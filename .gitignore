@@ -21,3 +21,6 @@ Release
 *.vbproj.user
 ipch
 *sdf
+
+# Project-specific
+Deps
