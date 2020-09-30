@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system.h"
+#include "engine.h"
 #include "events.h"
 
 #include <spdlog/spdlog.h>
@@ -15,18 +15,18 @@ struct KeyLogSystem : public dagger::System
 			spdlog::info("Key {} released!", (char)event_.GetKeyboard());
 	}
 
-	void SpinUp(entt::dispatcher& events_) override
+	void SpinUp(dagger::Engine& engine_) override
 	{
-		events_.sink<dagger::InputEvent>().connect<&KeyLogSystem::CheckInput>(this);
+		engine_.GetDispatcher().sink<dagger::InputEvent>().connect<&KeyLogSystem::CheckInput>(this);
 	}
 
-	void Run(entt::dispatcher& events_) override
+	void Run(dagger::Engine&) override
 	{
 	}
 
-	void WindDown(entt::dispatcher& events_) override
+	void WindDown(dagger::Engine& engine_) override
 	{
-		events_.sink<dagger::InputEvent>().disconnect<&KeyLogSystem::CheckInput>(this);
+		engine_.GetDispatcher().sink<dagger::InputEvent>().disconnect<&KeyLogSystem::CheckInput>(this);
 	}
 };
 

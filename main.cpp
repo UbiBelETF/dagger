@@ -1,32 +1,31 @@
 
-#include "dagger.h"
+#include "engine.h"
 #include "render.h"
-
 #include "escape.h"
 #include "keylog.h"
 #include "frame_count.h"
 
 #include <spdlog/spdlog.h>
 
-using namespace dagger::engine;
-
 int main(int argc_, char** argv_)
 {
 	spdlog::set_level(spdlog::level::trace);
 
-	Engine engine;
+	dagger::Engine engine;
 
-	engine.AddSystem<dagger::RenderSystem>();
+	engine.AddSystem<dagger::RenderSystem>(1200, 800);
 	engine.AddSystem<EscapeSystem>();
 	engine.AddSystem<FrameCountSystem>();
 	engine.AddSystem<KeyLogSystem>();
 
-	EngineInit(engine);
+	dagger::EngineInit(engine);
 
 	while (engine.Up())
 	{
-		EngineLoop(engine);
+		dagger::EngineLoop(engine);
 	}
 
-	EngineStop(engine);
+	dagger::EngineStop(engine);
+
+	return 0;
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system.h"
+#include "engine.h"
 #include "events.h"
 
 #include <spdlog/spdlog.h>
@@ -26,12 +26,12 @@ struct FrameCountSystem : public dagger::System
 		m_FrameCounter++;
 	}
 
-	void SpinUp(entt::dispatcher& events_) override
+	void SpinUp(dagger::Engine& engine_) override
 	{
-		events_.sink<dagger::Frame>().connect<&FrameCountSystem::Tick>(this);
+		engine_.GetDispatcher().sink<dagger::Frame>().connect<&FrameCountSystem::Tick>(this);
 	}
 
-	void Run(entt::dispatcher& events_) override
+	void Run(dagger::Engine&) override
 	{
 		auto delta = m_DeltaTime.count();
 		if (delta >= 1.0)
@@ -42,9 +42,9 @@ struct FrameCountSystem : public dagger::System
 		}
 	}
 
-	void WindDown(entt::dispatcher& events_) override
+	void WindDown(dagger::Engine& engine_) override
 	{
-		events_.sink<dagger::Frame>().disconnect<&FrameCountSystem::Tick>(this);
+		engine_.GetDispatcher().sink<dagger::Frame>().disconnect<&FrameCountSystem::Tick>(this);
 	}
 };
 

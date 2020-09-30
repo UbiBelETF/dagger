@@ -22,12 +22,11 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dagger.h" />
+    <ClInclude Include="engine.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="frame_count.h" />
     <ClInclude Include="keylog.h" />
     <ClInclude Include="render.h" />
-    <ClInclude Include="system.h" />
     <ClInclude Include="escape.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

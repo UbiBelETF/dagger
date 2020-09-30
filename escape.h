@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system.h"
+#include "engine.h"
 #include "events.h"
 
 #include <spdlog/spdlog.h>
@@ -15,20 +15,20 @@ struct EscapeSystem : public dagger::System
 			m_Exiting = true;
 	}
 
-	void SpinUp(entt::dispatcher& events_) override
+	void SpinUp(dagger::Engine& engine_) override
 	{
-		events_.sink<dagger::InputEvent>().connect<&EscapeSystem::CheckExit>(this);
+		engine_.GetDispatcher().sink<dagger::InputEvent>().connect<&EscapeSystem::CheckExit>(this);
 	}
 
-	void Run(entt::dispatcher& events_) override
+	void Run(dagger::Engine& engine_) override
 	{
 		if (m_Exiting)
-			events_.trigger<dagger::Exit>(dagger::Exit());
+			engine_.GetDispatcher().trigger<dagger::Exit>(dagger::Exit());
 	}
 
-	void WindDown(entt::dispatcher& events_) override
+	void WindDown(dagger::Engine& engine_) override
 	{
-		events_.sink<dagger::InputEvent>().disconnect<&EscapeSystem::CheckExit>(this);
+		engine_.GetDispatcher().sink<dagger::InputEvent>().disconnect<&EscapeSystem::CheckExit>(this);
 	}
 };
 

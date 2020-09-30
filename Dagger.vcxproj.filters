@@ -26,16 +26,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dagger.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="events.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="render.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="system.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="keylog.h">
@@ -46,6 +40,9 @@
     </ClInclude>
     <ClInclude Include="frame_count.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
