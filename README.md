@@ -28,4 +28,4 @@ The Visual Studio solution will automatically look there and find the appropriat
 
 ## Rights and Reservations
 
-Dagger is made as a part of Ubisoft Belgrade's game development course.
+Dagger is made as a part of Ubisoft Belgrade's game development course. All rights reserved.
