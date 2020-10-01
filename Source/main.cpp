@@ -4,6 +4,7 @@
 #include "escape.h"
 #include "keylog.h"
 #include "frame_count.h"
+#include "resources.h"
 
 #include <spdlog/spdlog.h>
 
@@ -13,10 +14,11 @@ int main(int argc_, char** argv_)
 
 	dagger::Engine engine;
 
-	engine.AddSystem<dagger::RenderSystem>(1200, 800);
+	engine.AddSystem<RenderSystem>(1200, 800);
 	engine.AddSystem<EscapeSystem>();
 	engine.AddSystem<FrameCountSystem>();
 	engine.AddSystem<KeyLogSystem>();
+	engine.AddSystem<ResourceSystem>("config.txt");
 
 	dagger::EngineInit(engine);
 

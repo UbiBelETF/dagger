@@ -7,7 +7,9 @@
 #include <atomic>
 #include <chrono>
 
-struct FrameCountSystem : public dagger::System
+using namespace dagger;
+
+struct FrameCountSystem : public System
 {
 	using TimePoint = std::chrono::time_point< std::chrono::steady_clock>;
 	using Duration = std::chrono::duration<double>;
@@ -16,7 +18,7 @@ struct FrameCountSystem : public dagger::System
 	TimePoint m_LastFrameTime;
 	Duration m_DeltaTime;
 
-	void Tick(dagger::Frame)
+	void Tick(Frame)
 	{
 		static TimePoint nextTime;
 
@@ -26,12 +28,12 @@ struct FrameCountSystem : public dagger::System
 		m_FrameCounter++;
 	}
 
-	void SpinUp(dagger::Engine& engine_) override
+	void SpinUp(Engine& engine_) override
 	{
-		engine_.GetDispatcher().sink<dagger::Frame>().connect<&FrameCountSystem::Tick>(this);
+		engine_.GetDispatcher().sink<Frame>().connect<&FrameCountSystem::Tick>(this);
 	}
 
-	void Run(dagger::Engine&) override
+	void Run(Engine&) override
 	{
 		auto delta = m_DeltaTime.count();
 		if (delta >= 1.0)
@@ -42,9 +44,9 @@ struct FrameCountSystem : public dagger::System
 		}
 	}
 
-	void WindDown(dagger::Engine& engine_) override
+	void WindDown(Engine& engine_) override
 	{
-		engine_.GetDispatcher().sink<dagger::Frame>().disconnect<&FrameCountSystem::Tick>(this);
+		engine_.GetDispatcher().sink<Frame>().disconnect<&FrameCountSystem::Tick>(this);
 	}
 };
 

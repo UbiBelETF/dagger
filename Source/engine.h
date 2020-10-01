@@ -1,17 +1,18 @@
 #pragma once
 
 #include "events.h"
+#include "texture.h"
 #include "engine.h"
 
 #include <entt/entt.hpp>
 #include <SDL.h>
 #include <spdlog/spdlog.h>
+#include <tsl/sparse_map.h>
 
 #include <utility>
+#include <memory>
 
 #undef main
-
-#include <memory>
 
 namespace dagger
 {
@@ -60,6 +61,10 @@ namespace dagger
 		bool m_ShouldStayUp;
 
 	public:
+		/* type-specific storage */
+		static tsl::sparse_map<uint32_t, SDL_Texture*> ms_Textures;
+		/* type-specific storage */
+
 		Engine()
 			: m_Systems{}
 			, m_Registry{}
@@ -98,10 +103,18 @@ namespace dagger
 		}
 	};
 
+	tsl::sparse_map<uint32_t, SDL_Texture*> Engine::ms_Textures{};
+
 	void EngineError(Error& error_)
 	{
 		spdlog::error(error_.m_Message);
 		exit(-1);
+	}
+
+	void EngineCacheTexture(TextureLoaded texture_)
+	{
+		spdlog::info("Loaded and cached texture {} (id #{})", texture_.m_Path, texture_.m_Id);
+		Engine::ms_Textures[texture_.m_Id] = texture_.m_Texture;
 	}
 
 	void EngineInit(Engine& engine_)
@@ -113,12 +126,14 @@ namespace dagger
 		}
 		engine_.m_EventDispatcher.sink<Error>().disconnect<&EngineError>();
 
+		engine_.m_EventDispatcher.sink<TextureLoaded>().connect<&EngineCacheTexture>();
 		engine_.m_EventDispatcher.sink<Exit>().connect<&Engine::EngineShutdown>(engine_);
 	}
 
 
 	void EngineStop(Engine& engine_)
 	{
+		engine_.m_EventDispatcher.sink<TextureLoaded>().disconnect<&EngineCacheTexture>();
 		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
 		for (auto& system : engine_.m_Systems)
 		{

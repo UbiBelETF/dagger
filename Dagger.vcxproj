@@ -19,15 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine.h" />
-    <ClInclude Include="events.h" />
-    <ClInclude Include="frame_count.h" />
-    <ClInclude Include="keylog.h" />
-    <ClInclude Include="render.h" />
-    <ClInclude Include="escape.h" />
+    <ClInclude Include="Source\engine.h" />
+    <ClInclude Include="Source\events.h" />
+    <ClInclude Include="Source\frame_count.h" />
+    <ClInclude Include="Source\keylog.h" />
+    <ClInclude Include="Source\render.h" />
+    <ClInclude Include="Source\escape.h" />
+    <ClInclude Include="Source\resources.h" />
+    <ClInclude Include="Source\sdl_image.h" />
+    <ClInclude Include="Source\stb_image.h" />
+    <ClInclude Include="Source\texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -83,23 +87,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(ProjectDir)Source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(ProjectDir)Source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(ProjectDir)Source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\sdl2\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(ProjectDir)Source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
