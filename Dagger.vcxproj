@@ -20,12 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\glad.c" />
-    <ClCompile Include="Source\imgui.cpp" />
-    <ClCompile Include="Source\imgui_demo.cpp" />
-    <ClCompile Include="Source\imgui_draw.cpp" />
-    <ClCompile Include="Source\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Source\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Source\imgui_widgets.cpp" />
+    <ClCompile Include="Source\imgui\imgui.cpp" />
+    <ClCompile Include="Source\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Source\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Source\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Source\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Source\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -33,17 +33,17 @@
     <ClInclude Include="Source\gui.h" />
     <ClInclude Include="Source\engine.h" />
     <ClInclude Include="Source\fps.h" />
-    <ClInclude Include="Source\imconfig.h" />
-    <ClInclude Include="Source\imgui.h" />
-    <ClInclude Include="Source\imgui_impl_glfw.h" />
-    <ClInclude Include="Source\imgui_impl_opengl3.h" />
-    <ClInclude Include="Source\imgui_internal.h" />
-    <ClInclude Include="Source\imstb_rectpack.h" />
-    <ClInclude Include="Source\imstb_textedit.h" />
-    <ClInclude Include="Source\imstb_truetype.h" />
-    <ClInclude Include="Source\khrplatform.h" />
+    <ClInclude Include="Source\imgui\imconfig.h" />
+    <ClInclude Include="Source\imgui\imgui.h" />
+    <ClInclude Include="Source\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Source\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\imgui\imgui_internal.h" />
+    <ClInclude Include="Source\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Source\imgui\imstb_textedit.h" />
+    <ClInclude Include="Source\imgui\imstb_truetype.h" />
+    <ClInclude Include="Source\imgui\khrplatform.h" />
     <ClInclude Include="Source\render.h" />
-    <ClInclude Include="Source\stb_image.h" />
+    <ClInclude Include="Source\imgui\stb_image.h" />
     <ClInclude Include="Source\structures.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -100,27 +100,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
-    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(SourcePath)</SourcePath>
+    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
-    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(SourcePath)</SourcePath>
+    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
-    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(SourcePath)</SourcePath>
+    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
-    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(SourcePath)</SourcePath>
+    <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

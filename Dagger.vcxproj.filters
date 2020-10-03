@@ -30,40 +30,10 @@
     <ClInclude Include="Source\render.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\stb_image.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
     <ClInclude Include="Source\gui.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\glad.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imconfig.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imgui.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imgui_impl_glfw.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imgui_impl_opengl3.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imgui_internal.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imstb_rectpack.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imstb_textedit.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imstb_truetype.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\khrplatform.h">
       <Filter>Header Files\External</Filter>
     </ClInclude>
     <ClInclude Include="Source\structures.h">
@@ -72,30 +42,60 @@
     <ClInclude Include="Source\fps.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\imgui\imconfig.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui_impl_glfw.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui_impl_opengl3.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui_internal.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imstb_rectpack.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imstb_textedit.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imstb_truetype.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\khrplatform.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\stb_image.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_impl_opengl3.cpp">
+    <ClCompile Include="Source\imgui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_impl_glfw.cpp">
+    <ClCompile Include="Source\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

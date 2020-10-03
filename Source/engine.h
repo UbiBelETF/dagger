@@ -122,14 +122,12 @@ namespace dagger
 
 	void EngineLoop(Engine& engine_)
 	{
-		static Frame oneFrame;
-
 		for (auto& system : engine_.m_Systems)
 		{
 			system->Run(engine_);
 		}
 
-		engine_.m_EventDispatcher.trigger<Frame>(oneFrame);
+		engine_.m_EventDispatcher.trigger<Frame>();
 	}
 
 

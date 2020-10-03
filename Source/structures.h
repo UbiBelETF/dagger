@@ -11,6 +11,9 @@ struct PreRender
 struct PostRender
 {};
 
+struct GUIRender
+{};
+
 struct RenderConfig
 {
 	std::uint32_t m_WindowWidth;

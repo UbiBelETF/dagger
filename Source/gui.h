@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "structures.h"
 
 struct GUISystem : public System
 {
@@ -27,10 +28,7 @@ struct GUISystem : public System
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
-		ImGui::Begin("Another Window");
-		ImGui::End();
-
+		Engine::Dispatch().trigger<GUIRender>();
 		ImGui::Render();
 	}
 
