@@ -19,7 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\glad.c" />
+    <ClCompile Include="Source\toolmenu.cpp" />
+    <ClCompile Include="Source\console.cpp" />
+    <ClCompile Include="Source\diag.cpp" />
+    <ClCompile Include="Source\gui.cpp" />
+    <ClCompile Include="Source\imfilebrowser.cpp" />
+    <ClCompile Include="Source\imgui\glad.c" />
     <ClCompile Include="Source\imgui\imgui.cpp" />
     <ClCompile Include="Source\imgui\imgui_demo.cpp" />
     <ClCompile Include="Source\imgui\imgui_draw.cpp" />
@@ -27,12 +32,16 @@
     <ClCompile Include="Source\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\glad.h" />
+    <ClInclude Include="Source\toolmenu.h" />
+    <ClInclude Include="Source\console.h" />
+    <ClInclude Include="Source\imfilebrowser.h" />
+    <ClInclude Include="Source\imgui\glad.h" />
     <ClInclude Include="Source\gui.h" />
     <ClInclude Include="Source\engine.h" />
-    <ClInclude Include="Source\fps.h" />
+    <ClInclude Include="Source\diag.h" />
     <ClInclude Include="Source\imgui\imconfig.h" />
     <ClInclude Include="Source\imgui\imgui.h" />
     <ClInclude Include="Source\imgui\imgui_impl_glfw.h" />
@@ -42,9 +51,10 @@
     <ClInclude Include="Source\imgui\imstb_textedit.h" />
     <ClInclude Include="Source\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\imgui\khrplatform.h" />
-    <ClInclude Include="Source\render.h" />
+    <ClInclude Include="Source\window.h" />
     <ClInclude Include="Source\imgui\stb_image.h" />
     <ClInclude Include="Source\structures.h" />
+    <ClInclude Include="Source\system.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

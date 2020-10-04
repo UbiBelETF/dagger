@@ -1,8 +1,10 @@
 
 #include "engine.h"
-#include "render.h"
-#include "fps.h"
+#include "window.h"
+#include "diag.h"
 #include "gui.h"
+#include "console.h"
+#include "toolmenu.h"
 
 #include <spdlog/spdlog.h>
 
@@ -14,9 +16,11 @@ int main(int argc_, char** argv_)
 
 	Engine engine;
 
-	engine.AddSystem<RenderSystem>(1200, 800);
+	engine.AddSystem<WindowSystem>(1200, 800);
 	engine.AddSystem<GUISystem>();
-	engine.AddSystem<FPSSystem>();
+	engine.AddSystem<DiagnosticSystem>();
+	engine.AddSystem<ConsoleSystem>();
+	engine.AddSystem<ToolMenuSystem>();
 
 	EngineInit(engine);
 

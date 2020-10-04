@@ -3,24 +3,38 @@
 #include <cstdint>
 #include <string>
 
-struct GLFWwindow;
-
-struct PreRender
-{};
-
-struct PostRender
-{};
-
-struct GUIRender
-{};
-
-struct RenderConfig
+class Command
 {
-	std::uint32_t m_WindowWidth;
-	std::uint32_t m_WindowHeight;
+	std::string m_Query;
 
-	GLFWwindow* m_Window;
+public:
+	Command(std::string query_)
+		: m_Query{ query_ }
+	{}
+
+	const std::string& Query() const
+	{
+		return m_Query;
+	}
 };
+
+class Log
+{
+	std::string m_Message;
+
+public:
+	Log(std::string message_)
+		: m_Message{ message_ }
+	{}
+
+	const std::string& Message() const
+	{
+		return m_Message;
+	}
+
+};
+
+#define TRIGGER {}
 
 struct KeyboardEvent
 {
@@ -43,12 +57,6 @@ struct CursorEvent
 	double m_Y;
 };
 
-struct Frame
-{};
-
-struct Exit
-{};
-
 struct Error
 {
 	std::string m_Message;
@@ -66,3 +74,6 @@ struct Error
 
 	~Error() = default;
 };
+
+struct Frame TRIGGER;
+struct Exit TRIGGER;

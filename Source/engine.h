@@ -1,5 +1,6 @@
 #pragma once
 
+#include "system.h"
 #include "structures.h"
 
 #include <entt/entt.hpp>
@@ -9,21 +10,15 @@
 
 #include <utility>
 #include <memory>
+#include <typeinfo>
 
 #undef main
 
 namespace dagger
 {
-	class Engine;
-
-	struct System
-	{
-		virtual void SpinUp(Engine&) {};
-		virtual void Run(Engine&) {};
-		virtual void WindDown(Engine&) {};
-	};
-
-	class Engine
+	class Engine 
+		: public Subscriber<Exit, Error>
+		, public Publisher<Frame>
 	{
 		friend void EngineInit(Engine& engine_);
 		friend void EngineStop(Engine& engine_);
@@ -50,6 +45,9 @@ namespace dagger
 		template<typename K, typename T>
 		inline static tsl::sparse_map<K, T>& Cache()
 		{
+#if !defined(NDEBUG)
+			spdlog::trace("<{}, {}> added to engine cache.", typeid(K).name(), typeid(T).name());
+#endif
 			static tsl::sparse_map<K, T> s_CachedMap;
 			return s_CachedMap;
 		}
@@ -58,6 +56,9 @@ namespace dagger
 		inline static T& Cache()
 		{
 			static T s_CachedElement{};
+#if !defined(NDEBUG)
+			spdlog::trace("{} added to engine cache.", typeid(T).name());
+#endif
 			return s_CachedElement;
 		}
 
@@ -102,13 +103,13 @@ namespace dagger
 		}
 	};
 
-	void EngineError(Error& error_)
+	static void EngineError(Error& error_)
 	{
 		spdlog::error(error_.m_Message);
 		exit(-1);
 	}
 
-	void EngineInit(Engine& engine_)
+	static void EngineInit(Engine& engine_)
 	{
 		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
 		for (auto& system : engine_.m_Systems)
@@ -120,7 +121,7 @@ namespace dagger
 	}
 
 
-	void EngineLoop(Engine& engine_)
+	static void EngineLoop(Engine& engine_)
 	{
 		for (auto& system : engine_.m_Systems)
 		{
@@ -131,7 +132,7 @@ namespace dagger
 	}
 
 
-	void EngineStop(Engine& engine_)
+	static void EngineStop(Engine& engine_)
 	{
 		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
 		for (auto system = engine_.m_Systems.rbegin(); system != engine_.m_Systems.rend(); system++)
