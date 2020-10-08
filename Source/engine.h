@@ -32,6 +32,8 @@ namespace dagger
 		static inline Engine* ms_Instance = nullptr;
 	public:
 
+		static inline uint64_t ms_EntityId = 0;
+
 		static inline Engine& Instance()
 		{
 			return *ms_Instance;
@@ -40,6 +42,11 @@ namespace dagger
 		static inline entt::dispatcher& Dispatch()
 		{
 			return ms_Instance->GetDispatcher();
+		}
+
+		static inline entt::registry& Registry()
+		{
+			return ms_Instance->GetRegistry();
 		}
 
 		template<typename K, typename T>
@@ -53,13 +60,13 @@ namespace dagger
 		}
 
 		template<typename T>
-		inline static T& Cache()
+		inline static T& Cache(std::string name_)
 		{
-			static T s_CachedElement{};
+			static tsl::sparse_map<std::string, T> s_CachedMap;
 #if !defined(NDEBUG)
-			spdlog::trace("{} added to engine cache.", typeid(T).name());
+			spdlog::trace("<{}>({}) added to engine cache.", typeid(T).name(), name_);
 #endif
-			return s_CachedElement;
+			return s_CachedMap[name_];
 		}
 
 		
@@ -74,7 +81,8 @@ namespace dagger
 			 
 		Engine(const Engine&) = delete;
 
-		~Engine() {}
+		~Engine() 
+		{}
 
 		inline bool Up() const
 		{
@@ -116,7 +124,6 @@ namespace dagger
 		{
 			system->SpinUp(engine_);
 		}
-		engine_.m_EventDispatcher.sink<Error>().disconnect<&EngineError>();
 		engine_.m_EventDispatcher.sink<Exit>().connect<&Engine::EngineShutdown>(engine_);
 	}
 
@@ -134,11 +141,12 @@ namespace dagger
 
 	static void EngineStop(Engine& engine_)
 	{
-		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
 		for (auto system = engine_.m_Systems.rbegin(); system != engine_.m_Systems.rend(); system++)
 		{
 			(*system)->WindDown(engine_);
+			(*system).reset();
 		}
 		engine_.m_EventDispatcher.sink<Error>().disconnect<&EngineError>();
+		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
 	}
 }

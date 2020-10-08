@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\test.cpp" />
     <ClCompile Include="Source\toolmenu.cpp" />
     <ClCompile Include="Source\console.cpp" />
     <ClCompile Include="Source\diag.cpp" />
     <ClCompile Include="Source\gui.cpp" />
-    <ClCompile Include="Source\imfilebrowser.cpp" />
+    <ClCompile Include="Source\imgui\imfilebrowser.cpp" />
     <ClCompile Include="Source\imgui\glad.c" />
     <ClCompile Include="Source\imgui\imgui.cpp" />
     <ClCompile Include="Source\imgui\imgui_demo.cpp" />
@@ -35,9 +37,13 @@
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\bitenums.h" />
+    <ClInclude Include="Source\files.h" />
+    <ClInclude Include="Source\shader.h" />
+    <ClInclude Include="Source\test.h" />
     <ClInclude Include="Source\toolmenu.h" />
     <ClInclude Include="Source\console.h" />
-    <ClInclude Include="Source\imfilebrowser.h" />
+    <ClInclude Include="Source\imgui\imfilebrowser.h" />
     <ClInclude Include="Source\imgui\glad.h" />
     <ClInclude Include="Source\gui.h" />
     <ClInclude Include="Source\engine.h" />
@@ -55,6 +61,10 @@
     <ClInclude Include="Source\imgui\stb_image.h" />
     <ClInclude Include="Source\structures.h" />
     <ClInclude Include="Source\system.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\Shaders\standard.fs" />
+    <None Include="Res\Shaders\standard.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -110,25 +120,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
@@ -146,7 +156,7 @@
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)Deps\sdl2\lib\$(PlatformShortName)\*.dll" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\"</Command>
+      <Command>xcopy "$(SolutionDir)Res" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\Res" /E /Y /I /R</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -167,7 +177,7 @@
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)Deps\sdl2\lib\$(PlatformShortName)\*.dll" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\"</Command>
+      <Command>xcopy "$(SolutionDir)Res" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\Res" /E /Y /I /R</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -184,7 +194,7 @@
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)Deps\sdl2\lib\$(PlatformShortName)\*.dll" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\"</Command>
+      <Command>xcopy "$(SolutionDir)Res" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\Res" /E /Y /I /R</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -205,7 +215,7 @@
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(SolutionDir)Deps\sdl2\lib\$(PlatformShortName)\*.dll" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\"</Command>
+      <Command>xcopy "$(SolutionDir)Res" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\Res" /E /Y /I /R</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

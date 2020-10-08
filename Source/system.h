@@ -8,9 +8,9 @@ namespace dagger
 
 	struct System
 	{
-		virtual void SpinUp(Engine&) {};
-		virtual void Run(Engine&) {};
-		virtual void WindDown(Engine&) {};
+		virtual inline void SpinUp(Engine&) {};
+		virtual inline void Run(Engine&) {};
+		virtual inline void WindDown(Engine&) {};
 	};
 
 	template<typename... Ts>

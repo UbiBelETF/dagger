@@ -22,8 +22,8 @@ struct GLFWwindow;
 
 struct RenderConfig
 {
-	std::uint32_t m_WindowWidth;
-	std::uint32_t m_WindowHeight;
+	GLsizei m_WindowWidth;
+	GLsizei m_WindowHeight;
 
 	GLFWwindow* m_Window;
 };
@@ -35,7 +35,7 @@ struct WindowSystem
 {
 	RenderConfig m_Config;
 
-	WindowSystem(std::uint32_t width_ = 640, std::uint32_t height_ = 480)
+	WindowSystem(GLsizei width_ = 640, GLsizei height_ = 480)
 		: m_Config{ width_, height_ }
 	{}
 

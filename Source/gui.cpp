@@ -8,14 +8,14 @@ using namespace dagger;
 
 void GUISystem::SpinUp(Engine&)
 {
-	auto renderConfig = Engine::Cache<RenderConfig>();
+	auto renderConfig = Engine::Cache<RenderConfig>("Render Config");
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ImGui_ImplOpenGL3_Init();
-	ImGui_ImplGlfw_InitForOpenGL(renderConfig.m_Window, true);
+	ImGui_ImplGlfw_InitForOpenGL(renderConfig.m_Window, false);
 
 	Engine::Dispatch().sink<PreRender>().connect<&GUISystem::OnPreRender>(this);
 	Engine::Dispatch().sink<ToolRender>().connect<&GUISystem::OnToolRender>(this);

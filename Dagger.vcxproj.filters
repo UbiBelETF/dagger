@@ -19,6 +19,12 @@
     <Filter Include="Source Files\External">
       <UniqueIdentifier>{ae181810-c701-46da-904c-c7e71c136fe9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\OpenGL">
+      <UniqueIdentifier>{c5fd81bb-55eb-415c-a26e-98e670e6b481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OpenGL">
+      <UniqueIdentifier>{0866019a-0c99-4e15-b996-c6aed3961fd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\imgui\imconfig.h">
@@ -75,10 +81,22 @@
     <ClInclude Include="Source\diag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imfilebrowser.h">
+    <ClInclude Include="Source\toolmenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imfilebrowser.h">
       <Filter>Header Files\External</Filter>
     </ClInclude>
-    <ClInclude Include="Source\toolmenu.h">
+    <ClInclude Include="Source\test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.h">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\bitenums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,11 +137,21 @@
     <ClCompile Include="Source\diag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imfilebrowser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\toolmenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\imgui\imfilebrowser.cpp">
+      <Filter>Source Files\External</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\Shaders\standard.fs" />
+    <None Include="Res\Shaders\standard.vs" />
   </ItemGroup>
 </Project>

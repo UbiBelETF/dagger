@@ -37,7 +37,7 @@ void WindowSystem::SpinUp(Engine& engine_)
 	glfwSetErrorCallback(ErrorCallback);
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	m_Config.m_Window = glfwCreateWindow(m_Config.m_WindowWidth, m_Config.m_WindowHeight, "Dagger", nullptr, nullptr);
@@ -57,7 +57,7 @@ void WindowSystem::SpinUp(Engine& engine_)
 		return;
 	}
 
-	Engine::Cache<RenderConfig>() = m_Config;
+	Engine::Cache<RenderConfig>("Render Config") = m_Config;
 
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetMouseButtonCallback(window, MouseCallback);
@@ -70,7 +70,7 @@ void WindowSystem::Run(Engine& engine_)
 	Engine::Dispatch().trigger<PreRender>();
 
 	glViewport(0, 0, m_Config.m_WindowWidth, m_Config.m_WindowHeight);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 
 	Engine::Dispatch().trigger<Render>();

@@ -77,3 +77,9 @@ struct Error
 
 struct Frame TRIGGER;
 struct Exit TRIGGER;
+
+struct Sprite
+{
+	uint64_t m_Id;
+	float m_XY[2];
+};
