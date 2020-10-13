@@ -158,7 +158,7 @@ void DebugConsole::ExecCommand(const char* command_)
         }
     m_History.push_back(Strdup(command_));
 
-    Engine::Dispatch().trigger<Command>(Command(command_));
+    Engine::Dispatcher().trigger<Command>(Command(command_));
 
     m_ScrollToBottom = true;
 }
@@ -276,14 +276,14 @@ void ConsoleSystem::ReceiveLog(Log log)
     m_Console.AddLog(log.Message().c_str());
 }
 
-void ConsoleSystem::SpinUp(Engine& engine_) 
+void ConsoleSystem::SpinUp() 
 {
-    Engine::Dispatch().sink<GUIRender>().connect<&ConsoleSystem::RenderGUI>(this);
-    Engine::Dispatch().sink<Log>().connect<&ConsoleSystem::ReceiveLog>(this);
+    Engine::Dispatcher().sink<GUIRender>().connect<&ConsoleSystem::RenderGUI>(this);
+    Engine::Dispatcher().sink<Log>().connect<&ConsoleSystem::ReceiveLog>(this);
 }
 
-void ConsoleSystem::WindDown(Engine& engine_) 
+void ConsoleSystem::WindDown() 
 {
-    Engine::Dispatch().sink<GUIRender>().disconnect<&ConsoleSystem::RenderGUI>(this);
-    Engine::Dispatch().sink<Log>().disconnect<&ConsoleSystem::ReceiveLog>(this);
+    Engine::Dispatcher().sink<GUIRender>().disconnect<&ConsoleSystem::RenderGUI>(this);
+    Engine::Dispatcher().sink<Log>().disconnect<&ConsoleSystem::ReceiveLog>(this);
 }

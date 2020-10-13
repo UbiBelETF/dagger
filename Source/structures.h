@@ -36,6 +36,15 @@ public:
 
 #define TRIGGER {}
 
+struct AssetLoadRequest
+{
+    std::string m_Path;
+
+	explicit AssetLoadRequest(std::string path_)
+		: m_Path{ path_ }
+	{}
+};
+
 struct KeyboardEvent
 {
 	int m_Key;
@@ -78,8 +87,25 @@ struct Error
 struct Frame TRIGGER;
 struct Exit TRIGGER;
 
+struct Position2D
+{
+    float X, Y;
+};
+
+struct Position3D
+{
+    float X, Y, Z;
+};
+
+struct Color
+{
+    float R, G, B, A;
+};
+
 struct Sprite
 {
-	uint64_t m_Id;
-	float m_XY[2];
+    Position3D m_Position{ 0, 0, 0 };		// 3
+    Position2D m_Pivot{ 0, 0 };				// 2
+    Color m_Color{ 0.5f, 0.5f,0.5f, 1.0f }; // 4
+	unsigned int m_Image{ 0 };				// 1
 };

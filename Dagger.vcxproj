@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\jiggle.cpp" />
     <ClCompile Include="Source\shader.cpp" />
-    <ClCompile Include="Source\test.cpp" />
+    <ClCompile Include="Source\sprite_render.cpp" />
+    <ClCompile Include="Source\textures.cpp" />
     <ClCompile Include="Source\toolmenu.cpp" />
     <ClCompile Include="Source\console.cpp" />
     <ClCompile Include="Source\diag.cpp" />
@@ -39,8 +41,11 @@
   <ItemGroup>
     <ClInclude Include="Source\bitenums.h" />
     <ClInclude Include="Source\files.h" />
+    <ClInclude Include="Source\jiggle.h" />
+    <ClInclude Include="Source\optimization.h" />
     <ClInclude Include="Source\shader.h" />
-    <ClInclude Include="Source\test.h" />
+    <ClInclude Include="Source\sprite_render.h" />
+    <ClInclude Include="Source\textures.h" />
     <ClInclude Include="Source\toolmenu.h" />
     <ClInclude Include="Source\console.h" />
     <ClInclude Include="Source\imgui\imfilebrowser.h" />
@@ -58,9 +63,10 @@
     <ClInclude Include="Source\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\imgui\khrplatform.h" />
     <ClInclude Include="Source\window.h" />
-    <ClInclude Include="Source\imgui\stb_image.h" />
+    <ClInclude Include="Source\loaders\stb_image.h" />
     <ClInclude Include="Source\structures.h" />
     <ClInclude Include="Source\system.h" />
+    <ClInclude Include="Source\texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\standard.fs" />
@@ -120,25 +126,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
@@ -149,6 +155,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -168,6 +176,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -187,6 +197,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -206,6 +218,9 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ControlFlowGuard>false</ControlFlowGuard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

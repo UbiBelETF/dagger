@@ -22,13 +22,13 @@ void DiagnosticSystem::RenderGUI()
 	ImGui::End();
 }
 
-void DiagnosticSystem::SpinUp(Engine& engine_)
+void DiagnosticSystem::SpinUp()
 {
-	Engine::Dispatch().sink<GUIRender>().connect<&DiagnosticSystem::RenderGUI>(this);
-	Engine::Dispatch().sink<Frame>().connect<&DiagnosticSystem::Tick>(this);
+	Engine::Dispatcher().sink<GUIRender>().connect<&DiagnosticSystem::RenderGUI>(this);
+	Engine::Dispatcher().sink<Frame>().connect<&DiagnosticSystem::Tick>(this);
 }
 
-void DiagnosticSystem::Run(Engine&)
+void DiagnosticSystem::Run()
 {
 	auto delta = m_DeltaTime.count();
 	if (delta >= 1.0)
@@ -39,8 +39,8 @@ void DiagnosticSystem::Run(Engine&)
 	}
 }
 
-void DiagnosticSystem::WindDown(Engine& engine_)
+void DiagnosticSystem::WindDown()
 {
-	Engine::Dispatch().sink<Frame>().disconnect<&DiagnosticSystem::Tick>(this);
-	Engine::Dispatch().sink<GUIRender>().disconnect<&DiagnosticSystem::RenderGUI>(this);
+	Engine::Dispatcher().sink<Frame>().disconnect<&DiagnosticSystem::Tick>(this);
+	Engine::Dispatcher().sink<GUIRender>().disconnect<&DiagnosticSystem::RenderGUI>(this);
 }

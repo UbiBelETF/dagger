@@ -19,11 +19,17 @@
     <Filter Include="Source Files\External">
       <UniqueIdentifier>{ae181810-c701-46da-904c-c7e71c136fe9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\OpenGL">
-      <UniqueIdentifier>{c5fd81bb-55eb-415c-a26e-98e670e6b481}</UniqueIdentifier>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{c30e8369-f378-492b-b5f8-90258decc16c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\OpenGL">
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{1703554d-c3e3-41e3-8e1b-4d1d4645242e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gameplay">
       <UniqueIdentifier>{0866019a-0c99-4e15-b996-c6aed3961fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay">
+      <UniqueIdentifier>{c5fd81bb-55eb-415c-a26e-98e670e6b481}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,63 +60,66 @@
     <ClInclude Include="Source\imgui\khrplatform.h">
       <Filter>Header Files\External</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imgui\stb_image.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
     <ClInclude Include="Source\imgui\glad.h">
       <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\console.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\gui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\structures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\system.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\diag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\toolmenu.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\imgui\imfilebrowser.h">
       <Filter>Header Files\External</Filter>
     </ClInclude>
-    <ClInclude Include="Source\test.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\window.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\shader.h">
-      <Filter>Header Files\OpenGL</Filter>
+    <ClInclude Include="Source\toolmenu.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\bitenums.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\sprite_render.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\system.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\structures.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\gui.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Source\files.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\engine.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\diag.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\console.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\bitenums.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\textures.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\loaders\stb_image.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\texture.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\jiggle.h">
+      <Filter>Header Files\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\optimization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\console.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\imgui\glad.c">
@@ -134,20 +143,35 @@
     <ClCompile Include="Source\imgui\imgui_widgets.cpp">
       <Filter>Source Files\External</Filter>
     </ClCompile>
-    <ClCompile Include="Source\diag.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\toolmenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\imgui\imfilebrowser.cpp">
       <Filter>Source Files\External</Filter>
     </ClCompile>
-    <ClCompile Include="Source\test.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\sprite_render.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\console.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\diag.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\gui.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\toolmenu.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\window.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Source\shader.cpp">
-      <Filter>Source Files\OpenGL</Filter>
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\textures.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\jiggle.cpp">
+      <Filter>Source Files\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

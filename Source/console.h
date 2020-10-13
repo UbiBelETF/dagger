@@ -59,6 +59,6 @@ public:
 		, m_IsOpen{ false }
 	{}
 
-	void SpinUp(Engine& engine_) override;
-	void WindDown(Engine& engine_) override;
+	void SpinUp() override;
+	void WindDown() override;
 };

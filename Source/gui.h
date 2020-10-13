@@ -15,6 +15,6 @@ class GUISystem
 	void OnToolRender();
 
 public:
-	void SpinUp(Engine&) override;
-	void WindDown(Engine&) override;
+	void SpinUp() override;
+	void WindDown() override;
 };

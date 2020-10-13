@@ -42,7 +42,7 @@ struct WindowSystem
 	~WindowSystem() = default;
 	WindowSystem(const WindowSystem&) = delete;
 
-	void SpinUp(Engine& engine_) override;
-	void Run(Engine& engine_) override;
-	void WindDown(Engine& engine_) override;
+	void SpinUp() override;
+	void Run() override;
+	void WindDown() override;
 };

@@ -24,8 +24,8 @@ class DiagnosticSystem
 	void RenderGUI();
 
 public:
-	void SpinUp(Engine& engine_) override;
-	void Run(Engine&) override;
-	void WindDown(Engine& engine_) override;
+	void SpinUp() override;
+	void Run() override;
+	void WindDown() override;
 };
 

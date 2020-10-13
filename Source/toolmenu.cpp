@@ -4,16 +4,16 @@
 void ToolMenuSystem::RenderGUI()
 {
 	ImGui::BeginMainMenuBar();
-	Engine::Dispatch().trigger<ToolMenuRender>();
+	Engine::Dispatcher().trigger<ToolMenuRender>();
 	ImGui::EndMainMenuBar();
 }
 
-void ToolMenuSystem::SpinUp(Engine& engine_)
+void ToolMenuSystem::SpinUp()
 {
-	Engine::Dispatch().sink<GUIRender>().connect<&ToolMenuSystem::RenderGUI>(this);
+	Engine::Dispatcher().sink<GUIRender>().connect<&ToolMenuSystem::RenderGUI>(this);
 }
 
-void ToolMenuSystem::WindDown(Engine& engine_)
+void ToolMenuSystem::WindDown()
 {
-	Engine::Dispatch().sink<GUIRender>().disconnect<&ToolMenuSystem::RenderGUI>(this);
+	Engine::Dispatcher().sink<GUIRender>().disconnect<&ToolMenuSystem::RenderGUI>(this);
 }

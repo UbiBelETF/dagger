@@ -39,7 +39,7 @@ namespace dagger
 			return *ms_Instance;
 		}
 
-		static inline entt::dispatcher& Dispatch()
+		static inline entt::dispatcher& Dispatcher()
 		{
 			return ms_Instance->GetDispatcher();
 		}
@@ -52,24 +52,17 @@ namespace dagger
 		template<typename K, typename T>
 		inline static tsl::sparse_map<K, T>& Cache()
 		{
-#if !defined(NDEBUG)
-			spdlog::trace("<{}, {}> added to engine cache.", typeid(K).name(), typeid(T).name());
-#endif
 			static tsl::sparse_map<K, T> s_CachedMap;
 			return s_CachedMap;
 		}
 
 		template<typename T>
-		inline static T& Cache(std::string name_)
+		inline static tsl::sparse_map<std::string, T*>& Res()
 		{
-			static tsl::sparse_map<std::string, T> s_CachedMap;
-#if !defined(NDEBUG)
-			spdlog::trace("<{}>({}) added to engine cache.", typeid(T).name(), name_);
-#endif
-			return s_CachedMap[name_];
+			static tsl::sparse_map<std::string, T*> s_CachedMap;
+			return s_CachedMap;
 		}
 
-		
 		Engine()
 			: m_Systems{}
 			, m_Registry{}
@@ -122,7 +115,7 @@ namespace dagger
 		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
 		for (auto& system : engine_.m_Systems)
 		{
-			system->SpinUp(engine_);
+			system->SpinUp();
 		}
 		engine_.m_EventDispatcher.sink<Exit>().connect<&Engine::EngineShutdown>(engine_);
 	}
@@ -132,7 +125,7 @@ namespace dagger
 	{
 		for (auto& system : engine_.m_Systems)
 		{
-			system->Run(engine_);
+			system->Run();
 		}
 
 		engine_.m_EventDispatcher.trigger<Frame>();
@@ -143,7 +136,7 @@ namespace dagger
 	{
 		for (auto system = engine_.m_Systems.rbegin(); system != engine_.m_Systems.rend(); system++)
 		{
-			(*system)->WindDown(engine_);
+			(*system)->WindDown();
 			(*system).reset();
 		}
 		engine_.m_EventDispatcher.sink<Error>().disconnect<&EngineError>();

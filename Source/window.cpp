@@ -4,29 +4,29 @@
 
 static void ErrorCallback(int error_, const char* description_)
 {
-	spdlog::error("GLFW Error ({}): {}\n", error_, description_);
-	Engine::Dispatch().trigger<Error>(Error(description_));
+	spdlog::error("GLFW Error {}): {}\n", error_, description_);
+	Engine::Dispatcher().trigger<Error>(Error(description_));
 }
 
 static void KeyCallback(GLFWwindow* window_, int key_, int scancode_, int action_, int mods_)
 {
-	Engine::Dispatch().trigger<KeyboardEvent>(KeyboardEvent{ key_, scancode_, action_, mods_ });
+	Engine::Dispatcher().trigger<KeyboardEvent>(KeyboardEvent{ key_, scancode_, action_, mods_ });
 }
 
 static void MouseCallback(GLFWwindow* window_, int button_, int action_, int mods_)
 {
-	Engine::Dispatch().trigger<MouseEvent>(MouseEvent{ button_, action_, mods_ });
+	Engine::Dispatcher().trigger<MouseEvent>(MouseEvent{ button_, action_, mods_ });
 }
 
 static void CursorCallback(GLFWwindow* window_, double x_, double y_)
 {
-	Engine::Dispatch().trigger<CursorEvent>(CursorEvent{ x_, y_ });
+	Engine::Dispatcher().trigger<CursorEvent>(CursorEvent{ x_, y_ });
 }
 
-void WindowSystem::SpinUp(Engine& engine_)
+void WindowSystem::SpinUp()
 {
 	spdlog::info("Booting up renderer");
-	auto& events = Engine::Dispatch();
+	auto& events = Engine::Dispatcher();
 
 	if (!glfwInit())
 	{
@@ -50,6 +50,7 @@ void WindowSystem::SpinUp(Engine& engine_)
 	}
 
 	glfwMakeContextCurrent(window);
+    glfwSwapInterval(0);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -57,36 +58,39 @@ void WindowSystem::SpinUp(Engine& engine_)
 		return;
 	}
 
-	Engine::Cache<RenderConfig>("Render Config") = m_Config;
+	Engine::Res<RenderConfig>()["Render Config"] = &m_Config;
 
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetMouseButtonCallback(window, MouseCallback);
 	glfwSetCursorPosCallback(window, CursorCallback);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void WindowSystem::Run(Engine& engine_)
+void WindowSystem::Run()
 {
 	auto* window = m_Config.m_Window;
-	Engine::Dispatch().trigger<PreRender>();
+	Engine::Dispatcher().trigger<PreRender>();
 
 	glViewport(0, 0, m_Config.m_WindowWidth, m_Config.m_WindowHeight);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
 
-	Engine::Dispatch().trigger<Render>();
-	Engine::Dispatch().trigger<ToolRender>();
+	Engine::Dispatcher().trigger<Render>();
+	Engine::Dispatcher().trigger<ToolRender>();
 
 	glfwSwapBuffers(window);
 
-	Engine::Dispatch().trigger<PostRender>();
+	Engine::Dispatcher().trigger<PostRender>();
 
 	glfwPollEvents();
 
 	if (glfwWindowShouldClose(window))
-		Engine::Dispatch().trigger<Exit>();
+		Engine::Dispatcher().trigger<Exit>();
 }
 
-void WindowSystem::WindDown(Engine& engine_)
+void WindowSystem::WindDown()
 {
 	spdlog::info("Winding down renderer");
 

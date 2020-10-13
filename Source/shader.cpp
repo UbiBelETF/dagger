@@ -24,7 +24,7 @@ Shader::Shader(std::string name_, ShaderStage stages_)
 
 	for (int i = 1; i < count; ++i)
 	{
-		unsigned int value = std::pow(2, i - 1);
+		unsigned int value = (unsigned int) std::pow(2, i - 1);
 		if (((unsigned int)stages_ & value) == value)
 		{
 			spdlog::info("Loading {}'s {}...", name_, ms_ShaderStageNames[i - 1]);
@@ -36,7 +36,7 @@ Shader::Shader(std::string name_, ShaderStage stages_)
 
 			if (source.empty())
 			{
-				Engine::Dispatch().trigger<Error>(Error(fmt::format("Shader path empty or not found: {}", path)));
+				Engine::Dispatcher().trigger<Error>(Error(fmt::format("Shader path empty or not found: {}", path)));
 				return;
 			}
 
@@ -53,7 +53,7 @@ Shader::Shader(std::string name_, ShaderStage stages_)
 						glGetShaderInfoLog(shaderIds[i], 512, nullptr, infoLog);
 						auto errorMessage = fmt::format("Shader error ({}): {}", name_, infoLog);
 						spdlog::error(errorMessage);
-						Engine::Dispatch().trigger<Error>(Error(errorMessage));
+						Engine::Dispatcher().trigger<Error>(Error(errorMessage));
 						return;
 					}
 				}
@@ -74,7 +74,7 @@ Shader::Shader(std::string name_, ShaderStage stages_)
 			glGetProgramInfoLog(shaderIds[0], 512, NULL, infoLog);
 			auto errorMessage = fmt::format("Shader linking error ({}): {}", name_, infoLog);
 			spdlog::error(errorMessage);
-			Engine::Dispatch().trigger<Error>(Error(errorMessage));
+			Engine::Dispatcher().trigger<Error>(Error(errorMessage));
 			return;
 		}
 	}

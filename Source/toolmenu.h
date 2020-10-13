@@ -15,6 +15,6 @@ struct ToolMenuSystem
 	, public Publisher<ToolMenuRender>
 {
 	void RenderGUI();
-	void SpinUp(Engine& engine_) override;
-	void WindDown(Engine& engine_) override;
+	void SpinUp() override;
+	void WindDown() override;
 };

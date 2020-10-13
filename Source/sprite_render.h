@@ -11,35 +11,39 @@
 
 using namespace dagger;
 
-class TestSystem
+class SpriteRenderSystem
 	: public System
 	, public Subscriber<Render>
 {
-	const float m_Vertices[6] = {
-		-0.5f, -0.5f,
-		 0.5f, -0.5f,
-		 0.0f,  0.5f
+	const float m_Vertices[24] = {
+		 -0.5f, -0.5f, 0.0f, 0.0f,
+		 -0.5f,  0.5f, 0.0f, 1.0f,
+		  0.5f,  0.5f, 1.0f, 1.0f,
+		  0.5f, -0.5f, 1.0f, 0.0f,
+		 -0.5f, -0.5f, 0.0f, 0.0f,
+		  0.5f,  0.5f, 1.0f, 1.0f
 	};
 
 	unsigned int m_VAO;
 
-	unsigned char m_Index = 0;
-	GLsync m_Fences[3];
-	GLuint m_VBOs[3];
-	float* m_Data[3];
+	GLuint m_StaticMeshVBO;
+	GLuint m_InstanceQuadInfoVBO;
+	float* m_Data;
 
-	std::vector<std::unique_ptr<Shader>> m_Shaders;
+	unsigned char m_Index = 0;
+
+	Shader* m_CurrentShader;
 
 	void OnRender();
 	void AddEntities();
 
 public:
-	constexpr static uint64_t ms_VertexCount = 6;
+	constexpr static uint64_t ms_VertexCount = 24;
 	constexpr static uint64_t m_SizeOfMesh = sizeof(float) * ms_VertexCount;
 	constexpr static uint64_t ms_MaxNumberOfMeshes = 10000;
 	constexpr static uint64_t ms_BufferSize = sizeof(float) * ms_VertexCount * ms_MaxNumberOfMeshes;
 
 
-	void SpinUp(Engine&) override;
-	void WindDown(Engine&) override;
+	void SpinUp() override;
+	void WindDown() override;
 };

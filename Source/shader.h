@@ -48,6 +48,8 @@ namespace dagger
 		unsigned int m_ProgramId;
 		std::string m_ShaderName;
 
+        Shader() = default;
+
 		Shader(std::string name_, ShaderStage stages_);
 		~Shader();
 	};
