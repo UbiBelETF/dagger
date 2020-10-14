@@ -21,5 +21,5 @@ void main()
 	v_QuadColor = a_QuadColor;
 	v_Image = a_Image;
 
-	gl_Position = vec4(a_Position.xy + a_QuadPosition.xy + a_QuadPivot.xy, a_QuadPosition.z, 1.0f);
+	gl_Position = vec4((a_Position.xy + a_QuadPosition.xy + a_QuadPivot.xy) * 0.1f, a_QuadPosition.z * 0.1f, 1.0f);
 }
