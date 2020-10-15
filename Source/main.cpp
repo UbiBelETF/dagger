@@ -14,6 +14,8 @@
 #include <spdlog/spdlog.h>
 #include <filesystem>
 
+#include <glm.hpp>
+
 using namespace dagger;
 
 int main(int argc_, char** argv_)

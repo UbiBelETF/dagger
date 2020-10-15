@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Engine\Loaders">
       <UniqueIdentifier>{1c2af63d-b8ef-4ede-9205-206b2055765d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{a79f914f-b38b-47f8-bd71-cbe817363bc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\imgui\imconfig.h">
@@ -190,8 +193,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Res\Shaders\standard.fs" />
-    <None Include="Res\Shaders\standard.vs" />
-    <None Include="Res\Shaders\standard.shader" />
+    <None Include="Res\Shaders\standard.fs">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\standard.shader">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\standard.vs">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
