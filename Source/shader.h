@@ -9,6 +9,7 @@ namespace dagger
 {
 	enum class ShaderStage : unsigned 
 	{
+		None = 0,
 		Vertex = 1,
 		Fragment = 2,
 		Geometry = 4,
@@ -19,6 +20,11 @@ namespace dagger
 
 	struct Shader
 	{
+		constexpr static unsigned int TextureBufferId()
+		{
+			return 0;
+		}
+
 		constexpr static unsigned int ms_ShaderStageCount = 4;
 
 		constexpr static unsigned int ms_ShaderStageHandles[ms_ShaderStageCount] =

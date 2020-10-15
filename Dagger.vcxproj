@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\shaders.cpp" />
     <ClCompile Include="Source\jiggle.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\sprite_render.cpp" />
@@ -39,6 +40,8 @@
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\shaders.h" />
+    <ClInclude Include="Source\stringops.h" />
     <ClInclude Include="Source\bitenums.h" />
     <ClInclude Include="Source\files.h" />
     <ClInclude Include="Source\jiggle.h" />
@@ -63,13 +66,14 @@
     <ClInclude Include="Source\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\imgui\khrplatform.h" />
     <ClInclude Include="Source\window.h" />
-    <ClInclude Include="Source\loaders\stb_image.h" />
+    <ClInclude Include="Source\stb\stb_image.h" />
     <ClInclude Include="Source\structures.h" />
     <ClInclude Include="Source\system.h" />
     <ClInclude Include="Source\texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\standard.fs" />
+    <None Include="Res\Shaders\standard.shader" />
     <None Include="Res\Shaders\standard.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

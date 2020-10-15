@@ -7,23 +7,20 @@
 #include <glad.h>
 #include <vector>
 
-using namespace dagger;
+#include "shaders.h"
 
-struct TextureUploadRequest
-{
-    unsigned int m_ShaderId;
-    unsigned int m_UniformPosition;
-};
+using namespace dagger;
 
 struct TextureSystem 
     : public System
+    , public Subscriber<ShaderChangeRequest, AssetLoadRequest<Texture>>
 {
     static unsigned char Get(std::string name_);
 
     std::vector<std::uint64_t> m_TextureHandles;
 
-    void OnLoadAsset(AssetLoadRequest request_);
-    void OnRequireTextureUpload(TextureUploadRequest request_);
+    void OnShaderChanged(ShaderChangeRequest request_);
+    void OnLoadAsset(AssetLoadRequest<Texture> request_);
     void SpinUp() override;
     void WindDown() override;
 };

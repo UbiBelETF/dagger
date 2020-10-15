@@ -36,6 +36,7 @@ public:
 
 #define TRIGGER {}
 
+template<typename PhantomT>
 struct AssetLoadRequest
 {
     std::string m_Path;

@@ -24,26 +24,26 @@ int main(int argc_, char** argv_)
 	Engine engine;
 
 	engine.AddSystem<WindowSystem>(1200, 800);
-    engine.AddSystem<TextureSystem>();
+	engine.AddSystem<ShaderSystem>();
+	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
-
+	engine.AddSystem<DiagnosticSystem>();
 #ifndef NDEBUG
 	engine.AddSystem<GUISystem>();
-	engine.AddSystem<DiagnosticSystem>();
 	engine.AddSystem<ConsoleSystem>();
 	engine.AddSystem<ToolMenuSystem>();
 #endif // !NDEBUG
-
-    // gameplay systems
     engine.AddSystem<JiggleSystem>();
 
 	EngineInit(engine);
+	
+	// Post-init pre-loop setup
 
-	auto &reg = engine.GetRegistry();
+	ShaderSystem::Use("standard");
 
-	auto textures = Engine::Res<Texture>();
+	auto& reg = engine.GetRegistry();
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 9999; i++)
 	{
 		auto entity = reg.create();
 		auto& sprite = reg.emplace<Sprite>(entity);
@@ -54,6 +54,8 @@ int main(int argc_, char** argv_)
 		sprite.m_Position.Z = 0.0001f * Engine::ms_EntityId++;
 		sprite.m_Image = TextureSystem::Get("rayman");
 	}
+
+	// Game loop starts here 
 
 	while (engine.Up())
 	{

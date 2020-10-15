@@ -31,6 +31,12 @@
     <Filter Include="Header Files\Gameplay">
       <UniqueIdentifier>{c5fd81bb-55eb-415c-a26e-98e670e6b481}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\Loaders">
+      <UniqueIdentifier>{dfd8115a-c024-4b53-b3c9-e32784520bd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Loaders">
+      <UniqueIdentifier>{1c2af63d-b8ef-4ede-9205-206b2055765d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\imgui\imconfig.h">
@@ -102,12 +108,6 @@
     <ClInclude Include="Source\shader.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\textures.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\loaders\stb_image.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
     <ClInclude Include="Source\texture.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
@@ -116,6 +116,18 @@
     </ClInclude>
     <ClInclude Include="Source\optimization.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\textures.h">
+      <Filter>Header Files\Engine\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stb\stb_image.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shaders.h">
+      <Filter>Header Files\Engine\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stringops.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,15 +179,19 @@
     <ClCompile Include="Source\shader.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\textures.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Source\jiggle.cpp">
       <Filter>Source Files\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\textures.cpp">
+      <Filter>Source Files\Engine\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shaders.cpp">
+      <Filter>Source Files\Engine\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\standard.fs" />
     <None Include="Res\Shaders\standard.vs" />
+    <None Include="Res\Shaders\standard.shader" />
   </ItemGroup>
 </Project>

@@ -10,32 +10,10 @@
 
 using namespace dagger;
 
-void SpriteRenderSystem::AddEntities()
-{
-	auto& reg = Engine::Registry();
-	if (reg.size() >= ms_MaxNumberOfMeshes - 10) return;
-
-	for (int i = 0; i < 10; i++)
-	{
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        sprite.m_Color.R = 1.0f;
-        sprite.m_Color.G = 1.0f;
-        sprite.m_Color.B = 1.0f;
-        sprite.m_Color.A = 1.0f;
-        sprite.m_Position.Z = 0.001f * Engine::ms_EntityId++;
-        sprite.m_Image = TextureSystem::Get(rand() % 2 ? "rayman" : "dagger");
-    }
-
-	spdlog::info("Current entity count: {}", reg.size());
-}
-
 void SpriteRenderSystem::SpinUp()
 {
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
-
-    Engine::Res<Shader>()["standard"] = m_CurrentShader = new Shader("standard", ShaderStage::Vertex | ShaderStage::Fragment);    
 
     auto flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
 
@@ -76,19 +54,21 @@ void SpriteRenderSystem::SpinUp()
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
 
-    glUseProgram(m_CurrentShader->m_ProgramId);
-    Engine::Dispatcher().trigger<TextureUploadRequest>(TextureUploadRequest{ m_CurrentShader->m_ProgramId, 0 });
-    glUseProgram(0);
-
     Engine::Dispatcher().sink<Render>().connect<&SpriteRenderSystem::OnRender>(this);
-	Engine::Dispatcher().sink<KeyboardEvent>().connect<&SpriteRenderSystem::AddEntities>(this);
+    Engine::Dispatcher().sink<ShaderChangeRequest>().connect<&SpriteRenderSystem::OnShaderChanged>(this);
+}
+
+void SpriteRenderSystem::OnShaderChanged(ShaderChangeRequest request_)
+{
+    m_CachedShader = request_.m_Shader;
 }
 
 void SpriteRenderSystem::OnRender()
 {
-	glBindVertexArray(m_VAO);
-    glUseProgram(m_CurrentShader->m_ProgramId);
+    assert(m_CachedShader != nullptr);
 
+	glBindVertexArray(m_VAO);
+    
 	assert(m_StaticMeshVBO != 0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
     
@@ -105,8 +85,6 @@ void SpriteRenderSystem::OnRender()
 
 void SpriteRenderSystem::WindDown()
 {
-    delete m_CurrentShader;
-
     glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
     glUnmapBuffer(GL_ARRAY_BUFFER);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -115,4 +93,5 @@ void SpriteRenderSystem::WindDown()
 	glDeleteVertexArrays(1, &m_VAO);
 
 	Engine::Dispatcher().sink<Render>().disconnect<&SpriteRenderSystem::OnRender>(this);
+    Engine::Dispatcher().sink<ShaderChangeRequest>().disconnect<&SpriteRenderSystem::OnShaderChanged>(this);
 }
