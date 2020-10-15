@@ -1,0 +1,15 @@
+[submodule "Deps/entt"]
+	path = Deps/entt
+	url = https://github.com/skypjack/entt.git
+[submodule "Deps/glfw3"]
+	path = Deps/glfw3
+	url = https://github.com/glfw/glfw.git
+[submodule "Deps/fmt"]
+	path = Deps/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "Deps/sparse-map"]
+	path = Deps/sparse-map
+	url = https://github.com/Tessil/sparse-map.git
+[submodule "Deps/spdlog"]
+	path = Deps/spdlog
+	url = https://github.com/gabime/spdlog.git
