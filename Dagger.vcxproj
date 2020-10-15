@@ -130,25 +130,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\glm\;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\glm\;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\glm\;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\glm\;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
