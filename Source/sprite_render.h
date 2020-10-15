@@ -39,7 +39,7 @@ class SpriteRenderSystem
 public:
 	constexpr static uint64_t ms_VertexCount = 24;
 	constexpr static uint64_t m_SizeOfMesh = sizeof(float) * ms_VertexCount;
-	constexpr static uint64_t ms_MaxNumberOfMeshes = 10000;
+	constexpr static uint64_t ms_MaxNumberOfMeshes = 100000;
 	constexpr static uint64_t ms_BufferSize = sizeof(float) * ms_VertexCount * ms_MaxNumberOfMeshes;
 
 	void SpinUp() override;

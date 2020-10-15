@@ -30,6 +30,7 @@
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
+#include "../engine.h"
 
 // GLFW
 #include <GLFW/glfw3.h>
@@ -67,47 +68,48 @@ static void ImGui_ImplGlfw_SetClipboardText(void* user_data, const char* text)
     glfwSetClipboardString((GLFWwindow*)user_data, text);
 }
 
-void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/)
+void ImguiInputWrapper::ImGui_ImplGlfw_MouseButtonCallback(MouseEvent mouse_)
 {
-    if (action == GLFW_PRESS && button >= 0 && button < IM_ARRAYSIZE(g_MouseJustPressed))
-        g_MouseJustPressed[button] = true;
+    if (mouse_.m_Action == GLFW_PRESS && mouse_.m_Button >= 0 && mouse_.m_Button < IM_ARRAYSIZE(g_MouseJustPressed))
+        g_MouseJustPressed[mouse_.m_Button] = true;
 }
 
-void ImGui_ImplGlfw_ScrollCallback(GLFWwindow*, double xoffset, double yoffset)
+void ImguiInputWrapper::ImGui_ImplGlfw_ScrollCallback(ScrollEvent scroll_)
 {
     ImGuiIO& io = ImGui::GetIO();
-    io.MouseWheelH += (float)xoffset;
-    io.MouseWheel += (float)yoffset;
+    io.MouseWheelH += (float)scroll_.m_X;
+    io.MouseWheel += (float)scroll_.m_Y;
 }
 
-void ImGui_ImplGlfw_KeyCallback(GLFWwindow*, int key, int, int action, int mods)
+void ImguiInputWrapper::ImGui_ImplGlfw_KeyCallback(KeyboardEvent keyboard_)
 {
     ImGuiIO& io = ImGui::GetIO();
-    if (action == GLFW_PRESS)
-        io.KeysDown[key] = true;
-    if (action == GLFW_RELEASE)
-        io.KeysDown[key] = false;
+    if (keyboard_ .m_Action == GLFW_PRESS)
+        io.KeysDown[keyboard_.m_Key] = true;
+    if (keyboard_.m_Action == GLFW_RELEASE)
+        io.KeysDown[keyboard_.m_Key] = false;
 
-    (void)mods; // Modifiers are not reliable across systems
+    (void)keyboard_.m_Modifiers; // Modifiers are not reliable across systems
     io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
     io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
     io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
     io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
 }
 
-void ImGui_ImplGlfw_CharCallback(GLFWwindow*, unsigned int c)
+void ImguiInputWrapper::ImGui_ImplGlfw_CharCallback(CharEvent char_)
 {
     ImGuiIO& io = ImGui::GetIO();
-    if (c > 0 && c < 0x10000)
-        io.AddInputCharacter((unsigned short)c);
+    if (char_.m_Codepoint > 0 && char_.m_Codepoint < 0x10000)
+        io.AddInputCharacter((unsigned short)char_.m_Codepoint);
 }
 
 void ImGui_ImplGlfw_InstallCallbacks(GLFWwindow* window)
 {
-    glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
-    glfwSetScrollCallback(window, ImGui_ImplGlfw_ScrollCallback);
-    glfwSetKeyCallback(window, ImGui_ImplGlfw_KeyCallback);
-    glfwSetCharCallback(window, ImGui_ImplGlfw_CharCallback);
+    auto& dispatcher = dagger::Engine::Dispatcher();
+    dispatcher.sink<MouseEvent>().connect<&ImguiInputWrapper::ImGui_ImplGlfw_MouseButtonCallback>();
+    dispatcher.sink<KeyboardEvent>().connect<&ImguiInputWrapper::ImGui_ImplGlfw_KeyCallback>();
+    dispatcher.sink<ScrollEvent>().connect<&ImguiInputWrapper::ImGui_ImplGlfw_ScrollCallback>();
+    dispatcher.sink<CharEvent>().connect<&ImguiInputWrapper::ImGui_ImplGlfw_CharCallback>();
 }
 
 static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, GlfwClientApi client_api)
@@ -166,17 +168,17 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
     return true;
 }
 
-bool ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks)
+bool ImguiInputWrapper::ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks)
 {
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
 }
 
-bool ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks)
+bool ImguiInputWrapper::ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks)
 {
     return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Vulkan);
 }
 
-void ImGui_ImplGlfw_Shutdown()
+void ImguiInputWrapper::ImGui_ImplGlfw_Shutdown()
 {
     for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
     {
@@ -236,7 +238,7 @@ static void ImGui_ImplGlfw_UpdateMouseCursor()
     }
 }
 
-void ImGui_ImplGlfw_NewFrame()
+void ImguiInputWrapper::ImGui_ImplGlfw_NewFrame()
 {
     ImGuiIO& io = ImGui::GetIO();
     IM_ASSERT(io.Fonts->IsBuilt());     // Font atlas needs to be built, call renderer _NewFrame() function e.g. ImGui_ImplOpenGL3_NewFrame() 

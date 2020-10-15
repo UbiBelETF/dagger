@@ -54,6 +54,17 @@ struct KeyboardEvent
 	int m_Modifiers;
 };
 
+struct CharEvent
+{
+	unsigned int m_Codepoint;
+};
+
+struct ScrollEvent
+{
+	double m_X;
+	double m_Y;
+};
+
 struct MouseEvent
 {
 	int m_Button;

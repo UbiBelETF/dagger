@@ -22,6 +22,7 @@ struct GLFWwindow;
 
 struct RenderConfig
 {
+	bool m_Fullscreen;
 	GLsizei m_WindowWidth;
 	GLsizei m_WindowHeight;
 
@@ -35,8 +36,12 @@ struct WindowSystem
 {
 	RenderConfig m_Config;
 
-	WindowSystem(GLsizei width_ = 640, GLsizei height_ = 480)
-		: m_Config{ width_, height_ }
+	WindowSystem()
+		: m_Config{ true, 0, 0 }
+	{}
+
+	WindowSystem(GLsizei width_, GLsizei height_)
+		: m_Config{ false, width_, height_ }
 	{}
 
 	~WindowSystem() = default;

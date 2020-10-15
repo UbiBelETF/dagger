@@ -13,6 +13,16 @@ static void KeyCallback(GLFWwindow* window_, int key_, int scancode_, int action
 	Engine::Dispatcher().trigger<KeyboardEvent>(KeyboardEvent{ key_, scancode_, action_, mods_ });
 }
 
+static void CharCallback(GLFWwindow* window_, unsigned int codepoint_)
+{
+	Engine::Dispatcher().trigger<CharEvent>(CharEvent{ codepoint_ });
+}
+
+static void ScrollCallback(GLFWwindow* window_, double xOffset_, double yOffset_)
+{
+	Engine::Dispatcher().trigger<ScrollEvent>(ScrollEvent{ xOffset_, yOffset_ });
+}
+
 static void MouseCallback(GLFWwindow* window_, int button_, int action_, int mods_)
 {
 	Engine::Dispatcher().trigger<MouseEvent>(MouseEvent{ button_, action_, mods_ });
@@ -40,7 +50,17 @@ void WindowSystem::SpinUp()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	m_Config.m_Window = glfwCreateWindow(m_Config.m_WindowWidth, m_Config.m_WindowHeight, "Dagger", nullptr, nullptr);
+	GLFWmonitor* monitor = nullptr;
+
+	if (m_Config.m_Fullscreen)
+	{
+		monitor = glfwGetPrimaryMonitor();
+		auto mode = glfwGetVideoMode(monitor);
+		m_Config.m_WindowWidth = mode->width;
+		m_Config.m_WindowHeight = mode->height;
+	}
+
+	m_Config.m_Window = glfwCreateWindow(m_Config.m_WindowWidth, m_Config.m_WindowHeight, "Dagger", monitor, nullptr);
 
 	auto* window = m_Config.m_Window;
 	if (window == nullptr)
@@ -54,13 +74,14 @@ void WindowSystem::SpinUp()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		events.trigger<Error>(Error("Couldn't initialize GLAD"));;
+		events.trigger<Error>(Error("Couldn't initialize GLAD"));
 		return;
 	}
 
 	Engine::Res<RenderConfig>()["Render Config"] = &m_Config;
 
 	glfwSetKeyCallback(window, KeyCallback);
+	glfwSetCharCallback(window, CharCallback);
 	glfwSetMouseButtonCallback(window, MouseCallback);
 	glfwSetCursorPosCallback(window, CursorCallback);
 

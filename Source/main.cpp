@@ -23,7 +23,7 @@ int main(int argc_, char** argv_)
 
 	Engine engine;
 
-	engine.AddSystem<WindowSystem>(1200, 800);
+	engine.AddSystem<WindowSystem>();
 	engine.AddSystem<ShaderSystem>();
 	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
@@ -43,7 +43,7 @@ int main(int argc_, char** argv_)
 
 	auto& reg = engine.GetRegistry();
 
-	for (int i = 0; i < 9999; i++)
+	for (int i = 0; i < 1000; i++)
 	{
 		auto entity = reg.create();
 		auto& sprite = reg.emplace<Sprite>(entity);
@@ -52,7 +52,7 @@ int main(int argc_, char** argv_)
 		sprite.m_Color.B = 1.0f;
 		sprite.m_Color.A = 1.0f;
 		sprite.m_Position.Z = 0.0001f * Engine::ms_EntityId++;
-		sprite.m_Image = TextureSystem::Get("rayman");
+		sprite.m_Image = TextureSystem::Get("goblin");
 	}
 
 	// Game loop starts here 

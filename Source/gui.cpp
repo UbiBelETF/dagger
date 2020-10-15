@@ -15,7 +15,7 @@ void GUISystem::SpinUp()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ImGui_ImplOpenGL3_Init();
-	ImGui_ImplGlfw_InitForOpenGL(renderConfig->m_Window, false);
+	ImguiInputWrapper::ImGui_ImplGlfw_InitForOpenGL(renderConfig->m_Window, true);
 
 	Engine::Dispatcher().sink<PreRender>().connect<&GUISystem::OnPreRender>(this);
 	Engine::Dispatcher().sink<ToolRender>().connect<&GUISystem::OnToolRender>(this);
@@ -24,7 +24,7 @@ void GUISystem::SpinUp()
 void GUISystem::OnPreRender()
 {
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
+	ImguiInputWrapper::ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	Engine::Dispatcher().trigger<GUIRender>();
 	ImGui::Render();
