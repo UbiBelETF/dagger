@@ -7,12 +7,12 @@
 #include "diag.h"
 #include "gui.h"
 #include "console.h"
+#include "sprite.h"
 #include "sprite_render.h"
 #include "toolmenu.h"
 #include "jiggle.h"
 
 #include <spdlog/spdlog.h>
-#include <filesystem>
 
 #include <glm.hpp>
 
@@ -25,17 +25,18 @@ int main(int argc_, char** argv_)
 
 	Engine engine;
 
-	engine.AddSystem<WindowSystem>();
+	engine.AddSystem<WindowSystem>(800, 800);
 	engine.AddSystem<ShaderSystem>();
 	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
-	engine.AddSystem<DiagnosticSystem>();
+	//engine.AddSystem<ResourceManager>();
 #ifndef NDEBUG
-	engine.AddSystem<GUISystem>();
-	engine.AddSystem<ConsoleSystem>();
 	engine.AddSystem<ToolMenuSystem>();
+	engine.AddSystem<DiagnosticSystem>();
+	engine.AddSystem<ConsoleSystem>();
+	engine.AddSystem<GUISystem>();
 #endif // !NDEBUG
-    engine.AddSystem<JiggleSystem>();
+//    engine.AddSystem<JiggleSystem>();
 
 	EngineInit(engine);
 	
@@ -45,16 +46,12 @@ int main(int argc_, char** argv_)
 
 	auto& reg = engine.GetRegistry();
 
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		auto entity = reg.create();
 		auto& sprite = reg.emplace<Sprite>(entity);
-		sprite.m_Color.R = 1.0f;
-		sprite.m_Color.G = 1.0f;
-		sprite.m_Color.B = 1.0f;
-		sprite.m_Color.A = 1.0f;
-		sprite.m_Position.Z = 0.0001f * Engine::ms_EntityId++;
-		sprite.m_Image = TextureSystem::Get("goblin");
+		sprite.Use("dagger");
+		sprite.m_Scale = 0.2f;
 	}
 
 	// Game loop starts here 

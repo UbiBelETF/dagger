@@ -40,6 +40,12 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{a79f914f-b38b-47f8-bd71-cbe817363bc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\GUI">
+      <UniqueIdentifier>{04fe423d-8947-47bc-b49c-154346658b47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\GUI">
+      <UniqueIdentifier>{d303fa94-c946-4140-a743-b9cbbc2819e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\imgui\imconfig.h">
@@ -132,6 +138,15 @@
     <ClInclude Include="Source\stringops.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Source\plotvar.h">
+      <Filter>Header Files\Engine\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\resource_manager.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -191,6 +206,15 @@
     <ClCompile Include="Source\shaders.cpp">
       <Filter>Source Files\Engine\Loaders</Filter>
     </ClCompile>
+    <ClCompile Include="Source\plotvar.cpp">
+      <Filter>Source Files\Engine\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\resource_manager.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\standard.fs">
@@ -202,5 +226,10 @@
     <None Include="Res\Shaders\standard.vs">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\Textures\rayman-spritesheet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

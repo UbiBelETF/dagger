@@ -10,11 +10,11 @@
 
 using namespace dagger;
 
-unsigned char TextureSystem::Get(std::string name_)
+Texture* TextureSystem::Get(String name_)
 {
     auto texture = Engine::Res<Texture>()[name_];
     assert(texture != nullptr);
-    return texture->Index();
+    return texture;
 }
 
 void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
@@ -22,11 +22,12 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
     spdlog::info("Loading texture {}...", request_.m_Path);
     stbi_set_flip_vertically_on_load(true);
 
-    const std::filesystem::path path{ request_.m_Path };
-    const std::string textureName = path.stem().string();
+    const FilePath path{ request_.m_Path };
+    const String textureName = path.stem().string();
 
+    // these have to remain "int" because of API/ABI-compatibility with stbi_load
     int width, height, channels;
-    unsigned char* image = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+    UInt8* image = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
     spdlog::info("Image statistics: name ({}), width ({}), height ({}), depth ({})", textureName, width, height, channels);
 
     if (image == nullptr)
@@ -35,10 +36,15 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
         return;
     }
 
-    auto* texture = new Texture(textureName, path, image, width, height, channels);
-    GLuint currentIndex = (GLuint) m_TextureHandles.size();
+    auto* texture = new Texture(textureName, path, image, (UInt32)width, (UInt32)height, (UInt32)channels);
+    UInt32 currentIndex = (UInt32) m_TextureHandles.size();
     m_TextureHandles.push_back(texture->Handle());
+
     texture->m_TextureIndex = currentIndex;
+    assert(width != 0);
+    texture->m_Ratio = (Float32)height / (Float32)width;
+    assert(texture->m_Ratio != 0);
+
     Engine::Res<Texture>()[textureName] = texture;
     spdlog::info("Texture index: {}", texture->m_TextureIndex);
     stbi_image_free(image);

@@ -10,27 +10,27 @@ static void ErrorCallback(int error_, const char* description_)
 
 static void KeyCallback(GLFWwindow* window_, int key_, int scancode_, int action_, int mods_)
 {
-	Engine::Dispatcher().trigger<KeyboardEvent>(KeyboardEvent{ key_, scancode_, action_, mods_ });
+	Engine::Dispatcher().trigger<KeyboardEvent>(KeyboardEvent{ (UInt32)key_, (UInt32)scancode_, (UInt32)action_, (UInt32)mods_ });
 }
 
 static void CharCallback(GLFWwindow* window_, unsigned int codepoint_)
 {
-	Engine::Dispatcher().trigger<CharEvent>(CharEvent{ codepoint_ });
+	Engine::Dispatcher().trigger<CharEvent>(CharEvent{ (UInt8)codepoint_ });
 }
 
 static void ScrollCallback(GLFWwindow* window_, double xOffset_, double yOffset_)
 {
-	Engine::Dispatcher().trigger<ScrollEvent>(ScrollEvent{ xOffset_, yOffset_ });
+	Engine::Dispatcher().trigger<ScrollEvent>(ScrollEvent{ (Float64)xOffset_, (Float64)yOffset_ });
 }
 
 static void MouseCallback(GLFWwindow* window_, int button_, int action_, int mods_)
 {
-	Engine::Dispatcher().trigger<MouseEvent>(MouseEvent{ button_, action_, mods_ });
+	Engine::Dispatcher().trigger<MouseEvent>(MouseEvent{ (UInt32)button_, (UInt32)action_, (UInt32)mods_ });
 }
 
 static void CursorCallback(GLFWwindow* window_, double x_, double y_)
 {
-	Engine::Dispatcher().trigger<CursorEvent>(CursorEvent{ x_, y_ });
+	Engine::Dispatcher().trigger<CursorEvent>(CursorEvent{ (Float64)x_, (Float64)y_ });
 }
 
 void WindowSystem::SpinUp()

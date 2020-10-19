@@ -1,4 +1,5 @@
 #include "sprite_render.h"
+#include "sprite.h"
 #include "engine.h"
 #include "textures.h"
 #include "texture.h"
@@ -19,33 +20,30 @@ void SpriteRenderSystem::SpinUp()
 
 	glGenBuffers(1, &m_StaticMeshVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(m_Vertices), m_Vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_VerticesAndTexCoords), m_VerticesAndTexCoords, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
     glEnableVertexAttribArray(1);
 
-    GLsizei size = sizeof(float) * 9 + sizeof(unsigned int);
-    assert(size == sizeof(Sprite));
-
+    GLsizei size = sizeof(Sprite);
+    
     glGenBuffers(1, &m_InstanceQuadInfoVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
     glBufferStorage(GL_ARRAY_BUFFER, ms_BufferSize, 0, flags);
 	glBufferData(GL_ARRAY_BUFFER, ms_BufferSize, nullptr, GL_STREAM_DRAW);
 
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, size, (void*)0); // position
-    glEnableVertexAttribArray(2);
-    glVertexAttribDivisor(2, 1);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, size, (void*)(sizeof(float) * 3)); // pivot
-    glEnableVertexAttribArray(3);
-    glVertexAttribDivisor(3, 1);
-    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, size, (void*)(sizeof(float) * 5)); // color
-    glEnableVertexAttribArray(4);
-    glVertexAttribDivisor(4, 1);
-    glVertexAttribPointer(5, 1, GL_UNSIGNED_INT, GL_FALSE, size, (void*)(sizeof(float) * 9)); // image handle
-    glEnableVertexAttribArray(5);
-    glVertexAttribDivisor(5, 1);
+    const UInt32 attributeSizes[]   = { 3,        2,        4,        1,               1,        1 };
+    const UInt64 attributeStrides[] = { 0,        3,        5,        9,               10,       11 };
+
+    for (UInt32 i = 0; i < 6; i++)
+    {
+        UInt32 index = 2 + i;
+        glVertexAttribPointer(index, attributeSizes[i], GL_FLOAT, GL_FALSE, size, (void*)(sizeof(Float32) * attributeStrides[i]));
+        glEnableVertexAttribArray(index);
+        glVertexAttribDivisor(index, 1);
+    }
 
 	m_Data = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, ms_BufferSize, flags));
 	assert(m_Data != nullptr);
@@ -71,9 +69,9 @@ void SpriteRenderSystem::OnRender()
     
 	assert(m_StaticMeshVBO != 0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
-    
-    auto entities = Engine::Registry().view<Sprite>();
-    auto size = sizeof(Sprite) * entities.size();
+
+    auto entities = Engine::Registry().view<Sprite>(); // a view of all the entities and their sprite components
+    std::size_t size = sizeof(Sprite) * entities.size();
     
     memcpy_s(m_Data, size, entities.raw(), size);
 

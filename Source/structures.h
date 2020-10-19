@@ -1,88 +1,94 @@
 #pragma once
 
+#include <glm.hpp>
 #include <cstdint>
 #include <string>
+#include <vector>
+#include <filesystem>
 
-class Command
-{
-	std::string m_Query;
+typedef bool			Bool;
+typedef std::uint8_t	UInt8;
+typedef std::uint16_t	UInt16;
+typedef std::uint32_t	UInt32;
+typedef std::uint64_t	UInt64;
 
-public:
-	Command(std::string query_)
-		: m_Query{ query_ }
-	{}
+typedef std::int8_t		SInt8;
+typedef std::int16_t	SInt16;
+typedef std::int32_t	SInt32;
+typedef std::int64_t	SInt64;
 
-	const std::string& Query() const
-	{
-		return m_Query;
-	}
-};
+typedef float			Float32;
+typedef double			Float64;
+
+typedef unsigned char	Char;
+typedef std::string		String;
+typedef std::filesystem::path FilePath;
+
+template<typename T>
+using Vector = std::vector<T>;
+
+typedef glm::fvec2		Position2D;
+typedef glm::fvec3		Position3D;
+typedef glm::fvec2		Size2D;
+typedef glm::fvec3		Size3D;
+typedef glm::fvec4		Color;
+
+#define EMPTY_EVENT 
 
 class Log
 {
-	std::string m_Message;
+	String m_Message;
 
 public:
-	Log(std::string message_)
+	Log(String message_)
 		: m_Message{ message_ }
 	{}
 
-	const std::string& Message() const
+	const String& Message() const
 	{
 		return m_Message;
 	}
-
 };
-
-#define TRIGGER {}
 
 template<typename PhantomT>
 struct AssetLoadRequest
 {
-    std::string m_Path;
+    String m_Path;
 
-	explicit AssetLoadRequest(std::string path_)
+	explicit AssetLoadRequest(String path_)
 		: m_Path{ path_ }
 	{}
 };
 
 struct KeyboardEvent
 {
-	int m_Key;
-	int m_Scancode;
-	int m_Action;
-	int m_Modifiers;
+	UInt32 m_Key;
+	UInt32 m_Scancode;
+	UInt32 m_Action;
+	UInt32 m_Modifiers;
 };
 
 struct CharEvent
 {
-	unsigned int m_Codepoint;
+	UInt8 m_Codepoint;
 };
 
-struct ScrollEvent
-{
-	double m_X;
-	double m_Y;
-};
+typedef glm::dvec2 ScrollEvent;
 
 struct MouseEvent
 {
-	int m_Button;
-	int m_Action;
-	int m_Modifiers;
+	UInt32 m_Button;
+	UInt32 m_Action;
+	UInt32 m_Modifiers;
 };
 
-struct CursorEvent
-{
-	double m_X;
-	double m_Y;
-};
+typedef glm::dvec2 CursorEvent;
 
 struct Error
 {
-	std::string m_Message;
+	String m_Message;
 
-	Error(std::string message_)
+	Error(String message_)
 		: m_Message{ message_ }
 	{}
 
@@ -96,28 +102,5 @@ struct Error
 	~Error() = default;
 };
 
-struct Frame TRIGGER;
-struct Exit TRIGGER;
-
-struct Position2D
-{
-    float X, Y;
-};
-
-struct Position3D
-{
-    float X, Y, Z;
-};
-
-struct Color
-{
-    float R, G, B, A;
-};
-
-struct Sprite
-{
-    Position3D m_Position{ 0, 0, 0 };		// 3
-    Position2D m_Pivot{ 0, 0 };				// 2
-    Color m_Color{ 0.5f, 0.5f,0.5f, 1.0f }; // 4
-	unsigned int m_Image{ 0 };				// 1
-};
+struct Frame EMPTY_EVENT {};
+struct Exit EMPTY_EVENT {};

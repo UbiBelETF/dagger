@@ -77,8 +77,8 @@ void ImguiInputWrapper::ImGui_ImplGlfw_MouseButtonCallback(MouseEvent mouse_)
 void ImguiInputWrapper::ImGui_ImplGlfw_ScrollCallback(ScrollEvent scroll_)
 {
     ImGuiIO& io = ImGui::GetIO();
-    io.MouseWheelH += (float)scroll_.m_X;
-    io.MouseWheel += (float)scroll_.m_Y;
+    io.MouseWheelH += (float)scroll_.x;
+    io.MouseWheel += (float)scroll_.y;
 }
 
 void ImguiInputWrapper::ImGui_ImplGlfw_KeyCallback(KeyboardEvent keyboard_)

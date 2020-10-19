@@ -2,6 +2,7 @@
 #include "diag.h"
 #include "engine.h"
 #include "imgui/imgui.h"
+#include "plotvar.h"
 #include <spdlog/spdlog.h>
 
 void DiagnosticSystem::Tick()
@@ -15,10 +16,9 @@ void DiagnosticSystem::Tick()
 
 void DiagnosticSystem::RenderGUI()
 {
-	ImGui::SetNextWindowSize(ImVec2(120, 60));
-	ImGui::SetNextWindowPos(ImVec2(10, 30));
+	ImGui::SetNextWindowSize(ImVec2(200, 60), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Diagnostics");
-	ImGui::LabelText("", "FPS: %d", m_LastFrameCounter);
+	ImGui::PlotVar("FPS", m_LastFrameCounter);
 	ImGui::End();
 }
 

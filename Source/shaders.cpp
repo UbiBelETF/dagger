@@ -14,7 +14,7 @@ void ShaderSystem::Use(std::string name_)
     auto shader = Engine::Res<Shader>()[name_];
     assert(shader != nullptr);
     glUseProgram(shader->m_ProgramId);
-    Engine::Dispatcher().trigger<ShaderChangeRequest>(shader);
+    Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(shader));
 }
 
 unsigned int ShaderSystem::Get(std::string name_)

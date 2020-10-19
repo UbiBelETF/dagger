@@ -16,7 +16,7 @@ class SpriteRenderSystem
 	: public System
 	, public Subscriber<Render, ShaderChangeRequest>
 {
-	const float m_Vertices[24] = {
+	const Float32 m_VerticesAndTexCoords[24] = {
 		 -0.5f, -0.5f, 0.0f, 0.0f,
 		 -0.5f,  0.5f, 0.0f, 1.0f,
 		  0.5f,  0.5f, 1.0f, 1.0f,
@@ -25,22 +25,22 @@ class SpriteRenderSystem
 		  0.5f,  0.5f, 1.0f, 1.0f
 	};
 
-	unsigned int m_VAO;
-	GLuint m_StaticMeshVBO;
-	GLuint m_InstanceQuadInfoVBO;
-	float* m_Data;
+	UInt32 m_VAO;
+	UInt32 m_StaticMeshVBO;
+	UInt32 m_InstanceQuadInfoVBO;
+	Float32* m_Data;
 
-	unsigned char m_Index = 0;
+	UInt8 m_Index = 0;
 	Shader* m_CachedShader;
 
 	void OnRender();
 	void OnShaderChanged(ShaderChangeRequest request_);
 
 public:
-	constexpr static uint64_t ms_VertexCount = 24;
-	constexpr static uint64_t m_SizeOfMesh = sizeof(float) * ms_VertexCount;
-	constexpr static uint64_t ms_MaxNumberOfMeshes = 100000;
-	constexpr static uint64_t ms_BufferSize = sizeof(float) * ms_VertexCount * ms_MaxNumberOfMeshes;
+	constexpr static UInt64 ms_VertexCount = 24;
+	constexpr static UInt64 m_SizeOfMesh = sizeof(Float32) * ms_VertexCount;
+	constexpr static UInt64 ms_MaxNumberOfMeshes = 10000;
+	constexpr static UInt64 ms_BufferSize = sizeof(Float32) * ms_VertexCount * ms_MaxNumberOfMeshes;
 
 	void SpinUp() override;
 	void WindDown() override;

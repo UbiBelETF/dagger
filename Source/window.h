@@ -12,11 +12,11 @@
  
 using namespace dagger;
 
-struct PreRender TRIGGER;
-struct Render TRIGGER;
-struct ToolRender TRIGGER;
-struct PostRender TRIGGER;
-struct GUIRender TRIGGER;
+struct PreRender {};
+struct Render {};
+struct ToolRender {};
+struct PostRender {};
+struct GUIRender {};
 
 struct GLFWwindow;
 

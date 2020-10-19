@@ -55,7 +55,6 @@ void DebugConsole::AddLog(const char* fmt_, ...)
 void DebugConsole::Draw(const char* title_, bool* open_ = nullptr)
 {
     ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowPos(ImVec2(140, 30));
     if (!ImGui::Begin(title_, open_))
     {
         ImGui::End();
@@ -158,7 +157,7 @@ void DebugConsole::ExecCommand(const char* command_)
         }
     m_History.push_back(Strdup(command_));
 
-    Engine::Dispatcher().trigger<Command>(Command(command_));
+//    Engine::Dispatcher().trigger<Command>(Command(command_));
 
     m_ScrollToBottom = true;
 }

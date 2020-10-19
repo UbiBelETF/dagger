@@ -14,7 +14,7 @@ struct ShaderChangeRequest
 {
     Shader* m_Shader;
 
-    ShaderChangeRequest(Shader* shader_)
+    explicit ShaderChangeRequest(Shader* shader_)
         : m_Shader{ shader_ }
     {}
 };

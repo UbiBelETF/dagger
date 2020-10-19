@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\resource_manager.cpp" />
+    <ClCompile Include="Source\plotvar.cpp" />
     <ClCompile Include="Source\shaders.cpp" />
     <ClCompile Include="Source\jiggle.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -38,8 +40,11 @@
     <ClCompile Include="Source\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\window.cpp" />
+    <ClCompile Include="Source\sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\resource_manager.h" />
+    <ClInclude Include="Source\plotvar.h" />
     <ClInclude Include="Source\shaders.h" />
     <ClInclude Include="Source\stringops.h" />
     <ClInclude Include="Source\bitenums.h" />
@@ -70,11 +75,15 @@
     <ClInclude Include="Source\structures.h" />
     <ClInclude Include="Source\system.h" />
     <ClInclude Include="Source\texture.h" />
+    <ClInclude Include="Source\sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\Shaders\standard.fs" />
     <None Include="Res\Shaders\standard.shader" />
     <None Include="Res\Shaders\standard.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\Textures\rayman-spritesheet.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
