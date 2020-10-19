@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system.h"
-#include "structures.h"
+#include "core.h"
 #include "shader.h"
 
 #include <glad.h>
@@ -23,8 +23,8 @@ struct ShaderSystem
     : public System
     , public Subscriber<AssetLoadRequest<Shader>>
 {
-    static void Use(std::string name_);
-    static unsigned int Get(std::string name_);
+    static void Use(String name_);
+    static UInt32 Get(String name_);
 
     void OnLoadAsset(AssetLoadRequest<Shader> request_);
     void SpinUp() override;

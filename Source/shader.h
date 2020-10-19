@@ -1,62 +1,60 @@
 #pragma once
 
-#include <string>
+#include "core.h"
 #include "bitenums.h"
 
 #include <glad.h>
 
-namespace dagger
+enum class ShaderStage : unsigned 
 {
-	enum class ShaderStage : unsigned 
+	None = 0,
+	Vertex = 1,
+	Fragment = 2,
+	Geometry = 4,
+	Compute = 8
+};
+
+ENABLE_BITMASK_OPERATORS(ShaderStage);
+
+struct Shader
+{
+	enum class Uniforms
 	{
-		None = 0,
-		Vertex = 1,
-		Fragment = 2,
-		Geometry = 4,
-		Compute = 8
+		ProjectionMatrixId = 0,
+		TextureBufferId = 5,
 	};
 
-	ENABLE_BITMASK_OPERATORS(ShaderStage);
+	constexpr static UInt32 ms_ShaderStageCount = 4;
 
-	struct Shader
+	constexpr static UInt32 ms_ShaderStageHandles[ms_ShaderStageCount] =
 	{
-		constexpr static unsigned int TextureBufferId()
-		{
-			return 0;
-		}
-
-		constexpr static unsigned int ms_ShaderStageCount = 4;
-
-		constexpr static unsigned int ms_ShaderStageHandles[ms_ShaderStageCount] =
-		{
-			GL_VERTEX_SHADER,
-			GL_FRAGMENT_SHADER,
-			GL_GEOMETRY_SHADER,
-			GL_COMPUTE_SHADER
-		};
-
-		const static inline char* ms_ShaderStageNames[ms_ShaderStageCount] =
-		{
-			"Vertex Shader",
-			"Fragment Shader",
-			"Geometry Shader",
-			"Compute Shader"
-		};
-
-		const static inline char* ms_ShaderStageExt[ms_ShaderStageCount] =
-		{
-			".vs.glsl",
-			".fs.glsl",
-			".gs.glsl",
-			".cs.glsl"
-		};
-
-		unsigned int m_ProgramId;
-		std::string m_ShaderName;
-
-        Shader() = default;
-
-		Shader(std::string name_, ShaderStage stages_);
-		~Shader();
+		GL_VERTEX_SHADER,
+		GL_FRAGMENT_SHADER,
+		GL_GEOMETRY_SHADER,
+		GL_COMPUTE_SHADER
 	};
-}
+
+	const static inline Char* ms_ShaderStageNames[ms_ShaderStageCount] =
+	{
+		"Vertex Shader",
+		"Fragment Shader",
+		"Geometry Shader",
+		"Compute Shader"
+	};
+
+	const static inline Char* ms_ShaderStageExt[ms_ShaderStageCount] =
+	{
+		".vs.glsl",
+		".fs.glsl",
+		".gs.glsl",
+		".cs.glsl"
+	};
+
+	UInt32 m_ProgramId;
+	String m_ShaderName;
+
+    Shader() = default;
+
+	Shader(String name_, ShaderStage stages_);
+	~Shader();
+};

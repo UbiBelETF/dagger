@@ -1,37 +1,41 @@
 #pragma once
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <filesystem>
 
-typedef bool			Bool;
-typedef std::uint8_t	UInt8;
-typedef std::uint16_t	UInt16;
-typedef std::uint32_t	UInt32;
-typedef std::uint64_t	UInt64;
-
-typedef std::int8_t		SInt8;
-typedef std::int16_t	SInt16;
-typedef std::int32_t	SInt32;
-typedef std::int64_t	SInt64;
-
-typedef float			Float32;
-typedef double			Float64;
-
-typedef unsigned char	Char;
-typedef std::string		String;
-typedef std::filesystem::path FilePath;
-
 template<typename T>
 using Vector = std::vector<T>;
 
-typedef glm::fvec2		Position2D;
-typedef glm::fvec3		Position3D;
-typedef glm::fvec2		Size2D;
-typedef glm::fvec3		Size3D;
-typedef glm::fvec4		Color;
+using Bool = bool;
+using Char = char;
+using UInt8 = std::uint8_t;
+using UInt16 = std::uint16_t;
+using UInt32 = std::uint32_t;
+using UInt64 = std::uint64_t;
+
+using SInt8 = std::int8_t;
+using SInt16 = std::int16_t;
+using SInt32 = std::int32_t;
+using SInt64 = std::int64_t;
+
+using Float32 = float;
+using Float64 = double;
+
+using String = std::string;
+
+namespace Files = std::filesystem;
+using FilePath = std::filesystem::path;
+
+using Matrix3 = glm::mat3x3;
+using Matrix4 = glm::mat4x4;
+
+using Vector2 = glm::fvec2;
+using Vector3 = glm::fvec3;
+
+using Color = glm::fvec4;
 
 #define EMPTY_EVENT 
 
@@ -84,6 +88,12 @@ struct MouseEvent
 
 typedef glm::dvec2 CursorEvent;
 
+struct WindowResizedEvent
+{
+	UInt32 m_Width;
+	UInt32 m_Height;
+};
+
 struct Error
 {
 	String m_Message;
@@ -93,13 +103,6 @@ struct Error
 	{}
 
 	Error() = delete;
-
-	Error(const Error&) = default;
-	Error& operator=(const Error&) = default;
-	Error(Error&&) = default;
-	Error& operator=(Error&&) = default;
-
-	~Error() = default;
 };
 
 struct Frame EMPTY_EVENT {};

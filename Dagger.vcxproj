@@ -72,7 +72,7 @@
     <ClInclude Include="Source\imgui\khrplatform.h" />
     <ClInclude Include="Source\window.h" />
     <ClInclude Include="Source\stb\stb_image.h" />
-    <ClInclude Include="Source\structures.h" />
+    <ClInclude Include="Source\core.h" />
     <ClInclude Include="Source\system.h" />
     <ClInclude Include="Source\texture.h" />
     <ClInclude Include="Source\sprite.h" />
@@ -139,7 +139,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\glm\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x86\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
@@ -151,7 +151,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\glm\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)\Deps\spdlog\include\;$(ProjectDir)\Deps\glfw3\include\;$(ProjectDir)\Deps\entt\src\;$(ProjectDir)\Deps\sparse-map\include\;$(ProjectDir)\Deps\fmt\include\;$(ProjectDir)\Deps\gl3w\include\;$(ProjectDir)Source\imgui;$(ProjectDir)\Deps\glm\;$(IncludePath)</IncludePath>
     <LibraryPath>D:\ETF kurs\Project\Dagger\Deps\glfw3;$(ProjectDir)\Deps\sdl2\lib\x64\;$(LibraryPath);$(ProjectDir)Deps\fmt\build\Debug</LibraryPath>
     <SourcePath>$(ProjectDir)Deps\glfw3\src;$(ProjectDir)Source;$(ProjectDir)Deps\gl3w\src\;$(ProjectDir)Source\imgui;$(SourcePath)</SourcePath>
   </PropertyGroup>
@@ -174,7 +174,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Res" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\Res" /E /Y /I /R</Command>
@@ -216,7 +216,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)Res" "$(SolutionDir)$(PlatformShortName)\$(Configuration)\Res" /E /Y /I /R</Command>

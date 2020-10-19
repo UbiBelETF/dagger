@@ -93,9 +93,6 @@
     <ClInclude Include="Source\system.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\structures.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Source\gui.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
@@ -146,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="Source\sprite.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\core.h">
+      <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

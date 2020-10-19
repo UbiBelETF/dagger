@@ -9,7 +9,7 @@
 
 using namespace dagger;
 
-void ShaderSystem::Use(std::string name_)
+void ShaderSystem::Use(String name_)
 {
     auto shader = Engine::Res<Shader>()[name_];
     assert(shader != nullptr);
@@ -17,7 +17,7 @@ void ShaderSystem::Use(std::string name_)
     Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(shader));
 }
 
-unsigned int ShaderSystem::Get(std::string name_)
+UInt32 ShaderSystem::Get(String name_)
 {
     auto shader = Engine::Res<Shader>()[name_];
     assert(shader != nullptr);
@@ -26,16 +26,16 @@ unsigned int ShaderSystem::Get(std::string name_)
 
 void ShaderSystem::OnLoadAsset(AssetLoadRequest<Shader> request_)
 {
-    std::filesystem::path path(request_.m_Path);
+    FilePath path(request_.m_Path);
 
-    if (!std::filesystem::exists(path))
+    if (!Files::exists(path))
     {
         Engine::Dispatcher().trigger<Error>(Error(fmt::format("Couldn't load shader from {}.", request_.m_Path)));
         return;
     }
 
     std::ifstream handle;
-    auto absolutePath = std::filesystem::absolute(path);
+    auto absolutePath = Files::absolute(path);
     handle.open(absolutePath);
 
     if (!handle.is_open())
@@ -44,7 +44,7 @@ void ShaderSystem::OnLoadAsset(AssetLoadRequest<Shader> request_)
         return;
     }
 
-    std::string line;
+    String line;
     ShaderStage stages{ ShaderStage::None };
 
     while (std::getline(handle, line))
@@ -70,7 +70,7 @@ void ShaderSystem::SpinUp()
 {
     Engine::Dispatcher().sink<AssetLoadRequest<Shader>>().connect<&ShaderSystem::OnLoadAsset>(this);
 
-    for (const auto& entry : std::filesystem::directory_iterator("Res\\Shaders"))
+    for (const auto& entry : Files::directory_iterator("Res\\Shaders"))
     {
         if (entry.is_regular_file() && entry.path().string().ends_with(".shader"))
             Engine::Dispatcher().trigger<AssetLoadRequest<Shader>>(AssetLoadRequest<Shader>(entry.path().string()));

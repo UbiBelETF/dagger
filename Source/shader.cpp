@@ -8,31 +8,31 @@
 
 using namespace dagger;
 
-Shader::Shader(std::string name_, ShaderStage stages_)
+Shader::Shader(String name_, ShaderStage stages_)
 	: m_ProgramId{ 0 }
 	, m_ShaderName{ name_ }
 {
 	spdlog::info("Constructing shader program '{}'", name_);
 	
 	constexpr auto count = ms_ShaderStageCount + 1;
-	unsigned int shaderIds[count] = { 0, };
+	UInt32 shaderIds[count] = { 0, };
 
-	for (int i = 0; i < count; ++i)
+	for (UInt32 i = 0; i < count; ++i)
 		shaderIds[i] = 0;
 
 	shaderIds[0] = glCreateProgram();
 
-	for (int i = 1; i < count; ++i)
+	for (UInt32 i = 1; i < count; ++i)
 	{
-		unsigned int value = (unsigned int) std::pow(2, i - 1);
-		if (((unsigned int)stages_ & value) == value)
+		UInt32 value = (UInt32) std::pow(2, i - 1);
+		if (((UInt32)stages_ & value) == value)
 		{
 			spdlog::info("Loading {}'s {}...", name_, ms_ShaderStageNames[i - 1]);
 			shaderIds[i] = glCreateShader(ms_ShaderStageHandles[i - 1]);
 
 			auto path = fmt::format("Res/Shaders/{}{}", name_, ms_ShaderStageExt[i - 1]);
 			spdlog::trace(" path: {}", path);
-			std::string source = ReadFromFile(path);
+			String source = ReadFromFile(path);
 
 			if (source.empty())
 			{
@@ -45,8 +45,8 @@ Shader::Shader(std::string name_, ShaderStage stages_)
 				glShaderSource(shaderIds[i], 1, &sourceCode, nullptr);
 				glCompileShader(shaderIds[i]);
 				{
-					int  success; 
-					char infoLog[512]; 
+					GLint success; 
+					GLchar infoLog[512]; 
 					glGetShaderiv(shaderIds[i], GL_COMPILE_STATUS, &success); 
 					if (!success)
 					{
@@ -67,8 +67,8 @@ Shader::Shader(std::string name_, ShaderStage stages_)
 	glLinkProgram(shaderIds[0]);
 
 	{
-		int  success;
-		char infoLog[512];
+		GLint success;
+		GLchar infoLog[512];
 		glGetProgramiv(shaderIds[0], GL_LINK_STATUS, &success);
 		if (!success) {
 			glGetProgramInfoLog(shaderIds[0], 512, NULL, infoLog);
@@ -81,7 +81,7 @@ Shader::Shader(std::string name_, ShaderStage stages_)
 
 	spdlog::info("Successfully linked shader '{}'", name_);
 
-	for (int i = 1; i < count; ++i)
+	for (UInt32 i = 1; i < count; ++i)
 	{
 		if(shaderIds[i] != 0)
 			glDeleteShader(shaderIds[i]);

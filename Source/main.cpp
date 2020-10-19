@@ -14,18 +14,18 @@
 
 #include <spdlog/spdlog.h>
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 
 using namespace dagger;
 
 int main(int argc_, char** argv_)
 {
-	srand(time(NULL));
+	srand(time(0));
 	spdlog::set_level(spdlog::level::trace);
 
 	Engine engine;
 
-	engine.AddSystem<WindowSystem>(800, 800);
+	engine.AddSystem<WindowSystem>(1200, 800);
 	engine.AddSystem<ShaderSystem>();
 	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
@@ -36,7 +36,7 @@ int main(int argc_, char** argv_)
 	engine.AddSystem<ConsoleSystem>();
 	engine.AddSystem<GUISystem>();
 #endif // !NDEBUG
-//    engine.AddSystem<JiggleSystem>();
+    engine.AddSystem<JiggleSystem>();
 
 	EngineInit(engine);
 	
@@ -46,12 +46,13 @@ int main(int argc_, char** argv_)
 
 	auto& reg = engine.GetRegistry();
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		auto entity = reg.create();
 		auto& sprite = reg.emplace<Sprite>(entity);
-		sprite.Use("dagger");
-		sprite.m_Scale = 0.2f;
+		sprite.UseTexture("rayman");
+		sprite.UseShader("standard");
+		sprite.m_Scale = 0.5f;
 	}
 
 	// Game loop starts here 

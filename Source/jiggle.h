@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system.h"
-#include "structures.h"
+#include "core.h"
     
 using namespace dagger;
 

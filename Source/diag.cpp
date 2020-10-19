@@ -18,7 +18,7 @@ void DiagnosticSystem::RenderGUI()
 {
 	ImGui::SetNextWindowSize(ImVec2(200, 60), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Diagnostics");
-	ImGui::PlotVar("FPS", m_LastFrameCounter);
+	ImGui::PlotVar("FPS", (Float32)m_LastFrameCounter);
 	ImGui::End();
 }
 

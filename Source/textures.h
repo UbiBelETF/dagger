@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system.h"
-#include "structures.h"
+#include "core.h"
 #include "texture.h"
 #include "shaders.h"
 

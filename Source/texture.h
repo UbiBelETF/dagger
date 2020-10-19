@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <memory>
 
-#include "structures.h"
+#include "core.h"
 
 struct TextureSystem;
 

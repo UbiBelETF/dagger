@@ -53,7 +53,7 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
 void TextureSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
     spdlog::info("Shader changed to {}, reuploading textures.", request_.m_Shader->m_ShaderName);
-    glProgramUniformHandleui64vARB(request_.m_Shader->m_ProgramId, Shader::TextureBufferId(),
+    glProgramUniformHandleui64vARB(request_.m_Shader->m_ProgramId, (GLuint)Shader::Uniforms::TextureBufferId,
         (GLsizei)m_TextureHandles.size(), m_TextureHandles.data());
 }
 

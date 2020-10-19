@@ -1,6 +1,12 @@
 
 #include "window.h"
+#include "core.h"
 #include "engine.h"
+
+#include <glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 static void ErrorCallback(int error_, const char* description_)
 {
@@ -33,9 +39,32 @@ static void CursorCallback(GLFWwindow* window_, double x_, double y_)
 	Engine::Dispatcher().trigger<CursorEvent>(CursorEvent{ (Float64)x_, (Float64)y_ });
 }
 
+static void WindowResizeCallback(GLFWwindow* window_, int width_, int height_)
+{
+	auto config = reinterpret_cast<RenderConfig*>(glfwGetWindowUserPointer(window_));
+	config->m_WindowWidth = width_;
+	config->m_WindowHeight = height_;
+
+	Float32 width = (Float32)width_;
+	Float32 height = (Float32)height_;
+
+	config->m_Projection = glm::ortho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, -1.0f, 1.0f);
+	glUniformMatrix4fv((GLuint)Shader::Uniforms::ProjectionMatrixId,
+		1, false, glm::value_ptr(config->m_Projection));
+	Engine::Dispatcher().trigger<WindowResizedEvent>(WindowResizedEvent{ (UInt32)width_, (UInt32)height_ });
+}
+
+void WindowSystem::OnShaderChanged(ShaderChangeRequest request_)
+{
+	spdlog::info("Shader changed to {}, reuploading projection matrix.", request_.m_Shader->m_ShaderName);
+	WindowResizeCallback(m_Config.m_Window, m_Config.m_WindowWidth, m_Config.m_WindowHeight);
+}
+
 void WindowSystem::SpinUp()
 {
 	spdlog::info("Booting up renderer");
+	Engine::Dispatcher().sink<ShaderChangeRequest>().connect<&WindowSystem::OnShaderChanged>(this);
+
 	auto& events = Engine::Dispatcher();
 
 	if (!glfwInit())
@@ -63,6 +92,8 @@ void WindowSystem::SpinUp()
 	m_Config.m_Window = glfwCreateWindow(m_Config.m_WindowWidth, m_Config.m_WindowHeight, "Dagger", monitor, nullptr);
 
 	auto* window = m_Config.m_Window;
+	glfwSetWindowUserPointer(window, (void*) &m_Config);
+
 	if (window == nullptr)
 	{
 		events.trigger<Error>(Error("GLFW window failed to create."));
@@ -78,12 +109,15 @@ void WindowSystem::SpinUp()
 		return;
 	}
 
+	WindowResizeCallback(window, m_Config.m_WindowWidth, m_Config.m_WindowHeight);
+
 	Engine::Res<RenderConfig>()["Render Config"] = &m_Config;
 
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetCharCallback(window, CharCallback);
 	glfwSetMouseButtonCallback(window, MouseCallback);
 	glfwSetCursorPosCallback(window, CursorCallback);
+	glfwSetWindowSizeCallback(window, WindowResizeCallback);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

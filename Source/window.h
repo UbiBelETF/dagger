@@ -1,15 +1,16 @@
 #pragma once
 
 #include "system.h"
-#include "structures.h"
+#include "core.h"
 #include <spdlog/spdlog.h>
+#include "shaders.h"
 
 #include "glad.h"
 #include <GLFW/glfw3.h>
 
 #include <deque>
 #include <sstream>
- 
+
 using namespace dagger;
 
 struct PreRender {};
@@ -27,6 +28,7 @@ struct RenderConfig
 	GLsizei m_WindowHeight;
 
 	GLFWwindow* m_Window;
+	Matrix4 m_Projection;
 };
 
 struct WindowSystem 
@@ -46,6 +48,8 @@ struct WindowSystem
 
 	~WindowSystem() = default;
 	WindowSystem(const WindowSystem&) = delete;
+
+	void OnShaderChanged(ShaderChangeRequest request_);
 
 	void SpinUp() override;
 	void Run() override;
