@@ -34,7 +34,7 @@ void DiagnosticSystem::Run()
 	if (delta >= 1.0)
 	{
 		m_LastFrameCounter = m_FrameCounter;
-		spdlog::trace("FPS: {}", m_LastFrameCounter);
+		Logger::trace("FPS: {}", m_LastFrameCounter);
 		m_FrameCounter = 0;
 		m_DeltaTime = Duration::zero();
 	}

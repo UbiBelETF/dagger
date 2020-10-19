@@ -11,8 +11,3 @@ void Sprite::UseTexture(String textureName_)
 	m_Image = texture->Index();
 	m_Ratio = texture->Ratio();
 }
-
-void Sprite::UseShader(String shaderName_)
-{
-	m_Shader = ShaderSystem::Get(shaderName_);
-}

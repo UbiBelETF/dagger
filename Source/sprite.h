@@ -13,7 +13,5 @@ struct Sprite
 	Float32 m_Scale{ 1.0f };				 // 1
 											 // ==== sum ==
 											 // 12
-	UInt32 m_Shader;
 	void UseTexture(String textureName_);
-	void UseShader(String shaderName_);
 };

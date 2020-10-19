@@ -70,7 +70,8 @@ void SpriteRenderSystem::OnRender()
 	assert(m_StaticMeshVBO != 0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
 
-    auto entities = Engine::Registry().view<Sprite>(); // a view of all the entities and their sprite components
+    // get a view of all the entities and their sprite components
+    auto entities = Engine::Registry().view<Sprite>();
     std::size_t size = sizeof(Sprite) * entities.size();
     
     memcpy_s(m_Data, size, entities.raw(), size);

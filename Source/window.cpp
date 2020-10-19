@@ -10,7 +10,7 @@
 
 static void ErrorCallback(int error_, const char* description_)
 {
-	spdlog::error("GLFW Error {}): {}\n", error_, description_);
+	Logger::error("GLFW Error {}): {}\n", error_, description_);
 	Engine::Dispatcher().trigger<Error>(Error(description_));
 }
 
@@ -56,13 +56,13 @@ static void WindowResizeCallback(GLFWwindow* window_, int width_, int height_)
 
 void WindowSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
-	spdlog::info("Shader changed to {}, reuploading projection matrix.", request_.m_Shader->m_ShaderName);
+	Logger::info("Shader changed to {}, reuploading projection matrix.", request_.m_Shader->m_ShaderName);
 	WindowResizeCallback(m_Config.m_Window, m_Config.m_WindowWidth, m_Config.m_WindowHeight);
 }
 
 void WindowSystem::SpinUp()
 {
-	spdlog::info("Booting up renderer");
+	Logger::info("Booting up renderer");
 	Engine::Dispatcher().sink<ShaderChangeRequest>().connect<&WindowSystem::OnShaderChanged>(this);
 
 	auto& events = Engine::Dispatcher();
@@ -147,7 +147,7 @@ void WindowSystem::Run()
 
 void WindowSystem::WindDown()
 {
-	spdlog::info("Winding down renderer");
+	Logger::info("Winding down renderer");
 
 	glfwDestroyWindow(m_Config.m_Window);
 	glfwTerminate();

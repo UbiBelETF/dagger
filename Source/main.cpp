@@ -21,7 +21,7 @@ using namespace dagger;
 int main(int argc_, char** argv_)
 {
 	srand(time(0));
-	spdlog::set_level(spdlog::level::trace);
+	Logger::set_level(Logger::level::trace);
 
 	Engine engine;
 
@@ -51,7 +51,6 @@ int main(int argc_, char** argv_)
 		auto entity = reg.create();
 		auto& sprite = reg.emplace<Sprite>(entity);
 		sprite.UseTexture("rayman");
-		sprite.UseShader("standard");
 		sprite.m_Scale = 0.5f;
 	}
 

@@ -106,7 +106,7 @@ namespace dagger
 
 	static void EngineError(Error& error_)
 	{
-		spdlog::error(error_.m_Message);
+		Logger::error(error_.m_Message);
 		exit(-1);
 	}
 

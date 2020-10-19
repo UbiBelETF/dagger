@@ -19,7 +19,7 @@ Texture* TextureSystem::Get(String name_)
 
 void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
 {
-    spdlog::info("Loading texture {}...", request_.m_Path);
+    Logger::info("Loading texture {}...", request_.m_Path);
     stbi_set_flip_vertically_on_load(true);
 
     const FilePath path{ request_.m_Path };
@@ -28,7 +28,7 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
     // these have to remain "int" because of API/ABI-compatibility with stbi_load
     int width, height, channels;
     UInt8* image = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
-    spdlog::info("Image statistics: name ({}), width ({}), height ({}), depth ({})", textureName, width, height, channels);
+    Logger::info("Image statistics: name ({}), width ({}), height ({}), depth ({})", textureName, width, height, channels);
 
     if (image == nullptr)
     {
@@ -40,19 +40,19 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
     UInt32 currentIndex = (UInt32) m_TextureHandles.size();
     m_TextureHandles.push_back(texture->Handle());
 
-    texture->m_TextureIndex = currentIndex;
+    texture->m_TextureIndex = (Float32) currentIndex;
     assert(width != 0);
     texture->m_Ratio = (Float32)height / (Float32)width;
     assert(texture->m_Ratio != 0);
 
     Engine::Res<Texture>()[textureName] = texture;
-    spdlog::info("Texture index: {}", texture->m_TextureIndex);
+    Logger::info("Texture index: {}", texture->m_TextureIndex);
     stbi_image_free(image);
 }
 
 void TextureSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
-    spdlog::info("Shader changed to {}, reuploading textures.", request_.m_Shader->m_ShaderName);
+    Logger::info("Shader changed to {}, reuploading textures.", request_.m_Shader->m_ShaderName);
     glProgramUniformHandleui64vARB(request_.m_Shader->m_ProgramId, (GLuint)Shader::Uniforms::TextureBufferId,
         (GLsizei)m_TextureHandles.size(), m_TextureHandles.data());
 }

@@ -1,13 +1,15 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <spdlog/spdlog.h>
+
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <filesystem>
 
 template<typename T>
-using Vector = std::vector<T>;
+using Seq = std::vector<T>;
 
 using Bool = bool;
 using Char = char;
@@ -26,7 +28,9 @@ using Float64 = double;
 
 using String = std::string;
 
+namespace Logger = spdlog;
 namespace Files = std::filesystem;
+
 using FilePath = std::filesystem::path;
 
 using Matrix3 = glm::mat3x3;

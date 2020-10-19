@@ -15,7 +15,7 @@ struct TextureSystem
 {
     static Texture* Get(String name_);
 
-    Vector<UInt64> m_TextureHandles;
+    Seq<UInt64> m_TextureHandles;
 
     void OnShaderChanged(ShaderChangeRequest request_);
     void OnLoadAsset(AssetLoadRequest<Texture> request_);
