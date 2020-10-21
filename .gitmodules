@@ -1,21 +1,24 @@
-[submodule "Deps/entt"]
-	path = Deps/entt
+[submodule "libs/entt"]
+	path = libs/entt
 	url = https://github.com/skypjack/entt.git
-[submodule "Deps/glfw3"]
-	path = Deps/glfw3
+[submodule "libs/glfw3"]
+	path = libs/glfw3
 	url = https://github.com/glfw/glfw.git
-[submodule "Deps/fmt"]
-	path = Deps/fmt
+[submodule "libs/fmt"]
+	path = libs/fmt
 	url = https://github.com/fmtlib/fmt.git
-[submodule "Deps/sparse-map"]
-	path = Deps/sparse-map
+[submodule "libs/sparse-map"]
+	path = libs/sparse-map
 	url = https://github.com/Tessil/sparse-map.git
-[submodule "Deps/spdlog"]
-	path = Deps/spdlog
+[submodule "libs/spdlog"]
+	path = libs/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "Deps/glm"]
-	path = Deps/glm
+[submodule "libs/glm"]
+	path = libs/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "Deps/json"]
-	path = Deps/json
+[submodule "libs/json"]
+	path = libs/json
 	url = https://github.com/nlohmann/json.git
+[submodule "libs/imgui"]
+	path = libs/imgui
+	url = https://github.com/ocornut/imgui.git
