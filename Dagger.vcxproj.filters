@@ -120,9 +120,6 @@
     <ClInclude Include="Source\jiggle.h">
       <Filter>Header Files\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\optimization.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\textures.h">
       <Filter>Header Files\Engine\Loaders</Filter>
     </ClInclude>
@@ -138,13 +135,13 @@
     <ClInclude Include="Source\plotvar.h">
       <Filter>Header Files\Engine\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\resource_manager.h">
+    <ClInclude Include="Source\core.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\optimization.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Source\sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\core.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
@@ -209,11 +206,8 @@
     <ClCompile Include="Source\plotvar.cpp">
       <Filter>Source Files\Engine\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\resource_manager.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Source\sprite.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

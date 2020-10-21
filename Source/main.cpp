@@ -11,7 +11,6 @@
 #include "sprite_render.h"
 #include "toolmenu.h"
 #include "jiggle.h"
-
 #include <spdlog/spdlog.h>
 
 #include <glm/glm.hpp>
@@ -29,7 +28,6 @@ int main(int argc_, char** argv_)
 	engine.AddSystem<ShaderSystem>();
 	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
-	//engine.AddSystem<ResourceManager>();
 #ifndef NDEBUG
 	engine.AddSystem<ToolMenuSystem>();
 	engine.AddSystem<DiagnosticSystem>();
