@@ -7,18 +7,21 @@
 [submodule "libs/fmt"]
 	path = libs/fmt
 	url = https://github.com/fmtlib/fmt.git
-[submodule "libs/sparse-map"]
+[submodule "libs/sparce-map"]
 	path = libs/sparse-map
 	url = https://github.com/Tessil/sparse-map.git
 [submodule "libs/spdlog"]
 	path = libs/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "libs/glm"]
-	path = libs/glm
-	url = https://github.com/g-truc/glm.git
 [submodule "libs/json"]
 	path = libs/json
 	url = https://github.com/nlohmann/json.git
-[submodule "libs/imgui"]
-	path = libs/imgui
-	url = https://github.com/ocornut/imgui.git
+[submodule "libs/glm/include"]
+	path = libs/glm/include
+	url = https://github.com/g-truc/glm.git
+[submodule "libs/imgui/include/imgui"]
+	path = libs/imgui/include/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "libs/stb/include/stb"]
+	path = libs/stb/include/stb
+	url = https://github.com/nothings/stb.git

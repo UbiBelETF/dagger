@@ -1,4 +1,7 @@
 # gitignore for C++
+source/**/external/
+bin/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -23,3 +26,5 @@ ipch
 *sdf
 .vs
 
+# Directory structure ignore
+projects/
