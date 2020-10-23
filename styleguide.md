@@ -48,7 +48,7 @@ Be aware that even though the capability for stacking boolean expressions exists
 Whenever working with the global scope, use namespaces to identify them. Your project should be set up in such a way that the only things
 in the global scope are namespaces that you defined (ie. no functions, classes, variables, or constants etc. by themselves)
 
-**a. Namespace names**: Use simple names for your namespaces. All namespaces should be in `lowerCamelCase`.
+**a. Namespace Names**: Use simple names for your namespaces. All namespaces should be in `lowerCamelCase`.
 
 **b. Namespaced Functions**: All global function names should be in `UpperCamelCase`.
 
@@ -60,17 +60,17 @@ within Dagger, we strictly distinguish between the two and use them for differen
 **a. Structs**: Use structs for outward-facing systems. This mostly means components in entity-component-system frameworks, 
 as well as data-only types that are used to only move data around.
 
-  - **1) Struct names**: Struct names are in `PascalCase` or `UpperCamelCase`.
+  - **1) Struct Names**: Struct names are in `PascalCase` or `UpperCamelCase`.
 
-  - **2) Struct members**: Structs shouldn't hold complex logic, ie. anything other than constructors, destructors, getters, and setters.
+  - **2) Struct Members**: Structs shouldn't hold complex logic, ie. anything other than constructors, destructors, getters, and setters.
 For structs, member names are always `lowerCamelCase`.
 
 **b. Classes**: Use classes whenever there is any need for complex functionalities that require complex state or ownership.
 
-  - **1) Class names**: Class names are in `PascalCase` or `UpperCamelCase`.
+  - **1) Class Names**: Class names are in `PascalCase` or `UpperCamelCase`.
   
-  - **2) Class data members**: Class data members (fields) are always in `prefixed_UpperCammelCase`. The prefix depends on the type of member:
+  - **2) Class Data Members**: Class data members (fields) are always in `prefixed_UpperCammelCase`. The prefix depends on the type of member:
     + use `m_` for non-static members
     + use `s_` for static members
   
-  - **3) Class function members**: Class function members (methods) are always in `UpperCamelCase`.
+  - **3) Class Function Members**: Class function members (methods) are always in `UpperCamelCase`.
