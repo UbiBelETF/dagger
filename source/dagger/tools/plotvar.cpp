@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include <vector>
 #include <map>
+#include <algorithm>
 
 namespace ImGui
 {

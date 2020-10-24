@@ -51,13 +51,13 @@ void ShaderSystem::OnLoadAsset(AssetLoadRequest<Shader> request_)
     {
         line = trim(line);
         if (line.empty()) continue;
-        else if (line.starts_with("#use vertex"))
+        else if (line.rfind("#use vertex", 0) == 0)
             stages = stages | ShaderStage::Vertex;
-        else if (line.starts_with("#use fragment"))
+        else if (line.rfind("#use fragment", 0) == 0)
             stages = stages | ShaderStage::Fragment;
-        else if (line.starts_with("#use compute"))
+        else if (line.rfind("#use compute", 0) == 0)
             stages = stages | ShaderStage::Compute;
-        else if (line.starts_with("#use geometry"))
+        else if (line.rfind("#use geometry", 0) == 0)
             stages = stages | ShaderStage::Geometry;
     }
     
@@ -72,7 +72,8 @@ void ShaderSystem::SpinUp()
 
     for (const auto& entry : Files::directory_iterator("shaders"))
     {
-        if (entry.is_regular_file() && entry.path().string().ends_with(".shader"))
+        // TODO:: will work with .shader.something path
+        if (entry.is_regular_file() && entry.path().string().rfind(".shader") != std::string::npos)
             Engine::Dispatcher().trigger<AssetLoadRequest<Shader>>(AssetLoadRequest<Shader>(entry.path().string()));
     }
 }
