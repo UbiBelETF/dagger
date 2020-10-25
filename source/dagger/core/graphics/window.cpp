@@ -45,8 +45,8 @@ static void WindowResizeCallback(GLFWwindow* window_, int width_, int height_)
 	config->m_WindowWidth = width_;
 	config->m_WindowHeight = height_;
 
-	Float32 width = (Float32)width_;
-	Float32 height = (Float32)height_;
+    Float32 width = 900; // (Float32)width_;
+    Float32 height = width * (Float32)height_ / (Float32)width_; // (Float32)height_;
 
 	config->m_Projection = glm::ortho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, -1.0f, 1.0f);
 	glUniformMatrix4fv((GLuint)Shader::Uniforms::ProjectionMatrixId,
