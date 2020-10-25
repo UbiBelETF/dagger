@@ -64,7 +64,8 @@ void TextureSystem::SpinUp()
 
     for (const auto& entry : std::filesystem::directory_iterator("textures"))
     {
-        if(entry.is_regular_file() && entry.path().string().ends_with(".png"))
+        // TODO:: will work with .png.something path
+        if(entry.is_regular_file() && entry.path().string().rfind(".png") != std::string::npos)
             Engine::Dispatcher().trigger<AssetLoadRequest<Texture>>(AssetLoadRequest<Texture>(entry.path().string()));
         else
         {
