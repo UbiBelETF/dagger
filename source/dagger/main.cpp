@@ -21,6 +21,20 @@
 
 using namespace dagger;
 
+void CoreSystemsSetup(Engine &engine)
+{
+    engine.AddSystem<WindowSystem>(800, 600);
+    engine.AddSystem<ShaderSystem>();
+    engine.AddSystem<TextureSystem>();
+    engine.AddSystem<SpriteRenderSystem>();
+    engine.AddSystem<AnimationSystem>();
+    engine.AddSystem<TransformSystem>();
+#if !defined(NDEBUG)
+    engine.AddSystem<DiagnosticSystem>();
+    engine.AddSystem<GUISystem>();
+    engine.AddSystem<ToolMenuSystem>();
+#endif //!defined(NDEBUG)
+}
 
 void GameplaySystemsSetup(Engine &engine)
 {
@@ -41,7 +55,7 @@ void PostInitWorld(Engine &engine)
 
     constexpr int Heigh = 20;
     constexpr int Width = 26;
-    constexpr float UnitSize = 30.f;// / static_cast<float>(Width);
+    constexpr float TileSize = 30.f;// / static_cast<float>(Width);
 
     constexpr float Space = 0.00f;
     for (int i = 0; i < Heigh; i++)
@@ -51,14 +65,20 @@ void PostInitWorld(Engine &engine)
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSpriteTexture(sprite, "EmptyWhitePixel");
-            sprite.scale = UnitSize;
+            sprite.scale = TileSize;
 
             
             if (i%2 != j%2)
             {
-                sprite.color.r = 0.5f;
-                sprite.color.g = 0.5f;
-                sprite.color.b = 0.5f;
+                sprite.color.r = 0.4f;
+                sprite.color.g = 0.4f;
+                sprite.color.b = 0.4f;
+            }
+            else
+            {
+                sprite.color.r = 0.6f;
+                sprite.color.g = 0.6f;
+                sprite.color.b = 0.6f;
             }
 
             if (i == 0 || i == Heigh - 1 || j == 0 || j == Width - 1)
@@ -69,8 +89,8 @@ void PostInitWorld(Engine &engine)
             }
 
             auto& transform = reg.emplace<Transform>(entity);
-            transform.position.x = (0.5f + j + j * Space - static_cast<float>(Width) / 2.f) * UnitSize;
-            transform.position.y = (0.5f + i + i * Space - static_cast<float>(Heigh) / 2.f) * UnitSize;
+            transform.position.x = (0.5f + j + j * Space - static_cast<float>(Width) / 2.f) * TileSize;
+            transform.position.y = (0.5f + i + i * Space - static_cast<float>(Heigh) / 2.f) * TileSize;
         }
     }
 
@@ -78,8 +98,8 @@ void PostInitWorld(Engine &engine)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
-        sprite.scale = UnitSize;
+        AssignSpriteTexture(sprite, "PingPong:ball");
+        sprite.scale = TileSize;
 
         sprite.color.r = 0.1f;
         sprite.color.g = 0.8f;
@@ -92,6 +112,18 @@ void PostInitWorld(Engine &engine)
     }
 }
 
+void PostInitWorld2(Engine &engine)
+{
+    ShaderSystem::Use("standard");
+
+    auto& reg = engine.GetRegistry();
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    sprite.scale = 500.f;
+    auto& anim = reg.emplace<Animator>(entity);
+    AnimatorPlay(anim, "souls_like_knight_character:DRINK_POTION");
+}
+
 int main(int argc_, char** argv_)
 {
 	srand(time(0));
@@ -99,17 +131,7 @@ int main(int argc_, char** argv_)
 
 	Engine engine;
 
-	engine.AddSystem<WindowSystem>(800, 600);
-	engine.AddSystem<ShaderSystem>();
-	engine.AddSystem<TextureSystem>();
-	engine.AddSystem<SpriteRenderSystem>();
-	engine.AddSystem<AnimationSystem>();
-    engine.AddSystem<TransformSystem>();
-#if !defined(NDEBUG)
-	engine.AddSystem<DiagnosticSystem>();
-	engine.AddSystem<GUISystem>();
-	engine.AddSystem<ToolMenuSystem>();
-#endif //!defined(NDEBUG)
+    CoreSystemsSetup(engine);
 
     GameplaySystemsSetup(engine);
 
@@ -118,13 +140,7 @@ int main(int argc_, char** argv_)
 	// Post-init pre-loop setup
 
     PostInitWorld(engine);
-    /*ShaderSystem::Use("standard");
-
-    auto& reg = engine.GetRegistry();
-    auto entity = reg.create();
-    auto& sprite = reg.emplace<Sprite>(entity);
-    auto& anim = reg.emplace<Animator>(entity);
-    AnimatorPlay(anim, "souls_like_knight_character:DRINK_POTION");*/
+    //PostInitWorld2(engine);
 
 	// Game loop starts here 
 
