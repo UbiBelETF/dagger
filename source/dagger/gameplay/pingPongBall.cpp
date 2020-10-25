@@ -13,21 +13,24 @@ void PingPongBallSystem::Run()
     auto view = Engine::Registry().view<PingPongBall, Transform>();
     for(auto entity: view) 
     {
-        auto &transform = view.get<Transform>(entity);
+        auto &t = view.get<Transform>(entity);
         auto &ball = view.get<PingPongBall>(entity);
 
-        // change 13 later
-        if (transform.position.x > 13 && ball.speed.x > 0.f || transform.position.x < -13 && ball.speed.x < 0.f)
+        if (ball.collided)
         {
-            ball.speed.x += ((rand() % 3) - 1) * 0.001f;
-            ball.speed.x *= -1;
-        }
-        if (transform.position.y > 10 && ball.speed.y > 0.f || transform.position.y < -10 && ball.speed.y < 0.f)
-        {
-            ball.speed.y += ((rand() % 3) - 1) * 0.05f * ball.speed.y;
-            ball.speed.y *= -1;
+            if (std::abs(t.position.x - ball.pointOfCollision.x) > std::abs(t.position.y - ball.pointOfCollision.y))
+            {
+                ball.speed.x *= -1;
+            }
+            else
+            {
+                ball.speed.y *= -1;
+            }
+
+            ball.collided = false;
         }
 
-        transform.position += ball.speed;
+        // todo: vector3 doesn't have multiplication to float64
+        t.position += (ball.speed * (float)Engine::DeltaTime());
     }
 }

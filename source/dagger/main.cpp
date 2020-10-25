@@ -15,6 +15,7 @@
 #include "gameplay/jiggle.h"
 #include "gameplay/transform.h"
 #include "gameplay/pingPongBall.h"
+#include "gameplay/SimpleCollisions.h"
 
 #include <spdlog/spdlog.h>
 #include <glm/glm.hpp>
@@ -29,6 +30,7 @@ void CoreSystemsSetup(Engine &engine)
     engine.AddSystem<SpriteRenderSystem>();
     engine.AddSystem<AnimationSystem>();
     engine.AddSystem<TransformSystem>();
+    engine.AddSystem<SimpleCollisionsSystem>();
 #if !defined(NDEBUG)
     engine.AddSystem<DiagnosticSystem>();
     engine.AddSystem<GUISystem>();
@@ -48,7 +50,6 @@ void PostInitWorld(Engine &engine)
 
     auto& reg = engine.GetRegistry();
 
-
     // field
     constexpr int ScreenHeigh = 600;
     constexpr int ScreenWidth = 800;
@@ -57,7 +58,7 @@ void PostInitWorld(Engine &engine)
     constexpr int Width = 26;
     constexpr float TileSize = 30.f;// / static_cast<float>(Width);
 
-    constexpr float Space = 0.00f;
+    constexpr float Space = 0.02f;
     for (int i = 0; i < Heigh; i++)
     {
         for (int j = 0; j < Width; j++)
@@ -86,6 +87,10 @@ void PostInitWorld(Engine &engine)
                 sprite.color.r = 0.0f;
                 sprite.color.g = 0.0f;
                 sprite.color.b = 0.0f;
+
+                auto& col = reg.emplace<SimpleCollision>(entity);
+                col.size.x = TileSize;
+                col.size.y = TileSize;
             }
 
             auto& transform = reg.emplace<Transform>(entity);
@@ -107,8 +112,12 @@ void PostInitWorld(Engine &engine)
 
         auto& transform = reg.emplace<Transform>(entity);
         auto& ball = reg.emplace<PingPongBall>(entity);
-        ball.speed.x = 0.02f;
-        ball.speed.y = 0.015f;
+        ball.speed.x = 7 * TileSize;
+        ball.speed.y = 7 * TileSize;
+
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size.x = TileSize;
+        col.size.y = TileSize;
     }
 }
 

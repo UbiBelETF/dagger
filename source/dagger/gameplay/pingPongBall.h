@@ -8,6 +8,9 @@ using namespace dagger;
 struct PingPongBall
 {
     Vector3 speed{ 0, 0, 0 };
+
+    bool collided = false;
+    Vector3 pointOfCollision{ 0, 0, 0 };
 };
 
 // todo: move to another file
