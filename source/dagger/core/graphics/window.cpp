@@ -11,7 +11,7 @@
 static void ErrorCallback(int error_, const char* description_)
 {
 	Logger::error("GLFW Error {}): {}\n", error_, description_);
-	Engine::Dispatcher().trigger<Error>(Error(description_));
+	Engine::Dispatcher().trigger<Error>(Error{ description_ });
 }
 
 static void KeyCallback(GLFWwindow* window_, int key_, int scancode_, int action_, int mods_)
@@ -56,7 +56,7 @@ static void WindowResizeCallback(GLFWwindow* window_, int width_, int height_)
 
 void WindowSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
-	Logger::info("Shader changed to {}, reuploading projection matrix.", request_.m_Shader->m_ShaderName);
+	Logger::info("Shader changed to {}, reuploading projection matrix.", request_.m_Shader->shaderName);
 	WindowResizeCallback(m_Config.m_Window, m_Config.m_WindowWidth, m_Config.m_WindowHeight);
 }
 
@@ -69,7 +69,7 @@ void WindowSystem::SpinUp()
 
 	if (!glfwInit())
 	{
-		events.trigger<Error>(Error("GLFW failed to initialize."));
+		events.trigger<Error>(Error{ "GLFW failed to initialize." });
 		return;
 	}
 
@@ -96,7 +96,7 @@ void WindowSystem::SpinUp()
 
 	if (window == nullptr)
 	{
-		events.trigger<Error>(Error("GLFW window failed to create."));
+		events.trigger<Error>(Error{ "GLFW window failed to create." });
 		return;
 	}
 
@@ -105,7 +105,7 @@ void WindowSystem::SpinUp()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		events.trigger<Error>(Error("Couldn't initialize GLAD"));
+		events.trigger<Error>(Error{ "Couldn't initialize GLAD" });
 		return;
 	}
 

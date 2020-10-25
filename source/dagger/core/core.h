@@ -1,15 +1,36 @@
 #pragma once
 
+#include "core/view_ptr.h"
+
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
+#include <tsl/sparse_map.h>
+#include <tsl/sparse_set.h>
+#include <nlohmann/json.hpp>
 
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <memory>
+#include <vector>
+#include <fstream>
+#include <chrono>
 
 template<typename T>
-using Seq = std::vector<T>;
+using OwningPtr = std::unique_ptr<T>;
+
+template<typename T>
+using ViewPtr = jss::object_ptr<T>;
+
+template<typename T>
+using Sequence = std::vector<T>;
+
+template<typename K, typename V>
+using Map = tsl::sparse_map<K, V>;
+
+template<typename K>
+using Set = tsl::sparse_set<K>;
 
 using Bool = bool;
 using Char = char;
@@ -31,7 +52,11 @@ using String = std::string;
 namespace Logger = spdlog;
 namespace Files = std::filesystem;
 
+using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
+using Duration = std::chrono::duration<double>;
+
 using FilePath = std::filesystem::path;
+using FileInputStream = std::fstream;
 
 using Matrix3 = glm::mat3x3;
 using Matrix4 = glm::mat4x4;
@@ -41,73 +66,55 @@ using Vector3 = glm::fvec3;
 
 using Color = glm::fvec4;
 
+namespace JSON = nlohmann;
+
 #define EMPTY_EVENT 
 
-class Log
+struct Log
 {
-	String m_Message;
-
-public:
-	Log(String message_)
-		: m_Message{ message_ }
-	{}
-
-	const String& Message() const
-	{
-		return m_Message;
-	}
+	String message;
 };
 
 template<typename PhantomT>
 struct AssetLoadRequest
 {
-    String m_Path;
-
-	explicit AssetLoadRequest(String path_)
-		: m_Path{ path_ }
-	{}
+    String path;
 };
 
 struct KeyboardEvent
 {
-	UInt32 m_Key;
-	UInt32 m_Scancode;
-	UInt32 m_Action;
-	UInt32 m_Modifiers;
+	UInt32 key;
+	UInt32 scancode;
+	UInt32 action;
+	UInt32 modifiers;
 };
 
 struct CharEvent
 {
-	UInt8 m_Codepoint;
+	UInt8 codepoint;
 };
 
 typedef glm::dvec2 ScrollEvent;
 
 struct MouseEvent
 {
-	UInt32 m_Button;
-	UInt32 m_Action;
-	UInt32 m_Modifiers;
+	UInt32 button;
+	UInt32 action;
+	UInt32 modifiers;
 };
 
 typedef glm::dvec2 CursorEvent;
 
 struct WindowResizedEvent
 {
-	UInt32 m_Width;
-	UInt32 m_Height;
+	UInt32 width;
+	UInt32 height;
 };
 
 struct Error
 {
-	String m_Message;
-
-	Error(String message_)
-		: m_Message{ message_ }
-	{}
-
-	Error() = delete;
+	String message;
 };
 
-struct Frame EMPTY_EVENT {};
+struct NextFrame EMPTY_EVENT {};
 struct Exit EMPTY_EVENT {};

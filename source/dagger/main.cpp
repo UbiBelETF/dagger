@@ -5,6 +5,8 @@
 #include "core/graphics/texture.h"
 #include "core/graphics/window.h"
 #include "core/graphics/sprite.h"
+#include "core/graphics/animation.h"
+#include "core/graphics/animations.h"
 #include "core/graphics/sprite_render.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
@@ -28,13 +30,12 @@ int main(int argc_, char** argv_)
 	engine.AddSystem<ShaderSystem>();
 	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
-#ifndef NDEBUG
-	engine.AddSystem<ToolMenuSystem>();
+	engine.AddSystem<AnimationSystem>();
+#if !defined(NDEBUG)
 	engine.AddSystem<DiagnosticSystem>();
-	engine.AddSystem<ConsoleSystem>();
 	engine.AddSystem<GUISystem>();
-#endif // !NDEBUG
-    engine.AddSystem<JiggleSystem>();
+	engine.AddSystem<ToolMenuSystem>();
+#endif //!defined(NDEBUG)
 
 	EngineInit(engine);
 	
@@ -48,8 +49,11 @@ int main(int argc_, char** argv_)
 	{
 		auto entity = reg.create();
 		auto& sprite = reg.emplace<Sprite>(entity);
-		sprite.UseTexture("rayman");
-		sprite.m_Scale = 0.5f;
+		auto& anim = reg.emplace<Animator>(entity);
+
+		AnimatorPlay(anim, "souls_like_knight_character:IDLE");
+
+		AssignSpriteTexture(sprite, "souls_like_knight_character:IDLE:idle1");
 	}
 
 	// Game loop starts here 

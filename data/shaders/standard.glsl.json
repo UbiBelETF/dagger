@@ -1,0 +1,8 @@
+{
+	"program-name": "standard",
+	"shader-stages": 
+	{
+		"vertex-shader": "shaders\\standard.vs.glsl",
+		"fragment-shader": "shaders\\standard.fs.glsl"
+	}
+}

@@ -12,9 +12,9 @@ using namespace dagger;
 
 struct ShaderChangeRequest
 {
-    Shader* m_Shader;
+    ViewPtr<Shader> m_Shader;
 
-    explicit ShaderChangeRequest(Shader* shader_)
+    explicit ShaderChangeRequest(ViewPtr<Shader> shader_)
         : m_Shader{ shader_ }
     {}
 };

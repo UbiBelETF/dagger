@@ -8,10 +8,6 @@
 
 void DiagnosticSystem::Tick()
 {
-	static TimePoint nextTime;
-	nextTime = std::chrono::steady_clock::now();
-	m_DeltaTime += (nextTime - m_LastFrameTime);
-	m_LastFrameTime = nextTime;
 	m_FrameCounter++;
 }
 
@@ -26,23 +22,23 @@ void DiagnosticSystem::RenderGUI()
 void DiagnosticSystem::SpinUp()
 {
 	Engine::Dispatcher().sink<GUIRender>().connect<&DiagnosticSystem::RenderGUI>(this);
-	Engine::Dispatcher().sink<Frame>().connect<&DiagnosticSystem::Tick>(this);
+	Engine::Dispatcher().sink<NextFrame>().connect<&DiagnosticSystem::Tick>(this);
 }
 
 void DiagnosticSystem::Run()
 {
-	auto delta = m_DeltaTime.count();
-	if (delta >= 1.0)
+	m_DeltaSum += Engine::DeltaTime();
+	if (m_DeltaSum >= 1.0)
 	{
 		m_LastFrameCounter = m_FrameCounter;
-		Logger::trace("FPS: {}", m_LastFrameCounter);
+		Logger::trace("Frame: {}, FPS: {}", Engine::FrameCount(), m_LastFrameCounter);
 		m_FrameCounter = 0;
-		m_DeltaTime = Duration::zero();
+		m_DeltaSum = 0.0;
 	}
 }
 
 void DiagnosticSystem::WindDown()
 {
-	Engine::Dispatcher().sink<Frame>().disconnect<&DiagnosticSystem::Tick>(this);
+	Engine::Dispatcher().sink<NextFrame>().disconnect<&DiagnosticSystem::Tick>(this);
 	Engine::Dispatcher().sink<GUIRender>().disconnect<&DiagnosticSystem::RenderGUI>(this);
 }

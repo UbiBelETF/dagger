@@ -13,9 +13,9 @@ struct TextureSystem
     : public System
     , public Subscriber<ShaderChangeRequest, AssetLoadRequest<Texture>>
 {
-    static Texture* Get(String name_);
+    static ViewPtr<Texture> Get(String name_);
 
-    Seq<UInt64> m_TextureHandles;
+    Sequence<UInt64> m_TextureHandles;
 
     void OnShaderChanged(ShaderChangeRequest request_);
     void OnLoadAsset(AssetLoadRequest<Texture> request_);

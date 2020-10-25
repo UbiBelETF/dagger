@@ -5,7 +5,7 @@
 
 #include <glad/glad.h>
 
-enum class ShaderStage : unsigned 
+enum class ShaderStage : unsigned
 {
 	None = 0,
 	Vertex = 1,
@@ -15,6 +15,13 @@ enum class ShaderStage : unsigned
 };
 
 ENABLE_BITMASK_OPERATORS(ShaderStage);
+
+struct ShaderConfig
+{
+	String name{ "" };
+	ShaderStage stages{ ShaderStage::None };
+	Map<ShaderStage, String> paths{};
+};
 
 struct Shader
 {
@@ -26,35 +33,35 @@ struct Shader
 
 	constexpr static UInt32 ms_ShaderStageCount = 4;
 
-	constexpr static UInt32 ms_ShaderStageHandles[ms_ShaderStageCount] =
+	inline static Map<ShaderStage, UInt32> s_ShaderStageHandles =
 	{
-		GL_VERTEX_SHADER,
-		GL_FRAGMENT_SHADER,
-		GL_GEOMETRY_SHADER,
-		GL_COMPUTE_SHADER
+		{ ShaderStage::Vertex, GL_VERTEX_SHADER },
+		{ ShaderStage::Fragment, GL_FRAGMENT_SHADER },
+		{ ShaderStage::Geometry, GL_GEOMETRY_SHADER },
+		{ ShaderStage::Compute, GL_COMPUTE_SHADER }
 	};
 
-	const static inline Char* ms_ShaderStageNames[ms_ShaderStageCount] =
+	inline static Map<String, ShaderStage> s_ShaderStageIndex =
 	{
-		"Vertex Shader",
-		"Fragment Shader",
-		"Geometry Shader",
-		"Compute Shader"
+		{ "vertex-shader", ShaderStage::Vertex },
+		{ "fragment-shader", ShaderStage::Fragment },
+		{ "geometry-shader", ShaderStage::Geometry },
+		{ "compute-shader", ShaderStage::Compute }
 	};
 
-	const static inline Char* ms_ShaderStageExt[ms_ShaderStageCount] =
+	inline static Map<ShaderStage, String> s_ShaderStageNames =
 	{
-		".vs.glsl",
-		".fs.glsl",
-		".gs.glsl",
-		".cs.glsl"
+		{ ShaderStage::Vertex, "Vertex Shader" },
+		{ ShaderStage::Fragment, "Fragment Shader" },
+		{ ShaderStage::Geometry, "Geometry Shader" },
+		{ ShaderStage::Compute, "Compute Shader" }
 	};
 
-	UInt32 m_ProgramId;
-	String m_ShaderName;
+	UInt32 programId;
+	String shaderName;
 
-    Shader() = default;
+	Shader() = default;
 
-	Shader(String name_, ShaderStage stages_);
+	Shader(ShaderConfig config_);
 	~Shader();
 };
