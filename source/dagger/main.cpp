@@ -25,7 +25,6 @@ using namespace dagger;
 void GameplaySystemsSetup(Engine &engine)
 {
     //engine.AddSystem<JiggleSystem>();
-    engine.AddSystem<TransformSystem>();
     engine.AddSystem<PingPongBallSystem>();
 }
 
@@ -42,9 +41,9 @@ void PostInitWorld(Engine &engine)
 
     constexpr int Heigh = 20;
     constexpr int Width = 26;
-    constexpr float UnitSize = 0.94f / static_cast<float>(Width);
+    constexpr float UnitSize = 30.f;// / static_cast<float>(Width);
 
-    constexpr float Space = 0.f;
+    constexpr float Space = 0.00f;
     for (int i = 0; i < Heigh; i++)
     {
         for (int j = 0; j < Width; j++)
@@ -70,8 +69,8 @@ void PostInitWorld(Engine &engine)
             }
 
             auto& transform = reg.emplace<Transform>(entity);
-            transform.position.x = j + j * Space - Width / 2.f;
-            transform.position.y = i + i * Space - Heigh / 2.f;
+            transform.position.x = (0.5f + j + j * Space - static_cast<float>(Width) / 2.f) * UnitSize;
+            transform.position.y = (0.5f + i + i * Space - static_cast<float>(Heigh) / 2.f) * UnitSize;
         }
     }
 
@@ -105,6 +104,7 @@ int main(int argc_, char** argv_)
 	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
 	engine.AddSystem<AnimationSystem>();
+    engine.AddSystem<TransformSystem>();
 #if !defined(NDEBUG)
 	engine.AddSystem<DiagnosticSystem>();
 	engine.AddSystem<GUISystem>();
@@ -117,14 +117,14 @@ int main(int argc_, char** argv_)
 	
 	// Post-init pre-loop setup
 
-    //PostInitWorld(engine);
-	ShaderSystem::Use("standard");
+    PostInitWorld(engine);
+    /*ShaderSystem::Use("standard");
 
-	auto& reg = engine.GetRegistry();
-	auto entity = reg.create();
-	auto& sprite = reg.emplace<Sprite>(entity);
-	auto& anim = reg.emplace<Animator>(entity);
-	AnimatorPlay(anim, "souls_like_knight_character:DRINK_POTION");
+    auto& reg = engine.GetRegistry();
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    auto& anim = reg.emplace<Animator>(entity);
+    AnimatorPlay(anim, "souls_like_knight_character:DRINK_POTION");*/
 
 	// Game loop starts here 
 

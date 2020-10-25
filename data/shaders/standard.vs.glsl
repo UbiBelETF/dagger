@@ -27,8 +27,9 @@ void main()
 	v_QuadColor = a_QuadColor;
 	v_Image = a_Image;
 
-	vec2 xy = a_Position.xy + a_QuadPosition.xy + a_QuadPivot.xy;
+	vec2 xy = a_QuadPosition.xy + (a_Position.xy + a_QuadPivot.xy) * a_Scale;
 	xy.y *= a_Ratio;
 
-	gl_Position = u_Projection * vec4(xy * a_Scale * 600, a_QuadPosition.z, 1.0f);
+	gl_Position = u_Projection * vec4(xy, a_QuadPosition.z, 1.0f);
+
 }

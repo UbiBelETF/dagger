@@ -27,7 +27,7 @@ ipch
 .vs
 
 # imgui
-imgui.ini
+*imgui.ini
 
 # Directory structure ignore
 projects/

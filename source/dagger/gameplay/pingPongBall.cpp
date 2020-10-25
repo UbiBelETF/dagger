@@ -19,12 +19,12 @@ void PingPongBallSystem::Run()
         // change 13 later
         if (transform.position.x > 13 && ball.speed.x > 0.f || transform.position.x < -13 && ball.speed.x < 0.f)
         {
-            ball.speed.x += ((rand() % 3) - 1) * 0.003f;
+            ball.speed.x += ((rand() % 3) - 1) * 0.001f;
             ball.speed.x *= -1;
         }
         if (transform.position.y > 10 && ball.speed.y > 0.f || transform.position.y < -10 && ball.speed.y < 0.f)
         {
-            ball.speed.y += ((rand() % 3) - 1) * 0.003f;
+            ball.speed.y += ((rand() % 3) - 1) * 0.05f * ball.speed.y;
             ball.speed.y *= -1;
         }
 
