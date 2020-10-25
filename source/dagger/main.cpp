@@ -44,17 +44,10 @@ int main(int argc_, char** argv_)
 	ShaderSystem::Use("standard");
 
 	auto& reg = engine.GetRegistry();
-
-	for (int i = 0; i < 3; i++)
-	{
-		auto entity = reg.create();
-		auto& sprite = reg.emplace<Sprite>(entity);
-		auto& anim = reg.emplace<Animator>(entity);
-
-		AnimatorPlay(anim, "souls_like_knight_character:IDLE");
-
-		AssignSpriteTexture(sprite, "souls_like_knight_character:IDLE:idle1");
-	}
+	auto entity = reg.create();
+	auto& sprite = reg.emplace<Sprite>(entity);
+	auto& anim = reg.emplace<Animator>(entity);
+	AnimatorPlay(anim, "souls_like_knight_character:DRINK_POTION");
 
 	// Game loop starts here 
 

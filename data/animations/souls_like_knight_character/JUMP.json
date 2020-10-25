@@ -1,0 +1,9 @@
+{
+	"animation-name": "souls_like_knight_character:JUMP",
+	"animation-length-ms": 500,
+	"animation-frames": 
+	[
+		{ "texture-name": "souls_like_knight_character:JUMP:jump1" },
+		{ "texture-name": "souls_like_knight_character:JUMP:jump2" }
+	]
+}

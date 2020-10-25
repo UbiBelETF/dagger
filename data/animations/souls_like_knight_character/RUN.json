@@ -1,0 +1,15 @@
+{
+	"animation-name": "souls_like_knight_character:RUN",
+	"animation-length-ms": 800,
+	"animation-frames": 
+	[
+		{ "texture-name": "souls_like_knight_character:RUN:run1", "relative-length": 1 },
+		{ "texture-name": "souls_like_knight_character:RUN:run2", "relative-length": 1 },
+		{ "texture-name": "souls_like_knight_character:RUN:run3", "relative-length": 2 },
+		{ "texture-name": "souls_like_knight_character:RUN:run4", "relative-length": 2 },
+		{ "texture-name": "souls_like_knight_character:RUN:run5", "relative-length": 1 },
+		{ "texture-name": "souls_like_knight_character:RUN:run6", "relative-length": 1 },
+		{ "texture-name": "souls_like_knight_character:RUN:run7", "relative-length": 2 },
+		{ "texture-name": "souls_like_knight_character:RUN:run8", "relative-length": 2 }
+	]
+}
