@@ -26,5 +26,8 @@ ipch
 *sdf
 .vs
 
+# imgui
+imgui.ini
+
 # Directory structure ignore
 projects/
