@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\BuildScripts\main.sharpmake.cs">
+      <Link>BuildScripts\main.sharpmake.cs</Link>
+    </Compile>
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="main.sharpmake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,12 +69,10 @@
     <Exec Command="xcopy /I /y $(SolutionDir)bin\Sharpmake.Application\Sharpmake.Generators.dll $(SolutionDir)bin\" />
     <Exec Command="xcopy /I /y $(SolutionDir)bin\Sharpmake.Application\Sharpmake.CommonPlatforms.dll $(SolutionDir)bin\" />
     <Exec Command="xcopy /I /y $(SolutionDir)bin\Sharpmake.Application\Microsoft.VisualStudio.Setup.Configuration.Interop.dll $(SolutionDir)bin\" />
-
     <!-- Clear build folders -->
     <Exec Command="rd /s /q $(SolutionDir)bin\debug\" />
     <Exec Command="rd /s /q $(SolutionDir)bin\Sharpmake.Application\" />
-    
     <!-- Generate Project Files -->
-    <Exec Command="$(SolutionDir)bin\Sharpmake.Application.exe /sources(@&quot;main.sharpmake.cs&quot;)" />
+    <Exec Command="$(SolutionDir)bin\Sharpmake.Application.exe /sources(@&quot;../../BuildScripts/main.sharpmake.cs&quot;)" />
   </Target>
 </Project>
