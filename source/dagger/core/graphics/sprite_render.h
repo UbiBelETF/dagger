@@ -37,6 +37,8 @@ class SpriteRenderSystem
 	void OnShaderChanged(ShaderChangeRequest request_);
 
 public:
+	inline String SystemName() { return "Sprite Render System"; }
+
 	constexpr static UInt64 ms_VertexCount = 24;
 	constexpr static UInt64 m_SizeOfMesh = sizeof(Float32) * ms_VertexCount;
 	constexpr static UInt64 ms_MaxNumberOfMeshes = 10000;

@@ -8,5 +8,7 @@ using namespace dagger;
 class JiggleSystem
     : public System
 {
+    inline String SystemName() { return "Jiggle System"; }
+
     void Run() override;
 };

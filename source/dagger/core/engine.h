@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system.h"
-#include "core.h"
+#include "core/core.h"
 
 #include <entt/entt.hpp>
 #include <spdlog/spdlog.h>
@@ -32,7 +32,7 @@ namespace dagger
 		OwningPtr<entt::registry> m_Registry;
 		OwningPtr<entt::dispatcher> m_EventDispatcher;
 		Bool m_ShouldStayUp;
-
+		
 		static inline Engine* s_Instance = nullptr;
 	public:
 
@@ -43,7 +43,7 @@ namespace dagger
 			return *s_Instance;
 		}
 		
-		static Float64 DeltaTime()
+		static Float32 DeltaTime()
 		{
 			return s_Instance->m_DeltaTime.count();
 		}
@@ -141,16 +141,33 @@ namespace dagger
 
 	static void EngineLoop(Engine& engine_)
 	{
+		Duration frameDuration{};
 		static TimePoint lastTime{ std::chrono::steady_clock::now() };
 		static TimePoint nextTime{ std::chrono::steady_clock::now() };
+		
+#if defined(MEASURE_SYSTEMS)
+		static TimePoint systemStart{};
+		static TimePoint systemEnd{};
+#endif//defined(MEASURE_SYSTEMS)
 
 		for (auto& system : engine_.m_Systems)
 		{
+#if defined(MEASURE_SYSTEMS)
+			systemStart = std::chrono::steady_clock::now();
+#endif//defined(MEASURE_SYSTEMS)
 			system->Run();
+#if defined(MEASURE_SYSTEMS)
+			systemEnd = std::chrono::steady_clock::now();
+			frameDuration += (systemEnd - systemStart);
+			Engine::Dispatcher().trigger<SystemRunStats>(SystemRunStats{ system->SystemName(), systemEnd - systemStart });
+#endif//defined(MEASURE_SYSTEMS)
 		}
 
 		nextTime = std::chrono::steady_clock::now();
 		engine_.m_DeltaTime = (nextTime - lastTime);
+#if !defined(MEASURE_SYSTEMS)
+		frameDuration = engine_.m_DeltaTime;
+#endif//!defined(MEASURE_SYSTEMS)
 		lastTime = nextTime;
 		engine_.m_FrameCounter++;
 

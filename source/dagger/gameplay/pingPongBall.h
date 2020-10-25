@@ -17,5 +17,7 @@ struct PingPongBall
 class PingPongBallSystem
     : public System
 {
+    inline String SystemName() { return "Ping Pong Ball System"; }
+
     void Run() override;
 };

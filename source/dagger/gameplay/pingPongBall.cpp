@@ -31,6 +31,6 @@ void PingPongBallSystem::Run()
         }
 
         // todo: vector3 doesn't have multiplication to float64
-        t.position += (ball.speed * (float)Engine::DeltaTime());
+        t.position += (ball.speed * Engine::DeltaTime());
     }
 }

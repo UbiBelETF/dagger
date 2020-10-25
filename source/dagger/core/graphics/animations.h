@@ -22,6 +22,8 @@ class AnimationSystem
 {
 
 public:
+    inline String SystemName() { return "Animation System"; }
+
     static ViewPtr<Animation> Get(String name_);
 
 #if !defined(NDEBUG)

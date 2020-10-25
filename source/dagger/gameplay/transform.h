@@ -14,5 +14,7 @@ struct Transform
 class TransformSystem
     : public System
 {
+    inline String SystemName() { return "Transform System"; }
+
     void Run() override;
 };

@@ -19,8 +19,22 @@ void DiagnosticSystem::RenderGUI()
 	ImGui::End();
 }
 
+#if defined(MEASURE_SYSTEMS)
+void DiagnosticSystem::ReceiveSystemStats(SystemRunStats stats_)
+{
+	auto length = stats_.length.count();
+	m_SystemTimeCounter += length;
+
+	if (!m_SystemStats.contains(stats_.name))
+		m_SystemStats[stats_.name] = length;
+	else
+		m_SystemStats[stats_.name] = (m_SystemStats[stats_.name] + length) / 2.0f;
+}
+#endif//defined(MEASURE_SYSTEMS)
+
 void DiagnosticSystem::SpinUp()
 {
+	Engine::Dispatcher().sink<SystemRunStats>().connect<&DiagnosticSystem::ReceiveSystemStats>(this);
 	Engine::Dispatcher().sink<GUIRender>().connect<&DiagnosticSystem::RenderGUI>(this);
 	Engine::Dispatcher().sink<NextFrame>().connect<&DiagnosticSystem::Tick>(this);
 }
@@ -33,6 +47,18 @@ void DiagnosticSystem::Run()
 		m_LastFrameCounter = m_FrameCounter;
 		Logger::trace("Frame: {}, FPS: {}", Engine::FrameCount(), m_LastFrameCounter);
 		m_FrameCounter = 0;
+
+#if defined(MEASURE_SYSTEMS)
+		Logger::trace("Per-system measurements #{}", Engine::FrameCount());
+		for (auto& [key, value] : m_SystemStats)
+		{
+			Logger::trace("  {:<30}:\t\t{:>10}", key, value);
+		}
+		Logger::trace("Systemic time: {:>30}", m_SystemTimeCounter / m_LastFrameCounter);
+
+		m_SystemTimeCounter = 0.0;
+#endif//defined(MEASURE_SYSTEMS)
+
 		m_DeltaSum = 0.0;
 	}
 }

@@ -44,7 +44,7 @@ struct SimpleCollision
 
 class SimpleCollisionsSystem : public System
 {
-
+    inline String SystemName() { return "Simple Collisions System"; }
 
     void Run() override;
 };

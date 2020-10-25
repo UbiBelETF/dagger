@@ -13,6 +13,8 @@ struct TextureSystem
     : public System
     , public Subscriber<ShaderChangeRequest, AssetLoadRequest<Texture>>
 {
+    inline String SystemName() { return "Texture System"; }
+
     static ViewPtr<Texture> Get(String name_);
 
     Sequence<UInt64> m_TextureHandles;

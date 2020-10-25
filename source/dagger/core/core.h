@@ -1,5 +1,7 @@
 #pragma once
 
+#define MEASURE_SYSTEMS
+
 #include "core/view_ptr.h"
 
 #include <glm/glm.hpp>
@@ -53,7 +55,7 @@ namespace Logger = spdlog;
 namespace Files = std::filesystem;
 
 using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
-using Duration = std::chrono::duration<double>;
+using Duration = std::chrono::duration<Float32>;
 
 using FilePath = std::filesystem::path;
 using FileInputStream = std::fstream;
@@ -114,6 +116,12 @@ struct WindowResizedEvent
 struct Error
 {
 	String message;
+};
+
+struct SystemRunStats
+{
+	String name;
+	Duration length;
 };
 
 struct NextFrame EMPTY_EVENT {};

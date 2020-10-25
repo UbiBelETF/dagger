@@ -23,6 +23,8 @@ struct ShaderSystem
     : public System
     , public Subscriber<AssetLoadRequest<Shader>>
 {
+    inline String SystemName() { return "Shader System"; }
+
     static void Use(String name_);
     static UInt32 Get(String name_);
 

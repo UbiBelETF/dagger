@@ -37,6 +37,8 @@ struct WindowSystem
 	, public Publisher<PreRender, Render, ToolRender, 
 				KeyboardEvent, MouseEvent, CursorEvent, Error>
 {
+	inline String SystemName() { return "Window System"; }
+
 	RenderConfig m_Config;
 
 	WindowSystem()

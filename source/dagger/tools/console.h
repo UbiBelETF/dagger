@@ -60,6 +60,8 @@ public:
 		, m_IsOpen{ false }
 	{}
 
+    inline String SystemName() { return "Console System"; }
+
 	void SpinUp() override;
 	void WindDown() override;
 };
