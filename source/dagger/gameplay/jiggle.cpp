@@ -12,12 +12,12 @@ void JiggleSystem::Run()
 {
     Engine::Registry().view<Sprite>().each([&](Sprite& sprite)
     {
-        sprite.m_Position.x += ((rand() % 3) - 1) * 0.001f;
-        sprite.m_Position.y += ((rand() % 3) - 1) * 0.001f;
+        sprite.position.x += ((rand() % 3) - 1) * 0.001f;
+        sprite.position.y += ((rand() % 3) - 1) * 0.001f;
 
-        sprite.m_Color.r += ((rand() % 3) - 1) * 0.01f;
-        sprite.m_Color.g += ((rand() % 3) - 1) * 0.01f;
-        sprite.m_Color.b += ((rand() % 3) - 1) * 0.01f;
+        sprite.color.r += ((rand() % 3) - 1) * 0.01f;
+        sprite.color.g += ((rand() % 3) - 1) * 0.01f;
+        sprite.color.b += ((rand() % 3) - 1) * 0.01f;
     });
 }
 

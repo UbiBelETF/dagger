@@ -110,7 +110,7 @@ public:
         , m_Ratio{ other_.m_Ratio }
     {}
 
-    Texture& operator=(const Texture& other_)
+    Texture& operator=(const Texture&)
     {
         return *this;
     }

@@ -10,15 +10,11 @@ using namespace dagger;
 
 class DiagnosticSystem 
 	: public System
-	, public Subscriber<GUIRender, Frame>
+	, public Subscriber<GUIRender, NextFrame>
 {
-	using TimePoint = std::chrono::time_point< std::chrono::steady_clock>;
-	using Duration = std::chrono::duration<double>;
-
-	uint64_t m_LastFrameCounter;
-	uint64_t m_FrameCounter;
-	TimePoint m_LastFrameTime;
-	Duration m_DeltaTime;
+	UInt64 m_LastFrameCounter;
+	UInt64 m_FrameCounter;
+	Float64 m_DeltaSum;
 
 	void Tick();
 	void RenderGUI();

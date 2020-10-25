@@ -31,7 +31,7 @@ class SpriteRenderSystem
 	Float32* m_Data;
 
 	UInt8 m_Index = 0;
-	Shader* m_CachedShader;
+	ViewPtr<Shader> m_CachedShader;
 
 	void OnRender();
 	void OnShaderChanged(ShaderChangeRequest request_);

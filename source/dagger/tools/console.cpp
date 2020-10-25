@@ -272,7 +272,7 @@ void ConsoleSystem::RenderGUI()
 
 void ConsoleSystem::ReceiveLog(Log log)
 {
-    m_Console.AddLog(log.Message().c_str());
+    m_Console.AddLog(log.message.c_str());
 }
 
 void ConsoleSystem::SpinUp() 

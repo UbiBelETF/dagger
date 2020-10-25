@@ -3,11 +3,17 @@
 #include "texture.h"
 #include "textures.h"
 
-void Sprite::UseTexture(String textureName_)
+void dagger::AssignSpriteTexture(Sprite& spriteTarget_, String textureName_)
 {
-	Texture* texture = TextureSystem::Get(textureName_);
+	ViewPtr<Texture> texture = TextureSystem::Get(textureName_);
 
 	// we copy this over so that this info can be copied into GPU-space directly
-	m_Image = texture->Index();
-	m_Ratio = texture->Ratio();
+	spriteTarget_.image = texture->Index();
+	spriteTarget_.ratio = texture->Ratio();
+}
+
+void dagger::AssignSpriteTexture(Sprite& spriteTarget_, ViewPtr<Texture> texture_)
+{
+	spriteTarget_.image = texture_->Index();
+	spriteTarget_.ratio = texture_->Ratio();
 }

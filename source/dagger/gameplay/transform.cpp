@@ -15,6 +15,6 @@ void TransformSystem::Run()
         auto &sprite = view.get<Sprite>(entity);
         auto &transform = view.get<Transform>(entity);
 
-        sprite.m_Position = transform.position;
+        sprite.position = transform.position;
     }
 }

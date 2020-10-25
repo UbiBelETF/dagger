@@ -2,99 +2,89 @@
 #include "core/files.h"
 #include "core/engine.h"
 
-#include <spdlog/spdlog.h>
-#include <fmt/format.h>
 #include <cmath>
 
 using namespace dagger;
 
-Shader::Shader(String name_, ShaderStage stages_)
-	: m_ProgramId{ 0 }
-	, m_ShaderName{ name_ }
+Shader::Shader(ShaderConfig config_)
+	: programId{ 0 }
+	, shaderName{ config_.name }
 {
-	Logger::info("Constructing shader program '{}'", name_);
-	
+	Logger::info("Constructing shader program '{}'", config_.name);
+
 	constexpr auto count = ms_ShaderStageCount + 1;
-	UInt32 shaderIds[count] = { 0, };
+	Sequence<UInt32> shaderIds;
 
-	for (UInt32 i = 0; i < count; ++i)
-		shaderIds[i] = 0;
+	programId = glCreateProgram();
 
-	shaderIds[0] = glCreateProgram();
-
-	for (UInt32 i = 1; i < count; ++i)
+	for (auto [stage, path] : config_.paths)
 	{
-		UInt32 value = (UInt32) std::pow(2, i - 1);
-		if (((UInt32)stages_ & value) == value)
+		Logger::info("Loading {}'s {}...", config_.name, Shader::s_ShaderStageNames[stage]);
+		UInt32 id = glCreateShader(Shader::s_ShaderStageHandles[stage]);
+
+		Logger::trace(" path: {}", path);
+		String source = ReadFromFile(path);
+
+		if (source.empty())
 		{
-			Logger::info("Loading {}'s {}...", name_, ms_ShaderStageNames[i - 1]);
-			shaderIds[i] = glCreateShader(ms_ShaderStageHandles[i - 1]);
+			Engine::Dispatcher().trigger<Error>(Error{ fmt::format("Shader path empty or not found: {}", path) });
+			return;
+		}
 
-			auto path = fmt::format("shaders/{}{}", name_, ms_ShaderStageExt[i - 1]);
-			Logger::trace(" path: {}", path);
-			String source = ReadFromFile(path);
-
-			if (source.empty())
+		{
+			auto sourceCode = source.c_str();
+			glShaderSource(id, 1, &sourceCode, nullptr);
+			glCompileShader(id);
 			{
-				Engine::Dispatcher().trigger<Error>(Error(fmt::format("Shader path empty or not found: {}", path)));
-				return;
-			}
-
-			{
-				auto sourceCode = source.c_str();
-				glShaderSource(shaderIds[i], 1, &sourceCode, nullptr);
-				glCompileShader(shaderIds[i]);
+				GLint success;
+				GLchar infoLog[512];
+				glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+				if (!success)
 				{
-					GLint success; 
-					GLchar infoLog[512]; 
-					glGetShaderiv(shaderIds[i], GL_COMPILE_STATUS, &success); 
-					if (!success)
-					{
-						glGetShaderInfoLog(shaderIds[i], 512, nullptr, infoLog);
-						auto errorMessage = fmt::format("Shader error ({}): {}", name_, infoLog);
-						Logger::error(errorMessage);
-						Engine::Dispatcher().trigger<Error>(Error(errorMessage));
-						return;
-					}
+					glGetShaderInfoLog(id, 512, nullptr, infoLog);
+					auto errorMessage = fmt::format("Shader error ({}): {}", config_.name, infoLog);
+					Logger::error(errorMessage);
+					Engine::Dispatcher().trigger<Error>(Error{ errorMessage });
+					return;
 				}
-
-				glAttachShader(shaderIds[0], shaderIds[i]);
-				Logger::info("{} successfully compiled and attached to program '{}'", ms_ShaderStageNames[i - 1], name_);
 			}
+
+			glAttachShader(programId, id);
+			shaderIds.push_back(id);
+			Logger::info("{} successfully compiled and attached to program '{}'", Shader::s_ShaderStageNames[stage], config_.name);
 		}
 	}
 
-	glLinkProgram(shaderIds[0]);
+	glLinkProgram(programId);
 
 	{
 		GLint success;
 		GLchar infoLog[512];
-		glGetProgramiv(shaderIds[0], GL_LINK_STATUS, &success);
+		glGetProgramiv(programId, GL_LINK_STATUS, &success);
 		if (!success) {
-			glGetProgramInfoLog(shaderIds[0], 512, NULL, infoLog);
-			auto errorMessage = fmt::format("Shader linking error ({}): {}", name_, infoLog);
+			glGetProgramInfoLog(programId, 512, NULL, infoLog);
+			auto errorMessage = fmt::format("Shader linking error ({}): {}", config_.name, infoLog);
 			Logger::error(errorMessage);
-			Engine::Dispatcher().trigger<Error>(Error(errorMessage));
+			Engine::Dispatcher().trigger<Error>(Error{ errorMessage });
 			return;
 		}
 	}
 
-	Logger::info("Successfully linked shader '{}'", name_);
+	Logger::info("Successfully linked shader '{}'", config_.name);
 
-	for (UInt32 i = 1; i < count; ++i)
+	for (UInt32 id : shaderIds)
 	{
-		if(shaderIds[i] != 0)
-			glDeleteShader(shaderIds[i]);
+		glDeleteShader(id);
 	}
 
-	m_ProgramId = shaderIds[0];
-	assert(m_ProgramId != 0);
+	programId = programId;
+	assert(programId != 0);
 }
 
 Shader::~Shader()
 {
-	if(m_ProgramId != 0)
-		glDeleteProgram(m_ProgramId);
+	if (programId != 0)
+		glDeleteProgram(programId);
 
-	Logger::info("Successfully destroyed shader '{}'", m_ShaderName);
+	Logger::info("Successfully destroyed shader '{}'", shaderName);
 }

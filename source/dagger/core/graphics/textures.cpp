@@ -10,7 +10,7 @@
 
 using namespace dagger;
 
-Texture* TextureSystem::Get(String name_)
+ViewPtr<Texture> TextureSystem::Get(String name_)
 {
     auto texture = Engine::Res<Texture>()[name_];
     assert(texture != nullptr);
@@ -19,11 +19,18 @@ Texture* TextureSystem::Get(String name_)
 
 void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
 {
-    Logger::info("Loading texture {}...", request_.m_Path);
+    Logger::info("Loading texture {}...", request_.path);
     stbi_set_flip_vertically_on_load(true);
 
-    const FilePath path{ request_.m_Path };
-    const String textureName = path.stem().string();
+    const FilePath path{ request_.path };
+    String textureName = "";
+    {
+        String pathName = path.string();
+        pathName = pathName.substr(9, pathName.length() - 13);
+        std::replace(pathName.begin(), pathName.end(), '/', ':');
+        std::replace(pathName.begin(), pathName.end(), '\\', ':');
+        textureName = pathName;
+    }
 
     // these have to remain "int" because of API/ABI-compatibility with stbi_load
     int width, height, channels;
@@ -32,7 +39,7 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
 
     if (image == nullptr)
     {
-        Engine::Dispatcher().trigger<Error>(Error(fmt::format("Failed to load texture: {}", path.string())));
+        Engine::Dispatcher().trigger<Error>(Error{ fmt::format("Failed to load texture: {}", path.string()) });
         return;
     }
 
@@ -46,14 +53,14 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
     assert(texture->m_Ratio != 0);
 
     Engine::Res<Texture>()[textureName] = texture;
-    Logger::info("Texture index: {}", texture->m_TextureIndex);
+    Logger::info("Texture [{}] added: {}", textureName, texture->m_TextureIndex);
     stbi_image_free(image);
 }
 
 void TextureSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
-    Logger::info("Shader changed to {}, reuploading textures.", request_.m_Shader->m_ShaderName);
-    glProgramUniformHandleui64vARB(request_.m_Shader->m_ProgramId, (GLuint)Shader::Uniforms::TextureBufferId,
+    Logger::info("Shader changed to {}, reuploading textures.", request_.m_Shader->shaderName);
+    glProgramUniformHandleui64vARB(request_.m_Shader->programId, (GLuint)Shader::Uniforms::TextureBufferId,
         (GLsizei)m_TextureHandles.size(), m_TextureHandles.data());
 }
 
@@ -62,17 +69,10 @@ void TextureSystem::SpinUp()
     Engine::Dispatcher().sink<ShaderChangeRequest>().connect<&TextureSystem::OnShaderChanged>(this);
     Engine::Dispatcher().sink<AssetLoadRequest<Texture>>().connect<&TextureSystem::OnLoadAsset>(this);
 
-    for (const auto& entry : std::filesystem::directory_iterator("textures"))
+    for (auto& entry : Files::recursive_directory_iterator("textures"))
     {
-        // TODO:: will work with .png.something path
-        if(entry.is_regular_file() && entry.path().string().rfind(".png") != std::string::npos)
-            Engine::Dispatcher().trigger<AssetLoadRequest<Texture>>(AssetLoadRequest<Texture>(entry.path().string()));
-        else
-        {
-            Engine::Dispatcher().trigger<Error>(
-                Error(fmt::format("Cannot read texture from {}, only PNG (4 channel) images supported.", entry.path().string())));
-            return;
-        }
+        if (entry.path().extension() == ".png")
+            Engine::Dispatcher().trigger<AssetLoadRequest<Texture>>(AssetLoadRequest<Texture>{ entry.path().string() });
     }
 }
 
@@ -83,6 +83,8 @@ void TextureSystem::WindDown()
     {
         delete t->second;
     }
+    
+    textures.clear();
 
     Engine::Dispatcher().sink<AssetLoadRequest<Texture>>().disconnect<&TextureSystem::OnLoadAsset>(this);
     Engine::Dispatcher().sink<ShaderChangeRequest>().disconnect<&TextureSystem::OnShaderChanged>(this);

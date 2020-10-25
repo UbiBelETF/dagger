@@ -1,9 +1,8 @@
-#include "shaders.h"
+#include "core/graphics/shaders.h"
 #include "core/engine.h"
 #include "core/stringops.h"
 
 #include <filesystem>
-#include <fstream>
 #include <string>
 #include <regex>
 
@@ -13,7 +12,7 @@ void ShaderSystem::Use(String name_)
 {
     auto shader = Engine::Res<Shader>()[name_];
     assert(shader != nullptr);
-    glUseProgram(shader->m_ProgramId);
+    glUseProgram(shader->programId);
     Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(shader));
 }
 
@@ -21,60 +20,69 @@ UInt32 ShaderSystem::Get(String name_)
 {
     auto shader = Engine::Res<Shader>()[name_];
     assert(shader != nullptr);
-    return shader->m_ProgramId;
+    return shader->programId;
 }
 
 void ShaderSystem::OnLoadAsset(AssetLoadRequest<Shader> request_)
 {
-    FilePath path(request_.m_Path);
+    FilePath path(request_.path);
 
     if (!Files::exists(path))
     {
-        Engine::Dispatcher().trigger<Error>(Error(fmt::format("Couldn't load shader from {}.", request_.m_Path)));
+        Engine::Dispatcher().trigger<Error>(Error{ fmt::format("Couldn't load shader from {}.", request_.path) });
         return;
     }
 
-    std::ifstream handle;
+    FileInputStream handle;
     auto absolutePath = Files::absolute(path);
     handle.open(absolutePath);
 
     if (!handle.is_open())
     {
-        Engine::Dispatcher().trigger<Error>(Error(fmt::format("Couldn't open shader file '{}' for reading.", absolutePath.string())));
+        Engine::Dispatcher().trigger<Error>(Error{ fmt::format("Couldn't open shader file '{}' for reading.", absolutePath.string()) });
         return;
     }
 
-    String line;
-    ShaderStage stages{ ShaderStage::None };
+    JSON::json json;
+    handle >> json;
 
-    while (std::getline(handle, line))
+    ShaderConfig config;
+
+    if (json.contains("program-name"))
     {
-        line = trim(line);
-        if (line.empty()) continue;
-        else if (line.rfind("#use vertex", 0) == 0)
-            stages = stages | ShaderStage::Vertex;
-        else if (line.rfind("#use fragment", 0) == 0)
-            stages = stages | ShaderStage::Fragment;
-        else if (line.rfind("#use compute", 0) == 0)
-            stages = stages | ShaderStage::Compute;
-        else if (line.rfind("#use geometry", 0) == 0)
-            stages = stages | ShaderStage::Geometry;
+        config.name = json["program-name"];
     }
-    
-    auto name = path.stem().string();
-    auto shader = new Shader(name, stages);
-    Engine::Res<Shader>()[name] = shader;
+
+    if (json.contains("shader-stages"))
+    {
+        Map<ShaderStage, String> stageLoader;
+
+        auto stages = json["shader-stages"];
+        for (auto [key, value] : stages.get<JSON::json::object_t>())
+        {
+            assert(Shader::s_ShaderStageIndex.contains(key));
+            auto stage = Shader::s_ShaderStageIndex[key];
+            config.stages = config.stages | stage;
+            stageLoader[stage] = stages[key];
+        }
+
+        config.paths = stageLoader;
+        auto shader = new Shader(config);
+        Engine::Res<Shader>()[config.name] = shader;
+    }
 }
 
 void ShaderSystem::SpinUp()
 {
     Engine::Dispatcher().sink<AssetLoadRequest<Shader>>().connect<&ShaderSystem::OnLoadAsset>(this);
 
-    for (const auto& entry : Files::directory_iterator("shaders"))
+    for (auto& entry : Files::recursive_directory_iterator("shaders"))
     {
-        // TODO:: will work with .shader.something path
-        if (entry.is_regular_file() && entry.path().string().rfind(".shader") != std::string::npos)
-            Engine::Dispatcher().trigger<AssetLoadRequest<Shader>>(AssetLoadRequest<Shader>(entry.path().string()));
+        auto path = entry.path().string();
+        if (entry.is_regular_file() && entry.path().extension() == ".json")
+        {
+            Engine::Dispatcher().trigger<AssetLoadRequest<Shader>>(AssetLoadRequest<Shader>{ path });
+        }
     }
 }
 

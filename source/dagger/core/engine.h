@@ -18,35 +18,49 @@ namespace dagger
 {
 	class Engine 
 		: public Subscriber<Exit, Error>
-		, public Publisher<Frame>
+		, public Publisher<NextFrame>
 	{
 		friend void EngineInit(Engine& engine_);
 		friend void EngineStop(Engine& engine_);
 		friend void EngineLoop(Engine& engine_);
 
-		std::vector<std::unique_ptr<System>> m_Systems;
-		entt::registry m_Registry;
-		entt::dispatcher m_EventDispatcher;
-		bool m_ShouldStayUp;
+		UInt64 m_LastFrameCounter{ 0 };
+		UInt64 m_FrameCounter{ 0 };
+		Duration m_DeltaTime{ 0.0 };
 
-		static inline Engine* ms_Instance = nullptr;
+		std::vector<System*> m_Systems;
+		OwningPtr<entt::registry> m_Registry;
+		OwningPtr<entt::dispatcher> m_EventDispatcher;
+		Bool m_ShouldStayUp;
+
+		static inline Engine* s_Instance = nullptr;
 	public:
 
-		static inline uint64_t ms_EntityId = 0;
+		static inline uint64_t s_EntityId = 0;
 
 		static inline Engine& Instance()
 		{
-			return *ms_Instance;
+			return *s_Instance;
+		}
+		
+		static Float64 DeltaTime()
+		{
+			return s_Instance->m_DeltaTime.count();
+		}
+
+		static inline UInt64 FrameCount()
+		{
+			return s_Instance->m_FrameCounter;
 		}
 
 		static inline entt::dispatcher& Dispatcher()
 		{
-			return ms_Instance->GetDispatcher();
+			return s_Instance->GetDispatcher();
 		}
 
 		static inline entt::registry& Registry()
 		{
-			return ms_Instance->GetRegistry();
+			return s_Instance->GetRegistry();
 		}
 
 		template<typename K, typename T>
@@ -69,7 +83,7 @@ namespace dagger
 			, m_EventDispatcher{}
 			, m_ShouldStayUp{ true }
 		{
-			Engine::ms_Instance = this;
+			Engine::s_Instance = this;
 		}
 			 
 		Engine(const Engine&) = delete;
@@ -85,61 +99,78 @@ namespace dagger
 		template<typename Sys, typename... Args>
 		inline void AddSystem(Args&&... args_)
 		{
-			m_Systems.push_back(std::unique_ptr<Sys>(new Sys(std::forward<Args>(args_)...)));
+			m_Systems.push_back(new Sys(std::forward<Args>(args_)...));
 		}
 
-		void EngineShutdown(Exit& exit_)
+		void EngineShutdown(Exit&)
 		{
 			m_ShouldStayUp = false;
 		}
 
 		inline entt::dispatcher& GetDispatcher()
 		{
-			return m_EventDispatcher;
+			return *m_EventDispatcher.get();
 		}
 
 		inline entt::registry& GetRegistry()
 		{
-			return m_Registry;
+			return *m_Registry.get();
 		}
 	};
 
 	static void EngineError(Error& error_)
 	{
-		Logger::error(error_.m_Message);
+		Logger::error(error_.message);
 		exit(-1);
 	}
 
 	static void EngineInit(Engine& engine_)
 	{
-		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
+		engine_.m_EventDispatcher.reset(new entt::dispatcher{});
+		engine_.m_Registry.reset(new entt::registry{});
+
+		engine_.Dispatcher().sink<Error>().connect<&EngineError>();
+
 		for (auto& system : engine_.m_Systems)
 		{
 			system->SpinUp();
 		}
-		engine_.m_EventDispatcher.sink<Exit>().connect<&Engine::EngineShutdown>(engine_);
+		engine_.Dispatcher().sink<Exit>().connect<&Engine::EngineShutdown>(engine_);
 	}
 
 
 	static void EngineLoop(Engine& engine_)
 	{
+		static TimePoint lastTime{ std::chrono::steady_clock::now() };
+		static TimePoint nextTime{ std::chrono::steady_clock::now() };
+
 		for (auto& system : engine_.m_Systems)
 		{
 			system->Run();
 		}
 
-		engine_.m_EventDispatcher.trigger<Frame>();
+		nextTime = std::chrono::steady_clock::now();
+		engine_.m_DeltaTime = (nextTime - lastTime);
+		lastTime = nextTime;
+		engine_.m_FrameCounter++;
+
+		engine_.Dispatcher().trigger<NextFrame>();
 	}
 
 
 	static void EngineStop(Engine& engine_)
 	{
-		for (auto system = engine_.m_Systems.rbegin(); system != engine_.m_Systems.rend(); system++)
+		for (auto& system : engine_.m_Systems)
 		{
-			(*system)->WindDown();
-			(*system).reset();
+			system->WindDown();
 		}
-		engine_.m_EventDispatcher.sink<Error>().disconnect<&EngineError>();
-		engine_.m_EventDispatcher.sink<Error>().connect<&EngineError>();
+
+		engine_.m_Systems.clear();
+
+		engine_.Dispatcher().sink<Error>().disconnect<&EngineError>();
+		engine_.Dispatcher().sink<Error>().connect<&EngineError>();
+
+		engine_.m_EventDispatcher.reset();
+		engine_.m_Registry.reset();
 	}
 }

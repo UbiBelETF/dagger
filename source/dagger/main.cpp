@@ -5,6 +5,8 @@
 #include "core/graphics/texture.h"
 #include "core/graphics/window.h"
 #include "core/graphics/sprite.h"
+#include "core/graphics/animation.h"
+#include "core/graphics/animations.h"
 #include "core/graphics/sprite_render.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
@@ -49,22 +51,22 @@ void PostInitWorld(Engine &engine)
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            sprite.UseTexture("EmptyWhitePixel");
-            sprite.m_Scale = UnitSize;
+            AssignSpriteTexture(sprite, "EmptyWhitePixel");
+            sprite.scale = UnitSize;
 
             
             if (i%2 != j%2)
             {
-                sprite.m_Color.r = 0.5f;
-                sprite.m_Color.g = 0.5f;
-                sprite.m_Color.b = 0.5f;
+                sprite.color.r = 0.5f;
+                sprite.color.g = 0.5f;
+                sprite.color.b = 0.5f;
             }
 
             if (i == 0 || i == Heigh - 1 || j == 0 || j == Width - 1)
             {
-                sprite.m_Color.r = 0.0f;
-                sprite.m_Color.g = 0.0f;
-                sprite.m_Color.b = 0.0f;
+                sprite.color.r = 0.0f;
+                sprite.color.g = 0.0f;
+                sprite.color.b = 0.0f;
             }
 
             auto& transform = reg.emplace<Transform>(entity);
@@ -77,12 +79,12 @@ void PostInitWorld(Engine &engine)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        sprite.UseTexture("EmptyWhitePixel");
-        sprite.m_Scale = UnitSize;
+        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        sprite.scale = UnitSize;
 
-        sprite.m_Color.r = 0.1f;
-        sprite.m_Color.g = 0.8f;
-        sprite.m_Color.b = 0.0f;
+        sprite.color.r = 0.1f;
+        sprite.color.g = 0.8f;
+        sprite.color.b = 0.0f;
 
         auto& transform = reg.emplace<Transform>(entity);
         auto& ball = reg.emplace<PingPongBall>(entity);
@@ -102,20 +104,27 @@ int main(int argc_, char** argv_)
 	engine.AddSystem<ShaderSystem>();
 	engine.AddSystem<TextureSystem>();
 	engine.AddSystem<SpriteRenderSystem>();
-#ifndef NDEBUG
-	engine.AddSystem<ToolMenuSystem>();
+	engine.AddSystem<AnimationSystem>();
+#if !defined(NDEBUG)
 	engine.AddSystem<DiagnosticSystem>();
-	engine.AddSystem<ConsoleSystem>();
 	engine.AddSystem<GUISystem>();
-#endif // !NDEBUG
-    GameplaySystemsSetup(engine);
+	engine.AddSystem<ToolMenuSystem>();
+#endif //!defined(NDEBUG)
 
+    GameplaySystemsSetup(engine);
 
 	EngineInit(engine);
 	
 	// Post-init pre-loop setup
 
-    PostInitWorld(engine);
+    //PostInitWorld(engine);
+	ShaderSystem::Use("standard");
+
+	auto& reg = engine.GetRegistry();
+	auto entity = reg.create();
+	auto& sprite = reg.emplace<Sprite>(entity);
+	auto& anim = reg.emplace<Animator>(entity);
+	AnimatorPlay(anim, "souls_like_knight_character:DRINK_POTION");
 
 	// Game loop starts here 
 

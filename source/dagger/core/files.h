@@ -1,24 +1,22 @@
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <streambuf>
+#include "core/core.h"
 
-static std::string ReadFromFile(std::string path_)
+static String ReadFromFile(String path_)
 {
-	std::ifstream t(path_.c_str());
+	FileInputStream stream(path_.c_str());
 
-	if (!t.good())
+	if (!stream.good())
 		return "";
 
-	std::string str;
+	String str;
 
-	t.seekg(0, std::ios::end);
-	str.reserve(t.tellg());
-	t.seekg(0, std::ios::beg);
+	stream.seekg(0, std::ios::end);
+	str.reserve(stream.tellg());
+	stream.seekg(0, std::ios::beg);
 
-	str.assign((std::istreambuf_iterator<char>(t)),
+	str.assign((std::istreambuf_iterator<char>(stream)),
 		std::istreambuf_iterator<char>());
-	
+
 	return str;
 }
