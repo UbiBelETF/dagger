@@ -27,7 +27,6 @@ void CoreSystemsSetup(Engine &engine)
     engine.AddSystem<TextureSystem>();
     engine.AddSystem<SpriteRenderSystem>();
     engine.AddSystem<AnimationSystem>();
-    engine.AddSystem<TransformSystem>();
 #if !defined(NDEBUG)
     engine.AddSystem<DiagnosticSystem>();
     engine.AddSystem<GUISystem>();
