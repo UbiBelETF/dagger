@@ -1,0 +1,10 @@
+{
+	"animation-name": "souls_like_knight_character:BLOCK",
+	"animation-length-ms": 400,
+	"animation-frames": 
+	[
+		{ "texture-name": "souls_like_knight_character:BLOCK:block1" },
+		{ "texture-name": "souls_like_knight_character:BLOCK:block2" },
+		{ "texture-name": "souls_like_knight_character:BLOCK:block3", "relative-length": 3 } 
+	]
+}

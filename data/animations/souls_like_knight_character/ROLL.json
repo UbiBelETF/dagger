@@ -1,0 +1,18 @@
+{
+	"animation-name": "souls_like_knight_character:ROLL",
+	"animation-length-ms": 800,
+	"animation-frames": 
+	[
+		{ "texture-name": "souls_like_knight_character:ROLL:roll1" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll2" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll3" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll4" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll5" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll6" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll7" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll8" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll9" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll10" },
+		{ "texture-name": "souls_like_knight_character:ROLL:roll11" }
+	]
+}
