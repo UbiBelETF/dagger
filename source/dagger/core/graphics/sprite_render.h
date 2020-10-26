@@ -17,12 +17,18 @@ class SpriteRenderSystem
 	, public Subscriber<Render, ShaderChangeRequest>
 {
 	const Float32 m_VerticesAndTexCoords[24] = {
-		 -0.55f, -0.55f, 0.0f, 0.0f,
-		 -0.55f,  0.55f, 0.0f, 1.0f,
-		  0.55f,  0.55f, 1.0f, 1.0f,
-		  0.55f, -0.55f, 1.0f, 0.0f,
-		 -0.55f, -0.55f, 0.0f, 0.0f,
-		  0.55f,  0.55f, 1.0f, 1.0f
+		 //-0.55f, -0.55f, 0.0f, 0.0f,
+		 //-0.55f,  0.55f, 0.0f, 1.0f,
+		 // 0.55f,  0.55f, 1.0f, 1.0f,
+		 // 0.55f, -0.55f, 1.0f, 0.0f,
+		 //-0.55f, -0.55f, 0.0f, 0.0f,
+		 // 0.55f,  0.55f, 1.0f, 1.0f
+        -0.5f, -0.5f, 0.0f, 0.0f,
+        -0.5f,  0.5f, 0.0f, 1.0f,
+         0.5f,  0.5f, 1.0f, 1.0f,
+         0.5f, -0.5f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f,
+         0.5f,  0.5f, 1.0f, 1.0f
 	};
 
 	UInt32 m_VAO;

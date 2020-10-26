@@ -59,7 +59,7 @@ void PostInitWorld(Engine &engine)
     constexpr int Width = 26;
     constexpr float TileSize = 30.f;// / static_cast<float>(Width);
 
-    constexpr float Space = 0.02f;
+    constexpr float Space = 0.1f;
     for (int i = 0; i < Heigh; i++)
     {
         for (int j = 0; j < Width; j++)
@@ -68,7 +68,6 @@ void PostInitWorld(Engine &engine)
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSpriteTexture(sprite, "EmptyWhitePixel");
             sprite.scale = TileSize;
-
             
             if (i%2 != j%2)
             {
@@ -95,8 +94,8 @@ void PostInitWorld(Engine &engine)
             }
 
             auto& transform = reg.emplace<Transform>(entity);
-            transform.position.x = (0.5f + j + j * Space - static_cast<float>(Width) / 2.f) * TileSize;
-            transform.position.y = (0.5f + i + i * Space - static_cast<float>(Heigh) / 2.f) * TileSize;
+            transform.position.x = (0.5f + j + j * Space - static_cast<float>(Width * (1+ Space)) / 2.f) * TileSize;
+            transform.position.y = (0.5f + i + i * Space - static_cast<float>(Heigh * (1+ Space)) / 2.f) * TileSize;
         }
     }
 
