@@ -106,6 +106,17 @@ public class MainProject : Project
         config.Options.Add(Options.Vc.General.WindowsTargetPlatformVersion.v10_0_17763_0);
         config.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP17);
         config.Options.Add(Options.Vc.Compiler.RuntimeLibrary.MultiThreadedDebugDLL);
+
+        // Define flags
+        if (target.Optimization == Optimization.Debug)
+        {
+            config.Defines.Add("DAGGER_DEBUG");
+        }
+
+        if (target.Optimization == Optimization.Release)
+        {
+            config.Defines.Add("DAGGER_RELEASE");
+        }
     }
 
     public override void PostResolve()
