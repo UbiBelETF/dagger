@@ -16,7 +16,7 @@ static void ErrorCallback(int error_, const char* description_)
 
 static void KeyCallback(GLFWwindow* window_, int key_, int scancode_, int action_, int mods_)
 {
-	Engine::Dispatcher().trigger<KeyboardEvent>(KeyboardEvent{ (UInt32)key_, (UInt32)scancode_, (UInt32)action_, (UInt32)mods_ });
+	Engine::Dispatcher().trigger<KeyboardEvent>(KeyboardEvent{ (DaggerKey)key_, (DaggerInputState)action_, (UInt32)scancode_, (UInt32)mods_ });
 }
 
 static void CharCallback(GLFWwindow* window_, unsigned int codepoint_)
@@ -31,7 +31,7 @@ static void ScrollCallback(GLFWwindow* window_, double xOffset_, double yOffset_
 
 static void MouseCallback(GLFWwindow* window_, int button_, int action_, int mods_)
 {
-	Engine::Dispatcher().trigger<MouseEvent>(MouseEvent{ (UInt32)button_, (UInt32)action_, (UInt32)mods_ });
+	Engine::Dispatcher().trigger<MouseEvent>(MouseEvent{ (DaggerMouse)(button_ + 255), (DaggerInputState)action_, (UInt32)mods_ });
 }
 
 static void CursorCallback(GLFWwindow* window_, double x_, double y_)

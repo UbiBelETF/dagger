@@ -27,6 +27,7 @@ namespace dagger
 		UInt64 m_LastFrameCounter{ 0 };
 		UInt64 m_FrameCounter{ 0 };
 		Duration m_DeltaTime{ 0.0 };
+		TimePoint m_CurrentTime{};
 
 		std::vector<System*> m_Systems;
 		OwningPtr<entt::registry> m_Registry;
@@ -46,6 +47,11 @@ namespace dagger
 		static Float32 DeltaTime()
 		{
 			return s_Instance->m_DeltaTime.count();
+		}
+
+		static inline TimePoint CurrentTime()
+		{
+			return s_Instance->m_CurrentTime;
 		}
 
 		static inline UInt64 FrameCount()
@@ -169,6 +175,7 @@ namespace dagger
 		frameDuration = engine_.m_DeltaTime;
 #endif//!defined(MEASURE_SYSTEMS)
 		lastTime = nextTime;
+		engine_.m_CurrentTime = lastTime;
 		engine_.m_FrameCounter++;
 
 		engine_.Dispatcher().trigger<NextFrame>();

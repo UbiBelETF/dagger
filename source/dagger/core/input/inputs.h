@@ -3,28 +3,36 @@
 #include "core/core.h"
 #include "core/system.h"
 
+#include <bitset>
+
 namespace dagger
 {
-	struct InputMapping
+	struct InputPattern
 	{
-		Bool Keys[256];
-		Bool Mouse[10];
-	};
+		Bool IsInputDown(DaggerKey key) const;
+		Bool IsInputDown(DaggerMouse button) const;
 
-	struct InputContext
-	{
-		virtual void ConsumeInput(InputMapping& mapping_) = 0;
+		UInt32 GetInputLength(DaggerKey key) const;
+		UInt32 GetInputLength(DaggerMouse mouse) const;
+
+	private:
+		Bool keys[256]{ false, };
+		Bool mouse[10]{ false, };
+		Map<UInt32, TimePoint> moment{};
+
+		friend class InputSystem;
 	};
 
 	class InputSystem
 		: public System
 	{
+		void Test(InputPattern pattern_);
 		void OnKeyboardEvent(KeyboardEvent input_);
 		void OnMouseEvent(MouseEvent input_);
 
 	public:
-		InputMapping m_Mapping;
-		Sequence<InputContext> m_InputContexts;
+		InputPattern m_CurrentInputPattern;
+		std::bitset<267> m_Bitmap;
 
 		inline String SystemName() { return "Input System"; }
 
