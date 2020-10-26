@@ -1,6 +1,7 @@
 
 #include "core/optimization.h"
 #include "core/engine.h"
+#include "core/input/inputs.h"
 #include "core/graphics/textures.h"
 #include "core/graphics/texture.h"
 #include "core/graphics/window.h"
@@ -25,12 +26,12 @@ using namespace dagger;
 void CoreSystemsSetup(Engine &engine)
 {
     engine.AddSystem<WindowSystem>(800, 600);
+    engine.AddSystem<InputSystem>();
     engine.AddSystem<ShaderSystem>();
     engine.AddSystem<TextureSystem>();
     engine.AddSystem<SpriteRenderSystem>();
     engine.AddSystem<AnimationSystem>();
     engine.AddSystem<TransformSystem>();
-    engine.AddSystem<SimpleCollisionsSystem>();
 #if !defined(NDEBUG)
     engine.AddSystem<DiagnosticSystem>();
     engine.AddSystem<GUISystem>();
@@ -40,7 +41,7 @@ void CoreSystemsSetup(Engine &engine)
 
 void GameplaySystemsSetup(Engine &engine)
 {
-    //engine.AddSystem<JiggleSystem>();
+    engine.AddSystem<SimpleCollisionsSystem>();
     engine.AddSystem<PingPongBallSystem>();
 }
 

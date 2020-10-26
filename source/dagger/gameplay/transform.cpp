@@ -9,12 +9,9 @@ using namespace dagger;
 
 void TransformSystem::Run()
 {
-    auto view = Engine::Registry().view<Sprite, Transform>();
-    for(auto entity: view) 
-    {
-        auto &sprite = view.get<Sprite>(entity);
-        auto &transform = view.get<Transform>(entity);
-
-        sprite.position = transform.position;
-    }
+    // note: groups are much faster than views for such simple tasks as transferring some values
+    Engine::Registry().group<Transform, Sprite>().each([](const Transform& transform_, Sprite& sprite_)
+        {
+            sprite_.position = transform_.position;
+        });
 }
