@@ -62,8 +62,10 @@ as well as data-only types that are used to only move data around.
 
   - **1) Struct Names**: Struct names are in `PascalCase` or `UpperCamelCase`.
 
-  - **2) Struct Members**: Structs shouldn't hold complex logic, ie. anything other than constructors, destructors, getters, and setters.
+  - **2) Struct Data Members**: Structs shouldn't hold complex logic, ie. anything other than constructors, destructors, getters, and setters.
 For structs, member names are always `lowerCamelCase`.
+
+  - **3) Struct Function Members**: Struct function members (methods, if any) are always in `UpperCamelCase`. General function rules (5.x) apply.
 
 **b. Classes**: Use classes whenever there is any need for complex functionalities that require complex state or ownership.
 
@@ -73,4 +75,20 @@ For structs, member names are always `lowerCamelCase`.
     + use `m_` for non-static members
     + use `s_` for static members
   
-  - **3) Class Function Members**: Class function members (methods) are always in `UpperCamelCase`.
+  - **3) Class Function Members**: Class function members (methods) are always in `UpperCamelCase`. General function rules (5.x) apply.
+
+## 5. Functions
+
+**a. Names**: Functions are always in `UpperCamelCase`.
+
+**b. Arguments**: Function arguments are written as `lowerCamelCase_`. The underscore at the end is mandatory. This is used to distinguish them from local variables.
+
+**c. Local Variables**: Local variables within function scope are always `lowerCamelCase`.
+
+## 6. Enums
+
+Always use **enum classes** instead of C-style enums.
+
+**a. Names**: Make sure the enum name acts as a namespace for its members, so make it distinct and descriptive. It should be in `UpperCamelCase`.
+
+**b. Member Names**: Members in an enum are written in `UpperCamelCase`. There is no need to repeat the name of the enum within the member, as it is scoped.
