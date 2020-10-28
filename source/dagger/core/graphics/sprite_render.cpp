@@ -34,7 +34,7 @@ void SpriteRenderSystem::SpinUp()
     glBufferStorage(GL_ARRAY_BUFFER, ms_BufferSize, 0, flags);
 	glBufferData(GL_ARRAY_BUFFER, ms_BufferSize, nullptr, GL_STREAM_DRAW);
 
-    const UInt32 attributeSizes[]   = { 3,        2,        4,        1,               1,        1 };
+    const UInt32 attributeSizes[]   = { 3,        2,        4,        1,               1,        2  };
     const UInt64 attributeStrides[] = { 0,        3,        5,        9,               10,       11 };
 
     for (UInt32 i = 0; i < 6; i++)

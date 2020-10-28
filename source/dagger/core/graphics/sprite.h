@@ -13,7 +13,7 @@ namespace dagger
 		Color   color{ 1.0f, 1.0f, 1.0f, 1.0f };
 		Float32 image{ 0 };
 		Float32 ratio{ 1.0f };
-		Float32 scale{ 1.0f };
+		Vector2 scale{ 1.0f, 1.0f };
 	};
 
 	void AssignSpriteTexture(Sprite& spriteTarget_, String textureName_);

@@ -14,6 +14,8 @@
 #include "tools/console.h"
 #include "tools/toolmenu.h"
 
+#include "gameplay/examples/character_controller.h"
+
 #include <spdlog/spdlog.h>
 #include <glm/glm.hpp>
 
@@ -34,42 +36,32 @@ void CoreSystemsSetup(Engine &engine)
 #endif //!defined(NDEBUG)
 }
 
-void GameplaySystemsSetup(Engine &engine)
+void GameplaySystemsSetup(Engine& engine)
 {
+    example1::SetupSystems(engine);
 }
 
-void PostInitWorld(Engine &engine)
+void WorldSetup(Engine& engine)
 {
-    ShaderSystem::Use("standard");
-
-    auto& reg = engine.GetRegistry();
-    auto entity = reg.create();
-    auto& sprite = reg.emplace<Sprite>(entity);
-    sprite.scale = 500.f;
-    auto& anim = reg.emplace<Animator>(entity);
-    AnimatorPlay(anim, "souls_like_knight_character:ATTACK");
+    example1::SetupWorld(engine);
 }
 
 int main(int argc_, char** argv_)
 {
-	srand(time(0));
-	Logger::set_level(Logger::level::trace);
-
 	Engine engine;
     CoreSystemsSetup(engine);
     GameplaySystemsSetup(engine);
 
-	EngineInit(engine);
-
-    PostInitWorld(engine);
+    engine.EngineInit();
+    WorldSetup(engine);
 
 	// Game loop starts here 
 	while (engine.Up())
 	{
-		EngineLoop(engine);
+		engine.EngineLoop();
 	}
 
-	EngineStop(engine);
+    engine.EngineStop();
 
 	return 0;
 }
