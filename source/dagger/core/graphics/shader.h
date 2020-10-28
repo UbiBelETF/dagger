@@ -28,7 +28,8 @@ struct Shader
 	enum class Uniforms
 	{
 		ProjectionMatrixId = 0,
-		TextureBufferId = 5,
+		CameraViewMatrixId = 5,
+		TextureBufferId = 10,
 	};
 
 	constexpr static UInt32 ms_ShaderStageCount = 4;

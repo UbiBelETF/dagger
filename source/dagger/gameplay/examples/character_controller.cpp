@@ -35,8 +35,8 @@ void CharacterControllerSystem::Run()
             else
             {
                 AnimatorPlay(animator_, "souls_like_knight_character:RUN");
-                sprite_.scale.x = run * 30;
-                sprite_.position.x += sprite_.scale.x * Engine::DeltaTime() * 10;
+                sprite_.scale.x = run;
+                sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
             }
         });
 }
@@ -60,8 +60,6 @@ void example1::SetupWorld(Engine& engine_)
     auto entity = reg.create();
 
     auto& sprite = reg.emplace<Sprite>(entity);
-    sprite.scale.x = 30.f;
-    sprite.scale.y = 30.f;
 
     auto& anim = reg.emplace<Animator>(entity);
     AnimatorPlay(anim, "souls_like_knight_character:IDLE");
