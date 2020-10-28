@@ -20,10 +20,6 @@ namespace dagger
 		: public Subscriber<Exit, Error>
 		, public Publisher<NextFrame>
 	{
-		friend void EngineInit(Engine& engine_);
-		friend void EngineStop(Engine& engine_);
-		friend void EngineLoop(Engine& engine_);
-
 		UInt64 m_LastFrameCounter{ 0 };
 		UInt64 m_FrameCounter{ 0 };
 		Duration m_DeltaTime{ 0.0 };
@@ -89,6 +85,9 @@ namespace dagger
 			, m_EventDispatcher{}
 			, m_ShouldStayUp{ true }
 		{
+			srand(time(0));
+			Logger::set_level(Logger::level::trace);
+
 			Engine::s_Instance = this;
 		}
 			 
@@ -122,79 +121,78 @@ namespace dagger
 		{
 			return *m_Registry.get();
 		}
-	};
 
-	static void EngineError(Error& error_)
-	{
-		Logger::error(error_.message);
-		exit(-1);
-	}
-
-	static void EngineInit(Engine& engine_)
-	{
-		engine_.m_EventDispatcher.reset(new entt::dispatcher{});
-		engine_.m_Registry.reset(new entt::registry{});
-
-		engine_.Dispatcher().sink<Error>().connect<&EngineError>();
-
-		for (auto& system : engine_.m_Systems)
+		void EngineError(Error& error_)
 		{
-			system->SpinUp();
-		}
-		engine_.Dispatcher().sink<Exit>().connect<&Engine::EngineShutdown>(engine_);
-	}
-
-
-	static void EngineLoop(Engine& engine_)
-	{
-		Duration frameDuration{};
-		static TimePoint lastTime{ std::chrono::steady_clock::now() };
-		static TimePoint nextTime{ std::chrono::steady_clock::now() };
-		
-#if defined(MEASURE_SYSTEMS)
-		static TimePoint systemStart{};
-		static TimePoint systemEnd{};
-#endif//defined(MEASURE_SYSTEMS)
-
-		for (auto& system : engine_.m_Systems)
-		{
-#if defined(MEASURE_SYSTEMS)
-			systemStart = std::chrono::steady_clock::now();
-#endif//defined(MEASURE_SYSTEMS)
-			system->Run();
-#if defined(MEASURE_SYSTEMS)
-			systemEnd = std::chrono::steady_clock::now();
-			frameDuration += (systemEnd - systemStart);
-			Engine::Dispatcher().trigger<SystemRunStats>(SystemRunStats{ system->SystemName(), systemEnd - systemStart });
-#endif//defined(MEASURE_SYSTEMS)
+			Logger::error(error_.message);
+			exit(-1);
 		}
 
-		nextTime = std::chrono::steady_clock::now();
-		engine_.m_DeltaTime = (nextTime - lastTime);
+		void EngineInit()
+		{
+			this->m_EventDispatcher.reset(new entt::dispatcher{});
+			this->m_Registry.reset(new entt::registry{});
+
+			this->Dispatcher().sink<Error>().connect<&Engine::EngineError>(*this);
+
+			for (auto& system : this->m_Systems)
+			{
+				system->SpinUp();
+			}
+			this->Dispatcher().sink<Exit>().connect<&Engine::EngineShutdown>(*this);
+		}
+
+
+		void EngineLoop()
+		{
+			Duration frameDuration{};
+			static TimePoint lastTime{ TimeSnapshot() };
+			static TimePoint nextTime{ TimeSnapshot() };
+
+#if defined(MEASURE_SYSTEMS)
+			static TimePoint systemStart{};
+			static TimePoint systemEnd{};
+#endif//defined(MEASURE_SYSTEMS)
+
+			for (auto& system : this->m_Systems)
+			{
+#if defined(MEASURE_SYSTEMS)
+				systemStart = TimeSnapshot();
+#endif//defined(MEASURE_SYSTEMS)
+				system->Run();
+#if defined(MEASURE_SYSTEMS)
+				systemEnd = TimeSnapshot();
+				frameDuration += (systemEnd - systemStart);
+				Engine::Dispatcher().trigger<SystemRunStats>(SystemRunStats{ system->SystemName(), systemEnd - systemStart });
+#endif//defined(MEASURE_SYSTEMS)
+			}
+
+			nextTime = TimeSnapshot();
+			this->m_DeltaTime = (nextTime - lastTime);
 #if !defined(MEASURE_SYSTEMS)
-		frameDuration = engine_.m_DeltaTime;
+			frameDuration = this->m_DeltaTime;
 #endif//!defined(MEASURE_SYSTEMS)
-		lastTime = nextTime;
-		engine_.m_CurrentTime = lastTime;
-		engine_.m_FrameCounter++;
+			lastTime = nextTime;
+			this->m_CurrentTime = lastTime;
+			this->m_FrameCounter++;
 
-		engine_.Dispatcher().trigger<NextFrame>();
-	}
-
-
-	static void EngineStop(Engine& engine_)
-	{
-		for (auto& system : engine_.m_Systems)
-		{
-			system->WindDown();
+			this->Dispatcher().trigger<NextFrame>();
 		}
 
-		engine_.m_Systems.clear();
+		void EngineStop()
+		{
+			for (auto& system : this->m_Systems)
+			{
+				system->WindDown();
+			}
 
-		engine_.Dispatcher().sink<Error>().disconnect<&EngineError>();
-		engine_.Dispatcher().sink<Error>().connect<&EngineError>();
+			this->m_Systems.clear();
 
-		engine_.m_EventDispatcher.reset();
-		engine_.m_Registry.reset();
-	}
+			this->Dispatcher().sink<Error>().disconnect<&Engine::EngineError>(*this);
+			this->Dispatcher().sink<Error>().connect<&Engine::EngineError>(*this);
+
+			this->m_EventDispatcher.reset();
+			this->m_Registry.reset();
+		}
+	};
 }

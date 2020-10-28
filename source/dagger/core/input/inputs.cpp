@@ -185,7 +185,7 @@ void InputSystem::Run()
 				{
 					for (auto& command : context->commands)
 					{
-						String fullName = fmt::format("{}:{}", name, command.name);
+						String fullName = command.name;
 						for (auto& action : command.actions)
 						{
 							if (action.event == DaggerInputState::Released)
@@ -286,37 +286,37 @@ void InputSystem::WindDown()
 	Engine::Dispatcher().sink<MouseEvent>().disconnect<&InputSystem::OnMouseEvent>(this);
 };
 
-inline Bool dagger::input::IsInputDown(DaggerKeyboard key_)
+Bool dagger::input::IsInputDown(DaggerKeyboard key_)
 {
 	const auto* state = Engine::Res<InputState>()["input"];
 	return state->keys[(UInt32)key_];
 }
 
-inline Bool dagger::input::IsInputDown(DaggerMouse button_)
+Bool dagger::input::IsInputDown(DaggerMouse button_)
 {
 	const auto* state = Engine::Res<InputState>()["input"];
 	return state->mouse[(UInt32)button_ - MouseStart];
 }
 
-inline UInt32 dagger::input::GetInputDuration(DaggerKeyboard key_)
+UInt32 dagger::input::GetInputDuration(DaggerKeyboard key_)
 {
 	const auto* state = Engine::Res<InputState>()["input"];
 
 	UInt32 value = (UInt32)key_;
 	if (!state->moments.contains(value)) return 0;
 
-	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value)).count();
+	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
 
-inline UInt32 dagger::input::GetInputDuration(DaggerMouse mouse_)
+UInt32 dagger::input::GetInputDuration(DaggerMouse mouse_)
 {
 	const auto* state = Engine::Res<InputState>()["input"];
 
 	UInt32 value = (UInt32)mouse_;
-	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value)).count();
+	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
 
-inline void dagger::input::ConsumeInput(DaggerKeyboard key_)
+void dagger::input::ConsumeInput(DaggerKeyboard key_)
 {
 	auto* state = Engine::Res<InputState>()["input"];
 
@@ -326,7 +326,7 @@ inline void dagger::input::ConsumeInput(DaggerKeyboard key_)
 	state->bitmap.reset(value);
 }
 
-inline void dagger::input::ConsumeInput(DaggerMouse button_)
+void dagger::input::ConsumeInput(DaggerMouse button_)
 {
 	auto* state = Engine::Res<InputState>()["input"];
 

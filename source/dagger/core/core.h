@@ -1,6 +1,6 @@
 #pragma once
 
-//#define MEASURE_SYSTEMS
+#define MEASURE_SYSTEMS
 
 #include "core/view_ptr.h"
 
@@ -9,6 +9,7 @@
 #include <tsl/sparse_map.h>
 #include <tsl/sparse_set.h>
 #include <nlohmann/json.hpp>
+#include <entt/entt.hpp>
 
 #include <cstdint>
 #include <string>
@@ -20,21 +21,32 @@
 #include <chrono>
 #include <bitset>
 
+using Registry = entt::registry;
+using Entity = entt::entity;
+
+// OwningPtr<T>: the pointer is owned and destroyed by whoever holds this instance.
 template<typename T>
 using OwningPtr = std::unique_ptr<T>;
 
+// ViewPtr<T>: the pointer is not owned or managed by whoever holds this instance.
+// It just views the object through this. Can be used anywhere a raw pointer could be used.
 template<typename T>
 using ViewPtr = jss::object_ptr<T>;
 
+// Sequence<T>: a contiguous sequence of elements in memory.
 template<typename T>
 using Sequence = std::vector<T>;
 
+// Map<K, V>: a quick map with keys of type K and elements of type V.
 template<typename K, typename V>
 using Map = tsl::sparse_map<K, V>;
 
+// Set<E>: a quick set of elements of type E
 template<typename K>
 using Set = tsl::sparse_set<K>;
 
+// BitSet<N>: a contiguous bitset with N elements. Can be used for quick membership checks.
+// Basically the same as a compile-time Sequence<Bool> with fixed size N.
 template<int N>
 using BitSet = std::bitset<N>;
 
@@ -55,15 +67,25 @@ using Float64 = double;
 
 using String = std::string;
 
+// Logger: provides nice logging functions like info, error, debug, critical, etc.
 namespace Logger = spdlog;
+
+// Files: provides nice filesystem functions and abstractions.
 namespace Files = std::filesystem;
-
-using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
-using Duration = std::chrono::duration<Float32>;
-#define DurationToMilliseconds  std::chrono::duration_cast<std::chrono::milliseconds>
-
 using FilePath = std::filesystem::path;
 using FileInputStream = std::fstream;
+
+// TimePoint: a literal point in time. It has no unit by itself.
+using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
+
+// Duration: a difference between two TimePoints.
+using Duration = std::chrono::duration<Float32>;
+
+// DurationToMilliseconds: turns a unit-less Duration into the count of milliseconds.
+#define DurationToMilliseconds(X)   (std::chrono::duration_cast<std::chrono::milliseconds>(X).count())
+
+// TimeSnapshot: gets you the current TimePoint.
+#define TimeSnapshot    std::chrono::steady_clock::now
 
 using Matrix3 = glm::mat3x3;
 using Matrix4 = glm::mat4x4;

@@ -13,7 +13,7 @@ layout (location = 4) in vec4 a_QuadColor;
 
 layout (location = 5) in float a_Image;
 layout (location = 6) in float a_Ratio;
-layout (location = 7) in float a_Scale;
+layout (location = 7) in vec2 a_Scale;
 
 layout (location = 0) uniform mat4 u_Projection;
 
@@ -27,7 +27,11 @@ void main()
 	v_QuadColor = a_QuadColor;
 	v_Image = a_Image;
 
-	vec2 xy = a_QuadPosition.xy + (a_Position.xy + a_QuadPivot.xy) * a_Scale;
+	vec2 pos = (a_Position.xy + a_QuadPivot.xy) * a_Scale;
+	pos.x *= a_Scale.x;
+	pos.y *= a_Scale.y;
+
+	vec2 xy = a_QuadPosition.xy + pos;
 	xy.y *= a_Ratio;
 
 	gl_Position = u_Projection * vec4(xy, a_QuadPosition.z, 1.0f);
