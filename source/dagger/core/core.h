@@ -1,6 +1,6 @@
 #pragma once
 
-#define MEASURE_SYSTEMS
+//#define MEASURE_SYSTEMS
 
 #include "core/view_ptr.h"
 

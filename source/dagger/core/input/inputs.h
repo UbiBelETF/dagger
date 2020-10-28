@@ -14,7 +14,7 @@ namespace dagger
     struct InputAction
 	{
         UInt32 trigger{ 0 };
-		UInt32 value{ 1 };
+        Float32 value{ 1 };
 		UInt32 duration{ 0 };
 		DaggerInputState event{ DaggerInputState::Pressed };
 	};
@@ -35,7 +35,7 @@ namespace dagger
     struct InputReceiver
     {
         Sequence<String> contexts;
-        Map<String, UInt32> values;
+        Map<String, Float32> values;
     };
 
 	struct InputState

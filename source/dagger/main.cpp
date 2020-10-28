@@ -60,13 +60,13 @@ class PlayerInfoSystem : public System
     {
         Engine::Registry().view<InputReceiver>().each([](InputReceiver receiver_)
             {
-                Logger::critical("Player [ run {} | jump {} | down {} | heavy {} | light {} | use {} ]",
-                    receiver_.values["Player:run"],
-                    receiver_.values["Player:jump"],
-                    receiver_.values["Player:down"],
-                    receiver_.values["Player:heavy"],
-                    receiver_.values["Player:light"],
-                    receiver_.values["Player:use"]);
+                for (auto& [k, v] : receiver_.values)
+                {
+                    if (v != 0)
+                    {
+                        Logger::critical("{}: {}", k, v);
+                    }
+                }
             });
     }
 };

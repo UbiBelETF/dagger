@@ -91,7 +91,7 @@ void InputSystem::LoadInputAction(InputCommand& command_, JSON::json& input_)
 			action.event = DaggerInputState::Released;
 	}
 	else
-		action.event = DaggerInputState::Pressed;
+		action.event = DaggerInputState::Held;
 
 	if (input_.contains("value"))
 	{
@@ -170,19 +170,10 @@ void InputSystem::OnAssetLoadRequest(AssetLoadRequest<InputContext> request_)
 
 void InputSystem::Run()
 {
-	if (!m_InputState.releasedLastFrame.empty())
-	{
-		for (auto& input : m_InputState.releasedLastFrame)
-		{
-			m_InputState.bitmap.reset(input);
-		}
-
-		m_InputState.releasedLastFrame.clear();
-	}
-
 	Engine::Registry().view<InputReceiver>().each([&](InputReceiver& receiver_)
 		{
-			Set<UInt32> dontTouch{};
+			static Set<String> updatedCommands{};
+
 			auto& bitmap = m_InputState.bitmap;
 			auto& library = Engine::Res<InputContext>();
 			for (auto& name : receiver_.contexts)
@@ -197,19 +188,12 @@ void InputSystem::Run()
 						String fullName = fmt::format("{}:{}", name, command.name);
 						for (auto& action : command.actions)
 						{
-							if (!bitmap.test(action.trigger))
-							{
-								if (action.event != DaggerInputState::Released)
-									receiver_.values[fullName] = 0;
-
-								continue;
-							}
-
 							if (action.event == DaggerInputState::Released)
 							{
 								if (m_InputState.releasedLastFrame.contains(action.trigger))
 								{
 									receiver_.values[fullName] = action.value;
+									updatedCommands.emplace(fullName);
 								}
 							}
 							else
@@ -230,7 +214,8 @@ void InputSystem::Run()
 										if (input::IsInputDown((DaggerMouse)(action.trigger)))
 										{
 											toFire = true;
-											if (toConsume) m_InputState.releasedLastFrame.emplace(action.trigger);
+											if (toConsume) 
+												m_InputState.releasedLastFrame.emplace(action.trigger);
 										}
 									}
 									else
@@ -250,7 +235,7 @@ void InputSystem::Run()
 										if (input::GetInputDuration((DaggerMouse)(action.trigger)) >= action.duration)
 										{
 											toFire = true;
-											if (toConsume) m_InputState.releasedLastFrame.emplace(action.trigger);
+											m_InputState.releasedLastFrame.emplace(action.trigger);
 										}
 									}
 									else
@@ -258,19 +243,40 @@ void InputSystem::Run()
 										if (input::GetInputDuration((DaggerKeyboard)(action.trigger)) >= action.duration)
 										{
 											toFire = true;
-											if (toConsume) m_InputState.releasedLastFrame.emplace(action.trigger);
+											m_InputState.releasedLastFrame.emplace(action.trigger);
 										}
 									}
 								}
 
-								if(toFire)
+								if (toFire)
+								{
 									receiver_.values[fullName] = action.value;
+									updatedCommands.emplace(fullName);
+								}
 							}
 						}
 					}
 				}
+
+				for (auto& [key, value] : receiver_.values)
+				{
+					if (updatedCommands.contains(key)) continue;
+					receiver_.values[key] = 0;
+				}
+
+				updatedCommands.clear();
 			}
 		});
+
+	if (!m_InputState.releasedLastFrame.empty())
+	{
+		for (auto& input : m_InputState.releasedLastFrame)
+		{
+			m_InputState.bitmap.reset(input);
+		}
+
+		m_InputState.releasedLastFrame.clear();
+	}
 };
 
 void InputSystem::WindDown() 
