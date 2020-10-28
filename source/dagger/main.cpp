@@ -40,17 +40,20 @@ class PlayerInfoSystem : public System
         return "Player Info System";
     }
 
+    void Initialize(entt::registry& reg_, entt::entity entity_)
+    {
+        auto& receiver_ = reg_.get<InputReceiver>(entity_);
+        receiver_.values["Player:run"] = 0;
+        receiver_.values["Player:jump"] = 0;
+        receiver_.values["Player:down"] = 0;
+        receiver_.values["Player:heavy"] = 0;
+        receiver_.values["Player:light"] = 0;
+        receiver_.values["Player:use"] = 0;
+    }
+
     inline void SpinUp() override
     {
-        Engine::Registry().view<InputReceiver>().each([](InputReceiver& receiver_)
-            {
-                receiver_.values["Player:run"] = 0;
-                receiver_.values["Player:jump"] = 0;
-                receiver_.values["Player:down"] = 0;
-                receiver_.values["Player:heavy"] = 0;
-                receiver_.values["Player:light"] = 0;
-                receiver_.values["Player:use"] = 0;
-            });
+        Engine::Registry().on_construct<InputReceiver>().connect<&PlayerInfoSystem::Initialize>(this);
     }
 
     inline void Run() override
