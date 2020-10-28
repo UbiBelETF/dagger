@@ -34,8 +34,43 @@ void CoreSystemsSetup(Engine &engine)
 #endif //!defined(NDEBUG)
 }
 
+class PlayerInfoSystem : public System
+{
+    String SystemName() override {
+        return "Player Info System";
+    }
+
+    inline void SpinUp() override
+    {
+        Engine::Registry().view<InputReceiver>().each([](InputReceiver& receiver_)
+            {
+                receiver_.values["Player:run"] = 0;
+                receiver_.values["Player:jump"] = 0;
+                receiver_.values["Player:down"] = 0;
+                receiver_.values["Player:heavy"] = 0;
+                receiver_.values["Player:light"] = 0;
+                receiver_.values["Player:use"] = 0;
+            });
+    }
+
+    inline void Run() override
+    {
+        Engine::Registry().view<InputReceiver>().each([](InputReceiver receiver_)
+            {
+                Logger::critical("Player [ run {} | jump {} | down {} | heavy {} | light {} | use {} ]",
+                    receiver_.values["Player:run"],
+                    receiver_.values["Player:jump"],
+                    receiver_.values["Player:down"],
+                    receiver_.values["Player:heavy"],
+                    receiver_.values["Player:light"],
+                    receiver_.values["Player:use"]);
+            });
+    }
+};
+
 void GameplaySystemsSetup(Engine &engine)
 {
+    engine.AddSystem<PlayerInfoSystem>();
 }
 
 void PostInitWorld(Engine &engine)
@@ -48,6 +83,8 @@ void PostInitWorld(Engine &engine)
     sprite.scale = 500.f;
     auto& anim = reg.emplace<Animator>(entity);
     AnimatorPlay(anim, "souls_like_knight_character:ATTACK");
+    auto& input = reg.emplace<InputReceiver>(entity);
+    input.contexts.push_back("Player");
 }
 
 int main(int argc_, char** argv_)
