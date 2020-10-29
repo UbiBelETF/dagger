@@ -1,6 +1,6 @@
 #pragma once
 
-namespace PingPong
+namespace pingPong
 {
 
     class player_scores

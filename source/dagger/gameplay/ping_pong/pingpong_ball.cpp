@@ -1,4 +1,4 @@
-#include "pingPongBall.h"
+#include "pingpong_ball.h"
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
@@ -9,7 +9,7 @@
 #include <GLFW/glfw3.h>
 
 using namespace dagger;
-using namespace PingPong;
+using namespace pingPong;
 
 void PingPongBallSystem::Run()
 {

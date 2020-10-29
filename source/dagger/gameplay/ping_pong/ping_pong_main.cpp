@@ -10,11 +10,11 @@
 #include "core/game/transforms.h"
 
 #include "gameplay/simple_collisions.h"
-#include "gameplay/ping_pong/pingPongBall.h"
+#include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace dagger;
-using namespace PingPong;
+using namespace pingPong;
 
 void CreatePingPongBall(entt::registry &reg, float TileSize, Color color, Vector3 speed, Vector3 pos)
 {
@@ -35,14 +35,14 @@ void CreatePingPongBall(entt::registry &reg, float TileSize, Color color, Vector
     col.size.y = TileSize;
 }
 
-void PingPong::SetupSystems(Engine &engine)
+void pingPong::SetupSystems(Engine &engine)
 {
     engine.AddSystem<SimpleCollisionsSystem>();
     engine.AddSystem<PingPongBallSystem>();
     engine.AddSystem<PingPongPlayerInputSystem>();
 }
 
-void PingPong::SetupWorld(Engine &engine)
+void pingPong::SetupWorld(Engine &engine)
 {
     Vector2 scale(1, 1);
 

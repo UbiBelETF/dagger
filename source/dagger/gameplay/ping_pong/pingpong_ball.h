@@ -5,9 +5,8 @@
 
 using namespace dagger;
 
-namespace PingPong
+namespace pingPong
 {
-
     struct PingPongBall
     {
         Vector3 speed{ 0, 0, 0 };
@@ -25,5 +24,4 @@ namespace PingPong
 
         void Run() override;
     };
-
 }

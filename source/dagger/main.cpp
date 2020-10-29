@@ -42,13 +42,13 @@ void CoreSystemsSetup(Engine &engine)
 void GameplaySystemsSetup(Engine& engine)
 {
     //example1::SetupSystems(engine);
-    PingPong::SetupSystems(engine);
+    pingPong::SetupSystems(engine);
 }
 
 void WorldSetup(Engine& engine)
 {
     //example1::SetupWorld(engine);
-    PingPong::SetupWorld(engine);
+    pingPong::SetupWorld(engine);
 }
 
 int main(int argc_, char** argv_)

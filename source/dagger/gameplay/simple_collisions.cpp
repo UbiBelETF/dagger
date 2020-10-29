@@ -3,7 +3,7 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
-#include "gameplay/ping_pong/pingPongBall.h"
+#include "gameplay/ping_pong/pingpong_ball.h"
 
 using namespace dagger;
 
@@ -27,9 +27,9 @@ void SimpleCollisionsSystem::Run()
             if (collision.IsCollided(transform.position, col, tr.position))
             {
                 // TODO: remove PingPongBall usage
-                if (Engine::Registry().has<PingPong::PingPongBall>(*it))
+                if (Engine::Registry().has<pingPong::PingPongBall>(*it))
                 {
-                    PingPong::PingPongBall& ball = Engine::Registry().get<PingPong::PingPongBall>(*it);
+                    pingPong::PingPongBall& ball = Engine::Registry().get<pingPong::PingPongBall>(*it);
                     // one collision per frame per component
                     if (!ball.collided)
                     {
@@ -38,9 +38,9 @@ void SimpleCollisionsSystem::Run()
                     }
                 }
 
-                if (Engine::Registry().has<PingPong::PingPongBall>(*it2))
+                if (Engine::Registry().has<pingPong::PingPongBall>(*it2))
                 {
-                    PingPong::PingPongBall& ball = Engine::Registry().get<PingPong::PingPongBall>(*it2);
+                    pingPong::PingPongBall& ball = Engine::Registry().get<pingPong::PingPongBall>(*it2);
                     // one collision per frame per component
                     if (!ball.collided)
                     {

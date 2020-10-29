@@ -5,7 +5,7 @@
 
 using namespace dagger;
 
-namespace PingPong
+namespace pingPong
 {
     void SetupSystems(Engine& engine_);
     void SetupWorld(Engine& engine_);

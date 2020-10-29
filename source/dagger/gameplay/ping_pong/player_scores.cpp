@@ -1,6 +1,6 @@
 #include "player_scores.h"
 
-using namespace PingPong;
+using namespace pingPong;
 
 player_scores::player_scores()
 {
