@@ -89,7 +89,7 @@ public:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data_);
+        glTexImage2D(GL_TEXTURE_2D, 0, channels_ == 4 ? GL_RGBA : GL_RGB, m_Width, m_Height, 0, channels_ == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data_);
         
         m_Handle = glGetTextureHandleARB(m_TextureId);
         glMakeTextureHandleResidentARB(m_Handle);
