@@ -10,11 +10,13 @@
 #include "core/graphics/animations.h"
 #include "core/graphics/sprite_render.h"
 #include "core/graphics/gui.h"
+#include "core/game/transforms.h"
 #include "tools/diagnostics.h"
 #include "tools/console.h"
 #include "tools/toolmenu.h"
 
 #include "gameplay/examples/character_controller.h"
+#include "gameplay/ping_pong/ping_pong_main.h"
 
 #include <spdlog/spdlog.h>
 #include <glm/glm.hpp>
@@ -29,6 +31,7 @@ void CoreSystemsSetup(Engine &engine)
     engine.AddSystem<TextureSystem>();
     engine.AddSystem<SpriteRenderSystem>();
     engine.AddSystem<AnimationSystem>();
+    engine.AddSystem<TransformSystem>();
 #if !defined(NDEBUG)
     engine.AddSystem<DiagnosticSystem>();
     engine.AddSystem<GUISystem>();
@@ -38,12 +41,14 @@ void CoreSystemsSetup(Engine &engine)
 
 void GameplaySystemsSetup(Engine& engine)
 {
-    example1::SetupSystems(engine);
+    //example1::SetupSystems(engine);
+    pingPong::SetupSystems(engine);
 }
 
 void WorldSetup(Engine& engine)
 {
-    example1::SetupWorld(engine);
+    //example1::SetupWorld(engine);
+    pingPong::SetupWorld(engine);
 }
 
 int main(int argc_, char** argv_)
