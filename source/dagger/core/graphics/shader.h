@@ -5,7 +5,7 @@
 
 #include <glad/glad.h>
 
-enum class ShaderStage : unsigned
+enum class EShaderStage : unsigned
 {
 	None = 0,
 	Vertex = 1,
@@ -14,18 +14,18 @@ enum class ShaderStage : unsigned
 	Compute = 8
 };
 
-ENABLE_BITMASK_OPERATORS(ShaderStage);
+ENABLE_BITMASK_OPERATORS(EShaderStage);
 
 struct ShaderConfig
 {
 	String name{ "" };
-	ShaderStage stages{ ShaderStage::None };
-	Map<ShaderStage, String> paths{};
+	EShaderStage stages{ EShaderStage::None };
+	Map<EShaderStage, String> paths{};
 };
 
 struct Shader
 {
-	enum class Uniforms
+	enum class EUniforms
 	{
 		ProjectionMatrixId = 0,
 		CameraViewMatrixId = 5,
@@ -34,28 +34,28 @@ struct Shader
 
 	constexpr static UInt32 ms_ShaderStageCount = 4;
 
-	inline static Map<ShaderStage, UInt32> s_ShaderStageHandles =
+	inline static Map<EShaderStage, UInt32> s_ShaderStageHandles =
 	{
-		{ ShaderStage::Vertex, GL_VERTEX_SHADER },
-		{ ShaderStage::Fragment, GL_FRAGMENT_SHADER },
-		{ ShaderStage::Geometry, GL_GEOMETRY_SHADER },
-		{ ShaderStage::Compute, GL_COMPUTE_SHADER }
+		{ EShaderStage::Vertex, GL_VERTEX_SHADER },
+		{ EShaderStage::Fragment, GL_FRAGMENT_SHADER },
+		{ EShaderStage::Geometry, GL_GEOMETRY_SHADER },
+		{ EShaderStage::Compute, GL_COMPUTE_SHADER }
 	};
 
-	inline static Map<String, ShaderStage> s_ShaderStageIndex =
+	inline static Map<String, EShaderStage> s_ShaderStageIndex =
 	{
-		{ "vertex-shader", ShaderStage::Vertex },
-		{ "fragment-shader", ShaderStage::Fragment },
-		{ "geometry-shader", ShaderStage::Geometry },
-		{ "compute-shader", ShaderStage::Compute }
+		{ "vertex-shader", EShaderStage::Vertex },
+		{ "fragment-shader", EShaderStage::Fragment },
+		{ "geometry-shader", EShaderStage::Geometry },
+		{ "compute-shader", EShaderStage::Compute }
 	};
 
-	inline static Map<ShaderStage, String> s_ShaderStageNames =
+	inline static Map<EShaderStage, String> s_ShaderStageNames =
 	{
-		{ ShaderStage::Vertex, "Vertex Shader" },
-		{ ShaderStage::Fragment, "Fragment Shader" },
-		{ ShaderStage::Geometry, "Geometry Shader" },
-		{ ShaderStage::Compute, "Compute Shader" }
+		{ EShaderStage::Vertex, "Vertex Shader" },
+		{ EShaderStage::Fragment, "Fragment Shader" },
+		{ EShaderStage::Geometry, "Geometry Shader" },
+		{ EShaderStage::Compute, "Compute Shader" }
 	};
 
 	UInt32 programId;

@@ -40,7 +40,7 @@ struct RenderConfig
 	Matrix4 cameraView;
 };
 
-enum class CameraMode
+enum class ECameraMode
 {
 	ShowAsMuchAsPossible,
 	FixedWidth,
@@ -50,7 +50,7 @@ enum class CameraMode
 
 struct Camera
 {
-	CameraMode mode{ CameraMode::FixedWidth };
+	ECameraMode mode{ ECameraMode::FixedWidth };
 	Vector2 size{ 800, 600 };
 	Vector2 position{ 0, 0 };
 	Float32 zoom{ 1 };

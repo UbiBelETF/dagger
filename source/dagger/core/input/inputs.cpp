@@ -9,13 +9,13 @@ void InputSystem::OnKeyboardEvent(KeyboardEvent input_)
 {
 	auto key = (UInt64)input_.key;
 
-	if (input_.action == DaggerInputState::Pressed)
+	if (input_.action == EDaggerInputState::Pressed)
 	{
 		m_InputState.keys[key] = true;
 		m_InputState.moments[key] = Engine::CurrentTime();
 		m_InputState.bitmap.set(key);
 	}
-	else if (input_.action == DaggerInputState::Released)
+	else if (input_.action == EDaggerInputState::Released)
 	{
 		m_InputState.releasedLastFrame.emplace(key);
 		m_InputState.keys[key] = false;
@@ -28,13 +28,13 @@ void InputSystem::OnMouseEvent(MouseEvent input_)
 {
 	UInt32 button = (UInt64)input_.button;
 
-	if (input_.action == DaggerInputState::Pressed)
+	if (input_.action == EDaggerInputState::Pressed)
 	{
 		m_InputState.mouse[button - MouseStart] = true;
 		m_InputState.moments[button] = std::chrono::steady_clock::now();
 		m_InputState.bitmap.set(button);
 	}
-	else if (input_.action == DaggerInputState::Released)
+	else if (input_.action == EDaggerInputState::Released)
 	{
 		m_InputState.releasedLastFrame.emplace(button);
 		m_InputState.mouse[button - MouseStart] = false;
@@ -84,14 +84,14 @@ void InputSystem::LoadInputAction(InputCommand& command_, JSON::json& input_)
 	{
 		String eventHandler = input_["event"];
 		if (eventHandler == "Pressed")
-			action.event = DaggerInputState::Pressed;
+			action.event = EDaggerInputState::Pressed;
 		else if (eventHandler == "Held")
-			action.event = DaggerInputState::Held;
+			action.event = EDaggerInputState::Held;
 		else if (eventHandler == "Released")
-			action.event = DaggerInputState::Released;
+			action.event = EDaggerInputState::Released;
 	}
 	else
-		action.event = DaggerInputState::Held;
+		action.event = EDaggerInputState::Held;
 
 	if (input_.contains("value"))
 	{
@@ -188,7 +188,7 @@ void InputSystem::Run()
 						String fullName = command.name;
 						for (auto& action : command.actions)
 						{
-							if (action.event == DaggerInputState::Released)
+							if (action.event == EDaggerInputState::Released)
 							{
 								if (m_InputState.releasedLastFrame.contains(action.trigger))
 								{
@@ -204,14 +204,14 @@ void InputSystem::Run()
 								}
 
 								Bool toFire = false;
-								const Bool toConsume = action.event == DaggerInputState::Pressed;
+								const Bool toConsume = action.event == EDaggerInputState::Pressed;
 
 								if (action.duration == 0)
 								{
 									// mouse
 									if (action.trigger >= MouseStart && action.trigger <= (MouseStart + 10))
 									{
-										if (input::IsInputDown((DaggerMouse)(action.trigger)))
+										if (input::IsInputDown((EDaggerMouse)(action.trigger)))
 										{
 											toFire = true;
 											if (toConsume) 
@@ -220,7 +220,7 @@ void InputSystem::Run()
 									}
 									else
 									{
-										if (input::IsInputDown((DaggerKeyboard)(action.trigger)))
+										if (input::IsInputDown((EDaggerKeyboard)(action.trigger)))
 										{
 											toFire = true;
 											if (toConsume) m_InputState.releasedLastFrame.emplace(action.trigger);
@@ -232,7 +232,7 @@ void InputSystem::Run()
 									// mouse
 									if (action.trigger >= MouseStart && action.trigger <= (MouseStart + 10))
 									{
-										if (input::GetInputDuration((DaggerMouse)(action.trigger)) >= action.duration)
+										if (input::GetInputDuration((EDaggerMouse)(action.trigger)) >= action.duration)
 										{
 											toFire = true;
 											m_InputState.releasedLastFrame.emplace(action.trigger);
@@ -240,7 +240,7 @@ void InputSystem::Run()
 									}
 									else
 									{
-										if (input::GetInputDuration((DaggerKeyboard)(action.trigger)) >= action.duration)
+										if (input::GetInputDuration((EDaggerKeyboard)(action.trigger)) >= action.duration)
 										{
 											toFire = true;
 											m_InputState.releasedLastFrame.emplace(action.trigger);
@@ -286,19 +286,19 @@ void InputSystem::WindDown()
 	Engine::Dispatcher().sink<MouseEvent>().disconnect<&InputSystem::OnMouseEvent>(this);
 };
 
-Bool dagger::input::IsInputDown(DaggerKeyboard key_)
+Bool dagger::input::IsInputDown(EDaggerKeyboard key_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	return state->keys[(UInt32)key_];
 }
 
-Bool dagger::input::IsInputDown(DaggerMouse button_)
+Bool dagger::input::IsInputDown(EDaggerMouse button_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	return state->mouse[(UInt32)button_ - MouseStart];
 }
 
-UInt32 dagger::input::GetInputDuration(DaggerKeyboard key_)
+UInt32 dagger::input::GetInputDuration(EDaggerKeyboard key_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	UInt32 value = (UInt32)key_;
@@ -307,14 +307,14 @@ UInt32 dagger::input::GetInputDuration(DaggerKeyboard key_)
 	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
 
-UInt32 dagger::input::GetInputDuration(DaggerMouse mouse_)
+UInt32 dagger::input::GetInputDuration(EDaggerMouse mouse_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	UInt32 value = (UInt32)mouse_;
 	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
 
-void dagger::input::ConsumeInput(DaggerKeyboard key_)
+void dagger::input::ConsumeInput(EDaggerKeyboard key_)
 {
 	auto* state = Engine::GetDefaultResource<InputState>();
 
@@ -324,7 +324,7 @@ void dagger::input::ConsumeInput(DaggerKeyboard key_)
 	state->bitmap.reset(value);
 }
 
-void dagger::input::ConsumeInput(DaggerMouse button_)
+void dagger::input::ConsumeInput(EDaggerMouse button_)
 {
 	auto* state = Engine::GetDefaultResource<InputState>();
 

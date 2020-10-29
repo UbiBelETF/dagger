@@ -89,6 +89,6 @@ For structs, member names are always `lowerCamelCase`.
 
 Always use **enum classes** instead of C-style enums.
 
-**a. Names**: Make sure the enum name acts as a namespace for its members, so make it distinct and descriptive. It should be in `UpperCamelCase`.
+**a. Names**: Make sure the enum name acts as a namespace for its members, so make it distinct and descriptive. It should be in `EUpperCamelCase`. The prefix `E` is used to make it more distinct.
 
 **b. Member Names**: Members in an enum are written in `UpperCamelCase`. There is no need to repeat the name of the enum within the member, as it is scoped.
