@@ -34,7 +34,9 @@ void DiagnosticSystem::ReceiveSystemStats(SystemRunStats stats_)
 
 void DiagnosticSystem::SpinUp()
 {
+#if defined(MEASURE_SYSTEMS)
 	Engine::Dispatcher().sink<SystemRunStats>().connect<&DiagnosticSystem::ReceiveSystemStats>(this);
+#endif//defined(MEASURE_SYSTEMS)
 	Engine::Dispatcher().sink<GUIRender>().connect<&DiagnosticSystem::RenderGUI>(this);
 	Engine::Dispatcher().sink<NextFrame>().connect<&DiagnosticSystem::Tick>(this);
 }
@@ -65,6 +67,9 @@ void DiagnosticSystem::Run()
 
 void DiagnosticSystem::WindDown()
 {
+#if defined(MEASURE_SYSTEMS)
+	Engine::Dispatcher().sink<SystemRunStats>().disconnect<&DiagnosticSystem::ReceiveSystemStats>(this);
+#endif//defined(MEASURE_SYSTEMS)
 	Engine::Dispatcher().sink<NextFrame>().disconnect<&DiagnosticSystem::Tick>(this);
 	Engine::Dispatcher().sink<GUIRender>().disconnect<&DiagnosticSystem::RenderGUI>(this);
 }

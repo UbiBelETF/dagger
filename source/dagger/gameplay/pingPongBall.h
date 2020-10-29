@@ -7,7 +7,7 @@ using namespace dagger;
 
 struct ControllerMapping
 {
-    UInt32 key;
+    DaggerKeyboard key;
     Vector2 input;
 };
 

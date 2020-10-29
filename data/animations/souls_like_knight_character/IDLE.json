@@ -1,6 +1,6 @@
 {
 	"animation-name": "souls_like_knight_character:IDLE",
-	"animation-length-ms": 1000,
+	"animation-length-ms": 600,
 	"animation-frames": 
 	[
 		{ "texture-name": "souls_like_knight_character:IDLE:idle1" },

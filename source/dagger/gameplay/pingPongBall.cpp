@@ -62,7 +62,7 @@ void PingPongBallSystem::OnKeyboardEvent(KeyboardEvent kEvent)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
     {
-        if (kEvent.key == ctrl_.key /*GLFW_KEY_W*/ && kEvent.action == GLFW_PRESS)
+        if (kEvent.key == ctrl_.key /*GLFW_KEY_W*/ && kEvent.action == DaggerInputState::Pressed)
         {
             ctrl_.input.y = 1;
         }

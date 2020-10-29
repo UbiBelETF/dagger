@@ -22,14 +22,38 @@ struct GUIRender {};
 
 struct GLFWwindow;
 
+struct WindowResized
+{
+	GLFWwindow* window;
+	UInt32 width;
+	UInt32 height;
+};
+
 struct RenderConfig
 {
-	bool m_Fullscreen;
-	GLsizei m_WindowWidth;
-	GLsizei m_WindowHeight;
+	bool fullscreen;
+	GLsizei windowWidth;
+	GLsizei windowHeight;
 
-	GLFWwindow* m_Window;
-	Matrix4 m_Projection;
+	GLFWwindow* window;
+	Matrix4 projection;
+	Matrix4 cameraView;
+};
+
+enum class CameraMode
+{
+	ShowAsMuchAsPossible,
+	FixedWidth,
+	FixedHeight,
+	FixedResolution
+};
+
+struct Camera
+{
+	CameraMode mode{ CameraMode::FixedWidth };
+	Vector2 size{ 800, 600 };
+	Vector2 position{ 0, 0 };
+	Float32 zoom{ 1 };
 };
 
 struct WindowSystem 
@@ -40,19 +64,24 @@ struct WindowSystem
 	inline String SystemName() { return "Window System"; }
 
 	RenderConfig m_Config;
+	Camera m_Camera;
 
 	WindowSystem()
 		: m_Config{ true, 0, 0 }
+		, m_Camera{}
 	{}
 
 	WindowSystem(GLsizei width_, GLsizei height_)
 		: m_Config{ false, width_, height_ }
+		, m_Camera{}
 	{}
 
 	~WindowSystem() = default;
 	WindowSystem(const WindowSystem&) = delete;
 
+	void OnWindowResized(WindowResized resized_);
 	void OnShaderChanged(ShaderChangeRequest request_);
+	void OnCameraUpdated(Camera camera_);
 
 	void SpinUp() override;
 	void Run() override;
