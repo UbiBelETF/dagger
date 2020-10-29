@@ -55,11 +55,8 @@ int main(int argc_, char** argv_)
     engine.EngineInit();
     WorldSetup(engine);
 
-	// Game loop starts here 
 	while (engine.Up())
-	{
 		engine.EngineLoop();
-	}
 
     engine.EngineStop();
 

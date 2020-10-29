@@ -1,10 +1,12 @@
 #include "character_controller.h"
 
+#include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "core/graphics/shaders.h"
+#include "core/graphics/window.h"
 
 using namespace example1;
 
@@ -37,6 +39,10 @@ void CharacterControllerSystem::Run()
                 AnimatorPlay(animator_, "souls_like_knight_character:RUN");
                 sprite_.scale.x = run;
                 sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
+
+                auto cam = Engine::GetDefaultResource<Camera>();
+                cam->zoom += 0.01f * run;
+                Engine::Dispatcher().trigger<Camera>(*cam);
             }
         });
 }
@@ -56,10 +62,16 @@ void example1::SetupWorld(Engine& engine_)
 {
     ShaderSystem::Use("standard");
 
+    Camera camera;
+    camera.mode = CameraMode::FixedResolution;
+    camera.size = { 800, 600 };
+    Engine::Dispatcher().trigger<Camera>(camera);
+
     auto& reg = engine_.GetRegistry();
     auto entity = reg.create();
 
     auto& sprite = reg.emplace<Sprite>(entity);
+    sprite.scale = { 1, 1 };
 
     auto& anim = reg.emplace<Animator>(entity);
     AnimatorPlay(anim, "souls_like_knight_character:IDLE");

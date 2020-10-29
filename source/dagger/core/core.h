@@ -279,12 +279,6 @@ struct MouseEvent
 
 typedef glm::dvec2 CursorEvent;
 
-struct WindowResizedEvent
-{
-	UInt32 width;
-	UInt32 height;
-};
-
 struct Error
 {
 	String message;

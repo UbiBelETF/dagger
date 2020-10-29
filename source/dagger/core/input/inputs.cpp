@@ -49,7 +49,7 @@ void InputSystem::SpinUp()
 	Engine::Dispatcher().sink<KeyboardEvent>().connect<&InputSystem::OnKeyboardEvent>(this);
 	Engine::Dispatcher().sink<MouseEvent>().connect<&InputSystem::OnMouseEvent>(this);
 
-	Engine::Res<InputState>()["input"] = &m_InputState;
+	Engine::PutDefaultResource<InputState>(&m_InputState);
 
 	LoadDefaultAssets();
 };
@@ -288,20 +288,19 @@ void InputSystem::WindDown()
 
 Bool dagger::input::IsInputDown(DaggerKeyboard key_)
 {
-	const auto* state = Engine::Res<InputState>()["input"];
+	const auto* state = Engine::GetDefaultResource<InputState>();
 	return state->keys[(UInt32)key_];
 }
 
 Bool dagger::input::IsInputDown(DaggerMouse button_)
 {
-	const auto* state = Engine::Res<InputState>()["input"];
+	const auto* state = Engine::GetDefaultResource<InputState>();
 	return state->mouse[(UInt32)button_ - MouseStart];
 }
 
 UInt32 dagger::input::GetInputDuration(DaggerKeyboard key_)
 {
-	const auto* state = Engine::Res<InputState>()["input"];
-
+	const auto* state = Engine::GetDefaultResource<InputState>();
 	UInt32 value = (UInt32)key_;
 	if (!state->moments.contains(value)) return 0;
 
@@ -310,15 +309,14 @@ UInt32 dagger::input::GetInputDuration(DaggerKeyboard key_)
 
 UInt32 dagger::input::GetInputDuration(DaggerMouse mouse_)
 {
-	const auto* state = Engine::Res<InputState>()["input"];
-
+	const auto* state = Engine::GetDefaultResource<InputState>();
 	UInt32 value = (UInt32)mouse_;
 	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
 
 void dagger::input::ConsumeInput(DaggerKeyboard key_)
 {
-	auto* state = Engine::Res<InputState>()["input"];
+	auto* state = Engine::GetDefaultResource<InputState>();
 
 	UInt32 value = (UInt32)key_;
 	state->keys[value] = false;
@@ -328,7 +326,7 @@ void dagger::input::ConsumeInput(DaggerKeyboard key_)
 
 void dagger::input::ConsumeInput(DaggerMouse button_)
 {
-	auto* state = Engine::Res<InputState>()["input"];
+	auto* state = Engine::GetDefaultResource<InputState>();
 
 	UInt32 value = (UInt32)button_;
 	state->mouse[value - MouseStart] = false;

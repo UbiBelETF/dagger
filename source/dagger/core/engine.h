@@ -73,6 +73,30 @@ namespace dagger
 		}
 
 		template<typename T>
+		inline static T* GetDefaultResource()
+		{
+			return Res<T>()[""];
+		}
+
+		template<typename T>
+		inline static void PutDefaultResource(T* ptr_)
+		{
+			Res<T>()[""] = ptr_;
+		}
+
+		template<typename T>
+		inline static T* GetResource(String name_)
+		{
+			return Res<T>()[name_];
+		}
+
+		template<typename T>
+		inline static void PutResource(String name_, T* ptr_)
+		{
+			Res<T>()[name_] = ptr_;
+		}
+
+		template<typename T>
 		inline static tsl::sparse_map<std::string, T*>& Res()
 		{
 			static tsl::sparse_map<std::string, T*> s_CachedMap;
