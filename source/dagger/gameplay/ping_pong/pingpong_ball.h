@@ -10,9 +10,15 @@ namespace pingPong
     struct PingPongBall
     {
         Vector3 speed{ 0, 0, 0 };
+        
+        bool reachedGoal{ false };
+        bool playerOneScored{ true };
+        bool processed{ false };
+    };
 
-        bool collided = false;
-        Vector2 collisionSides{ 0, 0 };
+    struct PingPongWall
+    {
+        bool isLeft{ true };
     };
 
     class PingPongBallSystem

@@ -11,12 +11,13 @@
 
 #include "gameplay/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
+#include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace dagger;
 using namespace pingPong;
 
-void CreatePingPongBall(entt::registry &reg, float TileSize, Color color, Vector3 speed, Vector3 pos)
+void pingPong::CreatePingPongBall(entt::registry &reg, float TileSize, Color color, Vector3 speed, Vector3 pos)
 {
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
@@ -40,6 +41,7 @@ void pingPong::SetupSystems(Engine &engine)
     engine.AddSystem<SimpleCollisionsSystem>();
     engine.AddSystem<PingPongBallSystem>();
     engine.AddSystem<PingPongPlayerInputSystem>();
+    engine.AddSystem<PlayerScoresSystem>();
 }
 
 void pingPong::SetupWorld(Engine &engine)
@@ -51,7 +53,7 @@ void pingPong::SetupWorld(Engine &engine)
     Camera camera;
     camera.mode = CameraMode::FixedResolution;
     camera.size = { 800, 600 };
-    camera.zoom = 0.15f;
+    camera.zoom = 0.17f;
     Engine::Dispatcher().trigger<Camera>(camera);
 
     auto& reg = engine.GetRegistry();
@@ -140,6 +142,9 @@ void pingPong::SetupWorld(Engine &engine)
             auto& transform = reg.emplace<Transform>(entity);
             transform.position.x = (0.5f - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
             transform.position.y = 0;
+
+            auto& wall = reg.emplace<PingPongWall>(entity);
+            wall.isLeft = true;
         }
 
         // right
@@ -152,17 +157,20 @@ void pingPong::SetupWorld(Engine &engine)
             auto& transform = reg.emplace<Transform>(entity);
             transform.position.x = (0.5f + (Width - 1) + (Width - 1) * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
             transform.position.y = 0;
+
+            auto& wall = reg.emplace<PingPongWall>(entity);
+            wall.isLeft = false;
         }
     }
 
     // ball
-    CreatePingPongBall(reg, TileSize, Color(1, 1, 1, 1), { 7,7,0 }, { 0,0,0 });
-    CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { 14,14,0 }, { 5,0,0 });
-    CreatePingPongBall(reg, TileSize, Color(1, 0.5f, 1, 1), { 4,7,0 }, { 0,5,0 });
-    CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), { 7,4,0 }, { -5,-5,0 });
-    CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 24,14,0 }, { 3,0,0 });
-    CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { 14,24,0 }, { 5,3,0 });
-    CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 0.5f, 1), { 5,5,0 }, { 5,-7,0 });
+    CreatePingPongBall(reg, TileSize, Color(1, 1, 1, 1), { 7,-7,0 },        { -1,5,0 });
+    //CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { -14,14,0 },   { 1,3,0 });
+    CreatePingPongBall(reg, TileSize, Color(1, 0.5f, 1, 1), { 6,4,0 },      { -1,1,0 });
+    //CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), {- 7,-7,0 },    { 1,-1,0 });
+    //CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 20,14,0 }, { -1,-3,0 });
+    CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,0 });
+    CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 0.5f, 1), { 8,8,0 },   { -1,-7,0 });
 
     // player controller setup
     const Float32 playerSize = TileSize * ((Heigh - 2) * (1 + Space) * 0.33f);
@@ -209,4 +217,5 @@ void pingPong::SetupWorld(Engine &engine)
     }
 
     // add score system to count scores for left and right collisions
+    PlayerScoresSystem::SetFieldSize(Width, Heigh, TileSize * (1 + Space));
 }
