@@ -17,34 +17,34 @@
 using namespace dagger;
 using namespace pingPong;
 
-void pingPong::CreatePingPongBall(entt::registry &reg, float TileSize, Color color, Vector3 speed, Vector3 pos)
+void pingPong::CreatePingPongBall(entt::registry &reg_, float TileSize_, Color color_, Vector3 speed_, Vector3 pos_)
 {
-    auto entity = reg.create();
-    auto& sprite = reg.emplace<Sprite>(entity);
+    auto entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
     AssignSpriteTexture(sprite, "PingPong:ball");
-    sprite.scale = Vector2(1, 1) * TileSize;
+    sprite.scale = Vector2(1, 1) * TileSize_;
 
-    sprite.color = color;
+    sprite.color = color_;
 
-    auto& transform = reg.emplace<Transform>(entity);
-    transform.position = pos * TileSize;
-    auto& ball = reg.emplace<PingPongBall>(entity);
-    ball.speed = speed * TileSize;
+    auto& transform = reg_.emplace<Transform>(entity);
+    transform.position = pos_ * TileSize_;
+    auto& ball = reg_.emplace<PingPongBall>(entity);
+    ball.speed = speed_ * TileSize_;
 
-    auto& col = reg.emplace<SimpleCollision>(entity);
-    col.size.x = TileSize;
-    col.size.y = TileSize;
+    auto& col = reg_.emplace<SimpleCollision>(entity);
+    col.size.x = TileSize_;
+    col.size.y = TileSize_;
 }
 
-void pingPong::SetupSystems(Engine &engine)
+void pingPong::SetupSystems(Engine &engine_)
 {
-    engine.AddSystem<SimpleCollisionsSystem>();
-    engine.AddSystem<PingPongBallSystem>();
-    engine.AddSystem<PingPongPlayerInputSystem>();
-    engine.AddSystem<PlayerScoresSystem>();
+    engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<PingPongBallSystem>();
+    engine_.AddSystem<PingPongPlayerInputSystem>();
+    engine_.AddSystem<PlayerScoresSystem>();
 }
 
-void pingPong::SetupWorld(Engine &engine)
+void pingPong::SetupWorld(Engine &engine_)
 {
     Vector2 scale(1, 1);
 
@@ -56,7 +56,7 @@ void pingPong::SetupWorld(Engine &engine)
     camera.zoom = 0.17f;
     Engine::Dispatcher().trigger<Camera>(camera);
 
-    auto& reg = engine.GetRegistry();
+    auto& reg = engine_.GetRegistry();
 
     // field
     constexpr int ScreenHeigh = 600;
@@ -175,7 +175,7 @@ void pingPong::SetupWorld(Engine &engine)
     // player controller setup
     const Float32 playerSize = TileSize * ((Heigh - 2) * (1 + Space) * 0.33f);
     PingPongPlayerInputSystem::SetupPlayerBoarders(playerSize, -playerSize);
-    PingPongPlayerInputSystem::PLAYER_SPEED = TileSize * 10.f;
+    PingPongPlayerInputSystem::s_PlayerSpeed = TileSize * 10.f;
     //1st player
     {
         auto entity = reg.create();

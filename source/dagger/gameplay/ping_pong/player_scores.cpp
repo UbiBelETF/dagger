@@ -9,9 +9,9 @@
 
 using namespace pingPong;
 
-int PlayerScoresSystem::FIELD_WIDTH = 20;
-int PlayerScoresSystem::FIELD_HEIGHT = 10;
-Float32 PlayerScoresSystem::TILE_SIZE = 1.f;
+int PlayerScoresSystem::s_FieldWidth = 20;
+int PlayerScoresSystem::s_FieldHeight = 10;
+Float32 PlayerScoresSystem::s_TileSize = 1.f;
 
 void PlayerScoresSystem::Run()
 {
@@ -31,12 +31,12 @@ void PlayerScoresSystem::Run()
             if (ball.playerOneScored)
             {
                 m_goalsPlayerOne++;
-                t.position = { (-(FIELD_WIDTH+3) / 2.f) * TILE_SIZE,  TILE_SIZE * m_goalsPlayerOne, 0 };
+                t.position = { (-(s_FieldWidth+3) / 2.f) * s_TileSize,  s_TileSize * m_goalsPlayerOne, 0 };
             }
             else
             {
                 m_goalsPlayerTwo++;
-                t.position = { ((FIELD_WIDTH+3) / 2.f) * TILE_SIZE, TILE_SIZE * m_goalsPlayerTwo, 0 };
+                t.position = { ((s_FieldWidth+3) / 2.f) * s_TileSize, s_TileSize * m_goalsPlayerTwo, 0 };
             }
 
             ball.processed = true;
@@ -51,6 +51,6 @@ void PlayerScoresSystem::Run()
     if (ballOnField == 0)
     {
         auto& reg = Engine::Registry();
-        pingPong::CreatePingPongBall(reg, TILE_SIZE, Color(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(FIELD_HEIGHT / 2),0 });
+        pingPong::CreatePingPongBall(reg, s_TileSize, Color(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
     }
 }

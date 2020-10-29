@@ -6,10 +6,10 @@
 using namespace dagger;
 using namespace pingPong;
 
-Float32 PingPongPlayerInputSystem::BOARDER_DOWN = -20;
-Float32 PingPongPlayerInputSystem::BOARDER_UP = 20;
+Float32 PingPongPlayerInputSystem::s_BoarderDown = -20;
+Float32 PingPongPlayerInputSystem::s_BoarderUp = 20;
 
-Float32 PingPongPlayerInputSystem::PLAYER_SPEED = 1.f;
+Float32 PingPongPlayerInputSystem::s_PlayerSpeed = 1.f;
 
 void PingPongPlayerInputSystem::SpinUp()
 {
@@ -21,23 +21,23 @@ void PingPongPlayerInputSystem::WindDown()
     Engine::Dispatcher().sink<KeyboardEvent>().disconnect<&PingPongPlayerInputSystem::OnKeyboardEvent>(this);
 }
 
-void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent)
+void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
     {
-        if (kEvent.key == ctrl_.up_key && (kEvent.action == DaggerInputState::Pressed || kEvent.action == DaggerInputState::Held))
+        if (kEvent_.key == ctrl_.up_key && (kEvent_.action == DaggerInputState::Pressed || kEvent_.action == DaggerInputState::Held))
         {
             ctrl_.input.y = 1;
         }
-        else if (kEvent.key == ctrl_.up_key && kEvent.action == DaggerInputState::Released && ctrl_.input.y > 0)
+        else if (kEvent_.key == ctrl_.up_key && kEvent_.action == DaggerInputState::Released && ctrl_.input.y > 0)
         {
             ctrl_.input.y = 0;
         }
-        else if (kEvent.key == ctrl_.down_key && (kEvent.action == DaggerInputState::Held || kEvent.action == DaggerInputState::Pressed))
+        else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == DaggerInputState::Held || kEvent_.action == DaggerInputState::Pressed))
         {
             ctrl_.input.y = -1;
         }
-        else if (kEvent.key == ctrl_.down_key && kEvent.action == DaggerInputState::Released && ctrl_.input.y < 0)
+        else if (kEvent_.key == ctrl_.down_key && kEvent_.action == DaggerInputState::Released && ctrl_.input.y < 0)
         {
             ctrl_.input.y = 0;
         }
@@ -52,16 +52,16 @@ void PingPongPlayerInputSystem::Run()
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
 
-        t.position.y += ctrl.input.y * PLAYER_SPEED * Engine::DeltaTime();
+        t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
 
-        if (t.position.y > BOARDER_UP)
+        if (t.position.y > s_BoarderUp)
         {
-            t.position.y = BOARDER_UP;
+            t.position.y = s_BoarderUp;
         }
 
-        if (t.position.y < BOARDER_DOWN)
+        if (t.position.y < s_BoarderDown)
         {
-            t.position.y = BOARDER_DOWN;
+            t.position.y = s_BoarderDown;
         }
     }
 }

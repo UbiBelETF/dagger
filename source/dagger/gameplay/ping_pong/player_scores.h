@@ -11,9 +11,9 @@ namespace pingPong
 
     class PlayerScoresSystem : public System
     {
-        static int FIELD_WIDTH;
-        static int FIELD_HEIGHT;
-        static Float32 TILE_SIZE;
+        static int s_FieldWidth;
+        static int s_FieldHeight;
+        static Float32 s_TileSize;
 
         int m_goalsPlayerOne = 0;
         int m_goalsPlayerTwo = 0;
@@ -25,9 +25,9 @@ namespace pingPong
 
         static void SetFieldSize(int width, int height, float tileSize)
         {
-            FIELD_WIDTH = width;
-            FIELD_HEIGHT = height;
-            TILE_SIZE = tileSize;
+            s_FieldWidth = width;
+            s_FieldHeight = height;
+            s_TileSize = tileSize;
         }
     };
 

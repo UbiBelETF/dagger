@@ -12,12 +12,12 @@ struct SimpleCollision
     bool colided = false;
     entt::entity colidedWith;
 
-    bool IsCollided(const Vector3& pos, const SimpleCollision& other, const Vector3& posOther);
+    bool IsCollided(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_);
 
     // return (0,1) if collision happen by y, (1,0) if collision happen by x
-    Vector2 GetCollisionSides(const Vector3& pos, const SimpleCollision& other, const Vector3& posOther);
+    Vector2 GetCollisionSides(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_);
 
-    Vector3 GetCollisionCenter(const Vector3& pos, const SimpleCollision& other, const Vector3& posOther);
+    Vector3 GetCollisionCenter(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_);
 };
 
 class SimpleCollisionsSystem : public System

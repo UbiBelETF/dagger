@@ -18,12 +18,12 @@ namespace pingPong
     class PingPongPlayerInputSystem
         : public System
     {
-        static Float32 BOARDER_UP;
-        static Float32 BOARDER_DOWN;
+        static Float32 s_BoarderUp;
+        static Float32 s_BoarderDown;
 
     public:
 
-        static Float32 PLAYER_SPEED;
+        static Float32 s_PlayerSpeed;
 
     public:
         inline String SystemName() { return "PingPong Player Input System"; }
@@ -32,26 +32,26 @@ namespace pingPong
         void WindDown() override;
         void Run() override;
 
-        static void SetupPlayerOneInput(ControllerMapping& controllerMapping)
+        static void SetupPlayerOneInput(ControllerMapping& controllerMapping_)
         {
-            controllerMapping.up_key = DaggerKeyboard::KeyW;
-            controllerMapping.down_key = DaggerKeyboard::KeyS;
+            controllerMapping_.up_key = DaggerKeyboard::KeyW;
+            controllerMapping_.down_key = DaggerKeyboard::KeyS;
         }
 
-        static void SetupPlayerTwoInput(ControllerMapping& controllerMapping)
+        static void SetupPlayerTwoInput(ControllerMapping& controllerMapping_)
         {
-            controllerMapping.up_key = DaggerKeyboard::KeyUp;
-            controllerMapping.down_key = DaggerKeyboard::KeyDown;
+            controllerMapping_.up_key = DaggerKeyboard::KeyUp;
+            controllerMapping_.down_key = DaggerKeyboard::KeyDown;
         }
 
-        static void SetupPlayerBoarders(Float32 boarderUp, Float32 boarderDown)
+        static void SetupPlayerBoarders(Float32 boarderUp_, Float32 boarderDown_)
         {
-            BOARDER_UP = boarderUp;
-            BOARDER_DOWN = boarderDown;
+            s_BoarderUp = boarderUp_;
+            s_BoarderDown = boarderDown_;
         }
 
     private:
 
-        void OnKeyboardEvent(KeyboardEvent kEvent);
+        void OnKeyboardEvent(KeyboardEvent kEvent_);
     };
 }
