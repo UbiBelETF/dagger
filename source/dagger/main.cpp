@@ -45,6 +45,29 @@ void GameplaySystemsSetup(Engine &engine)
     engine.AddSystem<PingPongBallSystem>();
 }
 
+void CreatePingPongBall(entt::registry &reg, float TileSize, Color color, Vector3 speed, Vector3 pos)
+{
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    AssignSpriteTexture(sprite, "PingPong:ball");
+    sprite.scale = TileSize;
+
+    sprite.color = color;
+
+    auto& transform = reg.emplace<Transform>(entity);
+    transform.position = pos * TileSize;
+    auto& ball = reg.emplace<PingPongBall>(entity);
+    ball.speed = speed * TileSize;
+
+    auto& col = reg.emplace<SimpleCollision>(entity);
+    col.size.x = TileSize;
+    col.size.y = TileSize;
+
+    auto& kb = reg.emplace<ControllerMapping>(entity);
+    kb.key = GLFW_KEY_W;
+}
+
+
 void PostInitWorld(Engine &engine)
 {
     ShaderSystem::Use("standard");
@@ -88,9 +111,9 @@ void PostInitWorld(Engine &engine)
                 sprite.color.g = 0.0f;
                 sprite.color.b = 0.0f;
 
-                auto& col = reg.emplace<SimpleCollision>(entity);
-                col.size.x = TileSize;
-                col.size.y = TileSize;
+                //auto& col = reg.emplace<SimpleCollision>(entity);
+                //col.size.x = TileSize;
+                //col.size.y = TileSize;
             }
 
             auto& transform = reg.emplace<Transform>(entity);
@@ -99,26 +122,71 @@ void PostInitWorld(Engine &engine)
         }
     }
 
-    // ball
+    // collisions
     {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "PingPong:ball");
-        sprite.scale = TileSize;
+        // up
+        {
+            auto entity = reg.create();
+            auto& col = reg.emplace<SimpleCollision>(entity);
+            col.size.x = TileSize * (Width - 2)* (1 + Space);
+            col.size.y = TileSize;
 
-        sprite.color.r = 0.1f;
-        sprite.color.g = 0.8f;
-        sprite.color.b = 0.0f;
+            auto& transform = reg.emplace<Transform>(entity);
+            transform.position.x = 0;
+            transform.position.y = (0.5f + (Heigh - 1) + (Heigh - 1) * Space - static_cast<float>(Heigh * (1 + Space)) / 2.f) * TileSize;
+        }
 
-        auto& transform = reg.emplace<Transform>(entity);
-        auto& ball = reg.emplace<PingPongBall>(entity);
-        ball.speed.x = 7 * TileSize;
-        ball.speed.y = 7 * TileSize;
+        // down
+        {
+            auto entity = reg.create();
+            auto& col = reg.emplace<SimpleCollision>(entity);
+            col.size.x = TileSize * (Width - 2) * (1 + Space);
+            col.size.y = TileSize;
 
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size.x = TileSize;
-        col.size.y = TileSize;
+            auto& transform = reg.emplace<Transform>(entity);
+            transform.position.x = 0;
+            transform.position.y = (0.5f - static_cast<float>(Heigh * (1 + Space)) / 2.f) * TileSize;
+        }
+
+        // left
+        {
+            auto entity = reg.create();
+            auto& col = reg.emplace<SimpleCollision>(entity);
+            col.size.x = TileSize;
+            col.size.y = TileSize * (Heigh - 2) * (1 + Space);
+
+            auto& transform = reg.emplace<Transform>(entity);
+            transform.position.x = (0.5f - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
+            transform.position.y = 0;
+        }
+
+        // right
+        {
+            auto entity = reg.create();
+            auto& col = reg.emplace<SimpleCollision>(entity);
+            col.size.x = TileSize;
+            col.size.y = TileSize * (Heigh - 2) * (1 + Space);
+
+            auto& transform = reg.emplace<Transform>(entity);
+            transform.position.x = (0.5f + (Width - 1) + (Width - 1) * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
+            transform.position.y = 0;
+        }
     }
+
+    // ball
+    CreatePingPongBall(reg, TileSize, Color(1, 1, 1, 1), { 7,7,0 }, {0,0,0});
+    CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { 14,14,0 }, {5,0,0});
+    CreatePingPongBall(reg, TileSize, Color(1, 0.5f, 1, 1), { 4,7,0 }, {0,5,0});
+    CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), { 7,4,0 }, {-5,-5,0});
+    CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 24,14,0 }, {3,0,0});
+    CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { 14,24,0 }, {5,3,0});
+    CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 0.5f, 1), { 5,5,0 }, {5,-7,0});
+//         auto& kb = reg.emplace<ControllerMapping>(entity);
+//         kb.key = GLFW_KEY_UP;
+
+    // player controller setup
+
+    // add score system to count scores for left and right collisions
 }
 
 void PostInitWorld2(Engine &engine)

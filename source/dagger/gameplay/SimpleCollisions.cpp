@@ -28,9 +28,10 @@ void SimpleCollisionsSystem::Run()
                 if (Engine::Registry().has<PingPongBall>(*it))
                 {
                     PingPongBall& ball = Engine::Registry().get<PingPongBall>(*it);
+                    // one collision per frame per component
                     if (!ball.collided)
                     {
-                        ball.pointOfCollision = collision.GetCollisionCenter(transform.position, col, tr.position);
+                        ball.collisionSides = collision.GetCollisionSides(transform.position, col, tr.position);
                         ball.collided = true;
                     }
                 }
@@ -38,9 +39,10 @@ void SimpleCollisionsSystem::Run()
                 if (Engine::Registry().has<PingPongBall>(*it2))
                 {
                     PingPongBall& ball = Engine::Registry().get<PingPongBall>(*it2);
+                    // one collision per frame per component
                     if (!ball.collided)
                     {
-                        ball.pointOfCollision = collision.GetCollisionCenter(transform.position, col, tr.position);
+                        ball.collisionSides = col.GetCollisionSides(tr.position, collision, transform.position);
                         ball.collided = true;
                     }
                 }
