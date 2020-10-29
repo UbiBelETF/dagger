@@ -12,6 +12,7 @@ using namespace pingPong;
 
 void PingPongBallSystem::Run()
 {
+    auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
     auto view = Engine::Registry().view<PingPongBall, Transform, SimpleCollision>();
     for(auto entity: view) 
     {
@@ -26,11 +27,10 @@ void PingPongBallSystem::Run()
 
         if (col.colided)
         {
-            if (Engine::Registry().has<SimpleCollision>(col.colidedWith) 
-                && Engine::Registry().has<Transform>(col.colidedWith))
+            if (Engine::Registry().valid(col.colidedWith))
             {
-                SimpleCollision& collision = Engine::Registry().get<SimpleCollision>(col.colidedWith);
-                Transform& transform = Engine::Registry().get<Transform>(col.colidedWith);
+                SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
+                Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
 
                 Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
 
