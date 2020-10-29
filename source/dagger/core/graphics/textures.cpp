@@ -60,7 +60,7 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
 void TextureSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
     Logger::info("Shader changed to {}, reuploading textures.", request_.m_Shader->shaderName);
-    glProgramUniformHandleui64vARB(request_.m_Shader->programId, (GLuint)Shader::Uniforms::TextureBufferId,
+    glProgramUniformHandleui64vARB(request_.m_Shader->programId, (GLuint)Shader::EUniforms::TextureBufferId,
         (GLsizei)m_TextureHandles.size(), m_TextureHandles.data());
 }
 

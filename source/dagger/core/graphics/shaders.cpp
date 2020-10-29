@@ -55,7 +55,7 @@ void ShaderSystem::OnLoadAsset(AssetLoadRequest<Shader> request_)
 
     if (json.contains("shader-stages"))
     {
-        Map<ShaderStage, String> stageLoader;
+        Map<EShaderStage, String> stageLoader;
 
         auto stages = json["shader-stages"];
         for (auto [key, value] : stages.get<JSON::json::object_t>())

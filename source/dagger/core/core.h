@@ -100,7 +100,7 @@ namespace JSON = nlohmann;
 #define EMPTY_EVENT 
 
 
-enum class DaggerKeyboard
+enum class EDaggerKeyboard
 {
     KeyUnknown = 1,
     KeySpace = 32,
@@ -225,7 +225,7 @@ enum class DaggerKeyboard
     KeyMenu = 348,
 };
 
-enum class DaggerMouse
+enum class EDaggerMouse
 {
     MouseButton1 = 150,
     MouseButton2 = 151,
@@ -237,7 +237,7 @@ enum class DaggerMouse
     MouseButton8 = 157,
 };
 
-enum class DaggerInputState
+enum class EDaggerInputState
 {
     Released = 0,
     Pressed = 1,
@@ -257,8 +257,8 @@ struct AssetLoadRequest
 
 struct KeyboardEvent
 {
-	DaggerKeyboard key;
-    DaggerInputState action;
+	EDaggerKeyboard key;
+    EDaggerInputState action;
     UInt32 scancode;
 	UInt32 modifiers;
 };
@@ -272,8 +272,8 @@ typedef glm::dvec2 ScrollEvent;
 
 struct MouseEvent
 {
-	DaggerMouse button;
-	DaggerInputState action;
+	EDaggerMouse button;
+	EDaggerInputState action;
 	UInt32 modifiers;
 };
 

@@ -63,7 +63,7 @@ void example1::SetupWorld(Engine& engine_)
     ShaderSystem::Use("standard");
 
     Camera camera;
-    camera.mode = CameraMode::FixedResolution;
+    camera.mode = ECameraMode::FixedResolution;
     camera.size = { 800, 600 };
     Engine::Dispatcher().trigger<Camera>(camera);
 

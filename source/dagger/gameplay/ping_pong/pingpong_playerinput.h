@@ -9,8 +9,8 @@ namespace pingPong
 {
     struct ControllerMapping
     {
-        DaggerKeyboard up_key;
-        DaggerKeyboard down_key;
+        EDaggerKeyboard up_key;
+        EDaggerKeyboard down_key;
 
         Vector2 input{ 0, 0 };
     };
@@ -34,14 +34,14 @@ namespace pingPong
 
         static void SetupPlayerOneInput(ControllerMapping& controllerMapping_)
         {
-            controllerMapping_.up_key = DaggerKeyboard::KeyW;
-            controllerMapping_.down_key = DaggerKeyboard::KeyS;
+            controllerMapping_.up_key = EDaggerKeyboard::KeyW;
+            controllerMapping_.down_key = EDaggerKeyboard::KeyS;
         }
 
         static void SetupPlayerTwoInput(ControllerMapping& controllerMapping_)
         {
-            controllerMapping_.up_key = DaggerKeyboard::KeyUp;
-            controllerMapping_.down_key = DaggerKeyboard::KeyDown;
+            controllerMapping_.up_key = EDaggerKeyboard::KeyUp;
+            controllerMapping_.down_key = EDaggerKeyboard::KeyDown;
         }
 
         static void SetupPlayerBoarders(Float32 boarderUp_, Float32 boarderDown_)

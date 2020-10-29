@@ -51,7 +51,7 @@ void pingPong::SetupWorld(Engine &engine_)
     ShaderSystem::Use("standard");
 
     Camera camera;
-    camera.mode = CameraMode::FixedResolution;
+    camera.mode = ECameraMode::FixedResolution;
     camera.size = { 800, 600 };
     camera.zoom = 0.17f;
     Engine::Dispatcher().trigger<Camera>(camera);
