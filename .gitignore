@@ -31,3 +31,7 @@ ipch
 
 # Directory structure ignore
 projects/
+
+# CoffeeCup
+tools/CoffeeCup/CoffeeCup.Scripts/bin
+tools/CoffeeCup/CoffeeCup.Scripts/obj
