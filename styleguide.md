@@ -2,23 +2,25 @@
 
 ## 1. Files and Inclusion
 
-**a. Headers**: All header files should have the `.h` extension. Header files can have one or more attached implementation files. 
+**a. File names**: All file names are in `lower_snake_case`, including folders.
+
+**b. Headers**: All header files should have the `.h` extension. Header files can have one or more attached implementation files. 
 Headers should always contain the symbols that other header/implementation files can include.
 
-**b. Implementations**: Implementation files should have the `.cpp` extension.
+**c. Implementations**: Implementation files should have the `.cpp` extension.
 
-**c. Include what you use**: Always include whatever you use in the class itself. Do **not** rely on transitive inclusion.
+**d. Include what you use**: Always include whatever you use in the class itself. Do **not** rely on transitive inclusion.
 This also applies to related headers: `foo.c` should include `bar.h` if it uses a symbol from it even if `foo.h` includes `bar.h` already.
 
-**d. Include where you use**: If a class requires `#include <foo>` in the implementation file, do **not** put that include into the header.
+**e. Include where you use**: If a class requires `#include <foo>` in the implementation file, do **not** put that include into the header.
 Separate definitions and implementations so that cyclic dependencies don't happen.
 
-**e. Forward declarations**: Try not to use forward declarations wherever possible. It won't always be possible, and that's alright.
+**f. Forward declarations**: Try not to use forward declarations wherever possible. It won't always be possible, and that's alright.
 It is always a better solution to include the headers you need directly, if possible.
 
-**f. Inlining**: Inline only functions that have no branches, loops, and whose local variables can be easily optimized away by substitution.
+**g. Inlining**: Inline only functions that have no branches, loops, and whose local variables can be easily optimized away by substitution.
 
-**g. Order of Includes**: Use the following order whenever including headers:
+**h. Order of Includes**: Use the following order whenever including headers:
   - (if in implementation) related header
   - other local headers
   - third-party headers
