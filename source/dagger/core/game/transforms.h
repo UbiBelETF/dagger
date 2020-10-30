@@ -10,7 +10,6 @@ struct Transform
     Vector3 position{ 0, 0, 0 };
 };
 
-// todo: move to another file
 class TransformSystem
     : public System
 {

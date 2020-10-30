@@ -11,12 +11,10 @@
 #include "core/graphics/sprite_render.h"
 #include "core/graphics/gui.h"
 #include "core/game/transforms.h"
+#include "core/game/scene_management.h"
 #include "tools/diagnostics.h"
 #include "tools/console.h"
 #include "tools/toolmenu.h"
-
-#include "gameplay/examples/character_controller.h"
-#include "gameplay/ping_pong/ping_pong_main.h"
 
 #include <spdlog/spdlog.h>
 #include <glm/glm.hpp>
@@ -39,20 +37,20 @@ void CoreSystemsSetup(Engine &engine)
 #endif //!defined(NDEBUG)
 }
 
-void GameplaySystemsSetup(Engine& engine)
+void GameplaySystemsSetup(Engine& engine_)
 {
-    //example1::SetupSystems(engine);
-    pingPong::SetupSystems(engine);
+    SceneManagement::SetupSystems(engine_);
 }
 
-void WorldSetup(Engine& engine)
+void WorldSetup(Engine& engine_)
 {
-    //example1::SetupWorld(engine);
-    pingPong::SetupWorld(engine);
+    SceneManagement::SetupWorld(engine_);
 }
 
 int main(int argc_, char** argv_)
 {
+    SceneManagement::SetCurrentScene(EScene::PingPongGame);
+
 	Engine engine;
     CoreSystemsSetup(engine);
     GameplaySystemsSetup(engine);
