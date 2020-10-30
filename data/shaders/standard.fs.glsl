@@ -14,5 +14,8 @@ out vec4 o_FragColor;
 
 void main()
 {
-	o_FragColor = texture(textures[int(v_Image)], v_TextureCoord) * v_QuadColor;
+	vec4 tex = texture(textures[int(v_Image)], v_TextureCoord);
+	if(tex.a < 1) discard;
+
+	o_FragColor = tex * v_QuadColor;
 }
