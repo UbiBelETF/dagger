@@ -1,3 +1,11 @@
+# A-Team branch
+Members: 
+- Daniil Privalov (iconbitpro@gamil.com)
+- Miroslav Gavrilov (gavrilov.miroslav@gmail.com)
+
+Game:
+
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
