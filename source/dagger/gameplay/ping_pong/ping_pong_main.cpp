@@ -53,7 +53,7 @@ void pingPong::SetupWorld(Engine &engine_)
     Camera camera;
     camera.mode = ECameraMode::FixedResolution;
     camera.size = { 800, 600 };
-    camera.zoom = 0.18f;
+    camera.zoom = 0.17f;
     Engine::Dispatcher().trigger<Camera>(camera);
 
     auto& reg = engine_.GetRegistry();
@@ -175,16 +175,16 @@ void pingPong::SetupWorld(Engine &engine_)
     // ball
     CreatePingPongBall(reg, TileSize, Color(1, 1, 1, 1), { 7,-7,0 },        { -1,5,zPos });
     //CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { -14,14,0 },   { 1,3,zPos });
-    CreatePingPongBall(reg, TileSize, Color(1, 0.5f, 1, 1), { 6,4,0 },      { -1,1,zPos });
+    CreatePingPongBall(reg, TileSize, Color(1, 0.5f, 1, 1), { -6,4,0 },      { -1,1,zPos });
     //CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), {- 7,-7,0 },    { 1,-1,zPos });
     //CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 20,14,0 }, { -1,-3,zPos });
-    CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,zPos });
+    //CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,zPos });
     CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 0.5f, 1), { 8,8,0 },   { -1,-7,zPos });
 
     // player controller setup
     const Float32 playerSize = TileSize * ((Heigh - 2) * (1 + Space) * 0.33f);
     PingPongPlayerInputSystem::SetupPlayerBoarders(playerSize, -playerSize);
-    PingPongPlayerInputSystem::s_PlayerSpeed = TileSize * 10.f;
+    PingPongPlayerInputSystem::s_PlayerSpeed = TileSize * 14.f;
     //1st player
     {
         auto entity = reg.create();
