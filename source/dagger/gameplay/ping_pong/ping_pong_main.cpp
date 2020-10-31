@@ -11,6 +11,7 @@
 
 #include "gameplay/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
+#include "gameplay/ping_pong/pingpong_ball_randomspeed.h"
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 
@@ -42,6 +43,7 @@ void pingPong::SetupSystems(Engine &engine_)
     engine_.AddSystem<PingPongBallSystem>();
     engine_.AddSystem<PingPongPlayerInputSystem>();
     engine_.AddSystem<PlayerScoresSystem>();
+    engine_.AddSystem<PingPongBallRandomSpeedSystem>();
 }
 
 void pingPong::SetupWorld(Engine &engine_)
