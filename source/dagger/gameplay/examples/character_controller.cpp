@@ -26,7 +26,7 @@ void CharacterControllerSystem::SpinUp()
 
 void CharacterControllerSystem::Run()
 {
-    Engine::Registry().group<InputReceiver, Sprite, Animator>().each(
+    Engine::Registry().view<InputReceiver, Sprite, Animator>().each(
         [](const InputReceiver input_, Sprite& sprite_, Animator& animator_)
         {
             Float32 run = input_.values.at("run");
@@ -68,14 +68,29 @@ void example1::SetupWorld(Engine& engine_)
     Engine::Dispatcher().trigger<Camera>(camera);
 
     auto& reg = engine_.GetRegistry();
-    auto entity = reg.create();
 
-    auto& sprite = reg.emplace<Sprite>(entity);
-    sprite.scale = { 1, 1 };
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        sprite.scale = { 5, 5 };
+        sprite.position = { 0, 0, 0 };
+        AssignSpriteTexture(sprite, "souls_like_knight_character:IDLE:idle1");
+    }
 
-    auto& anim = reg.emplace<Animator>(entity);
-    AnimatorPlay(anim, "souls_like_knight_character:IDLE");
+    /*{
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        sprite.scale = { 1, 1 };
+        sprite.position = { 0.5f, 0, 0 };
+        AssignSpriteTexture(sprite, "souls_like_knight_character:ATTACK:attack1");
+    }*/
 
-    auto& input = reg.emplace<InputReceiver>(entity);
-    input.contexts.push_back("Player");
+    //{
+    //    auto entity = reg.create();
+
+    //    auto& sprite = reg.emplace<Sprite>(entity);
+    //    sprite.scale = { 1, 1 };
+    //    sprite.position = { 2, 0, 0 };
+    //    AssignSpriteTexture(sprite, "souls_like_knight_character:IDLE:idle1");
+    //}
 }

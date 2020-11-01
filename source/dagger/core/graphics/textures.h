@@ -19,7 +19,6 @@ struct TextureSystem
 
     Sequence<UInt64> m_TextureHandles;
 
-    void OnShaderChanged(ShaderChangeRequest request_);
     void OnLoadAsset(AssetLoadRequest<Texture> request_);
     void SpinUp() override;
     void WindDown() override;
