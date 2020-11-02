@@ -23,7 +23,7 @@ void AnimationSystem::SpinUp()
 
 void AnimationSystem::Run()
 {
-    auto& entities = Engine::Registry().view<Animator, Sprite>();
+    const auto& entities = Engine::Registry().view<Animator, Sprite>();
     entities.each([](Animator& animator_, Sprite& sprite_) 
         {
             if (animator_.animationPlaying)
@@ -71,7 +71,7 @@ void AnimationSystem::RenderToolMenu()
 
         if (ImGui::MenuItem("Stop All"))
         {
-            auto& entities = Engine::Registry().view<Animator>();
+            const auto& entities = Engine::Registry().view<Animator>();
             entities.each([](Animator& anim_)
                 {
                     anim_.animationPlaying = false;
@@ -80,7 +80,7 @@ void AnimationSystem::RenderToolMenu()
 
         if (ImGui::MenuItem("Play All"))
         {
-            auto& entities = Engine::Registry().view<Animator>();
+            const auto& entities = Engine::Registry().view<Animator>();
             entities.each([](Animator& anim_)
                 {
                     anim_.animationPlaying = true;
