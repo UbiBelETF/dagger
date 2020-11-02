@@ -82,7 +82,7 @@ void SpriteRenderSystem::OnRender()
 
     prevTexture = nullptr;
     
-    for (auto& ptr = sprites.begin(); ptr != sprites.end(); ptr++)
+    for (auto& ptr = sprites.begin(); ptr != sprites.end();)
     {
         while (ptr != sprites.end() && ptr->image == nullptr) ptr++;
         if (ptr == sprites.end()) break;

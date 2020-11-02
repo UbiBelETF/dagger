@@ -63,34 +63,42 @@ void example1::SetupWorld(Engine& engine_)
     ShaderSystem::Use("standard");
 
     Camera camera;
-    camera.mode = ECameraMode::FixedResolution;
-    camera.size = { 800, 600 };
+    camera.mode = ECameraMode::ShowAsMuchAsPossible;
     Engine::Dispatcher().trigger<Camera>(camera);
 
     auto& reg = engine_.GetRegistry();
 
     {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        sprite.scale = { 5, 5 };
-        sprite.position = { 0, 0, 0 };
-        AssignSpriteTexture(sprite, "souls_like_knight_character:IDLE:idle1");
+        auto entity1 = reg.create();
+        auto& sprite1 = reg.emplace<Sprite>(entity1);
+        sprite1.scale = { 1, 1 };
+        sprite1.position = { -0.5f, 0, 0 };
+        AssignSpriteTexture(sprite1, "souls_like_knight_character:IDLE:idle1");
+
+        auto& anim1 = reg.emplace<Animator>(entity1);
+        AnimatorPlay(anim1, "souls_like_knight_character:IDLE");
     }
 
-    /*{
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        sprite.scale = { 1, 1 };
-        sprite.position = { 0.5f, 0, 0 };
-        AssignSpriteTexture(sprite, "souls_like_knight_character:ATTACK:attack1");
-    }*/
+    {
+        auto entity2 = reg.create();
+        auto& sprite2 = reg.emplace<Sprite>(entity2);
+        sprite2.scale = { 1, 1 };
+        sprite2.position = { 0.5f, 0, 0 };
+        AssignSpriteTexture(sprite2, "souls_like_knight_character:ATTACK:attack1");
 
-    //{
-    //    auto entity = reg.create();
+        auto& anim2 = reg.emplace<Animator>(entity2);
+        AnimatorPlay(anim2, "souls_like_knight_character:ATTACK");
+    }
 
-    //    auto& sprite = reg.emplace<Sprite>(entity);
-    //    sprite.scale = { 1, 1 };
-    //    sprite.position = { 2, 0, 0 };
-    //    AssignSpriteTexture(sprite, "souls_like_knight_character:IDLE:idle1");
-    //}
+    {
+        auto entity3 = reg.create();
+
+        auto& sprite = reg.emplace<Sprite>(entity3);
+        sprite.scale = { 3, 3 };
+        sprite.position = { 0, 0, 0.5f };
+        AssignSpriteTexture(sprite, "souls_like_knight_character:SKY_ATTACK:sky_attack1");
+
+        auto& anim3 = reg.emplace<Animator>(entity3);
+        AnimatorPlay(anim3, "souls_like_knight_character:SKY_ATTACK");
+    }
 }
