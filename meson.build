@@ -4,7 +4,10 @@ project('dagger', 'c', 'cpp', default_options : [
 
 deps = [
     dependency('glfw3'),
-    dependency('fmt')
+    dependency('glew'),
+    dependency('tbb'),
+    dependency('fmt'),
+    meson.get_compiler('c').find_library('dl')
 ]
 
 includes = [
@@ -15,6 +18,7 @@ includes = [
     include_directories('libs/glad/include'),
     include_directories('libs/json/include'),
     include_directories('libs/stb/include'),
+    include_directories('libs/spdlog/include'),
     include_directories('libs/imgui/include'),
     include_directories('libs/imgui/include/imgui'),
     include_directories('libs/imgui/include/imgui/backends'),
