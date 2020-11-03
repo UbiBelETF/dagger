@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/builddir/dagger",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/data",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
