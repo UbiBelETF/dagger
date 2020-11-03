@@ -176,8 +176,8 @@ void WindowSystem::SpinUp()
 
 	glfwSetErrorCallback(ErrorCallback);
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	GLFWmonitor* monitor = nullptr;
@@ -233,6 +233,7 @@ void WindowSystem::SpinUp()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	glEnable(GL_ALPHA_TEST);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 }

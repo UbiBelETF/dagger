@@ -26,7 +26,7 @@ void CharacterControllerSystem::SpinUp()
 
 void CharacterControllerSystem::Run()
 {
-    Engine::Registry().group<InputReceiver, Sprite, Animator>().each(
+    Engine::Registry().view<InputReceiver, Sprite, Animator>().each(
         [](const InputReceiver input_, Sprite& sprite_, Animator& animator_)
         {
             Float32 run = input_.values.at("run");
@@ -63,19 +63,42 @@ void example1::SetupWorld(Engine& engine_)
     ShaderSystem::Use("standard");
 
     Camera camera;
-    camera.mode = ECameraMode::FixedResolution;
-    camera.size = { 800, 600 };
+    camera.mode = ECameraMode::ShowAsMuchAsPossible;
     Engine::Dispatcher().trigger<Camera>(camera);
 
     auto& reg = engine_.GetRegistry();
-    auto entity = reg.create();
 
-    auto& sprite = reg.emplace<Sprite>(entity);
-    sprite.scale = { 1, 1 };
+    {
+        auto entity1 = reg.create();
+        auto& sprite1 = reg.emplace<Sprite>(entity1);
+        sprite1.scale = { 1, 1 };
+        sprite1.position = { -0.5f, 0, 0 };
+        AssignSpriteTexture(sprite1, "souls_like_knight_character:IDLE:idle1");
 
-    auto& anim = reg.emplace<Animator>(entity);
-    AnimatorPlay(anim, "souls_like_knight_character:IDLE");
+        auto& anim1 = reg.emplace<Animator>(entity1);
+        AnimatorPlay(anim1, "souls_like_knight_character:IDLE");
+    }
 
-    auto& input = reg.emplace<InputReceiver>(entity);
-    input.contexts.push_back("Player");
+    {
+        auto entity2 = reg.create();
+        auto& sprite2 = reg.emplace<Sprite>(entity2);
+        sprite2.scale = { 1, 1 };
+        sprite2.position = { 0.5f, 0, 0 };
+        AssignSpriteTexture(sprite2, "souls_like_knight_character:ATTACK:attack1");
+
+        auto& anim2 = reg.emplace<Animator>(entity2);
+        AnimatorPlay(anim2, "souls_like_knight_character:ATTACK");
+    }
+
+    {
+        auto entity3 = reg.create();
+
+        auto& sprite = reg.emplace<Sprite>(entity3);
+        sprite.scale = { 3, 3 };
+        sprite.position = { 0, 0, 0.5f };
+        AssignSpriteTexture(sprite, "souls_like_knight_character:SKY_ATTACK:sky_attack1");
+
+        auto& anim3 = reg.emplace<Animator>(entity3);
+        AnimatorPlay(anim3, "souls_like_knight_character:SKY_ATTACK");
+    }
 }

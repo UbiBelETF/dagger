@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <execution>
 #include <chrono>
+#include <cstdint>
 
 using namespace dagger;
 
@@ -15,8 +16,6 @@ void SpriteRenderSystem::SpinUp()
 {
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
-
-    auto flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
 
 	glGenBuffers(1, &m_StaticMeshVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
@@ -31,11 +30,10 @@ void SpriteRenderSystem::SpinUp()
     
     glGenBuffers(1, &m_InstanceQuadInfoVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
-    glBufferStorage(GL_ARRAY_BUFFER, ms_BufferSize, 0, flags);
 	glBufferData(GL_ARRAY_BUFFER, ms_BufferSize, nullptr, GL_STREAM_DRAW);
 
-    const UInt32 attributeSizes[]   = { 3,        2,        4,        1,               1,        2  };
-    const UInt64 attributeStrides[] = { 0,        3,        5,        9,               10,       11 };
+    const UInt32 attributeSizes[]   = { 3,        2,        4,        1,        2,         2  };
+    const UInt64 attributeStrides[] = { 0,        3,        5,        9,        10,        12 };
 
     for (UInt32 i = 0; i < 6; i++)
     {
@@ -45,8 +43,6 @@ void SpriteRenderSystem::SpinUp()
         glVertexAttribDivisor(index, 1);
     }
 
-	m_Data = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, ms_BufferSize, flags));
-	assert(m_Data != nullptr);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glEnable(GL_TEXTURE_2D);
@@ -66,19 +62,53 @@ void SpriteRenderSystem::OnRender()
     assert(m_CachedShader != nullptr);
 
 	glBindVertexArray(m_VAO);
-    
-	assert(m_StaticMeshVBO != 0);
-	glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 
     // get a view of all the entities and their sprite components
-    auto entities = Engine::Registry().view<Sprite>();
-    std::size_t size = sizeof(Sprite) * entities.size();
+    Texture* prevTexture = nullptr;
+
+    auto& view = Engine::Registry().view<Sprite>();
+    Sequence<Sprite> sprites{ view.raw(), view.raw() + view.size() };
+    UInt64 dataSize = sizeof(Sprite) * sprites.size();
     
-    memcpy_s(m_Data, size, entities.raw(), size);
+    Sequence<Sprite> currentRender{};
 
-    glDrawArraysInstanced(GL_TRIANGLES, 0, ms_VertexCount, (GLsizei)entities.size());
+    std::sort(sprites.begin(), sprites.end(), [](const Sprite& a_, const Sprite& b_)
+        {
+            UInt32 a = a_.image == nullptr ? 0 : a_.image->TextureId();
+            UInt32 b = b_.image == nullptr ? 0 : b_.image->TextureId();
+            return a < b;
+        });
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    prevTexture = nullptr;
+    
+    for (auto& ptr = sprites.begin(); ptr != sprites.end();)
+    {
+        while (ptr != sprites.end() && ptr->image == nullptr) ptr++;
+        if (ptr == sprites.end()) break;
+
+        prevTexture = ptr->image;
+
+        while (ptr != sprites.end() && prevTexture == ptr->image)
+        {
+            currentRender.push_back(*ptr);
+            ptr++;
+        }
+
+        UInt32 renderSize = sizeof(Sprite) * currentRender.size();
+
+        m_Data = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, sizeof(Sprite) * currentRender.size(), GL_MAP_WRITE_BIT));
+        memcpy_s(m_Data, renderSize, &(*currentRender.begin()), renderSize);
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+
+        glBindTexture(GL_TEXTURE_2D, prevTexture->TextureId());
+        glDrawArraysInstanced(GL_TRIANGLES, 0, ms_VertexCount, (GLsizei)currentRender.size());
+        currentRender.clear();
+                   
+        if (ptr == sprites.end()) break;
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
