@@ -1,14 +1,17 @@
-project('dagger', 'c', 'cpp', default_options : [
-    'cpp_std=c++17'
-])
+project('dagger', 'c', 'cpp', default_options : ['cpp_std=c++17' ])
 
 deps = [
     dependency('glfw3'),
-    dependency('glew'),
-    dependency('tbb'),
-    dependency('fmt'),
-    meson.get_compiler('c').find_library('dl')
+    dependency('fmt')
 ]
+
+if (host_machine.system() == 'Linux')
+    deps += [
+        dependency('glew'),
+        dependency('tbb'),
+        meson.get_compiler('c').find_library('dl')
+    ]
+endif
 
 includes = [
     include_directories('source/dagger'),
@@ -60,11 +63,10 @@ sources = [
 ]
 
 c_dl_dep = meson.get_compiler('c').find_library('dl', required : false)
-cpp_dl_dep = meson.get_compiler('cpp').find_library('dl, required : false)
 
 deps = [
      dependency('glfw3'),
      dependency('fmt'),
-     c_dl_dep, cpp_dl_dep ]
+     c_dl_dep ]
 
 executable('dagger', sources, dependencies : deps, include_directories : includes)
