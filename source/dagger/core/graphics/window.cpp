@@ -223,7 +223,9 @@ void WindowSystem::SpinUp()
 	glm::mat4 scaleMatrix = glm::scale(glm::vec3(m_Camera.zoom));
 	glm::mat4 translateMatrix = glm::translate(glm::vec3(m_Camera.position, 0));
 	m_Config.cameraView = translateMatrix * scaleMatrix * glm::identity<glm::mat4>();
-	glUniformMatrix4fv((GLuint)Shader::EUniforms::CameraViewMatrixId, 1, false, glm::value_ptr(m_Config.cameraView));
+    
+	glUniformMatrix4fv(glGetUniformLocation((GLint)Shader::EUniforms::CameraViewMatrixId, "u_CameraView"), 
+        1, false, glm::value_ptr(m_Config.cameraView));
 
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetCharCallback(window, CharCallback);

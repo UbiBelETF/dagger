@@ -1,5 +1,4 @@
 project('dagger', 'c', 'cpp', default_options : [
-    'c_std=c17',
     'cpp_std=c++17'
 ])
 
@@ -12,12 +11,14 @@ includes = [
     include_directories('source/dagger'),
     include_directories('libs/sparse-map/include'),
     include_directories('libs/entt/single_include'),
+    include_directories('libs/glm/include'),
     include_directories('libs/glad/include'),
     include_directories('libs/json/include'),
     include_directories('libs/stb/include'),
     include_directories('libs/imgui/include'),
     include_directories('libs/imgui/include/imgui'),
-    include_directories('libs/imgui/include/imgui/backends')
+    include_directories('libs/imgui/include/imgui/backends'),
+    include_directories('libs/spdlog/include')
 ]
 
 sources = [
@@ -53,5 +54,11 @@ sources = [
     'libs/imgui/include/imgui/backends/imgui_impl_glfw.cpp',
     'libs/imgui/include/imgui/backends/imgui_impl_opengl3.cpp'
 ]
+
+dl_dep = meson.get_compiler('c').find_library('dl', required : false)
+deps = [
+     dependency('glfw3'),
+     dependency('fmt'),
+     dl_dep ]
 
 executable('dagger', sources, dependencies : deps, include_directories : includes)

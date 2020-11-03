@@ -1,10 +1,8 @@
 #pragma once
 
 #include "core/core.h"
-
+#include "core/filesystem.h"
 #include <glad/glad.h>
-
-#include <filesystem>
 #include <memory>
 
 struct TextureSystem;

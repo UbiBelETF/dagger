@@ -3,10 +3,10 @@
 #include "shader.h"
 #include "core/system.h"
 #include "core/core.h"
+#include "core/filesystem.h"
 
 #include <glad/glad.h>
 #include <vector>
-#include <filesystem>
 
 using namespace dagger;
 

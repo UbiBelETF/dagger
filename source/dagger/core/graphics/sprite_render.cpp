@@ -84,6 +84,7 @@ void SpriteRenderSystem::OnRender()
     
     for (auto ptr = sprites.begin(); ptr != sprites.end();)
     {
+        assert(ptr->image != nullptr);
         while (ptr != sprites.end() && ptr->image == nullptr) ptr++;
         if (ptr == sprites.end()) break;
 

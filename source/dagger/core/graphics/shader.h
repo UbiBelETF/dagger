@@ -26,7 +26,7 @@ struct Shader
 	enum class EUniforms
 	{
 		ProjectionMatrixId = 0,
-		CameraViewMatrixId = 5,
+		CameraViewMatrixId = 1,
 	};
 
 	constexpr static UInt32 ms_ShaderStageCount = 4;

@@ -3,6 +3,7 @@
 #define MEASURE_SYSTEMS
 
 #include "core/view_ptr.h"
+#include "core/filesystem.h"
 
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
@@ -14,7 +15,6 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <filesystem>
 #include <memory>
 #include <vector>
 #include <fstream>
