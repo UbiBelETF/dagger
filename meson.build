@@ -7,7 +7,6 @@ deps = [
 
 if (host_machine.system() == 'linux')
     deps += [
-        dependency('glew'),
         dependency('tbb'),
         meson.get_compiler('c').find_library('dl')
     ]
@@ -62,4 +61,4 @@ sources = [
     'libs/imgui/include/imgui/backends/imgui_impl_opengl3.cpp'
 ]
 
-executable('dagger', sources, dependencies : deps, include_directories : includes)
+executable('dagger', sources, dependencies : deps, include_directories : includes, cpp_args : '-DIMGUI_IMPL_OPENGL_LOADER_GLAD')
