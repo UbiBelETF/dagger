@@ -59,10 +59,12 @@ sources = [
     'libs/imgui/include/imgui/backends/imgui_impl_opengl3.cpp'
 ]
 
-dl_dep = meson.get_compiler('c').find_library('dl', required : false)
+c_dl_dep = meson.get_compiler('c').find_library('dl', required : false)
+cpp_dl_dep = meson.get_compiler('cpp').find_library('dl, required : false)
+
 deps = [
      dependency('glfw3'),
      dependency('fmt'),
-     dl_dep ]
+     c_dl_dep, cpp_dl_dep ]
 
 executable('dagger', sources, dependencies : deps, include_directories : includes)
