@@ -1,5 +1,4 @@
 #version 330 core
-#extension GL_ARB_explicit_uniform_location : enable
 
 layout (location = 0) in vec2 a_VertexPosition;
 layout (location = 1) in vec2 a_TextureCoord;
@@ -11,8 +10,8 @@ layout (location = 5) in float ai_Ratio;
 layout (location = 6) in vec2  ai_Scale;
 layout (location = 7) in vec2  x_UnusedTexture;
 
-layout (location = 0) uniform mat4 u_Projection;
-layout (location = 5) uniform mat4 u_CameraView;
+uniform mat4 u_Projection;
+uniform mat4 u_CameraView;
 
 out vec2 v_TextureCoord;
 out vec4 v_QuadColor;

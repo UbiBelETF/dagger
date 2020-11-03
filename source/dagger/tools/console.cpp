@@ -131,7 +131,7 @@ void DebugConsole::Draw(const char* title_, bool* open_ = nullptr)
         Strtrim(s);
         if (s[0])
             ExecCommand(s);
-        strcpy_s(s, sizeof s, "");
+        strcpy(s, "");
         reclaim_focus = true;
     }
 

@@ -67,7 +67,7 @@ void SpriteRenderSystem::OnRender()
     // get a view of all the entities and their sprite components
     Texture* prevTexture = nullptr;
 
-    auto& view = Engine::Registry().view<Sprite>();
+    const auto& view = Engine::Registry().view<Sprite>();
     Sequence<Sprite> sprites{ view.raw(), view.raw() + view.size() };
     UInt64 dataSize = sizeof(Sprite) * sprites.size();
     
@@ -82,8 +82,9 @@ void SpriteRenderSystem::OnRender()
 
     prevTexture = nullptr;
     
-    for (auto& ptr = sprites.begin(); ptr != sprites.end();)
+    for (auto ptr = sprites.begin(); ptr != sprites.end();)
     {
+        assert(ptr->image != nullptr);
         while (ptr != sprites.end() && ptr->image == nullptr) ptr++;
         if (ptr == sprites.end()) break;
 
@@ -98,7 +99,7 @@ void SpriteRenderSystem::OnRender()
         UInt32 renderSize = sizeof(Sprite) * currentRender.size();
 
         m_Data = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, sizeof(Sprite) * currentRender.size(), GL_MAP_WRITE_BIT));
-        memcpy_s(m_Data, renderSize, &(*currentRender.begin()), renderSize);
+        memcpy(m_Data, &(*currentRender.begin()), renderSize);
         glUnmapBuffer(GL_ARRAY_BUFFER);
 
         glBindTexture(GL_TEXTURE_2D, prevTexture->TextureId());
