@@ -29,15 +29,32 @@ struct WindowResized
 	UInt32 height;
 };
 
+// config provided from json file
+struct GameRenderConfig
+{
+    bool lockScreenResize;
+    bool fullscreen;
+    GLsizei windowWidth;
+    GLsizei windowHeight;
+};
+
 struct RenderConfig
 {
-	bool fullscreen;
-	GLsizei windowWidth;
-	GLsizei windowHeight;
+    bool lockScreenResize;
+    bool fullscreen;
+    GLsizei windowWidth;
+    GLsizei windowHeight;
 
-	GLFWwindow* window;
-	Matrix4 projection;
-	Matrix4 cameraView;
+    GLFWwindow* window;
+    Matrix4 projection;
+    Matrix4 cameraView;
+
+    RenderConfig(GameRenderConfig config_)
+        : lockScreenResize(config_.lockScreenResize),
+        fullscreen(config_.fullscreen),
+        windowWidth(config_.windowWidth),
+        windowHeight(config_.windowHeight)
+    {}
 };
 
 enum class ECameraMode
@@ -67,12 +84,12 @@ struct WindowSystem
 	Camera m_Camera;
 
 	WindowSystem()
-		: m_Config{ true, 0, 0 }
+        : m_Config(GameRenderConfig{ false, true, 0, 0 })
 		, m_Camera{}
 	{}
 
-	WindowSystem(GLsizei width_, GLsizei height_)
-		: m_Config{ false, width_, height_ }
+	WindowSystem(GameRenderConfig config_)
+		: m_Config{config_}
 		, m_Camera{}
 	{}
 
