@@ -4,7 +4,6 @@
 
 #include "core/view_ptr.h"
 #include "core/filesystem.h"
-
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 #include <tsl/sparse_map.h>
@@ -20,6 +19,10 @@
 #include <fstream>
 #include <chrono>
 #include <bitset>
+
+#include <SimpleIni.h>
+
+using IniFile = CSimpleIni;
 
 using Registry = entt::registry;
 using Entity = entt::entity;
@@ -98,7 +101,6 @@ using Color = glm::fvec4;
 namespace JSON = nlohmann;
 
 #define EMPTY_EVENT 
-
 
 enum class EDaggerKeyboard
 {

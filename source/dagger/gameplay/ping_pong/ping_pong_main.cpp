@@ -8,6 +8,11 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
+#include "core/graphics/sprite_render.h"
+#include "core/graphics/textures.h"
+#include "core/graphics/animations.h"
+#include "core/graphics/gui.h"
+#include "tools/diagnostics.h"
 
 #include "gameplay/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
@@ -15,28 +20,24 @@
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace dagger;
-using namespace pingPong;
 
-void pingPong::CreatePingPongBall(entt::registry &reg_, float TileSize_, Color color_, Vector3 speed_, Vector3 pos_)
+void PingPongGame::CoreSystemsSetup(Engine& engine_)
 {
-    auto entity = reg_.create();
-    auto& sprite = reg_.emplace<Sprite>(entity);
-    AssignSpriteTexture(sprite, "PingPong:ball");
-    sprite.scale = Vector2(1, 1) * TileSize_;
-
-    sprite.color = color_;
-
-    auto& transform = reg_.emplace<Transform>(entity);
-    transform.position = pos_ * TileSize_;
-    auto& ball = reg_.emplace<PingPongBall>(entity);
-    ball.speed = speed_ * TileSize_;
-
-    auto& col = reg_.emplace<SimpleCollision>(entity);
-    col.size.x = TileSize_;
-    col.size.y = TileSize_;
+    engine_.AddSystem<WindowSystem>();
+    engine_.AddSystem<InputSystem>();
+    engine_.AddSystem<ShaderSystem>();
+    engine_.AddSystem<TextureSystem>();
+    engine_.AddSystem<SpriteRenderSystem>();
+    engine_.AddSystem<AnimationSystem>();
+    engine_.AddSystem<TransformSystem>();
+#if !defined(NDEBUG)
+    engine_.AddSystem<DiagnosticSystem>();
+    engine_.AddSystem<GUISystem>();
+    engine_.AddSystem<ToolMenuSystem>();
+#endif //!defined(NDEBUG)
 }
 
-void pingPong::SetupSystems(Engine &engine_)
+void PingPongGame::GameplaySystemsSetup(Engine& engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PingPongBallSystem>();
@@ -44,7 +45,7 @@ void pingPong::SetupSystems(Engine &engine_)
     engine_.AddSystem<PlayerScoresSystem>();
 }
 
-void pingPong::SetupWorld(Engine &engine_)
+void PingPongGame::WorldSetup(Engine& engine_)
 {
     Vector2 scale(1, 1);
 
@@ -56,27 +57,27 @@ void pingPong::SetupWorld(Engine &engine_)
     camera.zoom = 0.17f;
     Engine::Dispatcher().trigger<Camera>(camera);
 
-    auto& reg = engine_.GetRegistry();
+    auto& reg = engine_.Registry();
 
     // field
     constexpr int ScreenHeigh = 600;
     constexpr int ScreenWidth = 800;
 
-    constexpr int Heigh = 20;
+    constexpr int Height = 20;
     constexpr int Width = 26;
-    constexpr float TileSize = 1.f;// / static_cast<float>(Width);
+    constexpr float tileSize = 1.f;// / static_cast<float>(Width);
 
     float zPos = -1.f;
 
     constexpr float Space = 0.1f;
-    for (int i = 0; i < Heigh; i++)
+    for (int i = 0; i < Height; i++)
     {
         for (int j = 0; j < Width; j++)
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSpriteTexture(sprite, "EmptyWhitePixel");
-            sprite.scale = scale * TileSize;
+            sprite.scale = scale * tileSize;
 
             if (i % 2 != j % 2)
             {
@@ -91,7 +92,7 @@ void pingPong::SetupWorld(Engine &engine_)
                 sprite.color.b = 0.6f;
             }
 
-            if (i == 0 || i == Heigh - 1 || j == 0 || j == Width - 1)
+            if (i == 0 || i == Height - 1 || j == 0 || j == Width - 1)
             {
                 sprite.color.r = 0.0f;
                 sprite.color.g = 0.0f;
@@ -103,8 +104,8 @@ void pingPong::SetupWorld(Engine &engine_)
             }
 
             auto& transform = reg.emplace<Transform>(entity);
-            transform.position.x = (0.5f + j + j * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
-            transform.position.y = (0.5f + i + i * Space - static_cast<float>(Heigh * (1 + Space)) / 2.f) * TileSize;
+            transform.position.x = (0.5f + j + j * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * tileSize;
+            transform.position.y = (0.5f + i + i * Space - static_cast<float>(Height * (1 + Space)) / 2.f) * tileSize;
             transform.position.z = zPos;
         }
     }
@@ -117,12 +118,12 @@ void pingPong::SetupWorld(Engine &engine_)
         {
             auto entity = reg.create();
             auto& col = reg.emplace<SimpleCollision>(entity);
-            col.size.x = TileSize * (Width - 2)* (1 + Space);
-            col.size.y = TileSize;
+            col.size.x = tileSize * (Width - 2)* (1 + Space);
+            col.size.y = tileSize;
 
             auto& transform = reg.emplace<Transform>(entity);
             transform.position.x = 0;
-            transform.position.y = (0.5f + (Heigh - 1) + (Heigh - 1) * Space - static_cast<float>(Heigh * (1 + Space)) / 2.f) * TileSize;
+            transform.position.y = (0.5f + (Height - 1) + (Height - 1) * Space - static_cast<float>(Height * (1 + Space)) / 2.f) * tileSize;
             transform.position.z = zPos;
         }
 
@@ -130,12 +131,12 @@ void pingPong::SetupWorld(Engine &engine_)
         {
             auto entity = reg.create();
             auto& col = reg.emplace<SimpleCollision>(entity);
-            col.size.x = TileSize * (Width - 2) * (1 + Space);
-            col.size.y = TileSize;
+            col.size.x = tileSize * (Width - 2) * (1 + Space);
+            col.size.y = tileSize;
 
             auto& transform = reg.emplace<Transform>(entity);
             transform.position.x = 0;
-            transform.position.y = (0.5f - static_cast<float>(Heigh * (1 + Space)) / 2.f) * TileSize;
+            transform.position.y = (0.5f - static_cast<float>(Height * (1 + Space)) / 2.f) * tileSize;
             transform.position.z = zPos;
         }
 
@@ -143,11 +144,11 @@ void pingPong::SetupWorld(Engine &engine_)
         {
             auto entity = reg.create();
             auto& col = reg.emplace<SimpleCollision>(entity);
-            col.size.x = TileSize;
-            col.size.y = TileSize * (Heigh - 2) * (1 + Space);
+            col.size.x = tileSize;
+            col.size.y = tileSize * (Height - 2) * (1 + Space);
 
             auto& transform = reg.emplace<Transform>(entity);
-            transform.position.x = (0.5f - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
+            transform.position.x = (0.5f - static_cast<float>(Width * (1 + Space)) / 2.f) * tileSize;
             transform.position.y = 0;
             transform.position.z = zPos;
 
@@ -159,11 +160,11 @@ void pingPong::SetupWorld(Engine &engine_)
         {
             auto entity = reg.create();
             auto& col = reg.emplace<SimpleCollision>(entity);
-            col.size.x = TileSize;
-            col.size.y = TileSize * (Heigh - 2) * (1 + Space);
+            col.size.x = tileSize;
+            col.size.y = tileSize * (Height - 2) * (1 + Space);
 
             auto& transform = reg.emplace<Transform>(entity);
-            transform.position.x = (0.5f + (Width - 1) + (Width - 1) * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
+            transform.position.x = (0.5f + (Width - 1) + (Width - 1) * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * tileSize;
             transform.position.y = 0;
             transform.position.z = zPos;
 
@@ -172,34 +173,35 @@ void pingPong::SetupWorld(Engine &engine_)
         }
     }
 
+    auto sys = Engine::GetDefaultResource<PingPongBallSystem>();
     // ball
-    CreatePingPongBall(reg, TileSize, Color(1, 1, 1, 1), { 7,-7,0 },        { -1,5,zPos });
-    //CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { -14,14,0 },   { 1,3,zPos });
-    CreatePingPongBall(reg, TileSize, Color(1, 0.5f, 1, 1), { -6,4,0 },      { -1,1,zPos });
-    //CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), {- 7,-7,0 },    { 1,-1,zPos });
-    //CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 20,14,0 }, { -1,-3,zPos });
-    //CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,zPos });
-    CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 0.5f, 1), { 8,8,0 },   { -1,-7,zPos });
+    sys->CreatePingPongBall(tileSize, Color(1, 1, 1, 1), { 7,-7,0 }, { -1,5,zPos });
+    //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { -14,14,0 },   { 1,3,zPos });
+    sys->CreatePingPongBall(tileSize, Color(1, 0.5f, 1, 1), { -6,4,0 }, { -1,1,zPos });
+    //sys->CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), {- 7,-7,0 },    { 1,-1,zPos });
+    //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 20,14,0 }, { -1,-3,zPos });
+    //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,zPos });
+    sys->CreatePingPongBall(tileSize, Color(0.5f, 1, 0.5f, 1), { 8,8,0 }, { -1,-7,zPos });
 
     // player controller setup
-    const Float32 playerSize = TileSize * ((Heigh - 2) * (1 + Space) * 0.33f);
+    const Float32 playerSize = tileSize * ((Height - 2) * (1 + Space) * 0.33f);
     PingPongPlayerInputSystem::SetupPlayerBoarders(playerSize, -playerSize);
-    PingPongPlayerInputSystem::s_PlayerSpeed = TileSize * 14.f;
+    PingPongPlayerInputSystem::s_PlayerSpeed = tileSize * 14.f;
     //1st player
     {
         auto entity = reg.create();
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size.x = TileSize;
+        col.size.x = tileSize;
         col.size.y = playerSize;
 
         auto& transform = reg.emplace<Transform>(entity);
-        transform.position.x = (2.5f - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
+        transform.position.x = (2.5f - static_cast<float>(Width * (1 + Space)) / 2.f) * tileSize;
         transform.position.y = 0;
         transform.position.z = zPos;
 
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSpriteTexture(sprite, "EmptyWhitePixel");
-        sprite.scale.x = TileSize;
+        sprite.scale.x = tileSize;
         sprite.scale.y = playerSize;
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
@@ -210,17 +212,17 @@ void pingPong::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size.x = TileSize;
+        col.size.x = tileSize;
         col.size.y = playerSize;
 
         auto& transform = reg.emplace<Transform>(entity);
-        transform.position.x = (0.5f + (Width - 3) + (Width - 1) * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * TileSize;
+        transform.position.x = (0.5f + (Width - 3) + (Width - 1) * Space - static_cast<float>(Width * (1 + Space)) / 2.f) * tileSize;
         transform.position.y = 0;
         transform.position.z = zPos;
 
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSpriteTexture(sprite, "EmptyWhitePixel");
-        sprite.scale.x = TileSize;
+        sprite.scale.x = tileSize;
         sprite.scale.y = playerSize;
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
@@ -228,5 +230,6 @@ void pingPong::SetupWorld(Engine &engine_)
     }
 
     // add score system to count scores for left and right collisions
-    PlayerScoresSystem::SetFieldSize(Width, Heigh, TileSize * (1 + Space));
+    PlayerScoresSystem::SetFieldSize(Width, Height, tileSize * (1 + Space));
 }
+

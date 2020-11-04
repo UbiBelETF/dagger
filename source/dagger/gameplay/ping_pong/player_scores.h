@@ -6,29 +6,24 @@
 
 using namespace dagger;
 
-namespace pingPong
+class PlayerScoresSystem : public System
 {
+    static int s_FieldWidth;
+    static int s_FieldHeight;
+    static Float32 s_TileSize;
 
-    class PlayerScoresSystem : public System
+    int m_goalsPlayerOne = 0;
+    int m_goalsPlayerTwo = 0;
+
+public:
+    inline String SystemName() { return "Player Scores System"; }
+
+    void Run() override;
+
+    static void SetFieldSize(int width, int height, float tileSize)
     {
-        static int s_FieldWidth;
-        static int s_FieldHeight;
-        static Float32 s_TileSize;
-
-        int m_goalsPlayerOne = 0;
-        int m_goalsPlayerTwo = 0;
-
-    public:
-        inline String SystemName() { return "Player Scores System"; }
-
-        void Run() override;
-
-        static void SetFieldSize(int width, int height, float tileSize)
-        {
-            s_FieldWidth = width;
-            s_FieldHeight = height;
-            s_TileSize = tileSize;
-        }
-    };
-
-}
+        s_FieldWidth = width;
+        s_FieldHeight = height;
+        s_TileSize = tileSize;
+    }
+};

@@ -5,10 +5,6 @@
 #include "gameplay/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
 
-#include "gameplay/ping_pong/ping_pong_main.h"
-
-using namespace pingPong;
-
 int PlayerScoresSystem::s_FieldWidth = 20;
 int PlayerScoresSystem::s_FieldHeight = 10;
 Float32 PlayerScoresSystem::s_TileSize = 1.f;
@@ -51,6 +47,7 @@ void PlayerScoresSystem::Run()
     if (ballOnField == 0)
     {
         auto& reg = Engine::Registry();
-        pingPong::CreatePingPongBall(reg, s_TileSize, Color(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+        auto sys = Engine::GetDefaultResource<PingPongBallSystem>();
+        sys->CreatePingPongBall(s_TileSize, Color(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
     }
 }

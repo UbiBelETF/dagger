@@ -66,7 +66,7 @@ void example1::SetupWorld(Engine& engine_)
     camera.mode = ECameraMode::ShowAsMuchAsPossible;
     Engine::Dispatcher().trigger<Camera>(camera);
 
-    auto& reg = engine_.GetRegistry();
+    auto& reg = engine_.Registry();
 
     {
         auto entity1 = reg.create();

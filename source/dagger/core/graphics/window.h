@@ -31,10 +31,10 @@ struct WindowResized
 
 struct RenderConfig
 {
-	bool fullscreen;
+	Bool fullscreen;
+	Bool resizable;
 	GLsizei windowWidth;
 	GLsizei windowHeight;
-
 	GLFWwindow* window;
 	Matrix4 projection;
 	Matrix4 cameraView;
@@ -67,12 +67,7 @@ struct WindowSystem
 	Camera m_Camera;
 
 	WindowSystem()
-		: m_Config{ true, 0, 0 }
-		, m_Camera{}
-	{}
-
-	WindowSystem(GLsizei width_, GLsizei height_)
-		: m_Config{ false, width_, height_ }
+		: m_Config{}
 		, m_Camera{}
 	{}
 

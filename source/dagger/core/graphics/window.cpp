@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+#include <cstring>
+
 static void ErrorCallback(int error_, const char* description_)
 {
 	Logger::error("GLFW Error {}): {}\n", error_, description_);
@@ -165,6 +167,13 @@ void WindowSystem::OnCameraUpdated(Camera camera_)
 void WindowSystem::SpinUp()
 {
 	Logger::info("Booting up renderer");
+
+	m_Config.windowWidth = atoi(Engine::GetIniFile().GetValue("window", "width", "800"));
+	m_Config.windowHeight = atoi(Engine::GetIniFile().GetValue("window", "height", "600"));
+	m_Config.fullscreen = strcmp(Engine::GetIniFile().GetValue("window", "fullscreen", "false"), "true") == 0;
+	m_Config.resizable = strcmp(Engine::GetIniFile().GetValue("window", "resizable", "false"), "true") == 0;
+
+	assert(m_Config.windowWidth > 0 && m_Config.windowHeight > 0);
 
 	auto& events = Engine::Dispatcher();
 
