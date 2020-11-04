@@ -75,9 +75,12 @@ void SpriteRenderSystem::OnRender()
 
     std::sort(sprites.begin(), sprites.end(), [](const Sprite& a_, const Sprite& b_)
         {
-            UInt32 a = a_.image == nullptr ? 0 : a_.image->TextureId();
-            UInt32 b = b_.image == nullptr ? 0 : b_.image->TextureId();
-            return a < b;
+            UInt32 aZ = a_.position.z;
+            UInt32 bZ = b_.position.z;
+            UInt32 aImage = a_.image == nullptr ? 0 : a_.image->TextureId();
+            UInt32 bImage = b_.image == nullptr ? 0 : b_.image->TextureId();
+            if (aZ == bZ) return aImage < bImage;
+            return aZ < bZ;
         });
 
     prevTexture = nullptr;
