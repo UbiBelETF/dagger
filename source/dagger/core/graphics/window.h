@@ -37,23 +37,38 @@ struct RenderConfig
 	GLsizei windowHeight;
 	GLFWwindow* window;
 	Matrix4 projection;
-	Matrix4 cameraView;
+	Matrix4 viewport;
+	Vector2 viewOffset;
+	Vector2 lastSize;
+	Vector4 viewBounds;
+	Matrix4 camera;
+};
+
+struct CachedMatrices
+{
+	GLuint viewportMatrixId;
+	GLuint projectionMatrixId;
+	GLuint cameraMatrixId;
 };
 
 enum class ECameraMode
 {
 	ShowAsMuchAsPossible,
-	FixedWidth,
-	FixedHeight,
 	FixedResolution
 };
 
 struct Camera
 {
-	ECameraMode mode{ ECameraMode::FixedWidth };
+	ECameraMode mode{ ECameraMode::FixedResolution };
+	Vector3 position{ 0, 0, 0 };
 	Vector2 size{ 800, 600 };
-	Vector2 position{ 0, 0 };
 	Float32 zoom{ 1 };
+
+	void Update();
+
+	static Vector2 WindowToScreen(Vector2 windowCoord_);
+	static Vector2 WindowToWorld(Vector2 windowCoord_);
+	static Vector2 WorldToWindow(Vector2 worldCoord_);
 };
 
 struct WindowSystem 
@@ -63,21 +78,29 @@ struct WindowSystem
 {
 	inline String SystemName() { return "Window System"; }
 
+	CachedMatrices m_Matrices;
 	RenderConfig m_Config;
 	Camera m_Camera;
 
 	WindowSystem()
 		: m_Config{}
 		, m_Camera{}
+		, m_Matrices{}
 	{}
 
 	~WindowSystem() = default;
 	WindowSystem(const WindowSystem&) = delete;
 
+	void UpdateViewProjectionMatrix();
+
+	void UpdateViewProjectionMatrix(RenderConfig& config_, Camera& camera_);
+	void SetViewProjectionMatrix(RenderConfig& config_, Camera& camera_, Float32 width_, Float32 height_);
+
+	void UpdateCameraMatrix();
+
 	void OnWindowResized(WindowResized resized_);
 	void OnShaderChanged(ShaderChangeRequest request_);
-	void OnCameraUpdated(Camera camera_);
-
+	
 	void SpinUp() override;
 	void Run() override;
 	void WindDown() override;

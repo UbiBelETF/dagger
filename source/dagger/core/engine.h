@@ -32,7 +32,7 @@ namespace dagger
 		std::vector<System*> m_Systems;
 		OwningPtr<entt::registry> m_Registry;
 		OwningPtr<entt::dispatcher> m_EventDispatcher;
-		Bool m_ShouldStayUp;
+		Bool m_ShouldStayUp{ true };
 		UInt32 m_ExitStatus;
 
 		static inline Engine* s_Instance = nullptr;

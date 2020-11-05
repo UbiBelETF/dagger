@@ -2,6 +2,7 @@
 #include "tools/diagnostics.h"
 #include "tools/plotvar.h"
 #include "core/engine.h"
+#include "core/input/inputs.h"
 
 #include <imgui/imgui.h>
 #include <spdlog/spdlog.h>
@@ -16,6 +17,23 @@ void DiagnosticSystem::RenderGUI()
 	ImGui::SetNextWindowSize(ImVec2(200, 60), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Diagnostics");
 	ImGui::PlotVar("FPS", (Float32)m_LastFrameCounter);
+	ImGui::Separator();
+
+	{
+		auto& cursor = dagger::Input::CursorPositionInWindow();
+		ImGui::Text("Window: %f %f", cursor.x, cursor.y);
+	}
+
+	{
+		auto& cursor = dagger::Input::CursorPositionInScreen();
+		ImGui::Text("Screen: %f %f", cursor.x, cursor.y);
+	}
+
+	{
+		auto& cursor = dagger::Input::CursorPositionInWorld();
+		ImGui::Text("World: %f %f", cursor.x, cursor.y);
+	}
+
 	ImGui::End();
 }
 

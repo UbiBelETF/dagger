@@ -5,7 +5,7 @@
 
 using namespace dagger;
 
-class CharacterControllerSystem
+class PlatformerControllerSystem
 	: public System
 {
 	void OnInitialize(Registry& registry_, Entity entity_);

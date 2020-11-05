@@ -1,4 +1,4 @@
-#include "character_controller.h"
+#include "platformer_controller.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -8,7 +8,7 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
-void CharacterControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
+void PlatformerControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
     InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
     for (auto command : { "run", "jump", "down", "heavy", "light", "use" })
@@ -17,12 +17,12 @@ void CharacterControllerSystem::OnInitialize(Registry& registry_, Entity entity_
     }
 }
 
-void CharacterControllerSystem::SpinUp()
+void PlatformerControllerSystem::SpinUp()
 {
-    Engine::Registry().on_construct<InputReceiver>().connect<&CharacterControllerSystem::OnInitialize>(this);
+    Engine::Registry().on_construct<InputReceiver>().connect<&PlatformerControllerSystem::OnInitialize>(this);
 }
 
-void CharacterControllerSystem::Run()
+void PlatformerControllerSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Animator>().each(
         [](const InputReceiver input_, Sprite& sprite_, Animator& animator_)
@@ -45,7 +45,7 @@ void CharacterControllerSystem::Run()
         });
 }
 
-void CharacterControllerSystem::WindDown()
+void PlatformerControllerSystem::WindDown()
 {
-    Engine::Registry().on_construct<InputReceiver>().disconnect<&CharacterControllerSystem::OnInitialize>(this);
+    Engine::Registry().on_construct<InputReceiver>().disconnect<&PlatformerControllerSystem::OnInitialize>(this);
 }

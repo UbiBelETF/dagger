@@ -1,7 +1,14 @@
+
 #include "inputs.h"
+#include "core/core.h"
 #include "core/engine.h"
+#include "core/graphics/window.h"
 
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 using namespace dagger;
 
@@ -43,11 +50,17 @@ void InputSystem::OnMouseEvent(MouseEvent input_)
 	}
 }
 
-void InputSystem::SpinUp() 
+void InputSystem::OnCursorMoveEvent(CursorEvent cursor_)
+{
+	m_InputState.cursor = cursor_;
+}
+
+void InputSystem::SpinUp()
 {
 	Engine::Dispatcher().sink<AssetLoadRequest<InputContext>>().connect<&InputSystem::OnAssetLoadRequest>(this);
 	Engine::Dispatcher().sink<KeyboardEvent>().connect<&InputSystem::OnKeyboardEvent>(this);
 	Engine::Dispatcher().sink<MouseEvent>().connect<&InputSystem::OnMouseEvent>(this);
+	Engine::Dispatcher().sink<CursorEvent>().connect<&InputSystem::OnCursorMoveEvent>(this);
 
 	Engine::PutDefaultResource<InputState>(&m_InputState);
 
@@ -132,7 +145,7 @@ void InputSystem::OnAssetLoadRequest(AssetLoadRequest<InputContext> request_)
 	assert(json.contains("commands"));
 
 	context->name = json["context-name"];
-	for(auto& cmd: json["commands"])
+	for (auto& cmd : json["commands"])
 	{
 		InputCommand command;
 		assert(cmd.contains("command-name"));
@@ -154,7 +167,7 @@ void InputSystem::OnAssetLoadRequest(AssetLoadRequest<InputContext> request_)
 		{
 			context->bitmap.set(action.trigger, true);
 		}
-		
+
 		context->commands.push_back(std::move(command));
 	}
 
@@ -211,16 +224,16 @@ void InputSystem::Run()
 									// mouse
 									if (action.trigger >= MouseStart && action.trigger <= (MouseStart + 10))
 									{
-										if (input::IsInputDown((EDaggerMouse)(action.trigger)))
+										if (Input::IsInputDown((EDaggerMouse)(action.trigger)))
 										{
 											toFire = true;
-											if (toConsume) 
+											if (toConsume)
 												m_InputState.releasedLastFrame.emplace(action.trigger);
 										}
 									}
 									else
 									{
-										if (input::IsInputDown((EDaggerKeyboard)(action.trigger)))
+										if (Input::IsInputDown((EDaggerKeyboard)(action.trigger)))
 										{
 											toFire = true;
 											if (toConsume) m_InputState.releasedLastFrame.emplace(action.trigger);
@@ -232,7 +245,7 @@ void InputSystem::Run()
 									// mouse
 									if (action.trigger >= MouseStart && action.trigger <= (MouseStart + 10))
 									{
-										if (input::GetInputDuration((EDaggerMouse)(action.trigger)) >= action.duration)
+										if (Input::GetInputDuration((EDaggerMouse)(action.trigger)) >= action.duration)
 										{
 											toFire = true;
 											m_InputState.releasedLastFrame.emplace(action.trigger);
@@ -240,7 +253,7 @@ void InputSystem::Run()
 									}
 									else
 									{
-										if (input::GetInputDuration((EDaggerKeyboard)(action.trigger)) >= action.duration)
+										if (Input::GetInputDuration((EDaggerKeyboard)(action.trigger)) >= action.duration)
 										{
 											toFire = true;
 											m_InputState.releasedLastFrame.emplace(action.trigger);
@@ -279,26 +292,45 @@ void InputSystem::Run()
 	}
 };
 
-void InputSystem::WindDown() 
+void InputSystem::WindDown()
 {
 	Engine::Dispatcher().sink<AssetLoadRequest<InputContext>>().disconnect<&InputSystem::OnAssetLoadRequest>(this);
 	Engine::Dispatcher().sink<KeyboardEvent>().disconnect<&InputSystem::OnKeyboardEvent>(this);
 	Engine::Dispatcher().sink<MouseEvent>().disconnect<&InputSystem::OnMouseEvent>(this);
+	Engine::Dispatcher().sink<CursorEvent>().disconnect<&InputSystem::OnCursorMoveEvent>(this);
 };
 
-Bool dagger::input::IsInputDown(EDaggerKeyboard key_)
+Bool dagger::Input::IsInputDown(EDaggerKeyboard key_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	return state->keys[(UInt32)key_];
 }
 
-Bool dagger::input::IsInputDown(EDaggerMouse button_)
+Bool dagger::Input::IsInputDown(EDaggerMouse button_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	return state->mouse[(UInt32)button_ - MouseStart];
 }
 
-UInt32 dagger::input::GetInputDuration(EDaggerKeyboard key_)
+const Vector2& dagger::Input::CursorPositionInWindow()
+{
+	const auto* state = Engine::GetDefaultResource<InputState>();
+	return state->cursor;
+}
+
+const Vector2& dagger::Input::CursorPositionInScreen()
+{
+	auto* state = Engine::GetDefaultResource<InputState>();
+	return Camera::WindowToScreen(state->cursor);
+}
+
+const Vector2& dagger::Input::CursorPositionInWorld()
+{
+	auto* state = Engine::GetDefaultResource<InputState>();
+	return Camera::WindowToWorld(state->cursor);
+}
+
+UInt32 dagger::Input::GetInputDuration(EDaggerKeyboard key_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	UInt32 value = (UInt32)key_;
@@ -307,14 +339,14 @@ UInt32 dagger::input::GetInputDuration(EDaggerKeyboard key_)
 	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
 
-UInt32 dagger::input::GetInputDuration(EDaggerMouse mouse_)
+UInt32 dagger::Input::GetInputDuration(EDaggerMouse mouse_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	UInt32 value = (UInt32)mouse_;
 	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
 
-void dagger::input::ConsumeInput(EDaggerKeyboard key_)
+void dagger::Input::ConsumeInput(EDaggerKeyboard key_)
 {
 	auto* state = Engine::GetDefaultResource<InputState>();
 
@@ -324,7 +356,7 @@ void dagger::input::ConsumeInput(EDaggerKeyboard key_)
 	state->bitmap.reset(value);
 }
 
-void dagger::input::ConsumeInput(EDaggerMouse button_)
+void dagger::Input::ConsumeInput(EDaggerMouse button_)
 {
 	auto* state = Engine::GetDefaultResource<InputState>();
 

@@ -38,8 +38,8 @@ void SpriteRenderSystem::SpinUp()
         pair(3, 0),  // #2: quad position
         pair(2, 3),  // #3: quad pivot
         pair(4, 5),  // #4: quad tint color
-        pair(1, 9),  // #5: texture ratio
-        pair(2, 10), // #6: scale
+        pair(2, 9),  // #5: texture size
+        pair(2, 11), // #6: scale
     };
 
     for (UInt32 i = 0; i < sizesAndStrides.size(); i++)
@@ -66,7 +66,7 @@ void SpriteRenderSystem::OnRender()
 
     // get a view of all the entities and their sprite components
     ViewPtr<Texture> prevTexture{ nullptr };
-    static ViewPtr<Shader> prevShader{ nullptr };
+    ViewPtr<Shader> prevShader{ nullptr };
 
     const auto& view = Engine::Registry().view<Sprite>();
     Sequence<Sprite> sprites{ view.raw(), view.raw() + view.size() };
@@ -96,8 +96,6 @@ void SpriteRenderSystem::OnRender()
                 return aZ > bZ;
         });
 
-    prevTexture = nullptr;
-    
     for (auto ptr = sprites.begin(); ptr != sprites.end();)
     {
         if (prevShader != ptr->shader)

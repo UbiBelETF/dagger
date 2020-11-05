@@ -22,6 +22,7 @@ Engine::Engine()
 
 void Engine::EngineShutdown(Exit&)
 {
+	Logger::error("Engine shutdown called.");
 	m_ShouldStayUp = false;
 }
 
@@ -42,6 +43,11 @@ void Engine::EngineInit()
 	for (auto& system : this->m_Systems)
 	{
 		system->SpinUp();
+		if (m_ExitStatus != 0)
+		{
+			Logger::critical("Spinning up failed: {}", system->SystemName());
+			break;
+		}
 	}
 	this->Dispatcher().sink<Exit>().connect<&Engine::EngineShutdown>(*this);
 }

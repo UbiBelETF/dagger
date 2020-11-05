@@ -105,6 +105,7 @@ using Matrix4 = glm::mat4x4;
 
 using Vector2 = glm::fvec2;
 using Vector3 = glm::fvec3;
+using Vector4 = glm::fvec4;
 
 using Color = glm::fvec4;
 
