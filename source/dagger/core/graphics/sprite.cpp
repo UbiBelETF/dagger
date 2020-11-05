@@ -17,3 +17,8 @@ void dagger::AssignSpriteTexture(Sprite& spriteTarget_, ViewPtr<Texture> texture
 	spriteTarget_.image = texture_.get();
 	spriteTarget_.ratio = texture_->Ratio();
 }
+
+void dagger::AssignSpriteShader(Sprite& spriteTarget_, String shaderName_)
+{
+	spriteTarget_.shader = ShaderSystem::Get(shaderName_);
+}

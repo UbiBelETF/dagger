@@ -21,24 +21,32 @@ void SpriteRenderSystem::SpinUp()
 	glBindBuffer(GL_ARRAY_BUFFER, m_StaticMeshVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(m_VerticesAndTexCoords), m_VerticesAndTexCoords, GL_STATIC_DRAW);
 
+    // attribute #0: vertex position
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)0);
     glEnableVertexAttribArray(0);
+    // attribute #1: tex coord
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
     glEnableVertexAttribArray(1);
 
-    GLsizei size = sizeof(Sprite);
+    const GLsizei dataSize = sizeof(SpriteData);
     
     glGenBuffers(1, &m_InstanceQuadInfoVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 	glBufferData(GL_ARRAY_BUFFER, ms_BufferSize, nullptr, GL_STREAM_DRAW);
 
-    const UInt32 attributeSizes[]   = { 3,        2,        4,        1,        2,         2  };
-    const UInt64 attributeStrides[] = { 0,        3,        5,        9,        10,        12 };
+    const StaticArray<Pair<UInt32, UInt32>, 5> sizesAndStrides = {
+        std::make_pair(3, 0),  // #2: quad position
+        std::make_pair(2, 3),  // #3: quad pivot
+        std::make_pair(4, 5),  // #4: quad tint color
+        std::make_pair(1, 9),  // #5: texture ratio
+        std::make_pair(2, 10), // #6: scale
+    };
 
-    for (UInt32 i = 0; i < 6; i++)
+    for (UInt32 i = 0; i < sizesAndStrides.size(); i++)
     {
         UInt32 index = 2 + i;
-        glVertexAttribPointer(index, attributeSizes[i], GL_FLOAT, GL_FALSE, size, (void*)(sizeof(Float32) * attributeStrides[i]));
+        glVertexAttribPointer(index, sizesAndStrides[i].first, GL_FLOAT, GL_FALSE, 
+            dataSize, (void*)(sizeof(Float32) * sizesAndStrides[i].second));
         glEnableVertexAttribArray(index);
         glVertexAttribDivisor(index, 1);
     }
@@ -49,44 +57,56 @@ void SpriteRenderSystem::SpinUp()
     glActiveTexture(GL_TEXTURE0);
 
     Engine::Dispatcher().sink<Render>().connect<&SpriteRenderSystem::OnRender>(this);
-    Engine::Dispatcher().sink<ShaderChangeRequest>().connect<&SpriteRenderSystem::OnShaderChanged>(this);
-}
-
-void SpriteRenderSystem::OnShaderChanged(ShaderChangeRequest request_)
-{
-    m_CachedShader = request_.m_Shader;
 }
 
 void SpriteRenderSystem::OnRender()
 {
-    assert(m_CachedShader != nullptr);
-
 	glBindVertexArray(m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 
     // get a view of all the entities and their sprite components
     Texture* prevTexture = nullptr;
+    static ViewPtr<Shader> prevShader = nullptr;
 
     const auto& view = Engine::Registry().view<Sprite>();
     Sequence<Sprite> sprites{ view.raw(), view.raw() + view.size() };
-    UInt64 dataSize = sizeof(Sprite) * sprites.size();
+    UInt64 dataSize = sizeof(SpriteData) * sprites.size();
     
-    Sequence<Sprite> currentRender{};
+    Sequence<SpriteData> currentRender{};
 
     std::sort(sprites.begin(), sprites.end(), [](const Sprite& a_, const Sprite& b_)
         {
+            UInt32 aShader = a_.shader->programId;
+            UInt32 bShader = b_.shader->programId;
             UInt32 aZ = a_.position.z;
             UInt32 bZ = b_.position.z;
             UInt32 aImage = a_.image == nullptr ? 0 : a_.image->TextureId();
             UInt32 bImage = b_.image == nullptr ? 0 : b_.image->TextureId();
-            if (aZ == bZ) return aImage < bImage;
-            return aZ < bZ;
+
+            if (aShader == bShader)
+            {
+                if (aZ == bZ)
+                {
+                    return aImage < bImage;
+                }
+                else
+                    return aZ < bZ;
+            }
+            else
+                return aShader < bShader;
         });
 
     prevTexture = nullptr;
     
     for (auto ptr = sprites.begin(); ptr != sprites.end();)
     {
+        if (prevShader != ptr->shader)
+        {
+            prevShader = ptr->shader;
+            glUseProgram(prevShader->programId);
+            Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(prevShader));
+        }
+
         assert(ptr->image != nullptr);
         while (ptr != sprites.end() && ptr->image == nullptr) ptr++;
         if (ptr == sprites.end()) break;
@@ -95,11 +115,11 @@ void SpriteRenderSystem::OnRender()
 
         while (ptr != sprites.end() && prevTexture == ptr->image)
         {
-            currentRender.push_back(*ptr);
+            currentRender.push_back((SpriteData)*ptr);
             ptr++;
         }
 
-        UInt32 renderSize = sizeof(Sprite) * currentRender.size();
+        const UInt32 renderSize = sizeof(SpriteData) * currentRender.size();
 
         m_Data = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, sizeof(Sprite) * currentRender.size(), GL_MAP_WRITE_BIT));
         memcpy(m_Data, &(*currentRender.begin()), renderSize);
@@ -126,5 +146,4 @@ void SpriteRenderSystem::WindDown()
 	glDeleteVertexArrays(1, &m_VAO);
 
 	Engine::Dispatcher().sink<Render>().disconnect<&SpriteRenderSystem::OnRender>(this);
-    Engine::Dispatcher().sink<ShaderChangeRequest>().disconnect<&SpriteRenderSystem::OnShaderChanged>(this);
 }

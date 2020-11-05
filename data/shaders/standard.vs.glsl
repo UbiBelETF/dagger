@@ -8,7 +8,6 @@ layout (location = 3) in vec2  ai_QuadPivot;
 layout (location = 4) in vec4  ai_QuadColor;
 layout (location = 5) in float ai_Ratio;
 layout (location = 6) in vec2  ai_Scale;
-layout (location = 7) in vec2  x_UnusedTexture;
 
 uniform mat4 u_Projection;
 uniform mat4 u_CameraView;

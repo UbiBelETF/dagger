@@ -36,6 +36,14 @@ using OwningPtr = std::unique_ptr<T>;
 template<typename T>
 using ViewPtr = jss::object_ptr<T>;
 
+// Pair<A, B>: contains two types with no other relations in it.
+template<typename A, typename B>
+using Pair = std::pair<A, B>;
+
+// Array<T, N>: a contiguous sequence of statically-sized elements in memory.
+template<typename T, int N>
+using StaticArray = std::array<T, N>;
+
 // Sequence<T>: a contiguous sequence of elements in memory.
 template<typename T>
 using Sequence = std::vector<T>;

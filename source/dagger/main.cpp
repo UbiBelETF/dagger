@@ -6,5 +6,5 @@
 int main(int argc_, char** argv_)
 {
 	dagger::Engine engine;
-	return engine.Run<Platformer>();
+	return engine.Run<PingPongGame>();
 }

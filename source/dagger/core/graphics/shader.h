@@ -29,7 +29,9 @@ struct Shader
 		CameraViewMatrixId = 1,
 	};
 
-	constexpr static UInt32 ms_ShaderStageCount = 4;
+	constexpr static UInt32 s_ShaderStageCount = 4;
+
+	inline static ViewPtr<Shader> s_FirstLoadedShader{ nullptr };
 
 	inline static Map<EShaderStage, UInt32> s_ShaderStageHandles =
 	{

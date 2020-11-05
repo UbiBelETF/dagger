@@ -12,7 +12,7 @@ Shader::Shader(ShaderConfig config_)
 {
 	Logger::info("Constructing shader program '{}'", config_.name);
 
-	constexpr auto count = ms_ShaderStageCount + 1;
+	constexpr auto count = s_ShaderStageCount + 1;
 	Sequence<UInt32> shaderIds;
 
 	programId = glCreateProgram();
@@ -79,6 +79,11 @@ Shader::Shader(ShaderConfig config_)
 
 	programId = programId;
 	assert(programId != 0);
+
+	if (!s_FirstLoadedShader)
+	{
+		s_FirstLoadedShader.reset(this);
+	}
 }
 
 Shader::~Shader()
