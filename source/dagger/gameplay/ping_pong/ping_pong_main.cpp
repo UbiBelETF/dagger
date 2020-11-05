@@ -14,7 +14,7 @@
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
 
-#include "gameplay/simple_collisions.h"
+#include "gameplay/common/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"

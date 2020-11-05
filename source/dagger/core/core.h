@@ -40,7 +40,9 @@ using ViewPtr = jss::object_ptr<T>;
 template<typename A, typename B>
 using Pair = std::pair<A, B>;
 
-// Array<T, N>: a contiguous sequence of statically-sized elements in memory.
+#define pair(X, Y)  std::make_pair((X), (Y))
+
+// StaticArray<T, N>: a contiguous sequence of statically-sized elements in memory.
 template<typename T, int N>
 using StaticArray = std::array<T, N>;
 

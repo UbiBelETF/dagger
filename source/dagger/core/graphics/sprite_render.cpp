@@ -32,14 +32,14 @@ void SpriteRenderSystem::SpinUp()
     
     glGenBuffers(1, &m_InstanceQuadInfoVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
-	glBufferData(GL_ARRAY_BUFFER, ms_BufferSize, nullptr, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, s_BufferSize, nullptr, GL_STREAM_DRAW);
 
     const StaticArray<Pair<UInt32, UInt32>, 5> sizesAndStrides = {
-        std::make_pair(3, 0),  // #2: quad position
-        std::make_pair(2, 3),  // #3: quad pivot
-        std::make_pair(4, 5),  // #4: quad tint color
-        std::make_pair(1, 9),  // #5: texture ratio
-        std::make_pair(2, 10), // #6: scale
+        pair(3, 0),  // #2: quad position
+        pair(2, 3),  // #3: quad pivot
+        pair(4, 5),  // #4: quad tint color
+        pair(1, 9),  // #5: texture ratio
+        pair(2, 10), // #6: scale
     };
 
     for (UInt32 i = 0; i < sizesAndStrides.size(); i++)
@@ -65,8 +65,8 @@ void SpriteRenderSystem::OnRender()
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 
     // get a view of all the entities and their sprite components
-    Texture* prevTexture = nullptr;
-    static ViewPtr<Shader> prevShader = nullptr;
+    ViewPtr<Texture> prevTexture{ nullptr };
+    static ViewPtr<Shader> prevShader{ nullptr };
 
     const auto& view = Engine::Registry().view<Sprite>();
     Sequence<Sprite> sprites{ view.raw(), view.raw() + view.size() };
@@ -83,17 +83,17 @@ void SpriteRenderSystem::OnRender()
             UInt32 aImage = a_.image == nullptr ? 0 : a_.image->TextureId();
             UInt32 bImage = b_.image == nullptr ? 0 : b_.image->TextureId();
 
-            if (aShader == bShader)
+            if (aZ == bZ)
             {
-                if (aZ == bZ)
+                if (aShader == bShader)
                 {
                     return aImage < bImage;
                 }
                 else
-                    return aZ < bZ;
+                    return aShader < bShader;
             }
             else
-                return aShader < bShader;
+                return aZ > bZ;
         });
 
     prevTexture = nullptr;
@@ -115,6 +115,8 @@ void SpriteRenderSystem::OnRender()
 
         while (ptr != sprites.end() && prevTexture == ptr->image)
         {
+            // look at the definition of SpriteData if you're wondering why the cast.
+            // we only need some fields, to optimize on data transfer.
             currentRender.push_back((SpriteData)*ptr);
             ptr++;
         }
@@ -126,7 +128,7 @@ void SpriteRenderSystem::OnRender()
         glUnmapBuffer(GL_ARRAY_BUFFER);
 
         glBindTexture(GL_TEXTURE_2D, prevTexture->TextureId());
-        glDrawArraysInstanced(GL_TRIANGLES, 0, ms_VertexCount, (GLsizei)currentRender.size());
+        glDrawArraysInstanced(GL_TRIANGLES, 0, s_VertexCount, (GLsizei)currentRender.size());
         currentRender.clear();
                    
         if (ptr == sprites.end()) break;

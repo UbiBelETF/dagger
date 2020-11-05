@@ -4,7 +4,7 @@
 #include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
 
-#include "gameplay/simple_collisions.h"
+#include "gameplay/common/simple_collisions.h"
 
 #include <algorithm>
 #include <execution>

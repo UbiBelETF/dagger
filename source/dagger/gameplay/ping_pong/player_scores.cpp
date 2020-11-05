@@ -2,7 +2,7 @@
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
-#include "gameplay/simple_collisions.h"
+#include "gameplay/common/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
 
 int PlayerScoresSystem::s_FieldWidth = 20;

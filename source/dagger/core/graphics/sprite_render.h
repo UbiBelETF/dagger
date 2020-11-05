@@ -39,10 +39,10 @@ class SpriteRenderSystem
 public:
 	inline String SystemName() { return "Sprite Render System"; }
 
-	constexpr static UInt64 ms_VertexCount = 24;
-	constexpr static UInt64 m_SizeOfMesh = sizeof(Float32) * ms_VertexCount;
-	constexpr static UInt64 ms_MaxNumberOfMeshes = 1000;
-	constexpr static UInt64 ms_BufferSize = sizeof(Float32) * ms_VertexCount * ms_MaxNumberOfMeshes;
+	constexpr static UInt64 s_VertexCount = 24;
+	constexpr static UInt64 m_SizeOfMesh = sizeof(Float32) * s_VertexCount;
+	constexpr static UInt64 s_MaxNumberOfMeshes = 10000;
+	constexpr static UInt64 s_BufferSize = sizeof(Float32) * s_VertexCount * s_MaxNumberOfMeshes;
 
 	void SpinUp() override;
 	void WindDown() override;
