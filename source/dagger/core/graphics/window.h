@@ -65,10 +65,14 @@ struct WindowSystem
 
 	RenderConfig m_Config;
 	Camera m_Camera;
+	GLuint m_CameraViewMatrixId;
+	GLuint m_ProjectionMatrixId;
 
 	WindowSystem()
 		: m_Config{ true, 0, 0 }
 		, m_Camera{}
+		, m_CameraViewMatrixId(0)
+		, m_ProjectionMatrixId(0)
 	{}
 
 	WindowSystem(GLsizei width_, GLsizei height_)

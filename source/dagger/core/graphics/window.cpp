@@ -80,13 +80,16 @@ void WindowSystem::OnWindowResized(WindowResized resized_)
 		break;
 	}
 
-	glUniformMatrix4fv((GLuint)Shader::EUniforms::ProjectionMatrixId, 1, false, glm::value_ptr(config->projection));
+	glUniformMatrix4fv(m_ProjectionMatrixId, 1, false, glm::value_ptr(config->projection));
 }
 
 void WindowSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
 	Logger::info("Shader changed to {}, reuploading projection matrix.", request_.m_Shader->shaderName);
 	WindowResizeCallback(m_Config.window, m_Config.windowWidth, m_Config.windowHeight);
+
+	m_CameraViewMatrixId = glGetUniformLocation(request_.m_Shader->programId, Shader::CameraViewMatrixId);
+	m_ProjectionMatrixId = glGetUniformLocation(request_.m_Shader->programId, Shader::ProjectionMatrixId);
 }
 
 void WindowSystem::OnCameraUpdated(Camera camera_)
@@ -153,13 +156,13 @@ void WindowSystem::OnCameraUpdated(Camera camera_)
 			break;
 		}
 
-		glUniformMatrix4fv((GLuint)Shader::EUniforms::ProjectionMatrixId, 1, false, glm::value_ptr(config->projection));
+		glUniformMatrix4fv(m_ProjectionMatrixId, 1, false, glm::value_ptr(config->projection));
 	}
 
 	glm::mat4 scaleMatrix = glm::scale(glm::vec3(camera->zoom));
 	glm::mat4 translateMatrix = glm::translate(glm::vec3(camera->position, 0));
 	m_Config.cameraView = translateMatrix * scaleMatrix * glm::identity<glm::mat4>();
-	glUniformMatrix4fv((GLuint)Shader::EUniforms::CameraViewMatrixId, 1, false, glm::value_ptr(m_Config.cameraView));
+	glUniformMatrix4fv(m_CameraViewMatrixId, 1, false, glm::value_ptr(m_Config.cameraView));
 }
 
 void WindowSystem::SpinUp()
@@ -224,8 +227,7 @@ void WindowSystem::SpinUp()
 	glm::mat4 translateMatrix = glm::translate(glm::vec3(m_Camera.position, 0));
 	m_Config.cameraView = translateMatrix * scaleMatrix * glm::identity<glm::mat4>();
     
-	glUniformMatrix4fv(glGetUniformLocation((GLint)Shader::EUniforms::CameraViewMatrixId, "u_CameraView"), 
-        1, false, glm::value_ptr(m_Config.cameraView));
+	glUniformMatrix4fv(m_CameraViewMatrixId, 1, false, glm::value_ptr(m_Config.cameraView));
 
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetCharCallback(window, CharCallback);

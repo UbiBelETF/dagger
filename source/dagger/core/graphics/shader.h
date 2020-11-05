@@ -23,11 +23,8 @@ struct ShaderConfig
 
 struct Shader
 {
-	enum class EUniforms
-	{
-		ProjectionMatrixId = 0,
-		CameraViewMatrixId = 1,
-	};
+	constexpr static GLchar* ProjectionMatrixId = "u_Projection";
+	constexpr static GLchar* CameraViewMatrixId = "u_CameraView";
 
 	constexpr static UInt32 ms_ShaderStageCount = 4;
 
