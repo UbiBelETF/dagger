@@ -1,0 +1,5 @@
+{
+  "CodePath": "CoffeeCup.Scripts/CoffeeCup.Scripts.csproj",
+  "DataPath": "CoffeeCup.Data",
+  "WorkingDirectory": "../../"
+}
