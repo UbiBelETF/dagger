@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <Reference Include="CoffeeCup.Core">
-      <HintPath>..\CoffeeCup.Core.dll</HintPath>
+      <HintPath>CoffeeCup.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
