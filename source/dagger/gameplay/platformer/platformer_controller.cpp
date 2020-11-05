@@ -36,11 +36,11 @@ void PlatformerControllerSystem::Run()
             {
                 AnimatorPlay(animator_, "souls_like_knight_character:RUN");
                 sprite_.scale.x = run;
-                sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
+                sprite_.position.x += 20 * sprite_.scale.x * Engine::DeltaTime();
 
                 auto cam = Engine::GetDefaultResource<Camera>();
-                cam->zoom += 0.01f * run;
-                Engine::Dispatcher().trigger<Camera>(*cam);
+                cam->position = sprite_.position;
+                cam->Update();
             }
         });
 }

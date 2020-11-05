@@ -28,7 +28,7 @@ void Platformer::WorldSetup(Engine& engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 10;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -36,11 +36,17 @@ void Platformer::WorldSetup(Engine& engine_)
 
     {
         auto entity1 = reg.create();
-        auto& sprite1 = reg.emplace<Sprite>(entity1);
-        sprite1.scale = { 1, 1 };
-        sprite1.position = { -10, 0, 1 };
-        sprite1.color = { 1, 0, 0, 1 };
-        AssignSpriteTexture(sprite1, "souls_like_knight_character:IDLE:idle1");
+        auto& sprite = reg.emplace<Sprite>(entity1);
+        sprite.scale = { 1, 1 };
+        sprite.position = { -10, 0, 1 };
+        sprite.color = { 1, 0, 0, 1 };
+        AssignSpriteTexture(sprite, "souls_like_knight_character:IDLE:idle1");
+
+        auto& input = reg.emplace<InputReceiver>(entity1);
+        input.contexts.push_back("Player");
+
+        auto& anim = reg.emplace<Animator>(entity1);
+        AnimatorPlay(anim, "souls_like_knight_character:IDLE");
     }
 
     {
