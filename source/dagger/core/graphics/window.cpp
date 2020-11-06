@@ -117,6 +117,8 @@ void Camera::Update()
 	
 	window->UpdateViewProjectionMatrix(*config, *camera);
 	window->UpdateCameraMatrix();
+
+	Engine::Dispatcher().trigger<CameraUpdate>();
 }
 
 void WindowSystem::UpdateCameraMatrix()
@@ -185,6 +187,10 @@ void WindowSystem::SpinUp()
 		return;
 	}
 
+	const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
+	const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
+	Logger::critical("GPU Vendor: {}, renderer: {}", vendor, renderer);
+
 	Engine::PutDefaultResource<RenderConfig>(&m_Config);
 	Engine::PutDefaultResource<Camera>(&m_Camera);
 
@@ -199,12 +205,12 @@ void WindowSystem::SpinUp()
 	glfwSetCursorPosCallback(window, CursorCallback);
 	glfwSetWindowSizeCallback(window, WindowResizeCallback);
 
-	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
-	glEnable(GL_ALPHA_TEST);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+//	glEnable(GL_ALPHA_TEST);
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_LEQUAL);
 }
 
 void WindowSystem::Run()

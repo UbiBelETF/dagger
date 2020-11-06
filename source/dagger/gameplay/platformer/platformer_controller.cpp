@@ -26,8 +26,8 @@ void PlatformerControllerSystem::SpinUp()
 
 void PlatformerControllerSystem::Run()
 {
-    Engine::Registry().view<InputReceiver, Sprite, Animator>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_)
+    Engine::Registry().view<InputReceiver, Sprite, Animator, PlatformerCharacter>().each(
+        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, const PlatformerCharacter& char_)
         {
             Float32 run = input_.values.at("run");
             if (run == 0)
@@ -38,11 +38,7 @@ void PlatformerControllerSystem::Run()
             {
                 AnimatorPlay(animator_, "souls_like_knight_character:RUN");
                 sprite_.scale.x = run;
-                sprite_.position.x += 20 * sprite_.scale.x * Engine::DeltaTime();
-
-                auto cam = Engine::GetDefaultResource<Camera>();
-                cam->position = sprite_.position;
-                cam->Update();
+                sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
             }
         });
 }

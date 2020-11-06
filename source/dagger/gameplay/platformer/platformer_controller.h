@@ -7,6 +7,11 @@ using namespace dagger;
 
 namespace platformer
 {
+	struct PlatformerCharacter
+	{
+		int speed{ 1 };
+	};
+
 	class PlatformerControllerSystem
 		: public System
 	{
