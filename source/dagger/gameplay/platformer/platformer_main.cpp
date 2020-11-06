@@ -28,7 +28,7 @@ void Platformer::WorldSetup(Engine& engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 10;
+    camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
 

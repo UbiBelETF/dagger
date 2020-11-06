@@ -271,9 +271,11 @@ Vector2 Camera::WorldToWindow(Vector2 worldCoord_)
 {
 	Vector2 cursorInWindow{ 0,0 };
 	auto* config = Engine::GetDefaultResource<RenderConfig>();
+	auto* camera = Engine::GetDefaultResource<Camera>();
 
-	auto pos = glm::project(Vector3{ worldCoord_ + config->viewOffset, 0 },
+	auto pos = glm::project(Vector3{ worldCoord_ + (camera->size / (2.0f * camera->zoom)), 0 },
 		config->camera, config->projection, config->viewBounds);
+
 	cursorInWindow.x = pos.x;
 	cursorInWindow.y = pos.y;
 	return cursorInWindow;

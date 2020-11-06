@@ -3,6 +3,7 @@
 #include "tools/plotvar.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
+#include "core/graphics/window.h"
 
 #include <imgui/imgui.h>
 #include <spdlog/spdlog.h>
@@ -20,20 +21,25 @@ void DiagnosticSystem::RenderGUI()
 	ImGui::Separator();
 
 	{
-		auto& cursor = dagger::Input::CursorPositionInWindow();
-		ImGui::Text("Window: %f %f", cursor.x, cursor.y);
+		auto& cursorInWindow = dagger::Input::CursorPositionInWindow();
+		ImGui::Text("Window: %f %f", cursorInWindow.x, cursorInWindow.y);
 	}
 
 	{
-		auto& cursor = dagger::Input::CursorPositionInScreen();
-		ImGui::Text("Screen: %f %f", cursor.x, cursor.y);
+		auto& cursorInScreen = dagger::Input::CursorPositionInScreen();
+		ImGui::Text("Screen: %f %f", cursorInScreen.x, cursorInScreen.y);
 	}
 
 	{
-		auto& cursor = dagger::Input::CursorPositionInWorld();
-		ImGui::Text("World: %f %f", cursor.x, cursor.y);
+		auto& cursorInWorld = dagger::Input::CursorPositionInWorld();
+		ImGui::Text("World: %f %f", cursorInWorld.x, cursorInWorld.y);
 	}
 
+	{
+		auto& cursorInWindow = dagger::Input::CursorPositionInWorld();
+		auto cursorInWorld = Camera::WorldToWindow(cursorInWindow);
+		ImGui::Text("Picked: %f %f", cursorInWorld.x, cursorInWorld.y);
+	}
 	ImGui::End();
 }
 
