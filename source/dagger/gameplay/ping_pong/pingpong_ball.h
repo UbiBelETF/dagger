@@ -5,27 +5,30 @@
 
 using namespace dagger;
 
-struct PingPongBall
+namespace ping_pong
 {
-    Vector3 speed{ 0, 0, 0 };
-        
-    bool reachedGoal{ false };
-    bool playerOneScored{ true };
-    bool processed{ false };
-};
+    struct PingPongBall
+    {
+        Vector3 speed{ 0, 0, 0 };
 
-struct PingPongWall
-{
-    bool isLeft{ true };
-};
+        bool reachedGoal{ false };
+        bool playerOneScored{ true };
+        bool processed{ false };
+    };
 
-class PingPongBallSystem
-    : public System
-{
-public:
+    struct PingPongWall
+    {
+        bool isLeft{ true };
+    };
 
-    inline String SystemName() { return "PingPong Ball System"; }
+    class PingPongBallSystem
+        : public System
+    {
+    public:
 
-    void Run() override;
-    void CreatePingPongBall(float tileSize_, Color color_, Vector3 speed_, Vector3 pos_);
-};
+        inline String SystemName() { return "PingPong Ball System"; }
+
+        void Run() override;
+        void CreatePingPongBall(float tileSize_, Color color_, Vector3 speed_, Vector3 pos_);
+    };
+}

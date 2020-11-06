@@ -10,6 +10,7 @@
 #include <execution>
 
 using namespace dagger;
+using namespace ping_pong;
 
 void PingPongBallSystem::Run()
 {

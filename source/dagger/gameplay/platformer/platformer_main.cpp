@@ -17,6 +17,7 @@
 #include "gameplay/platformer/platformer_controller.h"
 
 using namespace dagger;
+using namespace platformer;
 
 void Platformer::GameplaySystemsSetup(Engine& engine_)
 {

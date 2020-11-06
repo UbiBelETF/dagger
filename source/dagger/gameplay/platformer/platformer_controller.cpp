@@ -8,6 +8,8 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
+using namespace platformer;
+
 void PlatformerControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
     InputReceiver& receiver = registry_.get<InputReceiver>(entity_);

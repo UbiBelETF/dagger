@@ -5,13 +5,16 @@
 
 using namespace dagger;
 
-class Platformer : public Game
+namespace platformer
 {
-    String GetIniFile() override
+    class Platformer : public Game
     {
-        return "platformer.ini";
-    }
+        String GetIniFile() override
+        {
+            return "platformer.ini";
+        }
 
-    void GameplaySystemsSetup(Engine& engine_) override;
-    void WorldSetup(Engine& engine_) override;
-};
+        void GameplaySystemsSetup(Engine& engine_) override;
+        void WorldSetup(Engine& engine_) override;
+    };
+}

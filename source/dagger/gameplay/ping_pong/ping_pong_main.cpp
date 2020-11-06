@@ -20,6 +20,7 @@
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace dagger;
+using namespace ping_pong;
 
 void PingPongGame::CoreSystemsSetup(Engine& engine_)
 {

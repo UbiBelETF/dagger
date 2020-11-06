@@ -7,14 +7,17 @@
 
 using namespace dagger;
 
-class PingPongGame : public Game
+namespace ping_pong
 {
-    inline String GetIniFile() override
+    class PingPongGame : public Game
     {
-        return "pingpong.ini";
-    };
+        inline String GetIniFile() override
+        {
+            return "pingpong.ini";
+        };
 
-    void CoreSystemsSetup(Engine& engine_) override;
-    void GameplaySystemsSetup(Engine& engine_) override;
-    void WorldSetup(Engine& engine_) override;
-};
+        void CoreSystemsSetup(Engine& engine_) override;
+        void GameplaySystemsSetup(Engine& engine_) override;
+        void WorldSetup(Engine& engine_) override;
+    };
+}

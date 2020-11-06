@@ -5,17 +5,20 @@
 
 using namespace dagger;
 
-class PlatformerControllerSystem
-	: public System
+namespace platformer
 {
-	void OnInitialize(Registry& registry_, Entity entity_);
+	class PlatformerControllerSystem
+		: public System
+	{
+		void OnInitialize(Registry& registry_, Entity entity_);
 
-public:
-	String SystemName() override {
-		return "Character Controller System";
-	}
+	public:
+		String SystemName() override {
+			return "Character Controller System";
+		}
 
-	void SpinUp() override;
-	void Run() override;
-	void WindDown() override;
-};
+		void SpinUp() override;
+		void Run() override;
+		void WindDown() override;
+	};
+}
