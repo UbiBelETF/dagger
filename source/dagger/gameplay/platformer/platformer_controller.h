@@ -5,9 +5,9 @@
 
 using namespace dagger;
 
-namespace example1
+namespace platformer
 {
-	class CharacterControllerSystem
+	class PlatformerControllerSystem
 		: public System
 	{
 		void OnInitialize(Registry& registry_, Entity entity_);
@@ -17,11 +17,8 @@ namespace example1
 			return "Character Controller System";
 		}
 
-		inline void SpinUp() override;
-		inline void Run() override;
-		inline void WindDown() override;
+		void SpinUp() override;
+		void Run() override;
+		void WindDown() override;
 	};
-
-	void SetupSystems(Engine& engine_);
-	void SetupWorld(Engine& engine_);
 }

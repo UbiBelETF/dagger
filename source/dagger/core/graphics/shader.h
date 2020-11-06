@@ -23,19 +23,19 @@ struct ShaderConfig
 
 struct Shader
 {
-	enum class EUniforms
-	{
-		ProjectionMatrixId = 0,
-		CameraViewMatrixId = 1,
-	};
+	constexpr static UInt32 s_ShaderStageCount = 4;
 
-	constexpr static UInt32 ms_ShaderStageCount = 4;
+	inline static ViewPtr<Shader> s_FirstLoadedShader{ nullptr };
 
 	inline static Map<EShaderStage, UInt32> s_ShaderStageHandles =
 	{
 		{ EShaderStage::Vertex, GL_VERTEX_SHADER },
 		{ EShaderStage::Fragment, GL_FRAGMENT_SHADER },
 	};
+
+	inline static const char* s_ViewportMatrixName{ "u_Viewport" };
+	inline static const char* s_ProjectionMatrixName{ "u_Projection" };
+	inline static const char* s_CameraMatrixName{ "u_Camera" };
 
 	inline static Map<String, EShaderStage> s_ShaderStageIndex =
 	{

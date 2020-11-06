@@ -26,7 +26,8 @@ struct ShaderSystem
     inline String SystemName() { return "Shader System"; }
 
     static void Use(String name_);
-    static UInt32 Get(String name_);
+    static ViewPtr<Shader> Get(String name_);
+    static UInt32 GetId(String name_);
 
     void OnLoadAsset(AssetLoadRequest<Shader> request_);
     void SpinUp() override;

@@ -2,13 +2,15 @@
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
-#include "gameplay/simple_collisions.h"
+#include "core/graphics/sprite.h"
+
+#include "gameplay/common/simple_collisions.h"
 
 #include <algorithm>
 #include <execution>
 
 using namespace dagger;
-using namespace pingPong;
+using namespace ping_pong;
 
 void PingPongBallSystem::Run()
 {
@@ -75,4 +77,24 @@ void PingPongBallSystem::Run()
             t.position += (ball.speed * Engine::DeltaTime());
         }
     }
+}
+
+void PingPongBallSystem::CreatePingPongBall(float tileSize_, Color color_, Vector3 speed_, Vector3 pos_)
+{
+    auto& reg = Engine::Registry();
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    AssignSpriteTexture(sprite, "PingPong:ball");
+    sprite.scale = Vector2(1, 1) * tileSize_;
+
+    sprite.color = color_;
+
+    auto& transform = reg.emplace<Transform>(entity);
+    transform.position = pos_ * tileSize_;
+    auto& ball = reg.emplace<PingPongBall>(entity);
+    ball.speed = speed_ * tileSize_;
+
+    auto& col = reg.emplace<SimpleCollision>(entity);
+    col.size.x = tileSize_;
+    col.size.y = tileSize_;
 }

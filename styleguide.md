@@ -50,7 +50,7 @@ Be aware that even though the capability for stacking boolean expressions exists
 Whenever working with the global scope, use namespaces to identify them. Your project should be set up in such a way that the only things
 in the global scope are namespaces that you defined (ie. no functions, classes, variables, or constants etc. by themselves)
 
-**a. Namespace Names**: Use simple names for your namespaces. All namespaces should be in `lowerCamelCase`.
+**a. Namespace Names**: Use simple names for your namespaces. All namespaces should be in `lower_snake_case`.
 
 **b. Namespaced Functions**: All global function names should be in `UpperCamelCase`.
 

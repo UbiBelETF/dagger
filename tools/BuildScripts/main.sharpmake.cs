@@ -49,6 +49,7 @@ public class MainProject : Project
         // Additional includes
         config.IncludePaths.Add(Path.Combine(m_RootDirectory, @"source", mc_ProjectName));
         config.IncludePaths.Add(Path.Combine(m_RootDirectory, @"libs", @"spdlog", @"include"));
+        config.IncludePaths.Add(Path.Combine(m_RootDirectory, @"libs", @"simpleini"));
         config.IncludePaths.Add(Path.Combine(m_RootDirectory, @"libs", @"stb", @"include"));
         config.IncludePaths.Add(Path.Combine(m_RootDirectory, @"libs", @"entt", @"single_include"));
         config.IncludePaths.Add(Path.Combine(m_RootDirectory, @"libs", @"fmt", @"include"));
