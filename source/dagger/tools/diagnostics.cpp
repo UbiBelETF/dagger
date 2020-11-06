@@ -2,6 +2,8 @@
 #include "tools/diagnostics.h"
 #include "tools/plotvar.h"
 #include "core/engine.h"
+#include "core/input/inputs.h"
+#include "core/graphics/window.h"
 
 #include <imgui/imgui.h>
 #include <spdlog/spdlog.h>
@@ -16,6 +18,28 @@ void DiagnosticSystem::RenderGUI()
 	ImGui::SetNextWindowSize(ImVec2(200, 60), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Diagnostics");
 	ImGui::PlotVar("FPS", (Float32)m_LastFrameCounter);
+	ImGui::Separator();
+
+	{
+		auto& cursorInWindow = dagger::Input::CursorPositionInWindow();
+		ImGui::Text("Window: %f %f", cursorInWindow.x, cursorInWindow.y);
+	}
+
+	{
+		auto& cursorInScreen = dagger::Input::CursorPositionInScreen();
+		ImGui::Text("Screen: %f %f", cursorInScreen.x, cursorInScreen.y);
+	}
+
+	{
+		auto& cursorInWorld = dagger::Input::CursorPositionInWorld();
+		ImGui::Text("World: %f %f", cursorInWorld.x, cursorInWorld.y);
+	}
+
+	{
+		auto& cursorInWindow = dagger::Input::CursorPositionInWorld();
+		auto cursorInWorld = Camera::WorldToWindow(cursorInWindow);
+		ImGui::Text("Picked: %f %f", cursorInWorld.x, cursorInWorld.y);
+	}
 	ImGui::End();
 }
 

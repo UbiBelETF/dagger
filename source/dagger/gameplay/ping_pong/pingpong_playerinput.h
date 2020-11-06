@@ -5,7 +5,7 @@
 
 using namespace dagger;
 
-namespace pingPong
+namespace ping_pong
 {
     struct ControllerMapping
     {

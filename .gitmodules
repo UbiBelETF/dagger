@@ -25,3 +25,6 @@
 [submodule "libs/stb/include/stb"]
 	path = libs/stb/include/stb
 	url = https://github.com/nothings/stb.git
+[submodule "libs/simpleini"]
+	path = libs/simpleini
+	url = https://github.com/brofield/simpleini.git

@@ -9,5 +9,8 @@ out vec4 o_FragColor;
 
 void main()
 {
-	o_FragColor = texture(u_Texture, v_TextureCoord) * v_QuadColor;
+	
+	vec4 tex = texture(u_Texture, v_TextureCoord);
+	if(tex.a < 0.99) discard;
+	o_FragColor = tex * v_QuadColor;
 }

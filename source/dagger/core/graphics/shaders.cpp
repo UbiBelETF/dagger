@@ -15,7 +15,14 @@ void ShaderSystem::Use(String name_)
     Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(shader));
 }
 
-UInt32 ShaderSystem::Get(String name_)
+ViewPtr<Shader> ShaderSystem::Get(String name_)
+{
+    auto shader = Engine::Res<Shader>()[name_];
+    assert(shader != nullptr);
+    return shader;
+}
+
+UInt32 ShaderSystem::GetId(String name_)
 {
     auto shader = Engine::Res<Shader>()[name_];
     assert(shader != nullptr);

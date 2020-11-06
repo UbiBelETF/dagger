@@ -5,12 +5,12 @@
 
 using namespace dagger;
 
-namespace pingPong
+namespace ping_pong
 {
     struct PingPongBall
     {
         Vector3 speed{ 0, 0, 0 };
-        
+
         bool reachedGoal{ false };
         bool playerOneScored{ true };
         bool processed{ false };
@@ -29,5 +29,6 @@ namespace pingPong
         inline String SystemName() { return "PingPong Ball System"; }
 
         void Run() override;
+        void CreatePingPongBall(float tileSize_, Color color_, Vector3 speed_, Vector3 pos_);
     };
 }
