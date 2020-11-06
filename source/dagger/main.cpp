@@ -21,19 +21,19 @@
 
 using namespace dagger;
 
-void CoreSystemsSetup(Engine &engine_, GameRenderConfig renderConfig_)
+void CoreSystemsSetup(Engine &engine)
 {
-    engine_.AddSystem<WindowSystem>(renderConfig_);
-    engine_.AddSystem<InputSystem>();
-    engine_.AddSystem<ShaderSystem>();
-    engine_.AddSystem<TextureSystem>();
-    engine_.AddSystem<SpriteRenderSystem>();
-    engine_.AddSystem<AnimationSystem>();
-    engine_.AddSystem<TransformSystem>();
+    engine.AddSystem<WindowSystem>(800, 600);
+    engine.AddSystem<InputSystem>();
+    engine.AddSystem<ShaderSystem>();
+    engine.AddSystem<TextureSystem>();
+    engine.AddSystem<SpriteRenderSystem>();
+    engine.AddSystem<AnimationSystem>();
+    engine.AddSystem<TransformSystem>();
 #if !defined(NDEBUG)
-    engine_.AddSystem<DiagnosticSystem>();
-    engine_.AddSystem<GUISystem>();
-    engine_.AddSystem<ToolMenuSystem>();
+    engine.AddSystem<DiagnosticSystem>();
+    engine.AddSystem<GUISystem>();
+    engine.AddSystem<ToolMenuSystem>();
 #endif //!defined(NDEBUG)
 }
 
@@ -49,28 +49,19 @@ void WorldSetup(Engine& engine_)
 
 int main(int argc_, char** argv_)
 {
-    // scene choice
     SceneManagement::SetCurrentScene(EScene::PingPongGame);
 
-    // todo: read configs from xml/json
-    // render settings
-    GameRenderConfig renderConfig;
-    renderConfig.fullscreen = false;
-    renderConfig.lockScreenResize = true;
-    renderConfig.windowHeight = 600;
-    renderConfig.windowWidth = 800;
-
-    Engine engine;
-    CoreSystemsSetup(engine, renderConfig);
+	Engine engine;
+    CoreSystemsSetup(engine);
     GameplaySystemsSetup(engine);
 
     engine.EngineInit();
     WorldSetup(engine);
 
-    while (engine.Up())
-        engine.EngineLoop();
+	while (engine.Up())
+		engine.EngineLoop();
 
     engine.EngineStop();
 
-    return 0;
+	return 0;
 }

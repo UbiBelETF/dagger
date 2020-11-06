@@ -191,10 +191,6 @@ void WindowSystem::SpinUp()
 		m_Config.windowHeight = mode->height;
 	}
 
-    if (m_Config.lockScreenResize)
-    {
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    }
 	m_Config.window = glfwCreateWindow(m_Config.windowWidth, m_Config.windowHeight, "Dagger", monitor, nullptr);
 
 	auto* window = m_Config.window;
