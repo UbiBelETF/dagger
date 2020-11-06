@@ -1,5 +1,5 @@
 {
-	"context-name": "Player",
+	"context-name": "ASDW",
 	"commands": [
 		{ "command-name": "run", 
 		  "actions": [
@@ -8,8 +8,8 @@
 		] }, 
 		{ "command-name": "jump", "trigger": "KeyW" },
 		{ "command-name": "down", "trigger": "KeyS" },
-		{ "command-name": "light", "trigger": "KeySpace", "event": "Released" },
-		{ "command-name": "heavy", "trigger": "KeySpace", "duration": 1000 },
+		{ "command-name": "light", "trigger": "KeyR", "event": "Released" },
+		{ "command-name": "heavy", "trigger": "KeyR", "duration": 1000 },
 		{ "command-name": "use", "trigger": "KeyE" }
 	]
 }

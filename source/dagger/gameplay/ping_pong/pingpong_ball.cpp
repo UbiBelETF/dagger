@@ -79,7 +79,7 @@ void PingPongBallSystem::Run()
     }
 }
 
-void PingPongBallSystem::CreatePingPongBall(float tileSize_, Color color_, Vector3 speed_, Vector3 pos_)
+void PingPongBallSystem::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 speed_, Vector3 pos_)
 {
     auto& reg = Engine::Registry();
     auto entity = reg.create();

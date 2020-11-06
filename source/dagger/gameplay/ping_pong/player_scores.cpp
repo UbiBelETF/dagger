@@ -50,6 +50,6 @@ void PlayerScoresSystem::Run()
     {
         auto& reg = Engine::Registry();
         auto sys = Engine::GetDefaultResource<PingPongBallSystem>();
-        sys->CreatePingPongBall(s_TileSize, Color(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+        sys->CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
     }
 }
