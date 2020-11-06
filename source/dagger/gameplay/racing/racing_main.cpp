@@ -18,7 +18,7 @@
 using namespace dagger;
 using namespace racing_game;
 
-void racing_game::SetupSystems(Engine &engine_)
+void RacingGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<RacingPlayerInputSystem>();
     engine_.AddSystem<RacingCarSystem>();
@@ -26,23 +26,29 @@ void racing_game::SetupSystems(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
 }
 
-void racing_game::SetupWorld(Engine &engine_)
+void RacingGame::WorldSetup(Engine &engine_)
 {
     ShaderSystem::Use("standard");
 
-    Camera camera;
-    camera.mode = ECameraMode::FixedResolution;
-    camera.size = { 800, 600 };
-    camera.zoom = 1.f;
-    Engine::Dispatcher().trigger<Camera>(camera);
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    camera->mode = ECameraMode::FixedResolution;
+    camera->size = { 600, 600 };
+    camera->zoom = 1;
+    camera->position = { 0, 0, 0 };
+    camera->Update();
 
+    racing_game::SetupWorld(engine_);
+}
+
+void racing_game::SetupWorld(Engine &engine_)
+{
     auto& reg = engine_.Registry();
 
     constexpr Vector2 scale(1, 1);
 
     constexpr int Heigh = 30;
     constexpr int Width = 21;
-    constexpr float TileSize = 0.15f;
+    constexpr float TileSize = 20.f;
 
     {
         auto entity = reg.create();
@@ -54,7 +60,7 @@ void racing_game::SetupWorld(Engine &engine_)
         Engine::PutDefaultResource<RacingGameFieldSettings>(&fieldSettings);
     }
 
-    float zPos = -1.f;
+    float zPos = 1.f;
 
     for (int i = 0; i < Heigh; i++)
     {
@@ -63,7 +69,7 @@ void racing_game::SetupWorld(Engine &engine_)
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSpriteTexture(sprite, "EmptyWhitePixel");
-            sprite.scale = scale * TileSize;
+            sprite.size = scale * TileSize;
 
             sprite.color = { 0.4f, 0.4f, 0.4f, 1 };
 
@@ -84,14 +90,15 @@ void racing_game::SetupWorld(Engine &engine_)
         }
     }
 
-    zPos += 0.5f;
+    zPos -= 0.5f;
 
     // player
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        sprite.scale = { 2 * TileSize, 2 * TileSize };
         AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4");
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { -TileSize * 4, -TileSize * 4, zPos };
@@ -102,7 +109,7 @@ void racing_game::SetupWorld(Engine &engine_)
         reg.emplace<ControllerMapping>(entity);
 
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = { 2 * TileSize, 2 * TileSize };
+        col.size = sprite.size;
     }
 
     // collisions for road bounds
@@ -113,8 +120,10 @@ void racing_game::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        sprite.scale = { 2 * TileSize, -2 * TileSize };
-        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4");
+        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4"); 
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
+        sprite.scale.y = -1;
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { TileSize * (3 * (i+1) - Width/2), TileSize * (-i * 2 + Heigh/2), zPos };
@@ -123,6 +132,6 @@ void racing_game::SetupWorld(Engine &engine_)
         racingCar.speed = TileSize * (rand() % 5 + 3);
 
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = { 2 * TileSize, 2 * TileSize };
+        col.size = sprite.size;
     }
 }
