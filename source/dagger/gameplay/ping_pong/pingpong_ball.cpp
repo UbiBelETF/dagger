@@ -85,12 +85,13 @@ void PingPongBallSystem::CreatePingPongBall(float tileSize_, Color color_, Vecto
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
     AssignSpriteTexture(sprite, "PingPong:ball");
-    sprite.scale = Vector2(1, 1) * tileSize_;
+    sprite.size = Vector2(1, 1) * tileSize_;
 
     sprite.color = color_;
 
     auto& transform = reg.emplace<Transform>(entity);
     transform.position = pos_ * tileSize_;
+    transform.position.z = pos_.z;
     auto& ball = reg.emplace<PingPongBall>(entity);
     ball.speed = speed_ * tileSize_;
 

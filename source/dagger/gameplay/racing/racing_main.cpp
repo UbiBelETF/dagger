@@ -9,7 +9,7 @@
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
 
-#include "gameplay/simple_collisions.h"
+#include "gameplay/common/simple_collisions.h"
 
 #include "gameplay/racing/racing_game_logic.h"
 #include "gameplay/racing/racing_player_car.h"
@@ -36,7 +36,7 @@ void racing_game::SetupWorld(Engine &engine_)
     camera.zoom = 1.f;
     Engine::Dispatcher().trigger<Camera>(camera);
 
-    auto& reg = engine_.GetRegistry();
+    auto& reg = engine_.Registry();
 
     constexpr Vector2 scale(1, 1);
 
