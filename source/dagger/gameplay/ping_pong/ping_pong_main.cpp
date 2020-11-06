@@ -175,13 +175,13 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
     auto sys = Engine::GetDefaultResource<PingPongBallSystem>();
     // ball
-    sys->CreatePingPongBall(tileSize, Color(1, 1, 1, 1), { 7,-7,0 }, { -1,5,zPos });
+    sys->CreatePingPongBall(tileSize, ColorRGBA(1, 1, 1, 1), { 7,-7,0 }, { -1,5,zPos });
     //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { -14,14,0 },   { 1,3,zPos });
-    sys->CreatePingPongBall(tileSize, Color(1, 0.5f, 1, 1), { -6,4,0 }, { -1,1,zPos });
+    sys->CreatePingPongBall(tileSize, ColorRGBA(1, 0.5f, 1, 1), { -6,4,0 }, { -1,1,zPos });
     //sys->CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), {- 7,-7,0 },    { 1,-1,zPos });
     //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 20,14,0 }, { -1,-3,zPos });
     //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,zPos });
-    sys->CreatePingPongBall(tileSize, Color(0.5f, 1, 0.5f, 1), { 8,8,0 }, { -1,-7,zPos });
+    sys->CreatePingPongBall(tileSize, ColorRGBA(0.5f, 1, 0.5f, 1), { 8,8,0 }, { -1,-7,zPos });
 
     // player controller setup
     const Float32 playerSize = tileSize * ((height - 2) * (1 + Space) * 0.33f);

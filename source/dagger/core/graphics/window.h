@@ -22,6 +22,8 @@ struct GUIRender {};
 
 struct GLFWwindow;
 
+struct CameraUpdate EMPTY_EVENT {};
+
 struct WindowResized
 {
 	GLFWwindow* window;

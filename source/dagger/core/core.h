@@ -107,7 +107,8 @@ using Vector2 = glm::fvec2;
 using Vector3 = glm::fvec3;
 using Vector4 = glm::fvec4;
 
-using Color = glm::fvec4;
+using ColorRGBA = glm::fvec4;
+using ColorRGB = glm::fvec3;
 
 namespace JSON = nlohmann;
 
