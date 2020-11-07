@@ -29,6 +29,5 @@ namespace ping_pong
         inline String SystemName() { return "PingPong Ball System"; }
 
         void Run() override;
-        void CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 speed_, Vector3 pos_);
     };
 }
