@@ -65,9 +65,9 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
     constexpr int height = 20;
     constexpr int width = 26;
-    constexpr float tileSize = 1.f;// / static_cast<float>(Width);
+    constexpr float tileSize = 20.f;// / static_cast<float>(Width);
 
-    float zPos = -1.f;
+    float zPos = 1.f;
 
     constexpr float Space = 0.1f;
     for (int i = 0; i < height; i++)
@@ -77,7 +77,7 @@ void PingPongGame::WorldSetup(Engine& engine_)
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSpriteTexture(sprite, "EmptyWhitePixel");
-            sprite.scale = scale * tileSize;
+            sprite.size = scale * tileSize;
 
             if (i % 2 != j % 2)
             {
@@ -110,7 +110,7 @@ void PingPongGame::WorldSetup(Engine& engine_)
         }
     }
 
-    zPos += 0.5f;
+    zPos -= 1.f;
 
     // collisions
     {
@@ -201,8 +201,8 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSpriteTexture(sprite, "EmptyWhitePixel");
-        sprite.scale.x = tileSize;
-        sprite.scale.y = playerSize;
+        sprite.size.x = tileSize;
+        sprite.size.y = playerSize;
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
@@ -222,8 +222,8 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSpriteTexture(sprite, "EmptyWhitePixel");
-        sprite.scale.x = tileSize;
-        sprite.scale.y = playerSize;
+        sprite.size.x = tileSize;
+        sprite.size.y = playerSize;
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerTwoInput(controller);
