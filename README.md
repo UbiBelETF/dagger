@@ -1,3 +1,8 @@
+# Fried cucumbers
+- Nikola Ristic (nikola97@gmail.com)
+
+Game:
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
