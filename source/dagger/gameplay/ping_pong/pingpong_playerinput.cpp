@@ -4,7 +4,7 @@
 #include "core/game/transforms.h"
 
 using namespace dagger;
-using namespace pingPong;
+using namespace ping_pong;
 
 Float32 PingPongPlayerInputSystem::s_BoarderDown = -20;
 Float32 PingPongPlayerInputSystem::s_BoarderUp = 20;

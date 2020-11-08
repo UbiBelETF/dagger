@@ -6,9 +6,8 @@
 
 using namespace dagger;
 
-namespace pingPong
+namespace ping_pong
 {
-
     class PlayerScoresSystem : public System
     {
         static int s_FieldWidth;
@@ -30,5 +29,4 @@ namespace pingPong
             s_TileSize = tileSize;
         }
     };
-
 }

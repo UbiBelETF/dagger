@@ -1,8 +1,7 @@
 #include "core/graphics/shaders.h"
 #include "core/engine.h"
 #include "core/stringops.h"
-
-#include <filesystem>
+#include "core/filesystem.h"
 #include <string>
 #include <regex>
 
@@ -16,7 +15,14 @@ void ShaderSystem::Use(String name_)
     Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(shader));
 }
 
-UInt32 ShaderSystem::Get(String name_)
+ViewPtr<Shader> ShaderSystem::Get(String name_)
+{
+    auto shader = Engine::Res<Shader>()[name_];
+    assert(shader != nullptr);
+    return shader;
+}
+
+UInt32 ShaderSystem::GetId(String name_)
 {
     auto shader = Engine::Res<Shader>()[name_];
     assert(shader != nullptr);
@@ -43,6 +49,7 @@ void ShaderSystem::OnLoadAsset(AssetLoadRequest<Shader> request_)
         return;
     }
 
+    
     JSON::json json;
     handle >> json;
 

@@ -12,25 +12,25 @@ namespace dagger
     constexpr inline static UInt32 MouseStart = 150;
 
     struct InputAction
-	{
+    {
         UInt32 trigger{ 0 };
         Float32 value{ 1 };
-		UInt32 duration{ 0 };
-		EDaggerInputState event{ EDaggerInputState::Pressed };
-	};
+        UInt32 duration{ 0 };
+        EDaggerInputState event{ EDaggerInputState::Pressed };
+    };
 
-	struct InputCommand
-	{
-		String name;
-		Sequence<InputAction> actions;
-	};
-
-	struct InputContext
-	{
+    struct InputCommand
+    {
         String name;
-		Sequence<InputCommand> commands;
-		BitSet<InputCount> bitmap;
-	};
+        Sequence<InputAction> actions;
+    };
+
+    struct InputContext
+    {
+        String name;
+        Sequence<InputCommand> commands;
+        BitSet<InputCount> bitmap;
+    };
 
     struct InputReceiver
     {
@@ -38,20 +38,21 @@ namespace dagger
         Map<String, Float32> values;
     };
 
-	struct InputState
-	{
-		Bool keys[InputCount]{ false, };
-		Bool mouse[10]{ false, };
+    struct InputState
+    {
+        Bool keys[InputCount]{ false, };
+        Bool mouse[10]{ false, };
+        Vector2 cursor{ 0, 0 };
         Set<UInt32> releasedLastFrame{};
-		Map<UInt32, TimePoint> moments{};
-		BitSet<InputCount> bitmap;
+        Map<UInt32, TimePoint> moments{};
+        BitSet<InputCount> bitmap;
 
-		friend class InputSystem;
-	};
+        friend class InputSystem;
+    };
 
-	class InputSystem
-		: public System
-	{
+    class InputSystem
+        : public System
+    {
         inline static Map<String, UInt32> s_InputValues =
         {
             { "KeyUnknown", (UInt32)EDaggerKeyboard::KeyUnknown },
@@ -185,33 +186,38 @@ namespace dagger
             { "MouseButton8", (UInt32)EDaggerMouse::MouseButton8 }
         };
 
-		void LoadDefaultAssets();
-		void OnAssetLoadRequest(AssetLoadRequest<InputContext> request_);
+        void LoadDefaultAssets();
+        void OnAssetLoadRequest(AssetLoadRequest<InputContext> request_);
 
-		void LoadInputAction(InputCommand& command_, JSON::json& input_);
+        void LoadInputAction(InputCommand& command_, JSON::json& input_);
 
-		void OnKeyboardEvent(KeyboardEvent input_);
-		void OnMouseEvent(MouseEvent input_);
+        void OnKeyboardEvent(KeyboardEvent input_);
+        void OnMouseEvent(MouseEvent input_);
+        void OnCursorMoveEvent(CursorEvent cursor_);
 
-	public:
-		InputState m_InputState;
+    public:
+        InputState m_InputState;
 
-		inline String SystemName() { return "Input System"; }
+        inline String SystemName() { return "Input System"; }
 
-		void SpinUp() override;
-		void Run() override;
-		void WindDown() override;
-	};
+        void SpinUp() override;
+        void Run() override;
+        void WindDown() override;
+    };
 
-	namespace input
-	{
-		static Bool IsInputDown(EDaggerKeyboard key_);
-		static Bool IsInputDown(EDaggerMouse button_);
+    struct Input
+    {
+        static Bool IsInputDown(EDaggerKeyboard key_);
+        static Bool IsInputDown(EDaggerMouse button_);
 
-		static UInt32 GetInputDuration(EDaggerKeyboard key_);
-		static UInt32 GetInputDuration(EDaggerMouse mouse_);
+        static const Vector2& CursorPositionInWindow();
+        static const Vector2& CursorPositionInScreen();
+        static const Vector2& CursorPositionInWorld();
 
-		static void ConsumeInput(EDaggerKeyboard key_);
-		static void ConsumeInput(EDaggerMouse button_);
-	}
+        static UInt32 GetInputDuration(EDaggerKeyboard key_);
+        static UInt32 GetInputDuration(EDaggerMouse mouse_);
+
+        static void ConsumeInput(EDaggerKeyboard key_);
+        static void ConsumeInput(EDaggerMouse button_);
+    };
 }

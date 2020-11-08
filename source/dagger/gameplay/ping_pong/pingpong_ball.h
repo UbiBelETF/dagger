@@ -5,12 +5,12 @@
 
 using namespace dagger;
 
-namespace pingPong
+namespace ping_pong
 {
     struct PingPongBall
     {
         Vector3 speed{ 0, 0, 0 };
-        
+
         bool reachedGoal{ false };
         bool playerOneScored{ true };
         bool processed{ false };

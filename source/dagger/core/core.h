@@ -1,9 +1,9 @@
 #pragma once
 
-#define MEASURE_SYSTEMS
+//#define MEASURE_SYSTEMS
 
 #include "core/view_ptr.h"
-
+#include "core/filesystem.h"
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 #include <tsl/sparse_map.h>
@@ -14,12 +14,15 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include <filesystem>
 #include <memory>
 #include <vector>
 #include <fstream>
 #include <chrono>
 #include <bitset>
+
+#include <SimpleIni.h>
+
+using IniFile = CSimpleIni;
 
 using Registry = entt::registry;
 using Entity = entt::entity;
@@ -32,6 +35,16 @@ using OwningPtr = std::unique_ptr<T>;
 // It just views the object through this. Can be used anywhere a raw pointer could be used.
 template<typename T>
 using ViewPtr = jss::object_ptr<T>;
+
+// Pair<A, B>: contains two types with no other relations in it.
+template<typename A, typename B>
+using Pair = std::pair<A, B>;
+
+#define pair(X, Y)  std::make_pair((X), (Y))
+
+// StaticArray<T, N>: a contiguous sequence of statically-sized elements in memory.
+template<typename T, int N>
+using StaticArray = std::array<T, N>;
 
 // Sequence<T>: a contiguous sequence of elements in memory.
 template<typename T>
@@ -92,13 +105,14 @@ using Matrix4 = glm::mat4x4;
 
 using Vector2 = glm::fvec2;
 using Vector3 = glm::fvec3;
+using Vector4 = glm::fvec4;
 
-using Color = glm::fvec4;
+using ColorRGBA = glm::fvec4;
+using ColorRGB = glm::fvec3;
 
 namespace JSON = nlohmann;
 
 #define EMPTY_EVENT 
-
 
 enum class EDaggerKeyboard
 {

@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
+#include <cstring>
+
 static void ErrorCallback(int error_, const char* description_)
 {
 	Logger::error("GLFW Error {}): {}\n", error_, description_);
@@ -45,6 +47,45 @@ static void WindowResizeCallback(GLFWwindow* window_, int width_, int height_)
 	Engine::Dispatcher().trigger<WindowResized>(WindowResized{ window_, (UInt32)width_, (UInt32)height_ });
 }
 
+void WindowSystem::UpdateViewProjectionMatrix()
+{
+	glUniformMatrix4fv((GLuint)m_Matrices.viewportMatrixId, 1, false, glm::value_ptr(m_Config.viewport));
+	glUniformMatrix4fv((GLuint)m_Matrices.projectionMatrixId, 1, false, glm::value_ptr(m_Config.projection));
+}
+
+void WindowSystem::UpdateViewProjectionMatrix(RenderConfig& config_, Camera& camera_)
+{
+	SetViewProjectionMatrix(config_, camera_, config_.lastSize.x, config_.lastSize.y);
+}
+
+void WindowSystem::SetViewProjectionMatrix(RenderConfig& config_, Camera& camera_, Float32 width_, Float32 height_)
+{
+	config_.lastSize = Vector2{ width_, height_ };
+	switch (camera_.mode)
+	{
+	case ECameraMode::FixedResolution:
+	{
+		Float32 halfWidth = camera_.size.x / 2;
+		Float32 halfHeight = camera_.size.y / 2;
+		config_.projection = glm::ortho(0.0f, (Float32)camera_.size.x, 0.0f, (Float32)camera_.size.y, 0.0f, 100.0f);
+		config_.viewport = glm::translate(glm::vec3(halfWidth, halfHeight, 0.0f));
+		config_.viewOffset = Vector2{ halfWidth, halfHeight };
+		config_.viewBounds = Vector4{ 0, 0, camera_.size.x, camera_.size.y };
+	}
+	break;
+	case ECameraMode::ShowAsMuchAsPossible:
+	default:
+		config_.projection = glm::ortho(0.0f, width_, 0.0f, height_, 0.0f, 100.0f);
+		config_.viewport = glm::translate(glm::vec3(width_ / 2.0f, height_ / 2.0f, 0.0f));
+		config_.viewOffset = Vector2{ width_ / 2.0f, height_ / 2.0f };
+		config_.viewBounds = Vector4{ 0, 0, width_, height_ };
+		break;
+	}
+	
+	glUniformMatrix4fv((GLuint)m_Matrices.viewportMatrixId, 1, false, glm::value_ptr(config_.viewport));
+	glUniformMatrix4fv((GLuint)m_Matrices.projectionMatrixId, 1, false, glm::value_ptr(config_.projection));
+}
+
 void WindowSystem::OnWindowResized(WindowResized resized_)
 {
 	auto& [window_, width_, height_] = resized_;
@@ -53,118 +94,52 @@ void WindowSystem::OnWindowResized(WindowResized resized_)
 	config->windowWidth = width_;
 	config->windowHeight = height_;
 
-	switch (camera->mode)
-	{
-	case ECameraMode::FixedWidth:
-		{
-			Float32 height = camera->size.x * (Float32)height_ / (Float32)width_;
-			config->projection = glm::ortho(-width_ / 2.0f, width_ / 2.0f, -height / 2.0f, height / 2.0f, -1.0f, 1.0f);
-		}
-		break;
-	case ECameraMode::FixedHeight:
-		{
-			Float32 width = camera->size.y * (Float32)width_ / (Float32)height_;
-			config->projection = glm::ortho(-width / 2.0f, width / 2.0f, -height_ / 2.0f, height_ / 2.0f, -1.0f, 1.0f);
-		}
-		break;
-	case ECameraMode::FixedResolution:
-		{
-			Float32 width = camera->size.x / 2;
-			Float32 height = camera->size.y / 2;
-			config->projection = glm::ortho(-width, width, -height, height, -1.0f, 1.0f);
-		}
-		break;
-	case ECameraMode::ShowAsMuchAsPossible:
-	default:
-		config->projection = glm::ortho(-width_ / 2.0f, width_ / 2.0f, -height_ / 2.0f, height_ / 2.0f, -1.0f, 1.0f);
-		break;
-	}
-
-	glUniformMatrix4fv((GLuint)Shader::EUniforms::ProjectionMatrixId, 1, false, glm::value_ptr(config->projection));
+	SetViewProjectionMatrix(*config, *camera, (Float32)width_, (Float32)height_);
 }
 
 void WindowSystem::OnShaderChanged(ShaderChangeRequest request_)
 {
-	Logger::info("Shader changed to {}, reuploading projection matrix.", request_.m_Shader->shaderName);
-	WindowResizeCallback(m_Config.window, m_Config.windowWidth, m_Config.windowHeight);
+	m_Matrices.cameraMatrixId = glGetUniformLocation(request_.m_Shader->programId, Shader::s_CameraMatrixName);
+	m_Matrices.viewportMatrixId = glGetUniformLocation(request_.m_Shader->programId, Shader::s_ViewportMatrixName);
+	m_Matrices.projectionMatrixId = glGetUniformLocation(request_.m_Shader->programId, Shader::s_ProjectionMatrixName);
+
+	UpdateViewProjectionMatrix();
+	UpdateCameraMatrix();
 }
 
-void WindowSystem::OnCameraUpdated(Camera camera_)
+void Camera::Update()
 {
+	auto* window = Engine::GetDefaultResource<WindowSystem>();
 	auto* config = Engine::GetDefaultResource<RenderConfig>();
 	auto* camera = Engine::GetDefaultResource<Camera>();
 
 	bool changedProjection = false;
-	bool changedView = false;
+	
+	window->UpdateViewProjectionMatrix(*config, *camera);
+	window->UpdateCameraMatrix();
 
-	if (camera->mode != camera_.mode)
-	{
-		camera->mode = camera_.mode;
-		changedProjection = true;
-	}
+	Engine::Dispatcher().trigger<CameraUpdate>();
+}
 
-	if (camera->size != camera_.size)
-	{
-		camera->size = camera_.size;
-		changedProjection = true;
-	}
-
-	if (camera->position != camera_.position)
-	{
-		camera->position = camera_.position;
-		changedView = true;
-	}
-
-	if (camera->zoom != camera_.zoom)
-	{
-		camera->zoom = camera_.zoom;
-		changedView = true;
-	}
-
-	if (changedProjection)
-	{
-		auto width_ = config->windowWidth;
-		auto height_ = config->windowHeight;
-
-		switch (camera->mode)
-		{
-		case ECameraMode::FixedWidth:
-		{
-			Float32 height = camera->size.x * (Float32)height_ / (Float32)width_;
-			config->projection = glm::ortho(-width_ / 2.0f, width_ / 2.0f, -height / 2.0f, height / 2.0f, -1.0f, 1.0f);
-		}
-		break;
-		case ECameraMode::FixedHeight:
-		{
-			Float32 width = camera->size.y * (Float32)width_ / (Float32)height_;
-			config->projection = glm::ortho(-width / 2.0f, width / 2.0f, -height_ / 2.0f, height_ / 2.0f, -1.0f, 1.0f);
-		}
-		break;
-		case ECameraMode::FixedResolution:
-		{
-			Float32 width = camera->size.x / 2;
-			Float32 height = camera->size.y / 2;
-			config->projection = glm::ortho(-width, width, -height, height, -1.0f, 1.0f);
-		}
-		break;
-		case ECameraMode::ShowAsMuchAsPossible:
-		default:
-			config->projection = glm::ortho(-width_ / 2.0f, width_ / 2.0f, -height_ / 2.0f, height_ / 2.0f, -1.0f, 1.0f);
-			break;
-		}
-
-		glUniformMatrix4fv((GLuint)Shader::EUniforms::ProjectionMatrixId, 1, false, glm::value_ptr(config->projection));
-	}
+void WindowSystem::UpdateCameraMatrix()
+{
+	auto* camera = Engine::GetDefaultResource<Camera>();
 
 	glm::mat4 scaleMatrix = glm::scale(glm::vec3(camera->zoom));
-	glm::mat4 translateMatrix = glm::translate(glm::vec3(camera->position, 0));
-	m_Config.cameraView = translateMatrix * scaleMatrix * glm::identity<glm::mat4>();
-	glUniformMatrix4fv((GLuint)Shader::EUniforms::CameraViewMatrixId, 1, false, glm::value_ptr(m_Config.cameraView));
+	m_Config.camera = scaleMatrix * glm::lookAt(camera->position, camera->position - glm::vec3(0, 0, 100), glm::vec3(0, 1, 0));
+	glUniformMatrix4fv((GLuint)m_Matrices.cameraMatrixId, 1, false, glm::value_ptr(m_Config.camera));
 }
 
 void WindowSystem::SpinUp()
 {
 	Logger::info("Booting up renderer");
+
+	m_Config.windowWidth = atoi(Engine::GetIniFile().GetValue("window", "width", "800"));
+	m_Config.windowHeight = atoi(Engine::GetIniFile().GetValue("window", "height", "600"));
+	m_Config.fullscreen = strcmp(Engine::GetIniFile().GetValue("window", "fullscreen", "false"), "true") == 0;
+	m_Config.resizable = strcmp(Engine::GetIniFile().GetValue("window", "resizable", "false"), "true") == 0;
+
+	assert(m_Config.windowWidth > 0 && m_Config.windowHeight > 0);
 
 	auto& events = Engine::Dispatcher();
 
@@ -176,9 +151,11 @@ void WindowSystem::SpinUp()
 
 	glfwSetErrorCallback(ErrorCallback);
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, m_Config.resizable ? GLFW_TRUE : GLFW_FALSE);
 
 	GLFWmonitor* monitor = nullptr;
 
@@ -210,19 +187,17 @@ void WindowSystem::SpinUp()
 		return;
 	}
 
+	const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
+	const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
+	Logger::critical("GPU Vendor: {}, renderer: {}", vendor, renderer);
+
 	Engine::PutDefaultResource<RenderConfig>(&m_Config);
 	Engine::PutDefaultResource<Camera>(&m_Camera);
 
 	Engine::Dispatcher().sink<ShaderChangeRequest>().connect<&WindowSystem::OnShaderChanged>(this);
 	Engine::Dispatcher().sink<WindowResized>().connect<&WindowSystem::OnWindowResized>(this);
-	Engine::Dispatcher().sink<Camera>().connect<&WindowSystem::OnCameraUpdated>(this);
-
+	
 	WindowResizeCallback(window, m_Config.windowWidth, m_Config.windowHeight);
-
-	glm::mat4 scaleMatrix = glm::scale(glm::vec3(m_Camera.zoom));
-	glm::mat4 translateMatrix = glm::translate(glm::vec3(m_Camera.position, 0));
-	m_Config.cameraView = translateMatrix * scaleMatrix * glm::identity<glm::mat4>();
-	glUniformMatrix4fv((GLuint)Shader::EUniforms::CameraViewMatrixId, 1, false, glm::value_ptr(m_Config.cameraView));
 
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetCharCallback(window, CharCallback);
@@ -230,11 +205,12 @@ void WindowSystem::SpinUp()
 	glfwSetCursorPosCallback(window, CursorCallback);
 	glfwSetWindowSizeCallback(window, WindowResizeCallback);
 
-	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+//	glEnable(GL_ALPHA_TEST);
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_LEQUAL);
 }
 
 void WindowSystem::Run()
@@ -268,5 +244,45 @@ void WindowSystem::WindDown()
 
 	Engine::Dispatcher().sink<ShaderChangeRequest>().disconnect<&WindowSystem::OnShaderChanged>(this);
 	Engine::Dispatcher().sink<WindowResized>().disconnect<&WindowSystem::OnWindowResized>(this);
-	Engine::Dispatcher().sink<Camera>().disconnect<&WindowSystem::OnCameraUpdated>(this);
+}
+
+Vector2 Camera::WindowToScreen(Vector2 windowCoord_)
+{
+	auto* config = Engine::GetDefaultResource<RenderConfig>();
+	auto* camera = Engine::GetDefaultResource<Camera>();
+
+	Vector2 cursorInScreen{ 0,0 };
+
+	const auto mat = config->projection * config->camera;
+	auto prod = (mat * glm::vec4(windowCoord_, 0, 0)) / (2 * camera->zoom);
+	cursorInScreen.x = prod.x;
+	cursorInScreen.y = prod.y;
+
+	return cursorInScreen;
+}
+
+Vector2 Camera::WindowToWorld(Vector2 windowCoord_)
+{
+	Vector2 cursorInWorld{ 0,0 };
+	auto* config = Engine::GetDefaultResource<RenderConfig>();
+
+	auto pos = glm::unProject(Vector3{ windowCoord_ - config->viewOffset, 0 },
+		config->camera, config->projection, config->viewBounds);
+	cursorInWorld.x = pos.x;
+	cursorInWorld.y = pos.y;
+	return cursorInWorld;
+}
+
+Vector2 Camera::WorldToWindow(Vector2 worldCoord_)
+{
+	Vector2 cursorInWindow{ 0,0 };
+	auto* config = Engine::GetDefaultResource<RenderConfig>();
+	auto* camera = Engine::GetDefaultResource<Camera>();
+
+	auto pos = glm::project(Vector3{ worldCoord_ + (camera->size / (2.0f * camera->zoom)), 0 },
+		config->camera, config->projection, config->viewBounds);
+
+	cursorInWindow.x = pos.x;
+	cursorInWindow.y = pos.y;
+	return cursorInWindow;
 }

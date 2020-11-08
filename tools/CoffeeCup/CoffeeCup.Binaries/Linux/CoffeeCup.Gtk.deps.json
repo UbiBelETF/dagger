@@ -1,0 +1,283 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "CoffeeCup.Gtk/1.0.0": {
+        "dependencies": {
+          "CoffeeCup": "1.0.0",
+          "Eto.Platform.Gtk": "2.5.6"
+        },
+        "runtime": {
+          "CoffeeCup.Gtk.dll": {}
+        }
+      },
+      "AtkSharp/3.22.25.74": {
+        "dependencies": {
+          "GLibSharp": "3.22.25.74"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AtkSharp.dll": {
+            "assemblyVersion": "3.22.25.74",
+            "fileVersion": "3.22.25.74"
+          }
+        }
+      },
+      "CairoSharp/3.22.25.74": {
+        "runtime": {
+          "lib/netstandard2.0/CairoSharp.dll": {
+            "assemblyVersion": "3.22.25.74",
+            "fileVersion": "3.22.25.74"
+          }
+        }
+      },
+      "Eto.Forms/2.5.6": {
+        "dependencies": {
+          "System.ComponentModel.Annotations": "4.7.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Eto.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.7565.31969"
+          }
+        }
+      },
+      "Eto.Platform.Gtk/2.5.6": {
+        "dependencies": {
+          "Eto.Forms": "2.5.6",
+          "GtkSharp": "3.22.25.74"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Eto.Gtk.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.7565.32009"
+          }
+        }
+      },
+      "Eto.Serialization.Xaml/2.5.5": {
+        "dependencies": {
+          "Eto.Forms": "2.5.6",
+          "Portable.Xaml": "0.24.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Eto.Serialization.Xaml.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.7537.38952"
+          }
+        }
+      },
+      "GdkSharp/3.22.25.74": {
+        "dependencies": {
+          "CairoSharp": "3.22.25.74",
+          "GLibSharp": "3.22.25.74",
+          "GioSharp": "3.22.25.74",
+          "PangoSharp": "3.22.25.74"
+        },
+        "runtime": {
+          "lib/netstandard2.0/GdkSharp.dll": {
+            "assemblyVersion": "3.22.25.74",
+            "fileVersion": "3.22.25.74"
+          }
+        }
+      },
+      "GioSharp/3.22.25.74": {
+        "dependencies": {
+          "GLibSharp": "3.22.25.74"
+        },
+        "runtime": {
+          "lib/netstandard2.0/GioSharp.dll": {
+            "assemblyVersion": "3.22.25.74",
+            "fileVersion": "3.22.25.74"
+          }
+        }
+      },
+      "GLibSharp/3.22.25.74": {
+        "runtime": {
+          "lib/netstandard2.0/GLibSharp.dll": {
+            "assemblyVersion": "3.22.25.74",
+            "fileVersion": "3.22.25.74"
+          }
+        }
+      },
+      "GtkSharp/3.22.25.74": {
+        "dependencies": {
+          "AtkSharp": "3.22.25.74",
+          "CairoSharp": "3.22.25.74",
+          "GLibSharp": "3.22.25.74",
+          "GdkSharp": "3.22.25.74",
+          "GioSharp": "3.22.25.74",
+          "PangoSharp": "3.22.25.74"
+        },
+        "runtime": {
+          "lib/netstandard2.0/GtkSharp.dll": {
+            "assemblyVersion": "3.22.25.74",
+            "fileVersion": "3.22.25.74"
+          }
+        }
+      },
+      "PangoSharp/3.22.25.74": {
+        "dependencies": {
+          "CairoSharp": "3.22.25.74",
+          "GLibSharp": "3.22.25.74"
+        },
+        "runtime": {
+          "lib/netstandard2.0/PangoSharp.dll": {
+            "assemblyVersion": "3.22.25.74",
+            "fileVersion": "3.22.25.74"
+          }
+        }
+      },
+      "Portable.Xaml/0.24.0": {
+        "runtime": {
+          "lib/netstandard2.0/Portable.Xaml.dll": {
+            "assemblyVersion": "0.24.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "System.ComponentModel.Annotations/4.7.0": {
+        "runtime": {
+          "lib/netstandard2.1/System.ComponentModel.Annotations.dll": {
+            "assemblyVersion": "4.3.1.0",
+            "fileVersion": "4.700.19.56404"
+          }
+        }
+      },
+      "System.Text.Json/4.7.2": {
+        "runtime": {
+          "lib/netcoreapp3.0/System.Text.Json.dll": {
+            "assemblyVersion": "4.0.1.2",
+            "fileVersion": "4.700.20.21406"
+          }
+        }
+      },
+      "CoffeeCup/1.0.0": {
+        "dependencies": {
+          "CoffeeCup.Core": "1.0.0",
+          "Eto.Forms": "2.5.6",
+          "Eto.Serialization.Xaml": "2.5.5",
+          "System.Text.Json": "4.7.2"
+        },
+        "runtime": {
+          "CoffeeCup.dll": {}
+        }
+      },
+      "CoffeeCup.Core/1.0.0": {
+        "runtime": {
+          "CoffeeCup.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CoffeeCup.Gtk/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AtkSharp/3.22.25.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uHPidgASKeXiFMhI5bXk+mj5JluKttZwUInS5CbX1eE/83TBlzb9mkOnwa0Lc9RhQhlvf8Nko/Q75TcOSXVgmQ==",
+      "path": "atksharp/3.22.25.74",
+      "hashPath": "atksharp.3.22.25.74.nupkg.sha512"
+    },
+    "CairoSharp/3.22.25.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Qz3E7Pvq3vPBCXjE40xfBWEWrd3Z0lUh9Xvwg725FNhgl6H3Sn+Jl8iPaANofd2k5eWrubZTEYpGrR4Z1rOD0A==",
+      "path": "cairosharp/3.22.25.74",
+      "hashPath": "cairosharp.3.22.25.74.nupkg.sha512"
+    },
+    "Eto.Forms/2.5.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z62tGSaucGGeE4hK6XH9sN5DbibSVDnmbcKbmZVBSFbkOskjgq6jx+oaIFoG9LoKwgSy5AeR8PuMltgTYNN+WQ==",
+      "path": "eto.forms/2.5.6",
+      "hashPath": "eto.forms.2.5.6.nupkg.sha512"
+    },
+    "Eto.Platform.Gtk/2.5.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6TflWmhQlZED6PiXXXDgfu+J0eCKCgAMW/+v6Edol6ZezTnJoDsjgCJBQvwhAVbyczgmtJUqFGVvlle7nOmNrA==",
+      "path": "eto.platform.gtk/2.5.6",
+      "hashPath": "eto.platform.gtk.2.5.6.nupkg.sha512"
+    },
+    "Eto.Serialization.Xaml/2.5.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HUq+vcbyBiddI8czfroaEeeUPJIgvHMnDFJZXM/sCaQ155Zgc8z2GIFc1yniklsHyWNB57f1HvnXr9a23k4oNA==",
+      "path": "eto.serialization.xaml/2.5.5",
+      "hashPath": "eto.serialization.xaml.2.5.5.nupkg.sha512"
+    },
+    "GdkSharp/3.22.25.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GlY3N8BQda3/KUVmMLLwzTBMludCGRJSMh2w4OKvc3KX4J2Fs9tBKh7/qdUfRV+TqKEPhAKh4wwYeM1fzjk/rg==",
+      "path": "gdksharp/3.22.25.74",
+      "hashPath": "gdksharp.3.22.25.74.nupkg.sha512"
+    },
+    "GioSharp/3.22.25.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YHaT6D+df57EajZ5EzgMFPz+vLA16eOb/sySEka2T5MnCQIhKUFBsJfJY0iMy1CBEBSJzVNrCFi4R55QivhaPg==",
+      "path": "giosharp/3.22.25.74",
+      "hashPath": "giosharp.3.22.25.74.nupkg.sha512"
+    },
+    "GLibSharp/3.22.25.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-82PaZvqcSyHCYEnwTelhlqxT0wvwaNQNI2D9NlP5DzNZ9J0YMBDm9L9I2YmwJmJhcscu171kxpPs0eeRxHvbdg==",
+      "path": "glibsharp/3.22.25.74",
+      "hashPath": "glibsharp.3.22.25.74.nupkg.sha512"
+    },
+    "GtkSharp/3.22.25.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-n1DJKEC1N+A0YjaURm3Nuj3lwuwoZwNdMT2xxgLz3FauSECYVZIbPL9QFy4To+8i6fqaO3/1eqO3roi/qOJ+eQ==",
+      "path": "gtksharp/3.22.25.74",
+      "hashPath": "gtksharp.3.22.25.74.nupkg.sha512"
+    },
+    "PangoSharp/3.22.25.74": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Dntn1HA3G5NzrQ7WrgiNfNhfHlEII61sZRvXwFGePZ/y9KN/jSzPST+gKu4Twm3C5kk130nBqbF2A1hET1PdeQ==",
+      "path": "pangosharp/3.22.25.74",
+      "hashPath": "pangosharp.3.22.25.74.nupkg.sha512"
+    },
+    "Portable.Xaml/0.24.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aNYRzh3J81v+oUj/ToYj9jUfv9MS53Yp3qwBwQOCB/5FpCeWcFSLBePndVchNS4TjBk6RXqIAF6mAznp49O+hA==",
+      "path": "portable.xaml/0.24.0",
+      "hashPath": "portable.xaml.0.24.0.nupkg.sha512"
+    },
+    "System.ComponentModel.Annotations/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0YFqjhp/mYkDGpU0Ye1GjE53HMp9UVfGN7seGpAMttAC0C40v5gw598jCgpbBLMmCo0E5YRLBv5Z2doypO49ZQ==",
+      "path": "system.componentmodel.annotations/4.7.0",
+      "hashPath": "system.componentmodel.annotations.4.7.0.nupkg.sha512"
+    },
+    "System.Text.Json/4.7.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TcMd95wcrubm9nHvJEQs70rC0H/8omiSGGpU4FQ/ZA1URIqD4pjmFJh2Mfv1yH1eHgJDWTi2hMDXwTET+zOOyg==",
+      "path": "system.text.json/4.7.2",
+      "hashPath": "system.text.json.4.7.2.nupkg.sha512"
+    },
+    "CoffeeCup/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CoffeeCup.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -2,13 +2,15 @@
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
-#include "gameplay/simple_collisions.h"
+#include "core/graphics/sprite.h"
+
+#include "gameplay/common/simple_collisions.h"
 
 #include <algorithm>
 #include <execution>
 
 using namespace dagger;
-using namespace pingPong;
+using namespace ping_pong;
 
 void PingPongBallSystem::Run()
 {
