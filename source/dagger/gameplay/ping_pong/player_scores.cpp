@@ -51,6 +51,7 @@ void PlayerScoresSystem::Run()
     {
         float x_speed = rand() % 20 - 10;
         x_speed += (x_speed == 0) ? 5 : 0;
+        x_speed *= ( std::abs(x_speed) < 1 ) ? 2.5 : 1;
 
         CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), 
                            { x_speed, rand() % 10 + 4, 0 }, 
