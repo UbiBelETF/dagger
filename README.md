@@ -1,10 +1,3 @@
-# Delta Snakes
-- Uroš Borovčanin (u.borovcanin@gmail.com)
-
-
-Game:
-
-
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
