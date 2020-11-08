@@ -1,3 +1,11 @@
+# Jovanovici
+- Aleksa Jovanovic (aleksa97srb@gmail.com)
+- Uros Jovanovic
+- Svetozar Jovanovic
+
+Game:
+
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
