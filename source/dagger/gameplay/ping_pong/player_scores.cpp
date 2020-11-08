@@ -15,8 +15,7 @@ Float32 PlayerScoresSystem::s_TileSize = 1.f;
 Vector3 PlayerScoresSystem::GetRandomBallSpeed(int minSpeed, int maxSpeed)
 {
     int sign = (rand() % 2) ? 1 : -1;
-    int xSpeed = minSpeed + rand() % (maxSpeed - minSpeed);
-    //return { rand() % 10 + offset, rand() % 10 + 4, 0 };
+    int xSpeed = minSpeed + rand() % (maxSpeed - minSpeed + 1);
     return { sign * xSpeed, rand() % 10 + 4, 0 };
 }
 
