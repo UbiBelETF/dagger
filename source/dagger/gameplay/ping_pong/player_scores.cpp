@@ -11,7 +11,15 @@ using namespace ping_pong;
 int PlayerScoresSystem::s_FieldWidth = 20;
 int PlayerScoresSystem::s_FieldHeight = 10;
 Float32 PlayerScoresSystem::s_TileSize = 1.f;
-bool k = true;
+
+Vector3 PlayerScoresSystem::GetRandomBallSpeed(int minSpeed, int maxSpeed)
+{
+    int sign = (rand() % 2) ? 1 : -1;
+    int xSpeed = minSpeed + rand() % (maxSpeed - minSpeed);
+    //return { rand() % 10 + offset, rand() % 10 + 4, 0 };
+    return { sign * xSpeed, rand() % 10 + 4, 0 };
+}
+
 void PlayerScoresSystem::Run()
 {
     auto view = Engine::Registry().view<PingPongBall, Transform>();
@@ -48,10 +56,6 @@ void PlayerScoresSystem::Run()
     }
     if (ballOnField == 0)
     {   
-        int offset = -15 + rand() % ((5 + 1) +15);
-
-        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 + offset, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
-            
-        
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), GetRandomBallSpeed(5, 10), { 0,rand() % (s_FieldHeight / 2) ,0 });
     }
 }
