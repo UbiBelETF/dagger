@@ -20,6 +20,8 @@ namespace ping_pong
     public:
         inline String SystemName() { return "Player Scores System"; }
 
+        int generate_rand_vel();
+
         void Run() override;
 
         static void SetFieldSize(int width, int height, float tileSize)
