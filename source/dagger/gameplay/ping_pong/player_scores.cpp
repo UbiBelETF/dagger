@@ -51,7 +51,7 @@ void PlayerScoresSystem::Run()
     {
         // TODO: set speed to be random in both directions
         float xSpeed = rand() % 17 - 8;
-        while ((xSpeed > -3) || (xSpeed < 3))
+        while ((xSpeed > -3) && (xSpeed < 3))
         {
             xSpeed = rand() % 17 - 8;
         }
