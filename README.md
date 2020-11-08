@@ -1,3 +1,9 @@
+# Sultans of Swing
+- Kosta Dimitrijevic (kole.dimi99@gmail.com)
+- Smiljana Spasic
+- Jovica Jovicevic
+Game:
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
