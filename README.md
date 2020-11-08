@@ -1,3 +1,7 @@
+# PaRTI Team
+
+Marija Kovačević (marijakovacevic1999@gmail.com)
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
