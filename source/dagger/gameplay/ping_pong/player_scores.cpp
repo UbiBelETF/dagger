@@ -48,15 +48,10 @@ void PlayerScoresSystem::Run()
     }
     if (ballOnField == 0)
     {   
+        int offset = -15 + rand() % ((5 + 1) +15);
+
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 + offset, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
+            
         
-        // TODO: set speed to be random in both directions
-        if (k) {
-            CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 + 5, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
-            k = false;
-        }
-        else {
-            CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 - 15, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
-            k = true;
-        }
     }
 }
