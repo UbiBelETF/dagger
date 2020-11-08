@@ -50,8 +50,8 @@ void PlayerScoresSystem::Run()
     if (ballOnField == 0)
     {
         // TODO: set speed to be random in both directions
-        float xSpeed = rand() % 9 - 4;
-        while (xSpeed == 0)
+        float xSpeed = rand() % 17 - 4;
+        while ((xSpeed > -3) || (xSpeed < 3))
         {
             xSpeed = rand() % 9 - 4;
         }
