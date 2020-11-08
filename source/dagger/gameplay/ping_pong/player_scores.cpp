@@ -49,6 +49,14 @@ void PlayerScoresSystem::Run()
 
     if (ballOnField == 0)
     {
-        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 - 5,rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
+        int x_direction = (1 - 2 * (rand() % 2));
+        int y_direction = (1 - 2 * (rand() % 2));
+
+        float x_speed = x_direction * (rand() % 5 + 5);
+        float y_speed = y_direction * (rand() % 5 + 5);
+
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), 
+                           { x_speed, y_speed, 0 }, 
+                           { 0, rand() % (s_FieldHeight / 2), 0 });
     }
 }

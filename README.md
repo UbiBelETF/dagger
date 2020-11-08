@@ -1,6 +1,7 @@
-# Delta Snakes
+﻿# Delta Snakes
 - Uroš Borovčanin (u.borovcanin@gmail.com)
-
+- Senad Kurtiši   (senad98kurtisi@gmail.com)
+- Feđa Vujičić    (fedjavujicic@gmail.com)
 
 Game:
 
