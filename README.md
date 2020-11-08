@@ -1,7 +1,8 @@
 # Sultans of Swing
 - Kosta Dimitrijevic (kole.dimi99@gmail.com)
 - Smiljana Spasic 
-- Jovica Jovicevic 
+- Jovica Jovicevic
+ 
 Game:
 
 # Dagger

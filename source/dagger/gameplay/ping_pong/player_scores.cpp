@@ -11,7 +11,7 @@ using namespace ping_pong;
 int PlayerScoresSystem::s_FieldWidth = 20;
 int PlayerScoresSystem::s_FieldHeight = 10;
 Float32 PlayerScoresSystem::s_TileSize = 1.f;
-
+bool k = true;
 void PlayerScoresSystem::Run()
 {
     auto view = Engine::Registry().view<PingPongBall, Transform>();
@@ -46,10 +46,17 @@ void PlayerScoresSystem::Run()
             ballOnField++;
         }
     }
-
     if (ballOnField == 0)
-    {
+    {   
+        
         // TODO: set speed to be random in both directions
-        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+        if (k) {
+            CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 + 5, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
+            k = false;
+        }
+        else {
+            CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 - 15, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
+            k = true;
+        }
     }
 }
