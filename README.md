@@ -1,3 +1,12 @@
+# Morning Afternoon
+- Mladen Jugović		jugovic.mladen@gmail.com 
+- Aleksandar Matić		maleksandar012@gmail.com
+- Veljko Đorović		djorovicveljko@gmail.com
+- Damjan Pavlović		dp98tm@gmail.com 
+
+# Game
+To be determined...
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
