@@ -1,7 +1,7 @@
 # Morning Afternoon
 - Mladen Jugović		jugovic.mladen@gmail.com 
 - Aleksandar Matić		maleksandar012@gmail.com
-- Veljko Đorović		djorovicveljko@gmail.com
+- Veljko Đorović		djorovicveljko@gmail.com 
 - Damjan Pavlović		dp98tm@gmail.com 
 
 # Game
