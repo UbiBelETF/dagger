@@ -1,3 +1,11 @@
+# Helix
+- Kristina Nikolić (kristinanikolic.n01@gmail.com)
+- Marko Macura
+- Miloš Milošević
+
+Game:
+
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
