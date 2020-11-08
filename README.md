@@ -1,6 +1,6 @@
 # sun tsu
 	Sofija
-	Teodor
+	Teodor  teopiano3@gmail.com
 	Uros	urosmaricic123@gmail.com
 	
 Game:
