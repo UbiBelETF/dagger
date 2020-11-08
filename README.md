@@ -1,5 +1,6 @@
 # Fried cucumbers
 - Nikola Ristic (nikola97@gmail.com)
+- Stefan Bozovic (wowstefan98411@gmail.com)
 
 Game:
 
