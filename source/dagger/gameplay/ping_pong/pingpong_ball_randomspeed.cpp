@@ -8,7 +8,7 @@
 #include <execution>
 
 using namespace dagger;
-using namespace pingPong;
+using namespace ping_pong;
 
 void PingPongBallRandomSpeedSystem::Run()
 {
@@ -31,7 +31,7 @@ void PingPongBallRandomSpeedSystem::Run()
             continue;
         }
 
-        Float32 speedAdd = 1.f + static_cast<Float32>(rand() % 10 - 3) / 10.f;
+        Float32 speedAdd = 1.f + static_cast<Float32>(rand() % 5 + 1) / 10.f;
 
         ball.speed.x *= speedAdd;
         ball.speed.y *= speedAdd;
