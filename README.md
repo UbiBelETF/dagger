@@ -1,3 +1,10 @@
+# sun tsu
+	Sofija
+	Teodor
+	Uros	urosmaricic123@gmail.com
+	
+Game:
+
 # Dagger
 
 A fully-featured, modern game engine made for educational purposes.
