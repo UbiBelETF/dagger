@@ -1,7 +1,7 @@
 # Helix
 - Kristina Nikolić (kristinanikolic.n01@gmail.com)
 - Marko Macura (marko.macura9@gmail.com)
-- Miloš Milošević
+- Miloš Milošević (milos.milos13@hotmail.com)
 
 Game:
 
