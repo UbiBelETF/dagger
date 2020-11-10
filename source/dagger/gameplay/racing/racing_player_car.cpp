@@ -38,6 +38,10 @@ void RacingPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         {
             ctrl_.input.x = 0;
         }
+        else if (kEvent_.key == ctrl_.fireKey && ( kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held) && ctrl_.inputFireLaser == 0)
+        {
+            ctrl_.inputFireLaser = 1;
+        }
     });
 }
 
