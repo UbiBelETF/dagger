@@ -13,9 +13,9 @@ namespace ping_pong
     struct PingPongBall
     {
         Vector3 speed{ 0, 0, 0 };
-        
-        std::chrono::seconds changeSpeedPeriod{ 5 };
-        TimePoint lastSpeedChange{ dagger::Engine::Instance().CurrentTime() };
+
+        float changeSpeedPeriod{ 5.0f };
+        float timeUnitlNextChange{ 5.0f };
 
         bool reachedGoal{ false };
         bool playerOneScored{ true };
