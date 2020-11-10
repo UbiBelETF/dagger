@@ -76,5 +76,13 @@ void PingPongBallSystem::Run()
         {
             t.position += (ball.speed * Engine::DeltaTime());
         }
+
+        if (dagger::Engine::Instance().CurrentTime() - ball.lastSpeedChange > ball.changeSpeedPeriod)
+        {
+            ball.speed.x *= 1.2;
+            ball.speed.y *= 1.2;
+
+            ball.lastSpeedChange = dagger::Engine::Instance().CurrentTime();
+        }
     }
 }
