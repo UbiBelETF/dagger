@@ -12,6 +12,14 @@ namespace ping_pong
         EDaggerKeyboard up_key;
         EDaggerKeyboard down_key;
 
+		EDaggerKeyboard boost_key;
+
+		bool boosting = false;
+		float boostLeft = 1.0f;
+
+		bool frozen = false;
+		float frozenFor;
+
         Vector2 input{ 0, 0 };
     };
 
@@ -36,12 +44,16 @@ namespace ping_pong
         {
             controllerMapping_.up_key = EDaggerKeyboard::KeyW;
             controllerMapping_.down_key = EDaggerKeyboard::KeyS;
+
+			controllerMapping_.boost_key = EDaggerKeyboard::KeyLeftShift;
         }
 
         static void SetupPlayerTwoInput(ControllerMapping& controllerMapping_)
         {
             controllerMapping_.up_key = EDaggerKeyboard::KeyUp;
             controllerMapping_.down_key = EDaggerKeyboard::KeyDown;
+
+			controllerMapping_.boost_key = EDaggerKeyboard::KeyRightShift;
         }
 
         static void SetupPlayerBoarders(Float32 boarderUp_, Float32 boarderDown_)
