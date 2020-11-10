@@ -1,10 +1,9 @@
 #include "impact_flash.h"
 
 #include "core/engine.h"
-#include <core/engine.h>
-#include <core/graphics/sprite.h>
+#include "core/graphics/sprite.h"
 
-#include <gameplay/common/simple_collisions.h>
+#include "gameplay/common/simple_collisions.h"
 
 using namespace dagger;
 
@@ -37,7 +36,7 @@ void ImpactFlashSystem::Run()
 			}
 			else
 			{
-				float newValue = sprite.color.b + (flash.flashingRate * Engine::DeltaTime());
+				Float32 newValue = sprite.color.b + (flash.flashingRate * Engine::DeltaTime());
 				sprite.color.b = newValue < 1.0f ? newValue : 1.0f;
 				sprite.color.g = newValue < 1.0f ? newValue : 1.0f;
 				if (sprite.color.b == 1.0f)
