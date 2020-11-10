@@ -11,8 +11,8 @@ namespace ping_pong
     {
         Vector3 speed{ 0, 0, 0 };
 
-        float changeSpeedPeriod{ 5.0f };
-        float timeUnitlNextChange{ 5.0f };
+        Float32 changeSpeedPeriod{ 5.0f };
+        Float32 timeUnitlNextChange{ 5.0f };
 
         bool reachedGoal{ false };
         bool playerOneScored{ true };
