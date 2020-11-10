@@ -62,7 +62,7 @@ void racing_game::SetupWorld(Engine &engine_)
         Engine::PutDefaultResource<RacingGameFieldSettings>(&fieldSettings);
     }
 
-    float zPos = 1.f;
+    float zPos = 10.f;
 
     for (int i = 0; i < Heigh; i++)
     {
@@ -92,7 +92,7 @@ void racing_game::SetupWorld(Engine &engine_)
         }
     }
 
-    zPos -= 0.5f;
+    zPos = 5.f;
 
     // player
     {
@@ -114,7 +114,7 @@ void racing_game::SetupWorld(Engine &engine_)
         col.size = sprite.size;
     }
     
-    zPos -= 0.1f;
+    zPos = 4.f;
 
     //players laser entity
     {
@@ -136,7 +136,7 @@ void racing_game::SetupWorld(Engine &engine_)
         
     }
 
-    zPos = 0.5f;
+    zPos = 5.f;
 
     // collisions for road bounds
 
