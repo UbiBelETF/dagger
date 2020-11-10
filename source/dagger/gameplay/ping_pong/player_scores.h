@@ -28,5 +28,12 @@ namespace ping_pong
             s_FieldHeight = height;
             s_TileSize = tileSize;
         }
+
+		float GetRandomSpeed()
+		{
+			float x_speed = rand() % 10 - 5.0f;
+			x_speed = x_speed ? x_speed : x_speed + 5.0f;
+			return x_speed;
+		}
     };
 }
