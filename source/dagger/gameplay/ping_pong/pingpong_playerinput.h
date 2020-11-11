@@ -13,6 +13,8 @@ namespace ping_pong
         EDaggerKeyboard down_key;
 
         Vector2 input{ 0, 0 };
+
+        Float32 speed_multiplier{ 1 };
     };
 
     class PingPongPlayerInputSystem

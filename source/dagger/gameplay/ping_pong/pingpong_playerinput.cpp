@@ -52,7 +52,7 @@ void PingPongPlayerInputSystem::Run()
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
 
-        t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
+        t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime() * ctrl.speed_multiplier;
 
         if (t.position.y > s_BoarderUp)
         {
