@@ -45,6 +45,24 @@ void PlayerScoresSystem::Run()
         {
             ballOnField++;
         }
+
+    }
+
+    for (auto entity : view) 
+    {
+        auto &ball = view.get<PingPongBall>(entity);
+
+        if (m_goalsPlayerOne == 5 || m_goalsPlayerTwo == 5) {
+            if (ball.processed) {
+                Engine::Registry().destroy(entity);
+            }
+        }  
+
+    }
+
+    if (m_goalsPlayerOne == 5 || m_goalsPlayerTwo == 5) {
+        m_goalsPlayerOne = 0;
+        m_goalsPlayerTwo = 0;
     }
 
     if (ballOnField == 0)
