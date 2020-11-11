@@ -12,17 +12,17 @@ namespace ping_pong
         EDaggerKeyboard up_key;
         EDaggerKeyboard down_key;
 
-		EDaggerKeyboard boost_key;
+        EDaggerKeyboard boost_key;
 
-		static constexpr float s_frozenMaxTime = 3.0f;
-		static constexpr float s_boostMaxTime = 1.0f;
-		static constexpr float s_boostSpeedIncrease = 2.0f;
+        static constexpr float s_frozenMaxTime = 3.0f;
+        static constexpr float s_boostMaxTime = 1.0f;
+        static constexpr float s_boostSpeedIncrease = 2.0f;
 
-		bool boosting = false;
-		float boostLeft = ControllerMapping::s_boostMaxTime;
+        bool boosting = false;
+        float boostLeft = ControllerMapping::s_boostMaxTime;
 
-		bool frozen = false;
-		float frozenFor;
+        bool frozen = false;
+        float frozenFor;
 
         Vector2 input{ 0, 0 };
     };
