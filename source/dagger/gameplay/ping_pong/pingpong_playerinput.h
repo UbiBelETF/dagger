@@ -14,8 +14,12 @@ namespace ping_pong
 
 		EDaggerKeyboard boost_key;
 
+		static constexpr float s_frozenMaxTime = 3.0f;
+		static constexpr float s_boostMaxTime = 1.0f;
+		static constexpr float s_boostSpeedIncrease = 2.0f;
+
 		bool boosting = false;
-		float boostLeft = 1.0f;
+		float boostLeft = ControllerMapping::s_boostMaxTime;
 
 		bool frozen = false;
 		float frozenFor;

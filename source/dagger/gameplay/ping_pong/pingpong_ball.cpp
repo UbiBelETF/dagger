@@ -62,7 +62,7 @@ void PingPongBallSystem::Run()
 						
 						if (!player.frozen) { // Player might already be frozen due to a boost, in that case dont freeze him again
 							player.frozen = true;
-							player.frozenFor = 3.0f; // Freeze for 3 seconds
+							player.frozenFor = ControllerMapping::s_frozenMaxTime; // Freeze for 3 seconds
 							player.input = { 0,0 };
 						}
 					}
