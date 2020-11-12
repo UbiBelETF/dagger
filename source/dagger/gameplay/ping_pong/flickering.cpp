@@ -6,6 +6,7 @@
 #include "gameplay/ping_pong/power_up.h"
 
 using namespace dagger;
+using namespace ping_pong;
 
 void FlickeringSystem::Run()
 {
@@ -45,15 +46,15 @@ void FlickeringSystem::Run()
 	}
 }
 
-void FlickeringSystem::ChangeColor(Sprite& sprite, Flickering& flicker, Bool is_on)
+void FlickeringSystem::ChangeColor(Sprite& sprite, Flickering& flickering, Bool is_on)
 {
 	if (is_on)
 	{
-		sprite.color = flicker.on_color;
+		sprite.color = flickering.on_color;
 	}
 	else
 	{
-		sprite.color = flicker.off_color;
+		sprite.color = flickering.off_color;
 	}
 
 }

@@ -6,24 +6,27 @@
 
 using namespace dagger;
 
-struct Flickering
+namespace ping_pong
 {
-	Bool is_on{ false };
+	struct Flickering
+	{
+		Bool is_on{ false };
 
-	Float32 transition_period{ 0.1 };
-	Float32 time_left{ 0.0 };
+		Float32 transition_period{ 0.1 };
+		Float32 time_left{ 0.0 };
 
-	ColorRGBA on_color{ 1.0f, 0.0f, 0.0f, 1.0f };
-	ColorRGBA off_color{ 1.0f, 1.0f, 1.0f, 1.0f };
-};
+		ColorRGBA on_color{ 1.0f, 0.0f, 0.0f, 1.0f };
+		ColorRGBA off_color{ 1.0f, 1.0f, 1.0f, 1.0f };
+	};
 
-class FlickeringSystem: public System
-{
-public:
+	class FlickeringSystem : public System
+	{
+	public:
 
-	inline String SystemName() { return "Flickering System "; }
+		inline String SystemName() { return "Flickering System "; }
 
-	void Run() override;
+		void Run() override;
 
-	void ChangeColor(Sprite& sprite, Flickering& flicker, Bool is_on);
+		void ChangeColor(Sprite& sprite, Flickering& flickering, Bool is_on);
+	};
 };
