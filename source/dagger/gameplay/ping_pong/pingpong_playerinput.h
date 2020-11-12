@@ -37,7 +37,8 @@ namespace ping_pong
         static bool s_PowerUpActive;
         static bool s_ActivatePowerUp;
         static bool s_DeactivatePowerUp;
-        static TimePoint s_PowerUpStartTime;
+        static Float32 s_PowerUpDuration;
+        static Float32 s_TimeUnitlNextChange;
 
     public:
         inline String SystemName() { return "PingPong Player Input System"; }

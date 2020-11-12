@@ -13,7 +13,8 @@ Float32 PingPongPlayerInputSystem::s_PlayerSpeed = 1.f;
 bool PingPongPlayerInputSystem::s_PowerUpActive = false;
 bool PingPongPlayerInputSystem::s_ActivatePowerUp = false;
 bool PingPongPlayerInputSystem::s_DeactivatePowerUp = false;
-TimePoint PingPongPlayerInputSystem::s_PowerUpStartTime = {};
+Float32 PingPongPlayerInputSystem::s_PowerUpDuration = { 5.0f };
+Float32 PingPongPlayerInputSystem::s_TimeUnitlNextChange = { 5.0f };
 
 void PingPongPlayerInputSystem::SpinUp()
 {
@@ -75,15 +76,19 @@ void PingPongPlayerInputSystem::Run()
         auto& pwrup = view.get<PlayerPowerUp>(entity);
 
         //If power-up has been active for more than 5s , then it deactivates automaticaly
-        if (s_PowerUpActive == true && std::chrono::duration_cast<std::chrono::milliseconds>(TimeSnapshot() - s_PowerUpStartTime).count() > 5000) {
-            Engine::Registry().view<PlayerPowerUp>().each([&](PlayerPowerUp& pwrup){
-                if (pwrup.power_up == true) {
-                    pwrup.power_up = false;
-                    pwrup.power_down = true;
-                    s_DeactivatePowerUp = true;
-                }
-            });
-
+        if (s_PowerUpActive == true) {
+            s_TimeUnitlNextChange -= dagger::Engine::Instance().DeltaTime();
+            if(s_TimeUnitlNextChange <= 0){
+                Engine::Registry().view<PlayerPowerUp>().each([&](PlayerPowerUp& pwrup) {
+                    if (pwrup.power_up == true) {
+                        pwrup.power_up = false;
+                        pwrup.power_down = true;
+                        s_DeactivatePowerUp = true;
+                    }
+                
+                });
+                s_TimeUnitlNextChange = s_PowerUpDuration;
+            }
             
         }
 
@@ -105,7 +110,6 @@ void PingPongPlayerInputSystem::Run()
                     ball.speed.y = ball.speed.y * 0.33f;
 
                 });
-                s_PowerUpStartTime = TimeSnapshot();
         }
         else if (pwrup.power_down == true && s_DeactivatePowerUp == true) {
             s_DeactivatePowerUp = true;
