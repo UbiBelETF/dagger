@@ -38,28 +38,6 @@ void RacingPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         {
             ctrl_.input.x = 0;
         }
-
-
-        if (kEvent_.key == ctrl_.upKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-        {
-            ctrl_.input.y = 1;
-        }
-        else if (kEvent_.key == ctrl_.upKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
-        {
-            ctrl_.input.y = 0;
-        }
-        else if (kEvent_.key == ctrl_.downKey && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
-        {
-            ctrl_.input.y = -1;
-        }
-        else if (kEvent_.key == ctrl_.downKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
-        {
-            ctrl_.input.y = 0;
-        }
-        else if (kEvent_.key == ctrl_.restartKey && kEvent_.action == EDaggerInputState::Pressed)
-        {
-            Engine::Dispatcher().trigger<Exit>();
-        }
     });
 }
 
@@ -80,12 +58,7 @@ void RacingPlayerInputSystem::Run()
 
         t.position.x += ctrl.input.x * car.horzSpeed * Engine::DeltaTime();
 
-        t.position.y += ctrl.input.y * car.horzSpeed * Engine::DeltaTime();
-
         Float32 boarderX = fieldSettings.GetXBoarder();
-
-        Float32 boarderY = fieldSettings.GetYBoarder();
-
         if (t.position.x > boarderX)
         {
             t.position.x = boarderX;
@@ -95,17 +68,6 @@ void RacingPlayerInputSystem::Run()
         {
             t.position.x = -boarderX;
         }
-
-        if (t.position.y > boarderY)
-        {
-            t.position.y = boarderY;
-        }
-
-        if (t.position.y < -boarderY)
-        {
-            t.position.y = -boarderY;
-        }
-
     }
 }
 
