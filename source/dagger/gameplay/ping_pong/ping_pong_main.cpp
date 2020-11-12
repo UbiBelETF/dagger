@@ -227,7 +227,7 @@ void PingPongGame::WorldSetup(Engine& engine_)
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
 
-        auto& powerups = reg.emplace<PlayerPowerUps>(entity);
+        auto& powerups = reg.emplace<PlayerPowerUp>(entity);
         powerups.slow_down = 2;
         powerups.power_up = false;
         powerups.power_down = false;
@@ -253,7 +253,7 @@ void PingPongGame::WorldSetup(Engine& engine_)
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerTwoInput(controller);
 
-        auto& powerups = reg.emplace<PlayerPowerUps>(entity);
+        auto& powerups = reg.emplace<PlayerPowerUp>(entity);
         powerups.slow_down = 2;
         powerups.power_up = false;
         powerups.power_down = false;

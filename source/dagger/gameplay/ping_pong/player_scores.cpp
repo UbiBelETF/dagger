@@ -51,7 +51,7 @@ void PlayerScoresSystem::Run()
     if (ballOnField == 0)
     {
         //If the new ball is to be created when the slow-mode power up is active , it is created with the slowed down speed
-        if (PingPongPlayerInputSystem::s_PowerUpsActive == true) {
+        if (PingPongPlayerInputSystem::s_PowerUpActive == true) {
             CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { (rand() % 10 + 4)*0.33f,(rand() % 10 + 4)*0.33f,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
         }
         else {

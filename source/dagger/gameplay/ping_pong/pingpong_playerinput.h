@@ -16,7 +16,7 @@ namespace ping_pong
         Vector2 input{ 0, 0 };
     };
 
-    struct PlayerPowerUps
+    struct PlayerPowerUp
     {
         int  slow_down;
 
@@ -34,9 +34,10 @@ namespace ping_pong
 
         static Float32 s_PlayerSpeed;
 
-        static bool s_PowerUpsActive;
-        static bool s_ActivatePowerUps;
-        static bool s_DeactivatePowerUps;
+        static bool s_PowerUpActive;
+        static bool s_ActivatePowerUp;
+        static bool s_DeactivatePowerUp;
+        static TimePoint s_PowerUpStartTime;
 
     public:
         inline String SystemName() { return "PingPong Player Input System"; }
