@@ -29,7 +29,7 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         {
             ctrl_.input.y = 1*ctrl_.inverted;
         }
-        else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
+        else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ((ctrl_.input.y > 0 && ctrl_.inverted == 1) || (ctrl_.input.y < 0 && ctrl_.inverted == -1)))
         {
             ctrl_.input.y = 0;
         }
@@ -37,7 +37,7 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         {
             ctrl_.input.y = -1*ctrl_.inverted;
         }
-        else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
+        else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ((ctrl_.input.y < 0 && ctrl_.inverted == 1) || (ctrl_.input.y > 0 && ctrl_.inverted == -1)))
         {
             ctrl_.input.y = 0;
         }
