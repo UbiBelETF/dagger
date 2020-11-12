@@ -55,7 +55,7 @@ void BigLaserSystem::Run()
 			float ratio = sprite.size.y / sprite.size.x;
 			sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
 
-			Engine::Registry().emplace<SimpleCollision>(entity);
+			
 		}
 		else if (ctrl.inputFireLaser == -2 && laser.remainingCooldown <= 1.5f)//laser had been firing for 0.5 seconds
 		{
@@ -67,7 +67,7 @@ void BigLaserSystem::Run()
 			float ratio = sprite.size.y / sprite.size.x;
 			sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
 
-			Engine::Registry().remove<SimpleCollision>(entity);
+			
 		}
 		else if (ctrl.inputFireLaser <= -1 && laser.remainingCooldown > 0)//laser has finished firing but is still on cooldown
 		{
@@ -82,5 +82,3 @@ void BigLaserSystem::Run()
 
 	}
 }
-
-
