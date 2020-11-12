@@ -226,6 +226,11 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
+
+        auto& powerups = reg.emplace<PlayerPowerUps>(entity);
+        powerups.slow_down = 2;
+        powerups.power_up = false;
+        powerups.power_down = false;
     }
 
     //2nd player
@@ -247,6 +252,12 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerTwoInput(controller);
+
+        auto& powerups = reg.emplace<PlayerPowerUps>(entity);
+        powerups.slow_down = 2;
+        powerups.power_up = false;
+        powerups.power_down = false;
+
     }
 
     // add score system to count scores for left and right collisions

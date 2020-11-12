@@ -11,8 +11,17 @@ namespace ping_pong
     {
         EDaggerKeyboard up_key;
         EDaggerKeyboard down_key;
+        EDaggerKeyboard slow_down_key;
 
         Vector2 input{ 0, 0 };
+    };
+
+    struct PlayerPowerUps
+    {
+        int  slow_down;
+
+        bool power_up;
+        bool power_down;
     };
 
     class PingPongPlayerInputSystem
@@ -25,6 +34,10 @@ namespace ping_pong
 
         static Float32 s_PlayerSpeed;
 
+        static bool s_PowerUpsActive;
+        static bool s_ActivatePowerUps;
+        static bool s_DeactivatePowerUps;
+
     public:
         inline String SystemName() { return "PingPong Player Input System"; }
 
@@ -36,12 +49,14 @@ namespace ping_pong
         {
             controllerMapping_.up_key = EDaggerKeyboard::KeyW;
             controllerMapping_.down_key = EDaggerKeyboard::KeyS;
+            controllerMapping_.slow_down_key = EDaggerKeyboard::KeyE;
         }
 
         static void SetupPlayerTwoInput(ControllerMapping& controllerMapping_)
         {
             controllerMapping_.up_key = EDaggerKeyboard::KeyUp;
             controllerMapping_.down_key = EDaggerKeyboard::KeyDown;
+            controllerMapping_.slow_down_key = EDaggerKeyboard::KeyL;
         }
 
         static void SetupPlayerBoarders(Float32 boarderUp_, Float32 boarderDown_)
