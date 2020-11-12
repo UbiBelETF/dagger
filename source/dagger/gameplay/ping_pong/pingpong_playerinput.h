@@ -11,6 +11,8 @@ namespace ping_pong
     {
         EDaggerKeyboard up_key;
         EDaggerKeyboard down_key;
+        int inverted{1};
+        TimePoint inverted_time_point{};
 
         Vector2 input{ 0, 0 };
     };

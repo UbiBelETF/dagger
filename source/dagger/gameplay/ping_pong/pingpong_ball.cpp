@@ -60,7 +60,15 @@ void PingPongBallSystem::Run()
                 if (std::abs(collisionSides.y) > 0)
                 {
                     ball.speed.y *= -1;
-                }
+                }  
+            }
+
+            if (Engine::Registry().has<ControllerMapping>(col.colidedWith) && ball.isMalicious == true) {
+               auto &cntrl =  Engine::Registry().get<ControllerMapping>(col.colidedWith);
+               cntrl.inverted = -1;
+               cntrl.inverted_time_point = TimeSnapshot();
+               Engine::Registry().destroy(entity);
+               break;
             }
 
             if (Engine::Registry().has<PingPongWall>(col.colidedWith))

@@ -2,6 +2,7 @@
 
 #include "core/system.h"
 #include "core/core.h"
+#include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace dagger;
 
@@ -14,6 +15,7 @@ namespace ping_pong
         bool reachedGoal{ false };
         bool playerOneScored{ true };
         bool processed{ false };
+        bool isMalicious{ false };
     };
 
     struct PingPongWall

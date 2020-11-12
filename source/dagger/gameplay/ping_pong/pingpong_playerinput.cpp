@@ -27,7 +27,7 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
     {
         if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
-            ctrl_.input.y = 1;
+            ctrl_.input.y = 1*ctrl_.inverted;
         }
         else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
         {
@@ -35,7 +35,7 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         }
         else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
         {
-            ctrl_.input.y = -1;
+            ctrl_.input.y = -1*ctrl_.inverted;
         }
         else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
         {
@@ -51,6 +51,10 @@ void PingPongPlayerInputSystem::Run()
     {
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
+
+        if (ctrl.inverted == -1 && std::chrono::duration_cast<std::chrono::milliseconds>(TimeSnapshot() - ctrl.inverted_time_point).count() > 5000) {
+            ctrl.inverted = 1;
+        }
 
         t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
 
