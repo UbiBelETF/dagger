@@ -5,6 +5,7 @@
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/ping_pong_main.h"
+#include "gameplay/ping_pong/pingpong_winner.h"
 
 using namespace ping_pong;
 
@@ -52,17 +53,32 @@ void PlayerScoresSystem::Run()
     {
         auto &ball = view.get<PingPongBall>(entity);
 
-        if (m_goalsPlayerOne == 5 || m_goalsPlayerTwo == 5) {
-            if (ball.processed) {
+        if (m_goalsPlayerOne == 5 || m_goalsPlayerTwo == 5) 
+        {
+            if (ball.processed)
+            {
                 Engine::Registry().destroy(entity);
             }
         }  
 
     }
 
-    if (m_goalsPlayerOne == 5 || m_goalsPlayerTwo == 5) {
+    auto secondView = Engine::Registry().view<PingPongWinner>();
+
+    if (m_goalsPlayerOne == 5)
+    {
+        auto& winner = secondView.get<PingPongWinner>(secondView[1]);
+        winner.playerWon = true;
         m_goalsPlayerOne = 0;
         m_goalsPlayerTwo = 0;
+    }
+
+    if (m_goalsPlayerTwo == 5)
+    {
+        auto& winner = secondView.get<PingPongWinner>(secondView[0]);
+        winner.playerWon = true;
+        m_goalsPlayerTwo = 0;
+        m_goalsPlayerOne = 0;
     }
 
     if (ballOnField == 0)

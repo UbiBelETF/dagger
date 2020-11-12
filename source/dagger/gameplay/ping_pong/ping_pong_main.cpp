@@ -18,6 +18,7 @@
 #include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
+#include "gameplay/ping_pong/pingpong_winner.h"
 
 using namespace dagger;
 using namespace ping_pong;
@@ -65,6 +66,7 @@ void PingPongGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<PingPongBallSystem>();
     engine_.AddSystem<PingPongPlayerInputSystem>();
     engine_.AddSystem<PlayerScoresSystem>();
+    engine_.AddSystem<PingPongWinnerSystem>();
 }
 
 void PingPongGame::WorldSetup(Engine& engine_)
@@ -226,6 +228,8 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
+
+        reg.emplace<PingPongWinner>(entity);
     }
 
     //2nd player
@@ -247,6 +251,8 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerTwoInput(controller);
+
+        reg.emplace<PingPongWinner>(entity);
     }
 
     // add score system to count scores for left and right collisions
