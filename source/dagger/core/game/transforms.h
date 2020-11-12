@@ -8,6 +8,8 @@ using namespace dagger;
 struct Transform
 {
     Vector3 position{ 0, 0, 0 };
+
+    static void PropertiesDrawer(Entity entity_);
 };
 
 class TransformSystem

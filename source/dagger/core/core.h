@@ -263,6 +263,18 @@ struct Log
 	String message;
 };
 
+struct NameTag
+{
+    String name;
+    Entity id;
+};
+
+template<typename PhantomT>
+struct AssetCreateRequest
+{
+    String path;
+};
+
 template<typename PhantomT>
 struct AssetLoadRequest
 {

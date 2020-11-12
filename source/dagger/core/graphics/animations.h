@@ -15,10 +15,7 @@ using namespace dagger;
 
 class AnimationSystem
     : public System
-    , public Subscriber<AssetLoadRequest<Animation>>
-#if !defined(NDEBUG)
-    , public Publisher<ToolMenuRender>
-#endif //!defined(NDEBUG)
+    , public Subscriber<AssetLoadRequest<Animation>, ToolMenuRender>
 {
 
 public:
@@ -26,9 +23,7 @@ public:
 
     static ViewPtr<Animation> Get(String name_);
 
-#if !defined(NDEBUG)
-    void RenderToolMenu();
-#endif //!defined(NDEBUG)
+    void OnToolMenuRender();
 
     void LoadDefaultAssets();
     void OnLoadAsset(AssetLoadRequest<Animation> request_);

@@ -11,7 +11,8 @@ using namespace dagger;
 
 ViewPtr<Texture> TextureSystem::Get(String name_)
 {
-    auto texture = Engine::Res<Texture>()[name_];
+    auto library = Engine::Res<Texture>();
+    auto texture = library[name_];
     assert(texture != nullptr);
     return texture;
 }

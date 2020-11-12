@@ -14,9 +14,8 @@ ViewPtr<Animation> AnimationSystem::Get(String name_)
 void AnimationSystem::SpinUp()
 {
     Engine::Dispatcher().sink<AssetLoadRequest<Animation>>().connect<&AnimationSystem::OnLoadAsset>(this);
-#if !defined(NDEBUG)
-    Engine::Dispatcher().sink<ToolMenuRender>().connect<&AnimationSystem::RenderToolMenu>(this);
-#endif //!defined(NDEBUG)
+    Engine::Dispatcher().sink<ToolMenuRender>().connect<&AnimationSystem::OnToolMenuRender>(this);
+
     LoadDefaultAssets();
 }
 
@@ -44,21 +43,18 @@ void AnimationSystem::Run()
         });
 }
 
+
 void AnimationSystem::WindDown()
 {
     auto& library = Engine::Res<Animation>();
     for (auto [_, value] : library) delete value;
 
     Engine::Dispatcher().sink<AssetLoadRequest<Animation>>().disconnect<&AnimationSystem::OnLoadAsset>(this);
-#if !defined(NDEBUG)
-    Engine::Dispatcher().sink<ToolMenuRender>().disconnect<&AnimationSystem::RenderToolMenu>(this);
-#endif //!defined(NDEBUG)
+    Engine::Dispatcher().sink<ToolMenuRender>().disconnect<&AnimationSystem::OnToolMenuRender>(this);
 }
 
 
-
-#if !defined(NDEBUG)
-void AnimationSystem::RenderToolMenu()
+void AnimationSystem::OnToolMenuRender()
 {
     if (ImGui::BeginMenu("Animations"))
     {
@@ -90,7 +86,6 @@ void AnimationSystem::RenderToolMenu()
         ImGui::EndMenu();
     }
 }
-#endif //!defined(NDEBUG)
 
 
 void AnimationSystem::OnLoadAsset(AssetLoadRequest<Animation> request_)

@@ -71,6 +71,8 @@ struct Camera
 	static Vector2 WindowToScreen(Vector2 windowCoord_);
 	static Vector2 WindowToWorld(Vector2 windowCoord_);
 	static Vector2 WorldToWindow(Vector2 worldCoord_);
+
+	static void PropertiesDrawer();
 };
 
 struct WindowSystem 

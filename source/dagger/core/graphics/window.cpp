@@ -2,6 +2,7 @@
 #include "window.h"
 #include "core/core.h"
 #include "core/engine.h"
+#include "imgui.h"
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -285,4 +286,23 @@ Vector2 Camera::WorldToWindow(Vector2 worldCoord_)
 	cursorInWindow.x = pos.x;
 	cursorInWindow.y = pos.y;
 	return cursorInWindow;
+}
+
+void Camera::PropertiesDrawer()
+{
+	if (ImGui::CollapsingHeader("Camera"))
+	{
+		ImGui::BeginGroup();
+		auto camera = Engine::GetDefaultResource<Camera>();
+
+		// position
+		float cameraPos[3] = { camera->position.x, camera->position.y, camera->position.z };
+		ImGui::DragFloat3("Position", cameraPos);
+		camera->position = { cameraPos[0], cameraPos[1], cameraPos[2] };
+
+		// scale
+		ImGui::DragFloat("Zoom", &camera->zoom, 0.01f, 100.f);
+		ImGui::EndGroup();
+	}
+
 }

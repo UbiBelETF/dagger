@@ -19,6 +19,9 @@ namespace dagger
 	{
 		Texture* image{ nullptr };
 		ViewPtr<Shader> shader{ Shader::s_FirstLoadedShader };
+		Bool lockRatio;
+
+		static void PropertiesDrawer(Entity entity_);
 	};
 
 	void AssignSpriteTexture(Sprite& spriteTarget_, String textureName_);
