@@ -17,6 +17,8 @@ namespace ping_pong
         int m_goalsPlayerOne = 0;
         int m_goalsPlayerTwo = 0;
 
+        static Vector3 GetRandomBallSpeed(int minSpeed, int maxSpeed);
+
     public:
         inline String SystemName() { return "Player Scores System"; }
 
