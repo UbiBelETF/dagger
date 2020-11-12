@@ -6,16 +6,17 @@
 #include "pingpong_playerinput.h"
 
 using namespace dagger;
+using namespace ping_pong;
 
 void PowerUpSystem::Run()
 {
-	auto view = Engine::Registry().view<PowerUp, SimpleCollision, ping_pong::ControllerMapping>();
+	auto view = Engine::Registry().view<PowerUp, SimpleCollision, ControllerMapping>();
 
 	for (auto entity : view)
 	{
 		auto& power_up = view.get<PowerUp>(entity);
 		auto& collision = view.get<SimpleCollision>(entity);
-		auto& ctrl = view.get<ping_pong::ControllerMapping>(entity);
+		auto& ctrl = view.get<ControllerMapping>(entity);
 
 		if (collision.colided)
 		{
