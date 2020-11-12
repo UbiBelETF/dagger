@@ -21,46 +21,46 @@ void RacingPlayerInputSystem::WindDown()
 void RacingPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
+    {
+        if (kEvent_.key == ctrl_.leftKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
-            if (kEvent_.key == ctrl_.leftKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-            {
-                ctrl_.input.x = -1;
-            }
-            else if (kEvent_.key == ctrl_.leftKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x < 0)
-            {
-                ctrl_.input.x = 0;
-            }
-            else if (kEvent_.key == ctrl_.rightKey && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
-            {
-                ctrl_.input.x = 1;
-            }
-            else if (kEvent_.key == ctrl_.rightKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x > 0)
-            {
-                ctrl_.input.x = 0;
-            }
+            ctrl_.input.x = -1;
+        }
+        else if (kEvent_.key == ctrl_.leftKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x < 0)
+        {
+            ctrl_.input.x = 0;
+        }
+        else if (kEvent_.key == ctrl_.rightKey && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+        {
+            ctrl_.input.x = 1;
+        }
+        else if (kEvent_.key == ctrl_.rightKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x > 0)
+        {
+            ctrl_.input.x = 0;
+        }
 
 
-            if (kEvent_.key == ctrl_.upKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-            {
-                ctrl_.input.y = 1;
-            }
-            else if (kEvent_.key == ctrl_.upKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
-            {
-                ctrl_.input.y = 0;
-            }
-            else if (kEvent_.key == ctrl_.downKey && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
-            {
-                ctrl_.input.y = -1;
-            }
-            else if (kEvent_.key == ctrl_.downKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
-            {
-                ctrl_.input.y = 0;
-            }
-            else if (kEvent_.key == ctrl_.restartKey && kEvent_.action == EDaggerInputState::Pressed)
-            {
-                Engine::Dispatcher().trigger<Exit>();
-            }
-        });
+        if (kEvent_.key == ctrl_.upKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            ctrl_.input.y = 1;
+        }
+        else if (kEvent_.key == ctrl_.upKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
+        {
+            ctrl_.input.y = 0;
+        }
+        else if (kEvent_.key == ctrl_.downKey && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+        {
+            ctrl_.input.y = -1;
+        }
+        else if (kEvent_.key == ctrl_.downKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
+        {
+            ctrl_.input.y = 0;
+        }
+        else if (kEvent_.key == ctrl_.restartKey && kEvent_.action == EDaggerInputState::Pressed)
+        {
+            Engine::Dispatcher().trigger<Exit>();
+        }
+    });
 }
 
 void RacingPlayerInputSystem::Run()
@@ -74,9 +74,9 @@ void RacingPlayerInputSystem::Run()
     auto view = Engine::Registry().view<Transform, ControllerMapping, RacingPlayerCar>();
     for (auto entity : view)
     {
-        auto& t = view.get<Transform>(entity);
-        auto& ctrl = view.get<ControllerMapping>(entity);
-        auto& car = view.get<RacingPlayerCar>(entity);
+        auto &t = view.get<Transform>(entity);
+        auto &ctrl = view.get<ControllerMapping>(entity);
+        auto &car = view.get<RacingPlayerCar>(entity);
 
         t.position.x += ctrl.input.x * car.horzSpeed * Engine::DeltaTime();
 
@@ -108,3 +108,4 @@ void RacingPlayerInputSystem::Run()
 
     }
 }
+
