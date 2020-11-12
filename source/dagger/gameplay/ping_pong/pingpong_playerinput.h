@@ -12,7 +12,8 @@ namespace ping_pong
         EDaggerKeyboard up_key;
         EDaggerKeyboard down_key;
         int inverted{1};
-        TimePoint inverted_time_point{};
+        Float32 invertedTimePeriod{ 5.0f };
+        Float32 timeUnitlNextChange{ 5.0f };
 
         Vector2 input{ 0, 0 };
     };

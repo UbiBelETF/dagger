@@ -37,7 +37,7 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     transform.position.z = pos_.z;
     auto& ball = reg.emplace<PingPongBall>(entity);
     ball.speed = speed_ * tileSize_;
-    if ((float)rand() / RAND_MAX > 0.9) {
+    if ((float)rand() / RAND_MAX > 0.7) {
         ball.isMalicious = true;
     }
 

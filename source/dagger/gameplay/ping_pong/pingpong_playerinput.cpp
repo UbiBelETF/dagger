@@ -51,11 +51,14 @@ void PingPongPlayerInputSystem::Run()
     {
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
-
-        if (ctrl.inverted == -1 && std::chrono::duration_cast<std::chrono::milliseconds>(TimeSnapshot() - ctrl.inverted_time_point).count() > 5000) {
-            ctrl.inverted = 1;
+        if (ctrl.inverted == -1) {
+            ctrl.timeUnitlNextChange -= dagger::Engine::Instance().DeltaTime();
+            if (ctrl.timeUnitlNextChange <= 0) {
+                ctrl.inverted = 1;
+                ctrl.timeUnitlNextChange = ctrl.invertedTimePeriod;
+            }
         }
-
+       
         t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
 
         if (t.position.y > s_BoarderUp)

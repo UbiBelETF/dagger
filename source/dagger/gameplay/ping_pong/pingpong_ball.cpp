@@ -63,10 +63,9 @@ void PingPongBallSystem::Run()
                 }  
             }
 
-            if (Engine::Registry().has<ControllerMapping>(col.colidedWith) && ball.isMalicious == true) {
+            if (ball.isMalicious == true &&  Engine::Registry().has<ControllerMapping>(col.colidedWith)  ) {
                auto &cntrl =  Engine::Registry().get<ControllerMapping>(col.colidedWith);
                cntrl.inverted = -1;
-               cntrl.inverted_time_point = TimeSnapshot();
                Engine::Registry().destroy(entity);
                break;
             }
