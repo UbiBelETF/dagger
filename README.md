@@ -1,5 +1,5 @@
 # sun tsu
-	Sofija
+	Sofija  sofija98733@gmail.com
 	Teodor  teopiano3@gmail.com
 	Uros	urosmaricic123@gmail.com
 	
