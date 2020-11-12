@@ -10,13 +10,13 @@ namespace ping_pong
 {
 	struct Flickering
 	{
-		Bool is_on{ false };
+		Bool isOn{ false };
 
-		Float32 transition_period{ 0.1 };
-		Float32 time_left{ 0.0 };
+		Float32 transitionPeriod{ 0.1f };
+		Float32 timeLeft{ 0.0f };
 
-		ColorRGBA on_color{ 1.0f, 0.0f, 0.0f, 1.0f };
-		ColorRGBA off_color{ 1.0f, 1.0f, 1.0f, 1.0f };
+		ColorRGBA onColor{ 1.0f, 0.0f, 0.0f, 1.0f };
+		ColorRGBA offColor{ 1.0f, 1.0f, 1.0f, 1.0f };
 	};
 
 	class FlickeringSystem : public System
@@ -27,6 +27,6 @@ namespace ping_pong
 
 		void Run() override;
 
-		void ChangeColor(Sprite& sprite, Flickering& flickering, Bool is_on);
+		void ChangeColor(Sprite& sprite_, Flickering& flickering_, Bool isOn_);
 	};
 };

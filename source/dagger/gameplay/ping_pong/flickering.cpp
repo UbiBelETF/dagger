@@ -18,43 +18,43 @@ void FlickeringSystem::Run()
 		auto& power_up = view.get<PowerUp>(entity);
 		auto& sprite = view.get<Sprite>(entity);
 
-		if (power_up.is_active)
+		if (power_up.isActive)
 		{
-			flickering.time_left -= dagger::Engine::Instance().DeltaTime();
+			flickering.timeLeft -= dagger::Engine::Instance().DeltaTime();
 
-			if (flickering.time_left <= 0.0f)
+			if (flickering.timeLeft <= 0.0f)
 			{
-				if (flickering.is_on)
+				if (flickering.isOn)
 				{
 					ChangeColor(sprite, flickering, false);
-					flickering.is_on = false;
+					flickering.isOn = false;
 				}
 				else
 				{
 					ChangeColor(sprite, flickering, true);
-					flickering.is_on = true;
+					flickering.isOn = true;
 				}
 
-				flickering.time_left = flickering.transition_period;
+				flickering.timeLeft = flickering.transitionPeriod;
 			}
 		}
 		else
 		{
 			ChangeColor(sprite, flickering, false);
-			flickering.is_on = false;
+			flickering.isOn = false;
 		}
 	}
 }
 
-void FlickeringSystem::ChangeColor(Sprite& sprite, Flickering& flickering, Bool is_on)
+void FlickeringSystem::ChangeColor(Sprite& sprite_, Flickering& flickering_, Bool isOn_)
 {
-	if (is_on)
+	if (isOn_)
 	{
-		sprite.color = flickering.on_color;
+		sprite_.color = flickering_.onColor;
 	}
 	else
 	{
-		sprite.color = flickering.off_color;
+		sprite_.color = flickering_.offColor;
 	}
 
 }

@@ -3,43 +3,44 @@
 #include <core/engine.h>
 
 #include <gameplay/common/simple_collisions.h>
-#include "pingpong_playerinput.h"
+#include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace dagger;
+using namespace ping_pong;
 
 void PowerUpSystem::Run()
 {
-	auto view = Engine::Registry().view<PowerUp, SimpleCollision, ping_pong::ControllerMapping>();
+	auto view = Engine::Registry().view<PowerUp, SimpleCollision, ControllerMapping>();
 
 	for (auto entity : view)
 	{
 		auto& power_up = view.get<PowerUp>(entity);
 		auto& collision = view.get<SimpleCollision>(entity);
-		auto& ctrl = view.get<ping_pong::ControllerMapping>(entity);
+		auto& ctrl = view.get<ControllerMapping>(entity);
 
 		if (collision.colided)
 		{
-			power_up.current_hits++;
+			power_up.currentHits++;
 			collision.colided = false;
 		}
 		
-		if (power_up.is_active)
+		if (power_up.isActive)
 		{
-			power_up.time_left -= dagger::Engine::Instance().DeltaTime();
+			power_up.timeLeft -= dagger::Engine::Instance().DeltaTime();
 
-			if (power_up.time_left <= 0)
+			if (power_up.timeLeft <= 0)
 			{
-				ctrl.speed_multiplier = 1;
-				power_up.current_hits = 0;
+				ctrl.speedMultiplier = 1;
+				power_up.currentHits = 0;
 
-				power_up.is_active = false;
-				power_up.time_left = power_up.power_up_time;
+				power_up.isActive = false;
+				power_up.timeLeft = power_up.powerUpTime;
 			}
 		}
-		else if (power_up.current_hits >= power_up.target_hits)
+		else if (power_up.currentHits >= power_up.targetHits)
 		{
-			ctrl.speed_multiplier = power_up.speed_multiplier;
-			power_up.is_active = true;
+			ctrl.speedMultiplier = power_up.speedMultiplier;
+			power_up.isActive = true;
 		}
 
 	}

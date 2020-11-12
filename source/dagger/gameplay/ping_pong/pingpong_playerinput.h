@@ -14,7 +14,7 @@ namespace ping_pong
 
         Vector2 input{ 0, 0 };
 
-        Float32 speed_multiplier{ 1 };
+        Float32 speedMultiplier{ 1 };
     };
 
     class PingPongPlayerInputSystem
