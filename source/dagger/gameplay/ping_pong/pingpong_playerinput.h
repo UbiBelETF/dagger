@@ -11,10 +11,10 @@ namespace ping_pong
     {
         EDaggerKeyboard up_key;
         EDaggerKeyboard down_key;
-        EDaggerKeyboard esc_key;//ADDED
-        EDaggerKeyboard space_key;//ADDED
-        bool boost;//ADDED
-        bool exit;//ADDED
+        EDaggerKeyboard esc_key;
+        EDaggerKeyboard space_key;
+        bool boost;
+        bool exit;
         Vector2 input{ 0, 0 };
     };
 
@@ -39,20 +39,20 @@ namespace ping_pong
         {
             controllerMapping_.up_key = EDaggerKeyboard::KeyW;
             controllerMapping_.down_key = EDaggerKeyboard::KeyS;
-            controllerMapping_.esc_key = EDaggerKeyboard::KeyEscape;//ADDED
-            controllerMapping_.space_key = EDaggerKeyboard::KeySpace;//ADDED
-            controllerMapping_.boost = false;//ADDED
-            controllerMapping_.exit = false;//ADDED
+            controllerMapping_.esc_key = EDaggerKeyboard::KeyEscape;
+            controllerMapping_.space_key = EDaggerKeyboard::KeySpace;
+            controllerMapping_.boost = false;
+            controllerMapping_.exit = false;
         }
 
         static void SetupPlayerTwoInput(ControllerMapping& controllerMapping_)
         {
             controllerMapping_.up_key = EDaggerKeyboard::KeyUp;
             controllerMapping_.down_key = EDaggerKeyboard::KeyDown;
-            controllerMapping_.esc_key = EDaggerKeyboard::KeyBackspace;//ADDED
-            controllerMapping_.space_key = EDaggerKeyboard::Key0;//ADDED
-            controllerMapping_.boost = false;//ADDED
-            controllerMapping_.exit = false;//ADDED
+            controllerMapping_.esc_key = EDaggerKeyboard::KeyBackspace;
+            controllerMapping_.space_key = EDaggerKeyboard::Key0;
+            controllerMapping_.boost = false;
+            controllerMapping_.exit = false;
         }
 
         static void SetupPlayerBoarders(Float32 boarderUp_, Float32 boarderDown_)

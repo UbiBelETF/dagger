@@ -1,5 +1,5 @@
 #include "pingpong_playerinput.h"
-#include "pingpong_ball.h"//Dodato
+#include "pingpong_ball.h"
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
@@ -28,11 +28,11 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         if (kEvent_.key == ctrl_.esc_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
             ctrl_.exit = true;
-        }//ADDED
+        }
         else if (kEvent_.key == ctrl_.space_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
             ctrl_.boost = true;
-        }//ADDED
+        }
         else if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
             ctrl_.input.y = 1;
@@ -64,8 +64,6 @@ void PingPongPlayerInputSystem::Run()
         
         
         if (ctrl.exit) exit(0);
-        
-        
         if (ctrl.boost == true) {
             auto ball = Engine::Registry().view<PingPongBall>();
             for (auto entity : ball) {
@@ -81,9 +79,8 @@ void PingPongPlayerInputSystem::Run()
                     b.boosted = false;
                 }
                 ctrl.boost = false;
-                //ctrl.boost = true;
             }
-        }//exit(0);//DODATO
+        }
         if (t.position.y > s_BoarderUp)
         {
             t.position.y = s_BoarderUp;
