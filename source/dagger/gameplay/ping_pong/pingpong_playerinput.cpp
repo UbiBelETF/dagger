@@ -25,6 +25,10 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
     {
+        if (ctrl_.frozen) {
+            return;
+        } // If a player is already frozen stop any movement actions
+        
         if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
             ctrl_.input.y = 1;
@@ -41,6 +45,11 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         {
             ctrl_.input.y = 0;
         }
+
+        if (kEvent_.key == ctrl_.boost_key && kEvent_.action == EDaggerInputState::Pressed) {
+            ctrl_.boosting = !ctrl_.boosting;	
+        }
+        
     });
 }
 
@@ -52,7 +61,18 @@ void PingPongPlayerInputSystem::Run()
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
 
-        t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
+        if (ctrl.frozen) {// If frozen player is unable to move
+            if ((ctrl.frozenFor -= Engine::DeltaTime()) <= 0) {
+                ctrl.frozen = false;  // Allowed to move again
+                ctrl.boosting = false;// Stopped the boost, in case player hit the ball while boosting
+            }
+            continue;
+        }
+
+        auto move = ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
+        if (ctrl.boosting) move *= ControllerMapping::s_boostSpeedIncrease;
+
+        t.position.y += move;
 
         if (t.position.y > s_BoarderUp)
         {
@@ -62,6 +82,15 @@ void PingPongPlayerInputSystem::Run()
         if (t.position.y < s_BoarderDown)
         {
             t.position.y = s_BoarderDown;
+        }
+
+        if (ctrl.boosting && (ctrl.boostLeft -= Engine::DeltaTime()) <= 0) { // If player is not boosting AND fails on first condititon and wont 
+            ctrl.frozen = true;                                              // check second condition and decrese boostLeft time
+            ctrl.frozenFor = ControllerMapping::s_boostMaxTime;
+            ctrl.input = { 0,0 };
+            // Freeze as a penalty and reset boost
+            ctrl.boostLeft = ControllerMapping::s_boostMaxTime;
+            ctrl.boosting = false;
         }
     }
 }

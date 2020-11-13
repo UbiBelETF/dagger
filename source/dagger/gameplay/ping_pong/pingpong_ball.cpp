@@ -1,4 +1,5 @@
 #include "pingpong_ball.h"
+#include "pingpong_playerinput.h"
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
@@ -55,6 +56,16 @@ void PingPongBallSystem::Run()
                 if (std::abs(collisionSides.x) > 0)
                 {
                     ball.speed.x *= -1;
+                    if (Engine::Registry().view<ControllerMapping>().contains(col.colidedWith)) { // If the entity the ball colided with has controls mapped
+                                                                                                  // it is a player and should stop moving for a bit of time
+                        auto &player = Engine::Registry().view<ControllerMapping>().get(col.colidedWith);
+                        
+                        if (!player.frozen) { // Player might already be frozen due to a boost, in that case dont freeze him again
+                            player.frozen = true;
+                            player.frozenFor = ControllerMapping::s_frozenMaxTime; // Freeze for 3 seconds
+                            player.input = { 0,0 };
+                        }
+                    }
                 }
 
                 if (std::abs(collisionSides.y) > 0)
