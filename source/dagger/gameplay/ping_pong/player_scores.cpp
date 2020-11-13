@@ -1,11 +1,12 @@
 #include "player_scores.h"
-#include "pingpong_playerinput.h"
+
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/ping_pong_main.h"
+#include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace ping_pong;
 
@@ -50,13 +51,8 @@ void PlayerScoresSystem::Run()
 
     if (ballOnField == 0)
     {
-        //If the new ball is to be created when the slow-mode power up is active , it is created with the slowed down speed
-        if (PingPongPlayerInputSystem::s_PowerUpActive == true) {
-            CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { (rand() % 10 + 4)*0.33f,(rand() % 10 + 4)*0.33f,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
-        }
-        else {
             // TODO: set speed to be random in both directions
             CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 + 4,rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
-        }
+        
     }
 }

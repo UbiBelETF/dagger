@@ -11,6 +11,7 @@ namespace ping_pong
     {
         Vector3 speed{ 0, 0, 0 };
 
+        Float32 speedMultiplier{ 1.f };
         bool reachedGoal{ false };
         bool playerOneScored{ true };
         bool processed{ false };

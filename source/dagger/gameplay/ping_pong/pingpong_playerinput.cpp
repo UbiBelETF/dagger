@@ -1,7 +1,9 @@
 #include "pingpong_playerinput.h"
-#include "pingpong_ball.h"
+
 #include "core/engine.h"
 #include "core/game/transforms.h"
+
+#include "gameplay/ping_pong/pingpong_ball.h"
 
 using namespace dagger;
 using namespace ping_pong;
@@ -15,6 +17,9 @@ bool PingPongPlayerInputSystem::s_ActivatePowerUp = false;
 bool PingPongPlayerInputSystem::s_DeactivatePowerUp = false;
 Float32 PingPongPlayerInputSystem::s_PowerUpDuration = { 5.0f };
 Float32 PingPongPlayerInputSystem::s_TimeUnitlNextChange = { 5.0f };
+
+const Float32 playerSlowMultiplier = 0.5f;
+const Float32 ballSlowMultiplier = 0.33f;
 
 void PingPongPlayerInputSystem::SpinUp()
 {
@@ -32,34 +37,34 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 
     for(auto entity : view)
     {
-        auto& ctrl_ = view.get<ControllerMapping>(entity);
-        auto& pwrups_ = view.get<PlayerPowerUp>(entity);
+        auto& ctrl = view.get<ControllerMapping>(entity);
+        auto& pwrups = view.get<PlayerPowerUp>(entity);
 
-            if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+            if (kEvent_.key == ctrl.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
             {
-                ctrl_.input.y = 1;
+                ctrl.input.y = 1;
             }
-            else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
+            else if (kEvent_.key == ctrl.up_key && kEvent_.action == EDaggerInputState::Released && ctrl.input.y > 0)
             {
-                ctrl_.input.y = 0;
+                ctrl.input.y = 0;
             }
-            else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+            else if (kEvent_.key == ctrl.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
             {
-                ctrl_.input.y = -1;
+                ctrl.input.y = -1;
             }
-            else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
+            else if (kEvent_.key == ctrl.down_key && kEvent_.action == EDaggerInputState::Released && ctrl.input.y < 0)
             {
-                ctrl_.input.y = 0;
+                ctrl.input.y = 0;
             }
-            else if (kEvent_.key == ctrl_.slow_down_key && kEvent_.action == EDaggerInputState::Pressed) {
-                if (pwrups_.slow_down > 0 && s_PowerUpActive == false && s_ActivatePowerUp == false) {
-                    pwrups_.power_up = true;
+            else if (kEvent_.key == ctrl.slow_down_key && kEvent_.action == EDaggerInputState::Pressed) {
+                if (pwrups.slow_down > 0 && s_PowerUpActive == false && s_ActivatePowerUp == false) {
+                    pwrups.power_up = true;
                     s_ActivatePowerUp = true;
                 }
 
-                else if (s_PowerUpActive == true && pwrups_.power_up == true){
-                    pwrups_.power_up = false;
-                    pwrups_.power_down = true;
+                else if (s_PowerUpActive == true && pwrups.power_up == true){
+                    pwrups.power_up = false;
+                    pwrups.power_down = true;
                     s_DeactivatePowerUp = true;
                 }
             }
@@ -95,7 +100,7 @@ void PingPongPlayerInputSystem::Run()
         if (pwrup.power_up == true && s_PowerUpActive == false && s_ActivatePowerUp == true) {
                 pwrup.slow_down--;
             
-                s_PlayerSpeed = s_PlayerSpeed * 0.5f;
+                s_PlayerSpeed = s_PlayerSpeed * playerSlowMultiplier;
                 s_PowerUpActive = true;
                 s_ActivatePowerUp = false;
 
@@ -106,14 +111,13 @@ void PingPongPlayerInputSystem::Run()
                         return;
                     }
 
-                    ball.speed.x = ball.speed.x * 0.33f;
-                    ball.speed.y = ball.speed.y * 0.33f;
+                    ball.speedMultiplier = ballSlowMultiplier;
 
                 });
         }
         else if (pwrup.power_down == true && s_DeactivatePowerUp == true) {
             s_DeactivatePowerUp = true;
-            s_PlayerSpeed = s_PlayerSpeed * 2;
+            s_PlayerSpeed = s_PlayerSpeed / playerSlowMultiplier;
             s_PowerUpActive = false;
             s_DeactivatePowerUp = false;
 
@@ -124,8 +128,7 @@ void PingPongPlayerInputSystem::Run()
                     return;
                 }
 
-                ball.speed.x = ball.speed.x / 0.33f;
-                ball.speed.y = ball.speed.y / 0.33f;
+                ball.speedMultiplier = 1.f;
 
             });
         }

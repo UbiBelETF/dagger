@@ -42,12 +42,12 @@ void PingPongBallSystem::Run()
                     Float32 dt = Engine::DeltaTime();
                     if (std::abs(collisionSides.x) > 0)
                     {
-                        t.position.x -= (ball.speed.x * dt);
+                        t.position.x -= (ball.speed.x * ball.speedMultiplier * dt);
                     }
 
                     if (std::abs(collisionSides.y) > 0)
                     {
-                        t.position.y -= (ball.speed.y * dt);
+                        t.position.y -= (ball.speed.y * ball.speedMultiplier * dt);
                     }
                         
                 } while (col.IsCollided(t.position, collision, transform.position));
@@ -74,7 +74,7 @@ void PingPongBallSystem::Run()
         }
         else
         {
-            t.position += (ball.speed * Engine::DeltaTime());
+            t.position += (ball.speed * ball.speedMultiplier * Engine::DeltaTime());
         }
     }
 }
