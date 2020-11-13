@@ -56,15 +56,20 @@ void RacingCollisionsLogicSystem::OnEndOfFrame()
     }
 
     auto view = Engine::Registry().view<RacingGameStats>();//2nd restart condition
+    Float32 deltaTime = Engine::DeltaTime();
     for (auto entity : view)
     {
         auto& gameStats = Engine::Registry().get<RacingGameStats>(entity);
-        if (gameStats.scores <= 0)
+        if (gameStats.scores <= 0 && gameStats.resetTimer <= 0)
         {
             m_Restart = false;
             Engine::Registry().clear();
 
             racing_game::SetupWorld(Engine::Instance());
+        }
+        else if (gameStats.scores <= 0)
+        {
+            gameStats.resetTimer -= deltaTime;
         }
     }
 }
