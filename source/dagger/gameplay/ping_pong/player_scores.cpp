@@ -57,7 +57,7 @@ void PlayerScoresSystem::Run()
         {
             if (ball.processed)
             {
-                Engine::Registry().destroy(entity);
+                ball.toDestroy = true;
             }
         }  
 

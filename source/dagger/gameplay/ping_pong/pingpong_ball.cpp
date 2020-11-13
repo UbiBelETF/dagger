@@ -78,3 +78,27 @@ void PingPongBallSystem::Run()
         }
     }
 }
+
+void PingPongBallSystem::SpinUp()
+{
+    Engine::Dispatcher().sink<NextFrame>().connect<&PingPongBallSystem::OnEndOfFrame>(this);
+}
+
+void PingPongBallSystem::WindDown()
+{
+    Engine::Dispatcher().sink<NextFrame>().disconnect<&PingPongBallSystem::OnEndOfFrame>(this);
+}
+
+void PingPongBallSystem::OnEndOfFrame() 
+{
+    auto view = Engine::Registry().view<PingPongBall>();
+
+    for (auto entity : view) 
+    {
+        auto& ball = view.get<PingPongBall>(entity);
+        if (ball.toDestroy)
+        {
+            Engine::Registry().destroy(entity);
+        }
+    }
+}
