@@ -57,18 +57,16 @@ void RacingCollisionsLogicSystem::Run()
 
             if (col.colided)
             {
+                col.colided=false;
                 if(player.pause>0) player.pause--;
                 else
-                {
+                {    
+                     
+                    player.pause=200;
+                    player.strike++;
+                    racing_game::CreateStrike(20.f,player.strike);
                     
-                    if(player.strike==3) m_Restart = true;
-                    else{
-                        player.strike++;
-                        racing_game::CreateStrike(20.f,player.strike);
-                        player.pause=400;
-                    } 
-                    
-                    
+                    if(player.strike==3) m_Restart = true;       
                 }
                 
                 
