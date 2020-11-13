@@ -1,6 +1,8 @@
 # PaRTI Team
 
 Marija Kovačević (marijakovacevic1999@gmail.com)
+Sofija Filipović (sofija@filipovic.rs)
+Mirko Krajcer (mirko.krajcer@yahoo.com)
 
 # Dagger
 

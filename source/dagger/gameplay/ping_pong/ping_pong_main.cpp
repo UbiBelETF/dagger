@@ -22,6 +22,27 @@
 using namespace dagger;
 using namespace ping_pong;
 
+void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 speed_, Vector3 pos_)
+{
+    auto& reg = Engine::Registry();
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    AssignSpriteTexture(sprite, "PingPong:ball");
+    sprite.size = Vector2(1, 1) * tileSize_;
+
+    sprite.color = color_;
+
+    auto& transform = reg.emplace<Transform>(entity);
+    transform.position = pos_ * tileSize_;
+    transform.position.z = pos_.z;
+    auto& ball = reg.emplace<PingPongBall>(entity);
+    ball.speed = speed_ * tileSize_;
+
+    auto& col = reg.emplace<SimpleCollision>(entity);
+    col.size.x = tileSize_;
+    col.size.y = tileSize_;
+}
+
 void PingPongGame::CoreSystemsSetup(Engine& engine_)
 {
     engine_.AddSystem<WindowSystem>();
@@ -173,15 +194,14 @@ void PingPongGame::WorldSetup(Engine& engine_)
         }
     }
 
-    auto sys = Engine::GetDefaultResource<PingPongBallSystem>();
     // ball
-    sys->CreatePingPongBall(tileSize, ColorRGBA(1, 1, 1, 1), { 7,-7,0 }, { -1,5,zPos });
-    //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { -14,14,0 },   { 1,3,zPos });
-    sys->CreatePingPongBall(tileSize, ColorRGBA(1, 0.5f, 1, 1), { -6,4,0 }, { -1,1,zPos });
-    //sys->CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), {- 7,-7,0 },    { 1,-1,zPos });
-    //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 20,14,0 }, { -1,-3,zPos });
-    //sys->CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,zPos });
-    sys->CreatePingPongBall(tileSize, ColorRGBA(0.5f, 1, 0.5f, 1), { 8,8,0 }, { -1,-7,zPos });
+    CreatePingPongBall(tileSize, ColorRGBA(1, 1, 1, 1), { 7,-7,0 }, { -1,5,zPos });
+    //CreatePingPongBall(reg, TileSize, Color(0.5f, 1, 1, 1), { -14,14,0 },   { 1,3,zPos });
+    CreatePingPongBall(tileSize, ColorRGBA(1, 0.5f, 1, 1), { -6,4,0 }, { -1,1,zPos });
+    //CreatePingPongBall(reg, TileSize, Color(1, 1, 0.5f, 1), {- 7,-7,0 },    { 1,-1,zPos });
+    //CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 1, 1), { 20,14,0 }, { -1,-3,zPos });
+    //CreatePingPongBall(reg, TileSize, Color(0.5f, 0.5f, 0.5f, 1), { -14,-20,0 }, { 1,-5,zPos });
+    CreatePingPongBall(tileSize, ColorRGBA(0.5f, 1, 0.5f, 1), { 8,8,0 }, { -1,-7,zPos });
 
     // player controller setup
     const Float32 playerSize = tileSize * ((height - 2) * (1 + Space) * 0.33f);
@@ -232,4 +252,3 @@ void PingPongGame::WorldSetup(Engine& engine_)
     // add score system to count scores for left and right collisions
     PlayerScoresSystem::SetFieldSize(width, height, tileSize * (1 + Space));
 }
-

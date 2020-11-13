@@ -4,6 +4,7 @@
 #include "core/game/transforms.h"
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
+#include "gameplay/ping_pong/ping_pong_main.h"
 
 using namespace ping_pong;
 
@@ -48,8 +49,8 @@ void PlayerScoresSystem::Run()
 
     if (ballOnField == 0)
     {
-        auto& reg = Engine::Registry();
-        auto sys = Engine::GetDefaultResource<PingPongBallSystem>();
-        sys->CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+        int pom = rand() % 10;
+        while (pom == 4) pom = rand() % 10;
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { pom - 4, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
     }
 }
