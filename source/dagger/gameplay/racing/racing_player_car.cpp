@@ -22,6 +22,10 @@ void RacingPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
     {
+        if (kEvent_.key == EDaggerKeyboard::KeySpace && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            Engine::Dispatcher().trigger<Exit>();
+        }
         if (kEvent_.key == ctrl_.leftKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
             ctrl_.input.x = -1;
