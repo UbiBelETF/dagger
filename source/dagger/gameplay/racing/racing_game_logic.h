@@ -27,6 +27,7 @@ namespace racing_game
     struct RacingGameStats
     {
         int scores = 0;
+        Float32 resetTimer = 1;
     };
 
     class RacingCollisionsLogicSystem

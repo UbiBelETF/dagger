@@ -9,11 +9,11 @@
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
 
-#include "gameplay/common/simple_collisions.h"
-
+#include "gameplay/racing/racing_simple_collision.h"
 #include "gameplay/racing/racing_game_logic.h"
 #include "gameplay/racing/racing_player_car.h"
 #include "gameplay/racing/racing_car.h"
+#include "gameplay/racing/racing_big_laser.h"
 
 using namespace dagger;
 using namespace racing_game;
@@ -23,7 +23,8 @@ void RacingGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<RacingPlayerInputSystem>();
     engine_.AddSystem<RacingCarSystem>();
     engine_.AddSystem<RacingCollisionsLogicSystem>();
-    engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<RacingSimpleCollisionSystem>();
+    engine_.AddSystem<BigLaserSystem>();
 }
 
 void RacingGame::WorldSetup(Engine &engine_)
@@ -60,7 +61,7 @@ void racing_game::SetupWorld(Engine &engine_)
         Engine::PutDefaultResource<RacingGameFieldSettings>(&fieldSettings);
     }
 
-    float zPos = 1.f;
+    float zPos = 10.f;
 
     for (int i = 0; i < Heigh; i++)
     {
@@ -90,13 +91,12 @@ void racing_game::SetupWorld(Engine &engine_)
         }
     }
 
-    zPos -= 0.5f;
-
+    zPos = 5.f;
     // player
-    {
+    //{
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4");
+        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4-bfl");
         float ratio = sprite.size.y / sprite.size.x;
         sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
 
@@ -108,14 +108,47 @@ void racing_game::SetupWorld(Engine &engine_)
 
         reg.emplace<ControllerMapping>(entity);
 
-        auto& col = reg.emplace<SimpleCollision>(entity);
+        auto& col = reg.emplace<RacingSimpleCollision>(entity);
         col.size = sprite.size;
+        col.identifier = 1;
+
+        auto& gameStats = reg.emplace<RacingGameStats>(entity);
+    //}
+    
+    zPos = 4.f;
+
+    //players laser entity
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSpriteTexture(sprite, "Racing:laser-long-off");
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
+        sprite.position.z = zPos;
+        
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { -TileSize * 4, TileSize * 4, zPos };
+
+        reg.emplace<ControllerMapping>(entity);
+
+        auto& laserSystem = reg.emplace<BigLaserGun>(entity);
+        laserSystem.laserSpeed = TileSize * 6;
+
+        auto& col = reg.emplace<RacingSimpleCollision>(entity);
+        col.size = sprite.size;
+        col.identifier = 2;
+        col.isColisionOn = false;
     }
+
+    zPos = 5.f;
 
     // collisions for road bounds
 
     // other cars
     int amountOfCars = rand() % 3 + 3;
+
+    gameStats.scores = amountOfCars;
+
     for (int i = 0; i < amountOfCars; i++)
     {
         auto entity = reg.create();
@@ -124,14 +157,15 @@ void racing_game::SetupWorld(Engine &engine_)
         float ratio = sprite.size.y / sprite.size.x;
         sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
         sprite.scale.y = -1;
-
+  
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { TileSize * (3 * (i+1) - Width/2), TileSize * (-i * 2 + Heigh/2), zPos };
-
+  
         auto& racingCar = reg.emplace<RacingCar>(entity);
         racingCar.speed = TileSize * (rand() % 5 + 3);
-
-        auto& col = reg.emplace<SimpleCollision>(entity);
+  
+        auto& col = reg.emplace<RacingSimpleCollision>(entity);
         col.size = sprite.size;
+        col.identifier = 0;
     }
 }

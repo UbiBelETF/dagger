@@ -11,8 +11,10 @@ namespace racing_game
     {
         EDaggerKeyboard leftKey = EDaggerKeyboard::KeyA;
         EDaggerKeyboard rightKey = EDaggerKeyboard::KeyD;
+        EDaggerKeyboard fireKey = EDaggerKeyboard::KeyJ;
 
         Vector2 input{ 0, 0 };
+        Float32 inputFireLaser = 0;
     };
 
     struct RacingPlayerCar
