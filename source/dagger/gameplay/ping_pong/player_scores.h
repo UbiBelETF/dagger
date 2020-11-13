@@ -29,10 +29,10 @@ namespace ping_pong
             s_TileSize = tileSize;
         }
 
-		float GetRandomSpeed()
+		int GetRandomSpeed()
 		{
-			float x_speed = rand() % 10 - 5.0f;
-			x_speed = x_speed ? x_speed : x_speed + 5.0f;
+			int x_speed = rand() % 10 - 5;
+			x_speed = x_speed ? x_speed : x_speed + 5;
 			return x_speed;
 		}
     };
