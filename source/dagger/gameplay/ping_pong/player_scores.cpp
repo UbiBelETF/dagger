@@ -53,3 +53,4 @@ void PlayerScoresSystem::Run()
         CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { (rand() % 10 + 4)*((rand() % 2 + 2)%3-1),(rand() % 10 + 4) * ((rand() % 2 + 2) % 3 - 1),0 },   { 0,rand()%(s_FieldHeight / 2),0 });
     }
 }
+w
