@@ -22,7 +22,11 @@ void RacingPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
     {
-        if (kEvent_.key == ctrl_.leftKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        if (kEvent_.key == EDaggerKeyboard::KeySpace && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            Engine::Dispatcher().trigger<Exit>();
+        }
+        else if (kEvent_.key == ctrl_.leftKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
             ctrl_.input.x = -1;
         }
@@ -37,6 +41,22 @@ void RacingPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         else if (kEvent_.key == ctrl_.rightKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x > 0)
         {
             ctrl_.input.x = 0;
+        }
+        else if (kEvent_.key == ctrl_.downKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            ctrl_.input.y = -1;
+        }
+        else if (kEvent_.key == ctrl_.downKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x < 0)
+        {
+            ctrl_.input.y = 0;
+        }
+        else if (kEvent_.key == ctrl_.upKey && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+        {
+            ctrl_.input.y = 1;
+        }
+        else if (kEvent_.key == ctrl_.upKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x > 0)
+        {
+            ctrl_.input.y = 0;
         }
     });
 }
@@ -58,6 +78,8 @@ void RacingPlayerInputSystem::Run()
 
         t.position.x += ctrl.input.x * car.horzSpeed * Engine::DeltaTime();
 
+        t.position.y += ctrl.input.y * car.horzSpeed * Engine::DeltaTime();
+
         Float32 boarderX = fieldSettings.GetXBoarder();
         if (t.position.x > boarderX)
         {
@@ -67,6 +89,17 @@ void RacingPlayerInputSystem::Run()
         if (t.position.x < -boarderX)
         {
             t.position.x = -boarderX;
+        }
+
+        Float32 boarderY = fieldSettings.GetYBoarder();
+        if (t.position.y > boarderY)
+        {
+            t.position.y = boarderY;
+        }
+
+        if (t.position.y < -boarderY)
+        {
+            t.position.y = -boarderY;
         }
     }
 }
