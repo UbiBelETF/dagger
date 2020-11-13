@@ -7,7 +7,7 @@
 #include "core/game/transforms.h"
 #include "racing_player_car.h"
 
-#include "gameplay/common/simple_collisions.h"
+#include "gameplay/racing/racing_simple_collision.h"
 
 
 #include "gameplay/racing/racing_game_logic.h"
@@ -23,12 +23,13 @@ void BigLaserSystem::Run()
 	    fieldSettings = *ptr;
 	}
 
-	auto view = Engine::Registry().view<BigLaserGun, Transform, ControllerMapping, Sprite>();
+	auto view = Engine::Registry().view<BigLaserGun, Transform, ControllerMapping, Sprite, RacingSimpleCollision>();
 	for (auto entity : view)
 	{
 		auto& t = view.get<Transform>(entity);
 		auto& ctrl = view.get<ControllerMapping>(entity);
 		auto& laser = view.get<BigLaserGun>(entity);
+		auto& col = view.get<RacingSimpleCollision>(entity);
 		
 		t.position.x += ctrl.input.x * laser.laserSpeed * Engine::DeltaTime();
 		
@@ -55,7 +56,8 @@ void BigLaserSystem::Run()
 			float ratio = sprite.size.y / sprite.size.x;
 			sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
 
-			
+			col.isColisionOn = true;
+			col.identifier = 2;
 		}
 		else if (ctrl.inputFireLaser == -2 && laser.remainingCooldown <= 1.5f)//laser had been firing for 0.5 seconds
 		{
@@ -67,7 +69,7 @@ void BigLaserSystem::Run()
 			float ratio = sprite.size.y / sprite.size.x;
 			sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
 
-			
+			col.isColisionOn = false;
 		}
 		else if (ctrl.inputFireLaser <= -1 && laser.remainingCooldown > 0)//laser has finished firing but is still on cooldown
 		{
@@ -77,6 +79,24 @@ void BigLaserSystem::Run()
 		{
 			ctrl.inputFireLaser = 0;
 			laser.remainingCooldown = 0;
+		}
+		
+		if (ctrl.inputFireLaser == -2 && col.colided)//if the laser hit something while firing remove the collision, change the sprite of the object, and update the score
+		{
+			col.colided = false;
+			Engine::Registry().remove<RacingSimpleCollision>(col.colidedWith);
+			auto& sprite = Engine::Registry().get<Sprite>(col.colidedWith);
+			AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4-exploded");
+			float ratio = sprite.size.y / sprite.size.x;
+			sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
+			sprite.scale.y = -1;
+
+			auto& view = Engine::Registry().view<RacingGameStats>();
+			for (auto entity : view)
+			{
+				auto& gameStats = Engine::Registry().get<RacingGameStats>(entity);
+				gameStats.scores -= 1;
+			}
 		}
 
 
