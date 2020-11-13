@@ -16,6 +16,7 @@ namespace ping_pong
         bool playerOneScored{ true };
         bool processed{ false };
         bool isMalicious{ false };
+        bool toBeDestroyed{ false };
     };
 
     struct PingPongWall
@@ -30,6 +31,11 @@ namespace ping_pong
 
         inline String SystemName() { return "PingPong Ball System"; }
 
+        void SpinUp() override;
+        void WindDown() override;
         void Run() override;
+
+    private:
+        void OnEndOfFrame();
     };
 }
