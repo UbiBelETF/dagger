@@ -21,21 +21,21 @@ void RacingCollisionsLogicSystem::WindDown()
     Engine::Dispatcher().sink<NextFrame>().disconnect<&RacingCollisionsLogicSystem::OnEndOfFrame>(this);
 }
 
-void racing_game::CreateStrike(float TileSize,int life)// Vector3 pos_
+void racing_game::CreateStrike(float tileSize_,int life_)
 {
-    auto view = Engine::Registry().view<Transform, ControllerMapping, RacingPlayerCar>();
     auto& reg = Engine::Instance().Registry();
  
-     for(int i=0; i<life;i++){
-            auto entity = reg.create();
-            auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4"); 
-            sprite.size = Vector2(1, 2) * TileSize;
+     for(int i=0; i<life_;i++)
+     {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4"); 
+        sprite.size = Vector2(1, 2) * tileSize_;
 
-            sprite.color = ColorRGBA(1, 0.5f, 1, 1);
-            auto& transform = reg.emplace<Transform>(entity);
-            transform.position={ (11.7+i)*TileSize,12*TileSize, 1 };
-        } 
+        sprite.color = ColorRGBA(1, 0.5f, 1, 1);
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position={ (11.7+i)*tileSize_,12*tileSize_, 1 };
+    } 
 }
 
 void RacingCollisionsLogicSystem::Run()
@@ -66,7 +66,11 @@ void RacingCollisionsLogicSystem::Run()
                     player.strike++;
                     racing_game::CreateStrike(20.f,player.strike);
                     
-                    if(player.strike==3) m_Restart = true;       
+                    if(player.strike==3)
+                    {
+                        m_Restart = true;
+                    }
+                           
                 }
                 
                 
