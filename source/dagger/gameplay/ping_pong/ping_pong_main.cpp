@@ -43,6 +43,28 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     col.size.y = tileSize_;
 }
 
+void ping_pong::CreatePingPongBallSplit(float tileSize_, ColorRGBA color_, Vector3 speed_, Vector3 pos_)
+{
+    auto& reg = Engine::Registry();
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    AssignSpriteTexture(sprite, "PingPong:ball");
+    sprite.size = Vector2(1, 1) * tileSize_;
+
+    sprite.color = color_;
+
+    auto& transform = reg.emplace<Transform>(entity);
+    transform.position = pos_ ;
+    transform.position.z = pos_.z;
+    auto& ball = reg.emplace<PingPongBall>(entity);
+    ball.speed = speed_ * tileSize_;
+
+    auto& col = reg.emplace<SimpleCollision>(entity);
+    col.size.x = tileSize_;
+    col.size.y = tileSize_;
+}
+
+
 void PingPongGame::CoreSystemsSetup(Engine& engine_)
 {
     engine_.AddSystem<WindowSystem>();
