@@ -1,5 +1,5 @@
 #include "pingpong_playerinput.h"
-
+#include "pingpong_ball.h"
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
@@ -25,7 +25,15 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
     {
-        if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        if (kEvent_.key == ctrl_.esc_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            ctrl_.exit = true;
+        }
+        else if (kEvent_.key == ctrl_.space_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            ctrl_.boost = true;
+        }
+        else if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
             ctrl_.input.y = 1;
         }
@@ -53,7 +61,26 @@ void PingPongPlayerInputSystem::Run()
         auto &ctrl = view.get<ControllerMapping>(entity);
 
         t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
-
+        
+        
+        if (ctrl.exit) exit(0);
+        if (ctrl.boost == true) {
+            auto ball = Engine::Registry().view<PingPongBall>();
+            for (auto entity : ball) {
+                auto& b = ball.get<PingPongBall>(entity);
+                if (!b.boosted) {
+                    b.speed.x *= 2;
+                    b.speed.y *= 2;
+                    b.boosted = true;
+                }
+                else {
+                    b.speed.x *= 0.5;
+                    b.speed.y *= 0.5;
+                    b.boosted = false;
+                }
+                ctrl.boost = false;
+            }
+        }
         if (t.position.y > s_BoarderUp)
         {
             t.position.y = s_BoarderUp;

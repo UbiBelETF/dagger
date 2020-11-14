@@ -37,7 +37,6 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     transform.position.z = pos_.z;
     auto& ball = reg.emplace<PingPongBall>(entity);
     ball.speed = speed_ * tileSize_;
-
     auto& col = reg.emplace<SimpleCollision>(entity);
     col.size.x = tileSize_;
     col.size.y = tileSize_;

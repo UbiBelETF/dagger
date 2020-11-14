@@ -16,6 +16,7 @@ namespace ping_pong
         bool reachedGoal{ false };
         bool playerOneScored{ true };
         bool processed{ false };
+        bool boosted{ false };
     };
 
     struct PingPongWall
