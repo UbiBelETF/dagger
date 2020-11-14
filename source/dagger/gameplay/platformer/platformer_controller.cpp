@@ -27,7 +27,7 @@ void PlatformerControllerSystem::SpinUp()
 void PlatformerControllerSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Animator, PlatformerCharacter>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, const PlatformerCharacter& char_)
+        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, /*const*/ PlatformerCharacter& char_)
         {
             Float32 run = input_.values.at("run");
             if (run == 0)
@@ -39,6 +39,35 @@ void PlatformerControllerSystem::Run()
                 AnimatorPlay(animator_, "souls_like_knight_character:RUN");
                 sprite_.scale.x = run;
                 sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+            }
+            Float32 jump = 0;
+            if (!char_.jumping)
+                jump = input_.values.at("jump");
+            if (jump)
+            {
+                char_.jumping = true;
+            }
+
+            if (char_.jumping)
+            {
+                if (char_.jumpDuration <= 50)
+                {
+                    sprite_.position.y += char_.speed * sprite_.scale.y * Engine::DeltaTime();
+                    AnimatorPlay(animator_, "souls_like_knight_character:JUMP");
+                    char_.jumpDuration++;
+                }
+                else if (char_.jumpDuration <= 100)
+                {
+                    sprite_.position.y -= char_.speed * sprite_.scale.y * Engine::DeltaTime();
+                    AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
+                    char_.jumpDuration++;
+                }
+                else
+                {
+                    char_.jumpDuration = 0;
+                    char_.jumping = false;
+                    sprite_.position.y = 0;
+                }
             }
         });
 }

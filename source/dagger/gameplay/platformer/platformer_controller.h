@@ -10,6 +10,8 @@ namespace platformer
 	struct PlatformerCharacter
 	{
 		int speed{ 1 };
+		bool jumping;
+		int jumpDuration = 0;
 	};
 
 	class PlatformerControllerSystem
