@@ -27,17 +27,17 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
     {
         if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
-            ctrl_.input.y = 1;
+            ctrl_.input.y = 1*ctrl_.inverted;
         }
-        else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
+        else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ((ctrl_.input.y > 0 && ctrl_.inverted == 1) || (ctrl_.input.y < 0 && ctrl_.inverted == -1)))
         {
             ctrl_.input.y = 0;
         }
         else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
         {
-            ctrl_.input.y = -1;
+            ctrl_.input.y = -1*ctrl_.inverted;
         }
-        else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
+        else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ((ctrl_.input.y < 0 && ctrl_.inverted == 1) || (ctrl_.input.y > 0 && ctrl_.inverted == -1)))
         {
             ctrl_.input.y = 0;
         }
@@ -51,7 +51,14 @@ void PingPongPlayerInputSystem::Run()
     {
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
-
+        if (ctrl.inverted == -1) {
+            ctrl.timeUnitlNextChange -= dagger::Engine::Instance().DeltaTime();
+            if (ctrl.timeUnitlNextChange <= 0) {
+                ctrl.inverted = 1;
+                ctrl.timeUnitlNextChange = ctrl.invertedTimePeriod;
+            }
+        }
+       
         t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
 
         if (t.position.y > s_BoarderUp)

@@ -12,6 +12,15 @@
 using namespace dagger;
 using namespace ping_pong;
 
+void PingPongBallSystem::SpinUp()
+{
+    Engine::Dispatcher().sink<NextFrame>().connect<&PingPongBallSystem::OnEndOfFrame>(this);
+}
+void PingPongBallSystem::WindDown()
+{
+    Engine::Dispatcher().sink<NextFrame>().disconnect<&PingPongBallSystem::OnEndOfFrame>(this);
+}
+
 void PingPongBallSystem::Run()
 {
     auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
@@ -60,7 +69,14 @@ void PingPongBallSystem::Run()
                 if (std::abs(collisionSides.y) > 0)
                 {
                     ball.speed.y *= -1;
-                }
+                }  
+            }
+
+            if (ball.isMalicious == true &&  Engine::Registry().has<ControllerMapping>(col.colidedWith)  ) {
+               auto &cntrl =  Engine::Registry().get<ControllerMapping>(col.colidedWith);
+               cntrl.inverted = -1;
+               ball.toBeDestroyed = true;
+               break;
             }
 
             if (Engine::Registry().has<PingPongWall>(col.colidedWith))
@@ -77,4 +93,18 @@ void PingPongBallSystem::Run()
             t.position += (ball.speed * Engine::DeltaTime());
         }
     }
+}
+
+void PingPongBallSystem::OnEndOfFrame()
+{
+   auto view = Engine::Registry().view<PingPongBall>();
+
+   for (auto entity : view) {
+       
+       auto& ball = Engine::Registry().get<PingPongBall>(entity);
+
+       if (ball.toBeDestroyed == true) {
+           Engine::Registry().destroy(entity);
+       }
+   }
 }
