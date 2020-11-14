@@ -312,19 +312,19 @@ Bool dagger::Input::IsInputDown(EDaggerMouse button_)
 	return state->mouse[(UInt32)button_ - MouseStart];
 }
 
-const Vector2& dagger::Input::CursorPositionInWindow()
+const Vector2 dagger::Input::CursorPositionInWindow()
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	return state->cursor;
 }
 
-const Vector2& dagger::Input::CursorPositionInScreen()
+const Vector2 dagger::Input::CursorPositionInScreen()
 {
 	auto* state = Engine::GetDefaultResource<InputState>();
 	return Camera::WindowToScreen(state->cursor);
 }
 
-const Vector2& dagger::Input::CursorPositionInWorld()
+const Vector2 dagger::Input::CursorPositionInWorld()
 {
 	auto* state = Engine::GetDefaultResource<InputState>();
 	return Camera::WindowToWorld(state->cursor);

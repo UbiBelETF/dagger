@@ -49,10 +49,15 @@ void PlayerScoresSystem::Run()
 
     if (ballOnField == 0)
     {
+<<<<<<< HEAD
         int xMultiplier = (1 - 2 * (rand() % 2));
         int yMultiplier = (1 - 2 * (rand() % 2));
         int xSpeed = xMultiplier * (rand() % 10 + 4);
         int ySpeed = yMultiplier * (rand() % 10 + 4);
         CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { xSpeed,ySpeed,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+=======
+        // TODO: set speed to be random in both directions. Done without if for better performnce 
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { (rand() % 10 + 4)*((rand() % 2 + 2)%3-1),(rand() % 10 + 4) * ((rand() % 2 + 2) % 3 - 1),0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+>>>>>>> main
     }
 }
