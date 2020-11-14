@@ -20,6 +20,8 @@ namespace racing_game
     struct RacingPlayerCar
     {
         Float32 horzSpeed;
+        int strike;
+        int pause=10;
     };
 
     class RacingPlayerInputSystem

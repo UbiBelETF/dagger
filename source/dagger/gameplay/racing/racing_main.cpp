@@ -110,6 +110,9 @@ void racing_game::SetupWorld(Engine &engine_)
 
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
+        racingPlayer.strike=0;
+
+        racing_game::CreateStrike(TileSize,racingPlayer.strike);
     }
 
     // collisions for road bounds
@@ -134,4 +137,5 @@ void racing_game::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
     }
+
 }

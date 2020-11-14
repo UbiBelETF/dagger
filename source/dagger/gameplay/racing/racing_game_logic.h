@@ -7,6 +7,7 @@ using namespace dagger;
 
 namespace racing_game
 {
+    void CreateStrike(float tileSize_,int lifePoints);
     struct RacingGameFieldSettings
     {
         int fieldWidth;
@@ -27,6 +28,7 @@ namespace racing_game
     struct RacingGameStats
     {
         int scores = 0;
+        
     };
 
     class RacingCollisionsLogicSystem

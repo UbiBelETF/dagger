@@ -18,7 +18,7 @@ void DiagnosticSystem::RenderGUI()
 	ImGui::SetNextWindowSize(ImVec2(200, 60), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Diagnostics");
 	ImGui::PlotVar("FPS", (Float32)m_LastFrameCounter);
-	ImGui::Separator();
+/*	ImGui::Separator();
 
 	{
 		auto& cursorInWindow = dagger::Input::CursorPositionInWindow();
@@ -40,7 +40,7 @@ void DiagnosticSystem::RenderGUI()
 		auto cursorInWorld = Camera::WorldToWindow(cursorInWindow);
 		ImGui::Text("Picked: %f %f", cursorInWorld.x, cursorInWorld.y);
 	}
-	ImGui::End();
+*/	ImGui::End();
 }
 
 #if defined(MEASURE_SYSTEMS)
