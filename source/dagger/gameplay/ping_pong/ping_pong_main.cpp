@@ -37,6 +37,10 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     transform.position.z = pos_.z;
     auto& ball = reg.emplace<PingPongBall>(entity);
     ball.speed = speed_ * tileSize_;
+
+    if (PingPongPlayerInputSystem::s_PowerUpActive == true) {
+        ball.speedMultiplier = 0.33f;
+
     if ((float)rand() / RAND_MAX > 0.7) {
         ball.isMalicious = true;
     }
@@ -229,6 +233,11 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
+
+        auto& powerups = reg.emplace<PlayerPowerUp>(entity);
+        powerups.slow_down = 2;
+        powerups.power_up = false;
+        powerups.power_down = false;
     }
 
     //2nd player
@@ -250,6 +259,12 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerTwoInput(controller);
+
+        auto& powerups = reg.emplace<PlayerPowerUp>(entity);
+        powerups.slow_down = 2;
+        powerups.power_up = false;
+        powerups.power_down = false;
+
     }
 
     // add score system to count scores for left and right collisions

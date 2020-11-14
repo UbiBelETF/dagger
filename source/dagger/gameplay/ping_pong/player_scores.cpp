@@ -1,10 +1,12 @@
 #include "player_scores.h"
 
+
 #include "core/engine.h"
 #include "core/game/transforms.h"
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/ping_pong_main.h"
+#include "gameplay/ping_pong/pingpong_playerinput.h"
 
 using namespace ping_pong;
 
@@ -55,7 +57,9 @@ void PlayerScoresSystem::Run()
 
     if (ballOnField == 0)
     {
+
         // TODO: set speed to be random in both directions
         CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { generate_rand_vel(),generate_rand_vel(),0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+
     }
 }
