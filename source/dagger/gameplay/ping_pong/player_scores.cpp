@@ -45,6 +45,11 @@ void PlayerScoresSystem::Run()
         {
             ballOnField++;
         }
+        if (ball.splitTimer<0) {
+            ball.splitTimer = 10;
+            CreatePingPongBallSplit(s_TileSize, ColorRGBA(1, 1, 1, 1), { (rand() % 10 + 4) * ((rand() % 2 + 2) % 3 - 1),(rand() % 10 + 4) * ((rand() % 2 + 2) % 3 - 1),0 }, { t.position.x,t.position.y,0 });
+            CreatePingPongBallSplit(s_TileSize, ColorRGBA(1, 1, 1, 1), { (rand() % 10 + 4) * ((rand() % 2 + 2) % 3 - 1),(rand() % 10 + 4) * ((rand() % 2 + 2) % 3 - 1),0 }, { t.position.x,t.position.y,0 });
+        }
     }
 
     if (ballOnField == 0)

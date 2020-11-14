@@ -76,5 +76,6 @@ void PingPongBallSystem::Run()
         {
             t.position += (ball.speed * Engine::DeltaTime());
         }
+        ball.splitTimer -= Engine::DeltaTime();
     }
 }

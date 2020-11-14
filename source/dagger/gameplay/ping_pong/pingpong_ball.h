@@ -11,9 +11,12 @@ namespace ping_pong
     {
         Vector3 speed{ 0, 0, 0 };
 
+        Float32 splitTimer{10};
+
         bool reachedGoal{ false };
         bool playerOneScored{ true };
         bool processed{ false };
+        bool boosted{ false };
     };
 
     struct PingPongWall
