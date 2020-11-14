@@ -13,6 +13,7 @@
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
+#include "gameplay/ping_pong/impact_flash.h"
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/ping_pong/pingpong_ball.h"
@@ -66,6 +67,7 @@ void PingPongGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<PingPongBallSystem>();
     engine_.AddSystem<PingPongPlayerInputSystem>();
     engine_.AddSystem<PlayerScoresSystem>();
+    engine_.AddSystem<ImpactFlashSystem>();
 #if defined(DAGGER_DEBUG)
     engine_.AddSystem<PingPongTools>();
 #endif //defined(DAGGER_DEBUG)
@@ -235,6 +237,7 @@ void ping_pong::SetupWorld(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
+        reg.emplace<ImpactFlash>(entity);
     }
 
     //2nd player
