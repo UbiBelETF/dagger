@@ -37,25 +37,26 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 
     for(auto entity : view)
     {
+
         auto& ctrl = view.get<ControllerMapping>(entity);
         auto& pwrups = view.get<PlayerPowerUp>(entity);
 
-            if (kEvent_.key == ctrl.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-            {
-                ctrl.input.y = 1;
-            }
-            else if (kEvent_.key == ctrl.up_key && kEvent_.action == EDaggerInputState::Released && ctrl.input.y > 0)
-            {
-                ctrl.input.y = 0;
-            }
-            else if (kEvent_.key == ctrl.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
-            {
-                ctrl.input.y = -1;
-            }
-            else if (kEvent_.key == ctrl.down_key && kEvent_.action == EDaggerInputState::Released && ctrl.input.y < 0)
-            {
-                ctrl.input.y = 0;
-            }
+             if (kEvent_.key == ctrl.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            ctrl.input.y = 1*ctrl.inverted;
+        }
+        else if (kEvent_.key == ctrl.up_key && kEvent_.action == EDaggerInputState::Released && ((ctrl.input.y > 0 && ctrl.inverted == 1) || (ctrl.input.y < 0 && ctrl.inverted == -1)))
+        {
+            ctrl.input.y = 0;
+        }
+        else if (kEvent_.key == ctrl.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+        {
+            ctrl.input.y = -1*ctrl.inverted;
+        }
+        else if (kEvent_.key == ctrl.down_key && kEvent_.action == EDaggerInputState::Released && ((ctrl.input.y < 0 && ctrl.inverted == 1) || (ctrl.input.y > 0 && ctrl.inverted == -1)))
+        {
+            ctrl.input.y = 0;
+        }
             else if (kEvent_.key == ctrl.slow_down_key && kEvent_.action == EDaggerInputState::Pressed) {
                 if (pwrups.slow_down > 0 && s_PowerUpActive == false && s_ActivatePowerUp == false) {
                     pwrups.power_up = true;
@@ -133,6 +134,14 @@ void PingPongPlayerInputSystem::Run()
             });
         }
 
+        if (ctrl.inverted == -1) {
+            ctrl.timeUnitlNextChange -= dagger::Engine::Instance().DeltaTime();
+            if (ctrl.timeUnitlNextChange <= 0) {
+                ctrl.inverted = 1;
+                ctrl.timeUnitlNextChange = ctrl.invertedTimePeriod;
+            }
+        }
+       
         t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
 
         if (t.position.y > s_BoarderUp)

@@ -14,6 +14,12 @@ int PlayerScoresSystem::s_FieldWidth = 20;
 int PlayerScoresSystem::s_FieldHeight = 10;
 Float32 PlayerScoresSystem::s_TileSize = 1.f;
 
+int PlayerScoresSystem::generate_rand_vel() {
+    int ret = rand() % 10 + 4;
+    if (rand() % 2) ret = -ret;
+    return ret;
+}
+
 void PlayerScoresSystem::Run()
 {
     auto view = Engine::Registry().view<PingPongBall, Transform>();
@@ -51,8 +57,9 @@ void PlayerScoresSystem::Run()
 
     if (ballOnField == 0)
     {
-            // TODO: set speed to be random in both directions
-            CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand() % 10 + 4,rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
-        
+
+        // TODO: set speed to be random in both directions
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { generate_rand_vel(),generate_rand_vel(),0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+
     }
 }

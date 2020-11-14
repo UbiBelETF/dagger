@@ -37,8 +37,12 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     transform.position.z = pos_.z;
     auto& ball = reg.emplace<PingPongBall>(entity);
     ball.speed = speed_ * tileSize_;
+
     if (PingPongPlayerInputSystem::s_PowerUpActive == true) {
         ball.speedMultiplier = 0.33f;
+
+    if ((float)rand() / RAND_MAX > 0.7) {
+        ball.isMalicious = true;
     }
 
     auto& col = reg.emplace<SimpleCollision>(entity);
