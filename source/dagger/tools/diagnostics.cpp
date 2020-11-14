@@ -21,22 +21,22 @@ void DiagnosticSystem::RenderGUI()
 	ImGui::Separator();
 
 	{
-		auto& cursorInWindow = dagger::Input::CursorPositionInWindow();
+		auto cursorInWindow = dagger::Input::CursorPositionInWindow();
 		ImGui::Text("Window: %f %f", cursorInWindow.x, cursorInWindow.y);
 	}
 
 	{
-		auto& cursorInScreen = dagger::Input::CursorPositionInScreen();
+		auto cursorInScreen = dagger::Input::CursorPositionInScreen();
 		ImGui::Text("Screen: %f %f", cursorInScreen.x, cursorInScreen.y);
 	}
 
 	{
-		auto& cursorInWorld = dagger::Input::CursorPositionInWorld();
+		auto cursorInWorld = dagger::Input::CursorPositionInWorld();
 		ImGui::Text("World: %f %f", cursorInWorld.x, cursorInWorld.y);
 	}
 
 	{
-		auto& cursorInWindow = dagger::Input::CursorPositionInWorld();
+		auto cursorInWindow = dagger::Input::CursorPositionInWorld();
 		auto cursorInWorld = Camera::WorldToWindow(cursorInWindow);
 		ImGui::Text("Picked: %f %f", cursorInWorld.x, cursorInWorld.y);
 	}
