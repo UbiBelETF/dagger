@@ -18,7 +18,7 @@
 #include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
-#include "gameplay/ping_pong/impact_flash.h"
+#include "gameplay/ping_pong/pingpong_tools.h"
 
 using namespace dagger;
 using namespace ping_pong;
@@ -66,19 +66,26 @@ void PingPongGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<PingPongBallSystem>();
     engine_.AddSystem<PingPongPlayerInputSystem>();
     engine_.AddSystem<PlayerScoresSystem>();
-    engine_.AddSystem<ImpactFlashSystem>();
+#if defined(DAGGER_DEBUG)
+    engine_.AddSystem<PingPongTools>();
+#endif //defined(DAGGER_DEBUG)
 }
 
 void PingPongGame::WorldSetup(Engine& engine_)
 {
-    Vector2 scale(1, 1);
-    
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
     camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
+
+    SetupWorld(engine_);
+}
+
+void ping_pong::SetupWorld(Engine& engine_)
+{
+    Vector2 scale(1, 1);
 
     auto& reg = engine_.Registry();
 
@@ -141,7 +148,7 @@ void PingPongGame::WorldSetup(Engine& engine_)
         {
             auto entity = reg.create();
             auto& col = reg.emplace<SimpleCollision>(entity);
-            col.size.x = tileSize * (width - 2)* (1 + Space);
+            col.size.x = tileSize * (width - 2) * (1 + Space);
             col.size.y = tileSize;
 
             auto& transform = reg.emplace<Transform>(entity);
@@ -228,8 +235,6 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
-
-        reg.emplace<ImpactFlash>(entity);
     }
 
     //2nd player
@@ -251,8 +256,6 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerTwoInput(controller);
-
-        reg.emplace<ImpactFlash>(entity);
     }
 
     // add score system to count scores for left and right collisions
