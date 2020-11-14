@@ -49,7 +49,8 @@ void PlayerScoresSystem::Run()
 
     if (ballOnField == 0)
     {
-        // TODO: set speed to be random in both directions
-        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { rand()%10 + 4,rand()%10 + 4,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
+        int pom = rand() % 10;
+        while (pom == 4) pom = rand() % 10;
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { pom - 4, rand() % 10 + 4,0 }, { 0,rand() % (s_FieldHeight / 2),0 });
     }
 }
