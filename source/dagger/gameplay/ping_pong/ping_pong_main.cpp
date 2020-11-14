@@ -19,6 +19,7 @@
 #include "gameplay/ping_pong/pingpong_ball_randomspeed.h"
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
+#include "gameplay/ping_pong/pingpong_tools.h"
 
 using namespace dagger;
 using namespace ping_pong;
@@ -53,11 +54,11 @@ void PingPongGame::CoreSystemsSetup(Engine& engine_)
     engine_.AddSystem<SpriteRenderSystem>();
     engine_.AddSystem<AnimationSystem>();
     engine_.AddSystem<TransformSystem>();
-#if !defined(NDEBUG)
+#if defined(DAGGER_DEBUG)
     engine_.AddSystem<DiagnosticSystem>();
     engine_.AddSystem<GUISystem>();
     engine_.AddSystem<ToolMenuSystem>();
-#endif //!defined(NDEBUG)
+#endif //defined(DAGGER_DEBUG)
 }
 
 void PingPongGame::GameplaySystemsSetup(Engine& engine_)
@@ -67,18 +68,26 @@ void PingPongGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<PingPongPlayerInputSystem>();
     engine_.AddSystem<PlayerScoresSystem>();
     engine_.AddSystem<PingPongBallRandomSpeedSystem>();
+#if defined(DAGGER_DEBUG)
+    engine_.AddSystem<PingPongTools>();
+#endif //defined(DAGGER_DEBUG)
 }
 
 void PingPongGame::WorldSetup(Engine& engine_)
 {
-    Vector2 scale(1, 1);
-    
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
     camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
+
+    SetupWorld(engine_);
+}
+
+void ping_pong::SetupWorld(Engine& engine_)
+{
+    Vector2 scale(1, 1);
 
     auto& reg = engine_.Registry();
 

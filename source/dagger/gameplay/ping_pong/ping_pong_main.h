@@ -10,6 +10,7 @@ using namespace dagger;
 namespace ping_pong
 {
     void CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 speed_, Vector3 pos_);
+    void SetupWorld(Engine& engine_);
 
     class PingPongGame : public Game
     {
