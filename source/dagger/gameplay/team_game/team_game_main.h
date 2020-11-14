@@ -7,19 +7,17 @@
 
 using namespace dagger;
 
-namespace ping_pong
+namespace team_game
 {
-    void CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 speed_, Vector3 pos_);
     void SetupWorld(Engine& engine_);
 
-    class PingPongGame : public Game
+    class TeamGame : public Game
     {
         inline String GetIniFile() override
         {
-            return "pingpong.ini";
+            return "teamgame.ini";
         };
 
-        void CoreSystemsSetup(Engine& engine_) override;
         void GameplaySystemsSetup(Engine& engine_) override;
         void WorldSetup(Engine& engine_) override;
     };

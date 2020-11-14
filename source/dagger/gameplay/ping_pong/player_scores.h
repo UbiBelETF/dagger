@@ -24,6 +24,8 @@ namespace ping_pong
 
         void Run() override;
 
+
+        static Float32 GetTileSize() { return s_TileSize; }
         static void SetFieldSize(int width, int height, float tileSize)
         {
             s_FieldWidth = width;
