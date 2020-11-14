@@ -18,6 +18,7 @@
 #include "gameplay/ping_pong/pingpong_ball.h"
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
+#include "gameplay/ping_pong/pingpong_tools.h"
 
 using namespace dagger;
 using namespace ping_pong;
@@ -65,18 +66,26 @@ void PingPongGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<PingPongBallSystem>();
     engine_.AddSystem<PingPongPlayerInputSystem>();
     engine_.AddSystem<PlayerScoresSystem>();
+#if defined(DAGGER_DEBUG)
+    engine_.AddSystem<PingPongTools>();
+#endif //defined(DAGGER_DEBUG)
 }
 
 void PingPongGame::WorldSetup(Engine& engine_)
 {
-    Vector2 scale(1, 1);
-    
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
     camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
+
+    SetupWorld(engine_);
+}
+
+void ping_pong::SetupWorld(Engine& engine_)
+{
+    Vector2 scale(1, 1);
 
     auto& reg = engine_.Registry();
 
