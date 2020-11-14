@@ -11,6 +11,8 @@ namespace racing_game
     {
         EDaggerKeyboard leftKey = EDaggerKeyboard::KeyA;
         EDaggerKeyboard rightKey = EDaggerKeyboard::KeyD;
+        EDaggerKeyboard upKey = EDaggerKeyboard::KeyW;
+        EDaggerKeyboard downKey = EDaggerKeyboard::KeyS;
 
         Vector2 input{ 0, 0 };
     };
