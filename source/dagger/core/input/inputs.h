@@ -210,9 +210,9 @@ namespace dagger
         static Bool IsInputDown(EDaggerKeyboard key_);
         static Bool IsInputDown(EDaggerMouse button_);
 
-        static const Vector2& CursorPositionInWindow();
-        static const Vector2& CursorPositionInScreen();
-        static const Vector2& CursorPositionInWorld();
+        static const Vector2 CursorPositionInWindow();
+        static const Vector2 CursorPositionInScreen();
+        static const Vector2 CursorPositionInWorld();
 
         static UInt32 GetInputDuration(EDaggerKeyboard key_);
         static UInt32 GetInputDuration(EDaggerMouse mouse_);
