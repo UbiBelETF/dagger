@@ -50,13 +50,14 @@ void PlatformerControllerSystem::Run()
 
             if (char_.jumping)
             {
-                if (char_.jumpDuration <= 50)
+                int maxHight = 60;
+                if (char_.jumpDuration <= maxHight)
                 {
                     sprite_.position.y += char_.speed * sprite_.scale.y * Engine::DeltaTime();
                     AnimatorPlay(animator_, "souls_like_knight_character:JUMP");
                     char_.jumpDuration++;
                 }
-                else if (char_.jumpDuration <= 100)
+                else if (char_.jumpDuration <= 2 * maxHight)
                 {
                     sprite_.position.y -= char_.speed * sprite_.scale.y * Engine::DeltaTime();
                     AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
