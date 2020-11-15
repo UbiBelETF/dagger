@@ -13,8 +13,8 @@ namespace platformer
 		
 		bool isRolling{ false };
 		Float32 rollingSpeed{ 25.0f };
-		UInt8 rollingTime{ 5 };
-		UInt8 timeRolling{ 0 };
+		Float32 rollingTime{ 0.75f };
+		Float32 timeRolling{ 0.0f };
 	};
 
 	class PlatformerControllerSystem

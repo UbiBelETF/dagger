@@ -31,11 +31,10 @@ void PlatformerControllerSystem::Run()
         {
             Float32 roll = input_.values.at("roll");
             Float32 run = input_.values.at("run");
-            
+
             if (roll == 1)
             {
                 char_.isRolling = true;
-                AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
 
                 // Ex: If the player is pressing the left movement key and roll Key
                 // allow him to do that. Alligning the sprite_.scale.x with run variable enables
@@ -44,19 +43,27 @@ void PlatformerControllerSystem::Run()
                 {
                     sprite_.scale.x = run;
                 }
-
-                if (char_.isRolling)
+            }
+            else
+            {
+                if (char_.timeRolling >= char_.rollingTime)
                 {
-                    if (char_.timeRolling < char_.rollingTime)
-                    {
-                        sprite_.position.x += char_.rollingSpeed * sprite_.scale.x * Engine::DeltaTime();
-                        char_.timeRolling++;
-                    }
-                    else
-                    {
-                        char_.isRolling = false;
-                        char_.timeRolling = 0;
-                    }
+                    char_.isRolling = false;
+                }
+            }
+
+            if (char_.isRolling)
+            {
+                if (char_.timeRolling < char_.rollingTime)
+                {
+                    AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
+                    sprite_.position.x += char_.rollingSpeed * sprite_.scale.x * Engine::DeltaTime();
+                    char_.timeRolling += Engine::DeltaTime();
+                }
+                else
+                {
+                    char_.isRolling = false;
+                    char_.timeRolling = 0;
                 }
             }
             else
