@@ -8,6 +8,7 @@
 		] }, 
 		{ "command-name": "jump", "trigger": "KeyUp" },
 		{ "command-name": "down", "trigger": "KeyDown" },
+		{ "command-name": "roll", "trigger": "KeyRightControl" },
 		{ "command-name": "light", "trigger": "KeyL", "event": "Released" },
 		{ "command-name": "heavy", "trigger": "KeyL", "duration": 1000 },
 		{ "command-name": "use", "trigger": "KeyO" }

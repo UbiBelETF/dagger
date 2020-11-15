@@ -10,6 +10,11 @@ namespace platformer
 	struct PlatformerCharacter
 	{
 		int speed{ 1 };
+		
+		bool isRolling{ false };
+		Float32 rollingSpeed{ 25.0f };
+		UInt8 rollingTime{ 5 };
+		UInt8 timeRolling{ 0 };
 	};
 
 	class PlatformerControllerSystem

@@ -8,6 +8,7 @@
 		] }, 
 		{ "command-name": "jump", "trigger": "KeyW" },
 		{ "command-name": "down", "trigger": "KeyS" },
+		{ "command-name": "roll", "trigger": "KeyX" },
 		{ "command-name": "light", "trigger": "KeyR", "event": "Released" },
 		{ "command-name": "heavy", "trigger": "KeyR", "duration": 1000 },
 		{ "command-name": "use", "trigger": "KeyE" }
