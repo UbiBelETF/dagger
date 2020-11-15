@@ -38,7 +38,7 @@ void PlatformerControllerSystem::Run()
                 AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
 
                 // Ex: If the player is pressing the left movement key and roll Key
-                // allow him to do that. Alligning the sprite_.scale.x also enables
+                // allow him to do that. Alligning the sprite_.scale.x with run variable enables
                 // the character to start rolling in the direction it is facing
                 if (run != 0)
                 {
