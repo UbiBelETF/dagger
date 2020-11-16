@@ -44,13 +44,6 @@ void PlatformerControllerSystem::Run()
                     sprite_.scale.x = run;
                 }
             }
-            else
-            {
-                if (char_.timeRolling >= char_.rollingTime)
-                {
-                    char_.isRolling = false;
-                }
-            }
 
             if (char_.isRolling)
             {
