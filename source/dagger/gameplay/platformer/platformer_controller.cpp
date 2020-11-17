@@ -31,8 +31,11 @@ void PlatformerControllerSystem::Run()
         {
             Float32 roll = input_.values.at("roll");
             Float32 run = input_.values.at("run");
+            Float32 jump = input_.values.at("jump");
 
-            if (roll == 1)
+            if (run != 0) char_.isRunning = true;
+
+            if (roll == 1 && !char_.isJumping)
             {
                 char_.isRolling = true;
 
@@ -45,25 +48,64 @@ void PlatformerControllerSystem::Run()
                 }
             }
 
-            if (char_.isRolling)
+            if (jump == 1 && !char_.isRolling)
             {
-                if (char_.timeRolling < char_.rollingTime)
+                char_.isJumping = true;
+                if (run != 0)
                 {
-                    AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
-                    sprite_.position.x += char_.rollingSpeed * sprite_.scale.x * Engine::DeltaTime();
-                    char_.timeRolling += Engine::DeltaTime();
+                    sprite_.scale.x = run;
                 }
-                else
+            }
+
+            if (char_.isRolling || char_.isJumping)
+            {
+
+                if (char_.isRolling)
                 {
-                    char_.isRolling = false;
-                    char_.timeRolling = 0;
+                    if (char_.timeRolling < char_.rollingTime)
+                    {
+                        AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
+                        sprite_.position.x += char_.rollingSpeed * sprite_.scale.x * Engine::DeltaTime();
+                        char_.timeRolling += Engine::DeltaTime();
+                    }
+                    else
+                    {
+                        char_.isRolling = false;
+                        char_.timeRolling = 0;
+                    }
+                }
+                else if (char_.isJumping)
+                {
+                    if ((sprite_.position.y < char_.maxHeight) && !char_.reachedMax)
+                    {
+                        AnimatorPlay(animator_, "souls_like_knight_character:JUMP");
+                        sprite_.position.y += char_.verticalSpeed * Engine::DeltaTime();
+                        if (char_.isRunning) sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                        else sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
+                    }
+                    if (sprite_.position.y >= char_.maxHeight) {
+                        char_.reachedMax = true;
+                    }
+                    if (char_.reachedMax) {
+                        AnimatorPlay(animator_, "souls_like_knight_character:FALLING");
+                        sprite_.position.y -= char_.verticalSpeed * Engine::DeltaTime();
+                        if (char_.isRunning) sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                        else sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
+                    }
+                    if (sprite_.position.y <= 0)
+                    {
+                        char_.reachedMax = false;
+                        char_.isJumping = false;
+                        char_.rollingInAir = false;
+                    }
                 }
             }
             else
             {
-                if (run == 0 && roll == 0)
+                if (run == 0 && roll == 0 && jump == 0)
                 {
                     AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
+                    char_.isRunning = false;
                 }
                 else
                 {

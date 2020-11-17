@@ -12,9 +12,15 @@ namespace platformer
 		int speed{ 1 };
 		
 		bool isRolling{ false };
+		bool isJumping{ false };
+		bool isRunning{ false };
+		bool reachedMax{ false };
+		bool rollingInAir{ false };
+		Float32 maxHeight{ 40.0f };
 		Float32 rollingSpeed{ 25.0f };
 		Float32 rollingTime{ 0.75f };
 		Float32 timeRolling{ 0.0f };
+		Float32 verticalSpeed{ 70 };
 	};
 
 	class PlatformerControllerSystem
