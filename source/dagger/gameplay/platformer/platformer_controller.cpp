@@ -24,6 +24,11 @@ void PlatformerControllerSystem::SpinUp()
     Engine::Registry().on_construct<InputReceiver>().connect<&PlatformerControllerSystem::OnInitialize>(this);
 }
 
+Float32 platformer::CalculateVerticalSpeed(Float32 speed_, Float32 acceleration_, Float32 time_) 
+{
+    return speed_ - acceleration_ * time_;
+}
+
 void PlatformerControllerSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Animator, PlatformerCharacter>().each(
@@ -62,6 +67,10 @@ void PlatformerControllerSystem::Run()
 
                 if (char_.isRolling)
                 {
+                    if (run != 0)
+                    {
+                        sprite_.scale.x = run;
+                    }
                     if (char_.timeRolling < char_.rollingTime)
                     {
                         AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
@@ -76,19 +85,26 @@ void PlatformerControllerSystem::Run()
                 }
                 else if (char_.isJumping)
                 {
-                    if ((sprite_.position.y < char_.maxHeight) && !char_.reachedMax)
+                    if (run != 0)
+                    {
+                        sprite_.scale.x = run;
+                    }
+                    Float32 speed = CalculateVerticalSpeed(char_.verticalInitialSpeed, char_.gravity, char_.timeJumping);
+                    if (!char_.reachedMax)
                     {
                         AnimatorPlay(animator_, "souls_like_knight_character:JUMP");
-                        sprite_.position.y += char_.verticalSpeed * Engine::DeltaTime();
+                        char_.timeJumping += Engine::DeltaTime();
+                        sprite_.position.y += speed * Engine::DeltaTime();
                         if (char_.isRunning) sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
                         else sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
                     }
-                    if (sprite_.position.y >= char_.maxHeight) {
+                    if (speed <= 0) {
                         char_.reachedMax = true;
                     }
                     if (char_.reachedMax) {
                         AnimatorPlay(animator_, "souls_like_knight_character:FALLING");
-                        sprite_.position.y -= char_.verticalSpeed * Engine::DeltaTime();
+                        char_.timeJumping += Engine::DeltaTime();
+                        sprite_.position.y += speed * Engine::DeltaTime();
                         if (char_.isRunning) sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
                         else sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
                     }
@@ -96,7 +112,7 @@ void PlatformerControllerSystem::Run()
                     {
                         char_.reachedMax = false;
                         char_.isJumping = false;
-                        char_.rollingInAir = false;
+                        char_.timeJumping = 0;
                     }
                 }
             }
