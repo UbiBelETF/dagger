@@ -40,7 +40,7 @@ void PlatformerControllerSystem::Run()
                 sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
                 AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
             } 
-            else if (sAttack != 0)
+            else if (sAttack != 0 && block==0)
             {
                 AnimatorPlay(animator_, "souls_like_knight_character:ATTACK");
                 
@@ -50,7 +50,7 @@ void PlatformerControllerSystem::Run()
                 AnimatorPlay(animator_, "souls_like_knight_character:BLOCK");
                 
             }
-            else if (useP != 0)
+            else if (useP != 0 && run==0)
             {
                 AnimatorPlay(animator_, "souls_like_knight_character:DRINK_POTION");
             } 
