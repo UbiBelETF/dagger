@@ -54,8 +54,8 @@ void PingPongGame::CoreSystemsSetup(Engine& engine_)
     engine_.AddSystem<ShaderSystem>();
     engine_.AddSystem<TextureSystem>();
     engine_.AddSystem<SpriteRenderSystem>();
-    engine_.AddSystem<AnimationSystem>();
-    engine_.AddSystem<TransformSystem>();
+    engine_.AddPausableSystem<TransformSystem>();
+    engine_.AddPausableSystem<AnimationSystem>();
 #if !defined(NDEBUG)
     engine_.AddSystem<DiagnosticSystem>();
     engine_.AddSystem<GUISystem>();
@@ -65,14 +65,14 @@ void PingPongGame::CoreSystemsSetup(Engine& engine_)
 
 void PingPongGame::GameplaySystemsSetup(Engine& engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
-    engine_.AddSystem<PingPongBallSystem>();
-    engine_.AddSystem<PingPongPlayerInputSystem>();
-    engine_.AddSystem<PlayerScoresSystem>();
-    engine_.AddSystem<PowerUpSystem>();
-    engine_.AddSystem<FlickeringSystem>();
+    engine_.AddPausableSystem<SimpleCollisionsSystem>();
+    engine_.AddPausableSystem<PingPongBallSystem>();
+    engine_.AddPausableSystem<PingPongPlayerInputSystem>();
+    engine_.AddPausableSystem<PlayerScoresSystem>();
+    //engine_.AddPausableSystem<PowerUpSystem>();
+    //engine_.AddPausableSystem<FlickeringSystem>();
 #if defined(DAGGER_DEBUG)
-    engine_.AddSystem<PingPongTools>();
+    engine_.AddPausableSystem<PingPongTools>();
 #endif //defined(DAGGER_DEBUG)
 }
 

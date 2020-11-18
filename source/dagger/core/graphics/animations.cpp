@@ -60,6 +60,21 @@ void AnimationSystem::WindDown()
 #if !defined(NDEBUG)
 void AnimationSystem::RenderToolMenu()
 {
+    if (ImGui::BeginMenu("Game"))
+    {
+        if (ImGui::MenuItem("Pause"))
+        {
+            dagger::Engine::ToggleSystems(true);
+        }
+
+        if (ImGui::MenuItem("Unpause"))
+        {
+            dagger::Engine::ToggleSystems(false);
+        }
+
+        ImGui::EndMenu();
+    }
+
     if (ImGui::BeginMenu("Animations"))
     {
         if (ImGui::MenuItem("Reload All"))
