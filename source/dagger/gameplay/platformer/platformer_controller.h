@@ -12,6 +12,7 @@ namespace platformer
 		int speed{ 1 };
 		bool jumping;
 		int jumpDuration = 0;
+		int maxHeight = 60;
 	};
 
 	class PlatformerControllerSystem
