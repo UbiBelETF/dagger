@@ -29,6 +29,7 @@ Float32 platformer::CalculateVerticalSpeed(Float32 speed_, Float32 acceleration_
     return speed_ - acceleration_ * time_;
 }
 
+
 // Ex: If the player is pressing the left movement key and roll Key
 // allow him to do that. Alligning the sprite_.scale.x with run variable enables
 // the character to start rolling in the direction it is facing
@@ -51,7 +52,14 @@ void PlatformerControllerSystem::Run()
 
             if (run != 0)
             {
-                char_.isRunning = true;
+                if (char_.isJumping)
+                {
+                    char_.turningDuringJump = true;
+                }
+                else if (jump == 1)
+                {
+                    char_.runningJump = true;
+                }
             }
 
             if (roll == 1 && !char_.isJumping)
@@ -87,7 +95,7 @@ void PlatformerControllerSystem::Run()
                 else if (char_.isJumping)
                 {
                     AlignCharacter(run, sprite_);
-                    Float32 verticalSpeed = CalculateVerticalSpeed(char_.verticalInitialSpeed, char_.gravity, char_.timeJumping);
+                    char_.verticalSpeed = CalculateVerticalSpeed(char_.verticalInitialSpeed, char_.gravity, char_.timeJumping);
                     if (!char_.reachedMax)
                     {
                         AnimatorPlay(animator_, "souls_like_knight_character:JUMP");
@@ -99,13 +107,17 @@ void PlatformerControllerSystem::Run()
                     }
 
                     char_.timeJumping += Engine::DeltaTime();
-                    sprite_.position.y += verticalSpeed * Engine::DeltaTime();
-                    if (char_.isRunning)
+                    sprite_.position.y += char_.verticalSpeed * Engine::DeltaTime();
+                    if (char_.runningJump)
                     {
                         sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
                     }
+                    else if (char_.turningDuringJump)
+                    {
+                        sprite_.position.x += char_.speed / 2 * sprite_.scale.x * Engine::DeltaTime();
+                    }
 
-                    if (verticalSpeed <= 0)
+                    if (char_.verticalSpeed <= 0)
                     {
                         char_.reachedMax = true;
                     }
@@ -119,10 +131,11 @@ void PlatformerControllerSystem::Run()
             }
             else
             {
-                if (run == 0 && roll == 0 && jump == 0)
+                if (run == 0)
                 {
                     AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
-                    char_.isRunning = false;
+                    char_.runningJump = false;
+                    char_.turningDuringJump = false;
                 }
                 else
                 {

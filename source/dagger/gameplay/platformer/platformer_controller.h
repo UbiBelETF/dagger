@@ -10,19 +10,20 @@ namespace platformer
 {
 	struct PlatformerCharacter
 	{
-		int speed{ 1 };
-		
 		bool isRolling{ false };
 		bool isJumping{ false };
-		bool isRunning{ false };
 		bool reachedMax{ false };
-		Float32 maxHeight{ 40.0f };
+		bool turningDuringJump{ false };
+		bool runningJump{ false };
+
 		Float32 rollingSpeed{ 25.0f };
 		Float32 rollingTime{ 0.75f };
 		Float32 timeRolling{ 0.0f };
 		Float32 timeJumping{ 0.0f };
-		Float32 verticalInitialSpeed{ 100 };
-		Float32 gravity{ 150 };
+		Float32 verticalInitialSpeed{ 100.0f };
+		Float32 verticalSpeed{ 0.0f };
+		Float32 gravity{ 150.0f };
+		Float32 speed{ 0.0f };
 	};
 
 	class PlatformerControllerSystem
