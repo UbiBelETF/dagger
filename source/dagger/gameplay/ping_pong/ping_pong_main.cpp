@@ -20,6 +20,7 @@
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 #include "gameplay/ping_pong/pingpong_tools.h"
+#include "gameplay/ping_pong/ball_glowing.h"
 
 using namespace dagger;
 using namespace ping_pong;
@@ -43,6 +44,7 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     auto& col = reg.emplace<SimpleCollision>(entity);
     col.size.x = tileSize_;
     col.size.y = tileSize_;
+    reg.emplace<BallGlowing>(entity);
 }
 
 void PingPongGame::CoreSystemsSetup(Engine& engine_)
@@ -54,6 +56,7 @@ void PingPongGame::CoreSystemsSetup(Engine& engine_)
     engine_.AddSystem<SpriteRenderSystem>();
     engine_.AddSystem<AnimationSystem>();
     engine_.AddSystem<TransformSystem>();
+    engine_.AddSystem<BallGlowingSystem>();
 #if !defined(NDEBUG)
     engine_.AddSystem<DiagnosticSystem>();
     engine_.AddSystem<GUISystem>();
