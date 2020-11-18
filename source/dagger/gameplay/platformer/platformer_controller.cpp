@@ -29,6 +29,17 @@ Float32 platformer::CalculateVerticalSpeed(Float32 speed_, Float32 acceleration_
     return speed_ - acceleration_ * time_;
 }
 
+// Ex: If the player is pressing the left movement key and roll Key
+// allow him to do that. Alligning the sprite_.scale.x with run variable enables
+// the character to start rolling in the direction it is facing
+void platformer::AlignCharacter(Float32 run_, Sprite& sprite_)
+{
+    if (run_ != 0)
+    {
+        sprite_.scale.x = run_;
+    }
+}
+
 void PlatformerControllerSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Animator, PlatformerCharacter>().each(
@@ -38,39 +49,28 @@ void PlatformerControllerSystem::Run()
             Float32 run = input_.values.at("run");
             Float32 jump = input_.values.at("jump");
 
-            if (run != 0) char_.isRunning = true;
+            if (run != 0)
+            {
+                char_.isRunning = true;
+            }
 
             if (roll == 1 && !char_.isJumping)
             {
-                char_.isRolling = true;
-
-                // Ex: If the player is pressing the left movement key and roll Key
-                // allow him to do that. Alligning the sprite_.scale.x with run variable enables
-                // the character to start rolling in the direction it is facing
-                if (run != 0)
-                {
-                    sprite_.scale.x = run;
-                }
+                char_.isRolling = true;               
+                AlignCharacter(run, sprite_);
             }
 
             if (jump == 1 && !char_.isRolling)
             {
-                char_.isJumping = true;
-                if (run != 0)
-                {
-                    sprite_.scale.x = run;
-                }
+                char_.isJumping = true; 
+                AlignCharacter(run, sprite_);
             }
 
             if (char_.isRolling || char_.isJumping)
             {
-
                 if (char_.isRolling)
                 {
-                    if (run != 0)
-                    {
-                        sprite_.scale.x = run;
-                    }
+                    AlignCharacter(run, sprite_);
                     if (char_.timeRolling < char_.rollingTime)
                     {
                         AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
@@ -83,30 +83,31 @@ void PlatformerControllerSystem::Run()
                         char_.timeRolling = 0;
                     }
                 }
+
                 else if (char_.isJumping)
                 {
-                    if (run != 0)
-                    {
-                        sprite_.scale.x = run;
-                    }
-                    Float32 speed = CalculateVerticalSpeed(char_.verticalInitialSpeed, char_.gravity, char_.timeJumping);
+                    AlignCharacter(run, sprite_);
+                    Float32 verticalSpeed = CalculateVerticalSpeed(char_.verticalInitialSpeed, char_.gravity, char_.timeJumping);
                     if (!char_.reachedMax)
                     {
                         AnimatorPlay(animator_, "souls_like_knight_character:JUMP");
-                        char_.timeJumping += Engine::DeltaTime();
-                        sprite_.position.y += speed * Engine::DeltaTime();
-                        if (char_.isRunning) sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
-                        else sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
                     }
-                    if (speed <= 0) {
-                        char_.reachedMax = true;
-                    }
-                    if (char_.reachedMax) {
+                    else
+                    {
+
                         AnimatorPlay(animator_, "souls_like_knight_character:FALLING");
-                        char_.timeJumping += Engine::DeltaTime();
-                        sprite_.position.y += speed * Engine::DeltaTime();
-                        if (char_.isRunning) sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
-                        else sprite_.position.x += sprite_.scale.x * Engine::DeltaTime();
+                    }
+
+                    char_.timeJumping += Engine::DeltaTime();
+                    sprite_.position.y += verticalSpeed * Engine::DeltaTime();
+                    if (char_.isRunning)
+                    {
+                        sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                    }
+
+                    if (verticalSpeed <= 0)
+                    {
+                        char_.reachedMax = true;
                     }
                     if (sprite_.position.y <= 0)
                     {

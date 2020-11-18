@@ -2,6 +2,7 @@
 
 #include "core/core.h"
 #include "core/system.h"
+#include "core/graphics/sprite.h"
 
 using namespace dagger;
 
@@ -40,4 +41,6 @@ namespace platformer
 	};
 
 	Float32 CalculateVerticalSpeed(Float32 speed_, Float32 acceleration_, Float32 time_);
+
+	void AlignCharacter(Float32 run_, Sprite& sprite_);
 }
