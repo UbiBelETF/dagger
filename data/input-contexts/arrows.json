@@ -10,6 +10,7 @@
 		{ "command-name": "down", "trigger": "KeyDown" },
 		{ "command-name": "light", "trigger": "KeyL", "event": "Released" },
 		{ "command-name": "heavy", "trigger": "KeyL", "duration": 1000 },
-		{ "command-name": "use", "trigger": "KeyO" }
+		{ "command-name": "use", "trigger": "KeyK" },
+		{ "command-name": "block", "trigger": "KeyM" }
 	]
 }

@@ -61,6 +61,8 @@ sources = [
     'source/dagger/tools/plotvar.cpp',
     'source/dagger/tools/toolmenu.cpp',
     'source/dagger/main.cpp',
+    'source/dagger/gameplay/team_game/team_game_main.cpp',
+
 
     'libs/glad/include/glad/glad.c',
     'libs/imgui/include/imgui/imgui.cpp',
