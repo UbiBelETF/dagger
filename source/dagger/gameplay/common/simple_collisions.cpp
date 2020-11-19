@@ -88,7 +88,7 @@ bool SimpleCollision::IsCollided(const Vector3& pos_, const SimpleCollision& oth
     else {                                                          // happens, collision won't happen regardless of the object positioning
         if (p1.x < p2.x + p2Size.x &&                               // This allows for accurate aproximation of the circle with a rectangle
             p1.x + p1Size.x > p2.x &&                               // because the cases where a rectangle would colide with an object but  
-            p1.y < p2.y + p2Size.y &&                               // a circle wouldn't are excluded because distance is far to great for 
+            p1.y < p2.y + p2Size.y &&                               // a circle wouldn't are excluded because distance is far too great for 
             p1.y + p1Size.y > p2.y)                                 // collision to happen
         {
             return true;

@@ -53,12 +53,12 @@ void RacingCollisionsLogicSystem::Run()
 }
 
 void RacingCollisionsLogicSystem::OnEndOfFrame()
-{
+{/*
     if (m_Restart)
     {
         m_Restart = false;
         Engine::Registry().clear();
 
         racing_game::SetupWorld(Engine::Instance());
-    }
+    }*/
 }
