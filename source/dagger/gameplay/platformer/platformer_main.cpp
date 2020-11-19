@@ -92,7 +92,7 @@ void CreateBackdrop()
         
         AssignSpriteTexture(sprite, "EmptyWhitePixel");
         sprite.color = { 0, 0, 0, 1 };
-        sprite.size = { 200, 200 };
+        sprite.imageDimensions = { 200, 200 };
         sprite.scale = { 10, 1 };
         sprite.position = { 0, -125, 1 };
     }

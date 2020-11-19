@@ -28,7 +28,7 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
     AssignSpriteTexture(sprite, "PingPong:ball");
-    sprite.size = Vector2(1, 1) * tileSize_;
+    sprite.imageDimensions = Vector2(1, 1) * tileSize_;
 
     sprite.color = color_;
 
@@ -98,7 +98,7 @@ void PingPongGame::WorldSetup(Engine& engine_)
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSpriteTexture(sprite, "EmptyWhitePixel");
-            sprite.size = scale * tileSize;
+            sprite.imageDimensions = scale * tileSize;
 
             if (i % 2 != j % 2)
             {
@@ -221,8 +221,8 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSpriteTexture(sprite, "EmptyWhitePixel");
-        sprite.size.x = tileSize;
-        sprite.size.y = playerSize;
+        sprite.imageDimensions.x = tileSize;
+        sprite.imageDimensions.y = playerSize;
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerOneInput(controller);
@@ -242,8 +242,8 @@ void PingPongGame::WorldSetup(Engine& engine_)
 
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSpriteTexture(sprite, "EmptyWhitePixel");
-        sprite.size.x = tileSize;
-        sprite.size.y = playerSize;
+        sprite.imageDimensions.x = tileSize;
+        sprite.imageDimensions.y = playerSize;
 
         auto& controller = reg.emplace<ControllerMapping>(entity);
         PingPongPlayerInputSystem::SetupPlayerTwoInput(controller);

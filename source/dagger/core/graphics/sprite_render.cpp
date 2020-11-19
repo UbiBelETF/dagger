@@ -22,10 +22,13 @@ void SpriteRenderSystem::SpinUp()
     glBufferData(GL_ARRAY_BUFFER, sizeof(m_VerticesAndTexCoords), m_VerticesAndTexCoords, GL_STATIC_DRAW);
 
     // attribute #0: vertex position
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 
+        sizeof(float) * 4, (void*)0);
     glEnableVertexAttribArray(0);
+
     // attribute #1: tex coord
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 
+        sizeof(float) * 4, (void*)(sizeof(float) * 2));
     glEnableVertexAttribArray(1);
 
     const GLsizei dataSize = sizeof(SpriteData);
@@ -34,17 +37,19 @@ void SpriteRenderSystem::SpinUp()
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 	glBufferData(GL_ARRAY_BUFFER, s_BufferSize, nullptr, GL_STREAM_DRAW);
 
-    const StaticArray<Pair<UInt32, UInt32>, 5> sizesAndStrides = {
-        pair(3, 0),  // #2: quad position
-        pair(2, 3),  // #3: quad pivot
-        pair(4, 5),  // #4: quad tint color
-        pair(2, 9),  // #5: texture size
-        pair(2, 11), // #6: scale
+    const StaticArray<Pair<UInt32, UInt32>, 7> sizesAndStrides = {
+        pair(2, 0),     // #2: sub size
+        pair(2, 2),     // #3: sub origin
+        pair(2, 4),     // #4: sub origin
+        pair(3, 6),     // #5: quad position
+        pair(2, 9),     // #6: quad pivot
+        pair(4, 11),    // #7: quad tint color
+        pair(2, 15),    // #8: scale
     };
 
     for (UInt32 i = 0; i < sizesAndStrides.size(); i++)
     {
-        UInt32 index = 2 + i;
+        const UInt32 index = 2 + i;
         glVertexAttribPointer(index, sizesAndStrides[i].first, GL_FLOAT, GL_FALSE, 
             dataSize, (void*)(sizeof(Float32) * sizesAndStrides[i].second));
         glEnableVertexAttribArray(index);
@@ -71,7 +76,6 @@ void SpriteRenderSystem::OnRender()
     const auto& view = Engine::Registry().view<Sprite>();
     Sequence<Sprite> sprites{ view.raw(), view.raw() + view.size() };
     UInt64 dataSize = sizeof(SpriteData) * sprites.size();
-    
     Sequence<SpriteData> currentRender{};
 
     std::sort(sprites.begin(), sprites.end(), [](const Sprite& a_, const Sprite& b_)
