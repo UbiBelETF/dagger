@@ -59,18 +59,44 @@ void PlatformerControllerSystem::Run()
                 AnimatorPlay(animator_, "souls_like_knight_character:RUN");
                 sprite_.scale.x = run;
                 sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+            }     
+           
+            
+            Float32 jump = 0;
+            if (!char_.jumping)
+                jump = input_.values.at("jump");
+            if (jump)
+            {
+                char_.jumping = true;
             }
 
-            if(run==0 && useP==0 && down==0 && block==0 && sAttack==0) 
+            if (char_.jumping)
+            {
+                if (char_.jumpDuration <= char_.maxHeight)
+                {
+                    sprite_.position.y += char_.speed * sprite_.scale.y * Engine::DeltaTime();
+                    AnimatorPlay(animator_, "souls_like_knight_character:JUMP");
+                    char_.jumpDuration++;
+                }
+                else if (char_.jumpDuration <= 2 * char_.maxHeight)
+                {
+                    sprite_.position.y -= char_.speed * sprite_.scale.y * Engine::DeltaTime();
+                    AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
+                    char_.jumpDuration++;
+                }
+                else
+                {
+                    char_.jumpDuration = 0;
+                    char_.jumping = false;
+                    sprite_.position.y = 0;
+                }
+            }
+           if(run==0 && useP==0 && down==0 && block==0 && sAttack==0 && jump==0) 
             {
                 AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
             }
             
-           
-            
-            
-            
-            
+
         });
 }
 
