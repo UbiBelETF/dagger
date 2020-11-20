@@ -9,7 +9,25 @@ namespace platformer
 {
 	struct PlatformerCharacter
 	{
+		bool jumping{ false };
+		bool falling{ false };
+		bool newJump{ true };
+		bool rolling{ false };
+		bool doubleTap{ false }; // Waiting for a double tap to perform roll animation
+
+		
 		int speed{ 1 };
+		int jumpNumber{ 0 };
+
+		Float32 startJumpSpeed{ 50.f };
+		Float32 currentJumpSpeed{ 0.f };
+		Float32 gravitySpeed{ 60.f };
+		Float32 rollingTime{0.75f};
+		Float32 startRoll{ 0.f };
+		Float32 rollingSpeed{ 100.f };
+		Float32 currentRollingTime{0.f};
+		Float32 doubleTapDurationWindow{ 0.25f };
+		Float32 currentDoubleTapDuration{ 0.f };
 	};
 
 	class PlatformerControllerSystem

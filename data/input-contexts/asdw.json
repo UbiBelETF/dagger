@@ -5,7 +5,12 @@
 		  "actions": [
 			{ "trigger": "KeyA", "value": -1 },
 			{ "trigger": "KeyD", "value": 1 } 
-		] }, 
+		] },
+		{ "command-name": "roll", 
+		  "actions": [
+			{ "trigger": "KeyA", "value": -1 , "event": "Released"  },
+			{ "trigger": "KeyD", "value": 1 , "event": "Released" } 
+		] },
 		{ "command-name": "jump", "trigger": "KeyW" },
 		{ "command-name": "down", "trigger": "KeyS" },
 		{ "command-name": "light", "trigger": "KeyR", "event": "Released" },
