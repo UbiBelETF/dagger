@@ -37,34 +37,31 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
             {
                 return;
             }
-            else
+            if (kEvent_.key == ctrl_.esc_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
             {
-                if (kEvent_.key == ctrl_.esc_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-                {
-                    ctrl_.exit = true;
-                }
-                else if (kEvent_.key == ctrl_.space_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-                {
-                    ctrl_.boost = true;
-                }
-                else if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-                {
-                    ctrl_.input.y = 1;
-                }
-                else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
-                {
-                    ctrl_.input.y = 0;
-                }
-                else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
-                {
-                    ctrl_.input.y = -1;
-                }
-                else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
-                {
-                    ctrl_.input.y = 0;
-                }
+                ctrl_.exit = true;
             }
-            }); 
+            else if (kEvent_.key == ctrl_.space_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+            {
+                ctrl_.boost = true;
+            }
+            else if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+            {
+                ctrl_.input.y = 1;
+            }
+            else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
+            {
+                ctrl_.input.y = 0;
+            }
+            else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+            {
+                ctrl_.input.y = -1;
+            }
+            else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
+            {
+                ctrl_.input.y = 0;
+            }
+        }); 
 }
 
 void PingPongPlayerInputSystem::Run()
