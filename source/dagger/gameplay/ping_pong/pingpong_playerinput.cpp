@@ -2,7 +2,7 @@
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
-
+#include "gameplay/ping_pong/configure.h"
 using namespace dagger;
 using namespace ping_pong;
 
@@ -52,7 +52,7 @@ void PingPongPlayerInputSystem::Run()
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
 
-        t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
+        t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime()*ConfigureSystem::PlayerSpeedMultiplier()*ConfigureSystem::GameSpeedMultiplier();
 
         if (t.position.y > s_BoarderUp)
         {
