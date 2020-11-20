@@ -12,13 +12,14 @@ namespace ping_pong
 {
     class PingPongGameplay
         : public System
-        , public Publisher<ToolMenuRender>
+        , public Subscriber<ToolMenuRender>
+        , public Subscriber<NextFrame>
     {
         bool vsPlayer = true;
         bool vsAI = false;
 
     public:
-        static bool AI;
+        
         inline String SystemName() { return "Ping Pong Gameplay System"; }
 
         void SpinUp() override;

@@ -10,8 +10,14 @@ using namespace ping_pong;
 
 Float32 PingPongPlayerInputSystem::s_BoarderDown = -20;
 Float32 PingPongPlayerInputSystem::s_BoarderUp = 20;
-
+bool PingPongPlayerInputSystem::AI = false;
 Float32 PingPongPlayerInputSystem::s_PlayerSpeed = 1.f;
+
+bool ping_pong::PingPongPlayerInputSystem::isSecondPlayer(ControllerMapping& m)
+{
+    if (m.up_key == EDaggerKeyboard::KeyUp) return true;
+    else return false;
+}
 
 void PingPongPlayerInputSystem::SpinUp()
 {
@@ -27,7 +33,11 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
         {
-            if (!(ctrl_.up_key == EDaggerKeyboard::KeyUp && PingPongGameplay::AI == true))
+            if (PingPongPlayerInputSystem::isSecondPlayer(ctrl_) && PingPongPlayerInputSystem::AI == true)
+            {
+                return;
+            }
+            else
             {
                 if (kEvent_.key == ctrl_.esc_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
                 {
@@ -54,9 +64,6 @@ void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
                     ctrl_.input.y = 0;
                 }
             }
-            else
-            {
-            }
             }); 
 }
 
@@ -67,7 +74,7 @@ void PingPongPlayerInputSystem::Run()
     {
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
-        if (PingPongGameplay::AI)
+        if (PingPongPlayerInputSystem::AI)
         {
             auto view1 = Engine::Registry().view<Transform, ControllerMapping>();
             auto view2 = Engine::Registry().view<PingPongBall, Transform>();
@@ -97,10 +104,11 @@ void PingPongPlayerInputSystem::Run()
             for (auto entity : view1)
             {
                
-                if (ctrl.up_key == EDaggerKeyboard::KeyUp)
+                if (PingPongPlayerInputSystem::isSecondPlayer(ctrl))
                 {
                     if (t.position.y > medium) ctrl.input.y = -1;
                     else ctrl.input.y = 1;
+                    break;
                 }
             }
         }

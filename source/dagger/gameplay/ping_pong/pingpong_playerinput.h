@@ -25,7 +25,8 @@ namespace ping_pong
         static Float32 s_BoarderDown;
 
     public:
-
+        static bool isSecondPlayer(ControllerMapping& m);
+        static bool AI;
         static Float32 s_PlayerSpeed;
 
     public:

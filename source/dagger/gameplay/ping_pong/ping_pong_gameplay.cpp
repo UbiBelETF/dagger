@@ -8,7 +8,6 @@
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 
 
-bool ping_pong::PingPongGameplay::AI = false;
 void ping_pong::PingPongGameplay::SpinUp()
 {
     Engine::Dispatcher().sink<NextFrame>().connect<&PingPongGameplay::OnEndOfFrame>(this);
@@ -47,19 +46,13 @@ void ping_pong::PingPongGameplay::OnEndOfFrame()
 {
     if (vsPlayer)
     {
-        AI = false;
+        PingPongPlayerInputSystem::AI = false;
         vsPlayer = false;
-        Engine::Registry().clear();
-
-        ping_pong::SetupWorld(Engine::Instance());
     }
     if (vsAI)
     {
-        AI = true;
+        PingPongPlayerInputSystem::AI = true;
         vsAI = false;
-        Engine::Registry().clear();
-
-        ping_pong::SetupWorld(Engine::Instance());
     }
 }
 #endif //defined(DAGGER_DEBUG)

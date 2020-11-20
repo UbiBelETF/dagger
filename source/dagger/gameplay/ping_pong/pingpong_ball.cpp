@@ -5,8 +5,7 @@
 #include "core/graphics/sprite.h"
 
 #include "gameplay/common/simple_collisions.h"
-#include "gameplay/ping_pong/ping_pong_gameplay.h"
-#include "gameplay/ping_pong/pingpong_playerinput.h"
+
 #include <algorithm>
 #include <execution>
 
