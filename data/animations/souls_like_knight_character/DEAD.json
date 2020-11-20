@@ -1,0 +1,7 @@
+{
+  "animation-name": "souls_like_knight_character:DEAD",
+  "animation-length-ms": 1,
+  "animation-frames": [
+    { "texture-name": "souls_like_knight_character:DEAD:dead17" }
+  ]
+}
