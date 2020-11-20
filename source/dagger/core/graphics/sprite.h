@@ -6,11 +6,21 @@
 
 namespace dagger
 {
+	struct Spritesheet;
+
 	struct SpriteCutoutData
 	{
 		Vector2 subSize{ 1.0f, 1.0f };					// 2
 		Vector2 subOrigin{ 0.0f, 0.0f };				// 2
 		Vector2 size{ 1.0f, 1.0f };						// 2
+
+		inline void UseFullImage()
+		{
+			subSize = { 0.5, 0.5f };
+			subOrigin = { 0.0f, 0.0f };
+		}
+
+		void Use(Spritesheet* spritesheet_);
 	};
 
 	struct SpriteData : public SpriteCutoutData
@@ -27,8 +37,16 @@ namespace dagger
 		ViewPtr<Shader> shader{ Shader::s_FirstLoadedShader };
 	};
 
-	void AssignSpriteTexture(Sprite& spriteTarget_, String textureName_);
-	void AssignSpriteTexture(Sprite& spriteTarget_, ViewPtr<Texture> texture_);
+	struct Spritesheet
+	{
+		ViewPtr<Texture> texture;
+		SpriteCutoutData frame;
+	};
+
+	void AssignSprite(Sprite& spriteTarget_, String textureName_);
+	void AssignSprite(Sprite& spriteTarget_, ViewPtr<Texture> texture_);
+	void AssignSprite(Sprite& spriteTarget_, ViewPtr<Spritesheet> texture_);
 
 	void AssignSpriteShader(Sprite& spriteTarget_, String shaderName_);
+
 }

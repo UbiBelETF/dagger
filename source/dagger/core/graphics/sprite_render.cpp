@@ -9,6 +9,7 @@
 #include <execution>
 #include <chrono>
 #include <cstdint>
+#include <regex>
 
 using namespace dagger;
 
@@ -61,7 +62,98 @@ void SpriteRenderSystem::SpinUp()
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
 
+    Engine::Dispatcher().sink<AssetLoadRequest<Spritesheet>>().connect<&SpriteRenderSystem::OnRequestSpritesheet>(this);
+
+    for (auto& entry : Files::recursive_directory_iterator("spritesheets"))
+    {
+        if (entry.path().extension() == ".spritesheet")
+            Engine::Dispatcher().trigger<AssetLoadRequest<Spritesheet>>(AssetLoadRequest<Spritesheet>{ entry.path().string() });
+    }
+
     Engine::Dispatcher().sink<Render>().connect<&SpriteRenderSystem::OnRender>(this);
+}
+
+void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<Spritesheet> request_)
+{
+    FilePath path{ request_.path };
+    String name = path.stem().string();
+    auto& textures = Engine::Res<Texture>();
+    if (!textures.contains(name))
+        Engine::Dispatcher().trigger<AssetLoadRequest<Texture>>(
+            AssetLoadRequest<Texture>{ path.replace_extension("png").string() });
+
+    FilePath root{ request_.path };
+    root.remove_filename();
+
+    String textureName = "";
+    {
+        String pathName = root.append(path.stem().string()).string();
+        if (pathName.find("textures") == 0)
+            pathName = pathName.substr(9, pathName.length() - 13);
+
+        std::replace(pathName.begin(), pathName.end(), '/', ':');
+        std::replace(pathName.begin(), pathName.end(), '\\', ':');
+        textureName = pathName;
+    }
+
+    assert(textures.contains(textureName));
+    auto texture = textures[textureName];
+
+    std::ifstream framesInput{ request_.path };
+    String line;
+
+    std::regex emptyLine("^[ \t\n]*$");
+    std::regex animationLine("([a-zA-Z_0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)");
+    std::regex spriteLine("([a-zA-Z_0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)");
+
+    while (std::getline(framesInput, line))
+    {
+        if (std::regex_match(line, emptyLine))
+            continue;
+
+        std::smatch match;
+
+        UInt32 count = 1;
+        if (std::regex_match(line, match, animationLine))
+        {
+            count = std::atoi(match[6].str().c_str());
+        }
+        else
+        {
+            assert(std::regex_match(line, match, spriteLine));
+        }
+
+        Vector2 fullSize{ texture->Width(), texture->Height() };
+
+        auto spriteName = match[1].str();
+        auto x = std::atoi(match[2].str().c_str());
+        auto y = std::atoi(match[3].str().c_str());
+        auto w = std::atoi(match[4].str().c_str());
+        auto h = std::atoi(match[5].str().c_str());
+
+        for (UInt32 i = 0; i < count; ++i)
+        {
+            Spritesheet* spritesheet = new Spritesheet();
+            spritesheet->texture = texture;
+
+            spritesheet->frame.size.x = w;
+            spritesheet->frame.size.y = h;
+
+            spritesheet->frame.subSize.x = (Float32)w / fullSize.x;
+            spritesheet->frame.subSize.y = (Float32)h / fullSize.y;
+
+            spritesheet->frame.subOrigin.x = (Float32)(x + w * i) / fullSize.x;
+            spritesheet->frame.subOrigin.y = 1.0f - spritesheet->frame.subSize.y - (Float32)y / fullSize.y;
+
+            auto fullSpriteName = fmt::format(count > 1 ? "{}:{}:{}" : "{}:{}", 
+                textureName, spriteName, i + 1);
+
+            Engine::Res<Spritesheet>()[fullSpriteName] = spritesheet;
+
+            Logger::info("Spritesheet loaded: {} -> {} {} {} {} {}",
+                textureName.c_str(), fullSpriteName, x, y, w, h);
+        }
+    }
 }
 
 void SpriteRenderSystem::OnRender()

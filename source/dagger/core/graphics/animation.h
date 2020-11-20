@@ -2,6 +2,7 @@
 
 #include "core/core.h"
 #include "core/graphics/texture.h"
+#include "core/graphics/sprite.h"
 
 namespace dagger
 {
@@ -11,7 +12,7 @@ namespace dagger
 		UInt32 relativeLength{ 0 };
 		Float64 absoluteLength{ 0 };
 		Vector2 pivot;
-		ViewPtr<Texture> texture;
+		Spritesheet spritesheet;
 	};
 
 	struct Animation

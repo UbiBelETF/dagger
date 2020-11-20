@@ -16,12 +16,17 @@ uniform mat4 u_Projection;
 uniform mat4 u_Viewport;
 uniform mat4 u_Camera;
 
-out vec2 v_TextureCoord;
-out vec4 v_QuadColor;
+out highp vec2 v_TextureCoord;
+out highp vec2 v_SubTexSize;
+out highp vec2 v_SubTexOrigin;
+out highp vec4 v_QuadColor;
 
 void main()
 {
-	v_TextureCoord = ai_SubTexOrigin + a_TextureCoord * ai_SubTexSize;
+	v_TextureCoord = a_TextureCoord;
+	v_SubTexSize = ai_SubTexSize;
+	v_SubTexOrigin = ai_SubTexOrigin;
+
 	v_QuadColor = ai_QuadColor;
 
 	vec2 recenteredVertexPosition = a_VertexPosition.xy + ai_QuadPivot.xy;

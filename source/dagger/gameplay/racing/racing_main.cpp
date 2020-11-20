@@ -68,8 +68,8 @@ void racing_game::SetupWorld(Engine &engine_)
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSpriteTexture(sprite, "EmptyWhitePixel");
-            sprite.imageDimensions = scale * TileSize;
+            AssignSprite(sprite, "EmptyWhitePixel");
+            sprite.size = scale * TileSize;
 
             sprite.color = { 0.4f, 0.4f, 0.4f, 1 };
 
@@ -96,9 +96,9 @@ void racing_game::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4");
-        float ratio = sprite.imageDimensions.y / sprite.imageDimensions.x;
-        sprite.imageDimensions = { 2 * TileSize, 2 * TileSize * ratio };
+        AssignSprite(sprite, "Racing:police-car-bmw-z4");
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { -TileSize * 4, -TileSize * 4, zPos };
@@ -109,7 +109,7 @@ void racing_game::SetupWorld(Engine &engine_)
         reg.emplace<ControllerMapping>(entity);
 
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.imageDimensions;
+        col.size = sprite.size;
     }
 
     // collisions for road bounds
@@ -120,9 +120,9 @@ void racing_game::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4"); 
-        float ratio = sprite.imageDimensions.y / sprite.imageDimensions.x;
-        sprite.imageDimensions = { 2 * TileSize, 2 * TileSize * ratio };
+        AssignSprite(sprite, "Racing:police-car-bmw-z4"); 
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
         sprite.scale.y = -1;
 
         auto& transform = reg.emplace<Transform>(entity);
@@ -132,6 +132,6 @@ void racing_game::SetupWorld(Engine &engine_)
         racingCar.speed = TileSize * (rand() % 5 + 3);
 
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.imageDimensions;
+        col.size = sprite.size;
     }
 }

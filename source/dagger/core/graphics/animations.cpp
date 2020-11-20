@@ -38,7 +38,7 @@ void AnimationSystem::Run()
                     animator_.currentFrame = (animator_.currentFrame + 1) % count;
                     animator_.currentFrameTime = 0.0;
                     
-                    AssignSpriteTexture(sprite_, currentAnimation->frames[animator_.currentFrame].textureName);
+                    AssignSprite(sprite_, currentAnimation->frames[animator_.currentFrame].textureName);
                 }
             }
         });
@@ -173,7 +173,17 @@ void AnimationSystem::OnLoadAsset(AssetLoadRequest<Animation> request_)
 
         animation->frameLengthRelativeSum += frame.relativeLength;
 
-        frame.texture = Engine::Res<Texture>()[frame.textureName];
+        if (frame.textureName.find("spritesheets:") == 0)
+        {
+            auto spritesheet = Engine::Res<Spritesheet>()[frame.textureName];
+            frame.spritesheet.frame = spritesheet->frame;
+            frame.spritesheet.texture = spritesheet->texture;
+        }
+        else
+        {
+            frame.spritesheet.frame.UseFullImage();
+            frame.spritesheet.texture = Engine::Res<Texture>()[frame.textureName];
+        }
         animation->frames.push_back(std::move(frame));
     }
 
