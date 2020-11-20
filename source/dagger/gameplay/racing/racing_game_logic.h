@@ -32,7 +32,7 @@ namespace racing_game
     class RacingCollisionsLogicSystem
         : public System
     {
-        bool m_Restart = false;
+    //    bool m_Restart = false;
 
     public:
         inline String SystemName() { return "Racing Collision Car System"; }

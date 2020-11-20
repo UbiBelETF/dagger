@@ -1,4 +1,5 @@
 #include "racing_game_logic.h"
+#include "racing_car.h"
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
@@ -39,19 +40,25 @@ void RacingCollisionsLogicSystem::Run()
 
             if (col.colided)
             {
-                m_Restart = true;
+                Engine::Registry().view<RacingCar>().each([&](RacingCar& car_) {
+                    car_.speed = 0;
+                });
+                Engine::Registry().view<RacingPlayerCar>().each([&](RacingPlayerCar& car_) {
+                    car_.horzSpeed = 0;
+                });
+              //  m_Restart = true;
             }
         }
     }
 }
 
 void RacingCollisionsLogicSystem::OnEndOfFrame()
-{
+{/*
     if (m_Restart)
     {
         m_Restart = false;
         Engine::Registry().clear();
 
         racing_game::SetupWorld(Engine::Instance());
-    }
+    }*/
 }
