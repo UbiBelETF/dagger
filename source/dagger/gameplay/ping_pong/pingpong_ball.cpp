@@ -5,7 +5,7 @@
 #include "core/graphics/sprite.h"
 
 #include "gameplay/common/simple_collisions.h"
-
+#include "gameplay/ping_pong/configure.h"
 #include <algorithm>
 #include <execution>
 
@@ -74,7 +74,7 @@ void PingPongBallSystem::Run()
         }
         else
         {
-            t.position += (ball.speed * Engine::DeltaTime());
+            t.position += (ball.speed * Engine::DeltaTime()*ConfigureSystem::BallSpeedMultiplier()*ConfigureSystem::GameSpeedMultiplier());
         }
     }
 }
