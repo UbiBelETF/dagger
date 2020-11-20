@@ -37,6 +37,24 @@ void RacingPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
         else if (kEvent_.key == ctrl_.rightKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.x > 0)
         {
             ctrl_.input.x = 0;
+        } else if (kEvent_.key == ctrl_.
+            
+            
+            && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            ctrl_.input.y = 1;
+        }
+        else if (kEvent_.key == ctrl_.upKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
+        {
+            ctrl_.input.y = 0;
+        }
+        else if (kEvent_.key == ctrl_.downKey && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+        {
+            ctrl_.input.y = -1;
+        }
+        else if (kEvent_.key == ctrl_.downKey && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
+        {
+            ctrl_.input.y = 0;
         }
     });
 }
@@ -57,6 +75,7 @@ void RacingPlayerInputSystem::Run()
         auto &car = view.get<RacingPlayerCar>(entity);
 
         t.position.x += ctrl.input.x * car.horzSpeed * Engine::DeltaTime();
+        t.position.y += ctrl.input.y * car.horzSpeed * Engine::DeltaTime();
 
         Float32 boarderX = fieldSettings.GetXBoarder();
         if (t.position.x > boarderX)
