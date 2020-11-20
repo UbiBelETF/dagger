@@ -18,9 +18,6 @@ namespace dagger
 		Bool canBePaused{ false };
 		Bool isPaused{ false };
 
-		System() {}
-		System(Bool canBePaused_): canBePaused(canBePaused_) {}
-
 		void Pause() { isPaused = true; }
 		void Unpause() { isPaused = false; }
 	};

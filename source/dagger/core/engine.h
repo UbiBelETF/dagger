@@ -58,7 +58,7 @@ namespace dagger
 			m_Systems.push_back(sys);
 		}
 
-		static void ToggleSystems(Bool toPause_);
+		static void ToggleSystemsPause(Bool toPause_);
 
 		static inline IniFile& GetIniFile()
 		{

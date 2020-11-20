@@ -64,12 +64,12 @@ void AnimationSystem::RenderToolMenu()
     {
         if (ImGui::MenuItem("Pause"))
         {
-            dagger::Engine::ToggleSystems(true);
+            dagger::Engine::ToggleSystemsPause(true);
         }
 
         if (ImGui::MenuItem("Unpause"))
         {
-            dagger::Engine::ToggleSystems(false);
+            dagger::Engine::ToggleSystemsPause(false);
         }
 
         ImGui::EndMenu();

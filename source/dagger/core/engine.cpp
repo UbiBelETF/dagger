@@ -107,7 +107,7 @@ void Engine::EngineStop()
 	this->m_Registry.reset();
 }
 
-void Engine::ToggleSystems(Bool toPause_)
+void Engine::ToggleSystemsPause(Bool toPause_)
 {
 	s_Instance->s_IsPaused = toPause_;
 
