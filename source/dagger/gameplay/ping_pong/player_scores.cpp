@@ -54,7 +54,7 @@ void PlayerScoresSystem::Run()
         int yMultiplier = (1 - 2 * (rand() % 2));
         int xSpeed = xMultiplier * (rand() % 10 + 4);
         int ySpeed = yMultiplier * (rand() % 10 + 4);
-        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { xSpeed,ySpeed,0 },   { 0,rand()%((s_FieldHeight -2) / 2),0 });
+        CreatePingPongBall(s_TileSize, ColorRGBA(1, 1, 1, 1), { xSpeed,ySpeed,0 },   { 0,rand()%(s_FieldHeight / 2),0 });
 
     }
 }
