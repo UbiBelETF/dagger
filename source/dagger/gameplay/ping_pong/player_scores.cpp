@@ -26,7 +26,7 @@ void PlayerScoresSystem::Run()
         if (ball.reachedGoal && !ball.processed)
         {
             ball.speed = { 0,0,0 };
-
+            Engine::Registry().remove<SimpleCollision>(entity);
             if (ball.playerOneScored)
             {
                 m_goalsPlayerOne++;
