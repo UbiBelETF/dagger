@@ -19,7 +19,7 @@
 #include "gameplay/ping_pong/player_scores.h"
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 #include "gameplay/ping_pong/pingpong_tools.h"
-
+#include "gameplay/ping_pong/configure.h"
 using namespace dagger;
 using namespace ping_pong;
 
@@ -67,6 +67,7 @@ void PingPongGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<PingPongPlayerInputSystem>();
     engine_.AddSystem<PlayerScoresSystem>();
 #if defined(DAGGER_DEBUG)
+    engine_.AddSystem<ConfigureSystem>();
     engine_.AddSystem<PingPongTools>();
 #endif //defined(DAGGER_DEBUG)
 }
