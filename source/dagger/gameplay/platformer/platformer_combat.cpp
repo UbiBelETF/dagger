@@ -27,7 +27,7 @@ void PlatformerCombatSystem::Run()
 		if (character.dead) {
 			return;
 		}
-		if (col.colided) {
+		if (col.colided && (character.heavy || character.down || character.light)) {
 			if (Engine::Registry().valid(col.colidedWith)) {
 				auto& ch = Engine::Registry().get<CharacterHealth>(col.colidedWith);
 				auto& pchar = Engine::Registry().get<PlatformerCharacter>(col.colidedWith);
