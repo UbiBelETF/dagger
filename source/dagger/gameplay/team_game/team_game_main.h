@@ -7,7 +7,7 @@
 
 using namespace dagger;
 
-namespace team_game
+namespace lab
 {
     void SetupWorld(Engine& engine_);
 

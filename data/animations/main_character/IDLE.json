@@ -1,0 +1,12 @@
+{
+	"animation-name": "main_character:idle",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "main_character:idle:idle1" },
+		{ "texture-name": "main_character:idle:idle2" },
+		{ "texture-name": "main_character:idle:idle3" },
+		{ "texture-name": "main_character:idle:idle4" },
+		{ "texture-name": "main_character:idle:idle5" }
+	]
+}

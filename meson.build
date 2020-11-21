@@ -62,6 +62,7 @@ sources = [
     'source/dagger/tools/toolmenu.cpp',
     'source/dagger/main.cpp',
     'source/dagger/gameplay/team_game/team_game_main.cpp',
+    'source/dagger/gameplay/team_game/player_controller.cpp',
 
 
     'libs/glad/include/glad/glad.c',
