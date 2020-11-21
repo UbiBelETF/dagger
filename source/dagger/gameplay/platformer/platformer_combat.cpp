@@ -13,7 +13,6 @@
 #include "gameplay/platformer/platformer_controller.h"
 #include "gameplay/platformer/platformer_main.h"
 
-#include "gameplay/platformer/character_complete_definition.h"
 
 
 using namespace platformer;
@@ -56,15 +55,18 @@ void PlatformerCombatSystem::Run()
 					pchar.died = true;
 				}
 
+
+				auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);
+				sprite.size.x = HEALTH_BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
 				
-					auto c = Character::Get(col.colidedWith);
+					/*auto c = Character::Get(col.colidedWith);
 					auto viewSprites = Engine::Registry().view<Sprite>();
 					for (auto e : viewSprites) {
 						if (e == c.chealth.currentHealthBar) {
 							auto& sprite = Engine::Registry().get<Sprite>(e);
 							sprite.size.x = HEALTH_BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
 						}
-					}
+					}*/
 				
 
 			}

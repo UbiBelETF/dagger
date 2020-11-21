@@ -10,7 +10,6 @@ using namespace dagger;
 
 namespace platformer
 {  
-    struct Character;
 
     class Platformer : public Game
     {
