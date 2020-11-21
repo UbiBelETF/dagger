@@ -10,11 +10,20 @@ namespace platformer
 {
 	struct PlatformerCharacter
 	{
-		bool isRolling{ false };
-		bool isJumping{ false };
-		bool reachedMax{ false };
-		bool turningDuringJump{ false };
-		bool runningJump{ false };
+		UInt8 id{ 0 };
+
+		Bool isRolling{ false };
+		Bool isJumping{ false };
+		Bool reachedMax{ false };
+		Bool turningDuringJump{ false };
+		Bool runningJump{ false };
+
+		Bool canGoRight{ true };
+		Bool canGoLeft{ true };
+		Bool canGoUp{ true };
+		Bool canGoDown{ true };
+
+		Float32 currentElevation{ 0.0f };
 
 		Float32 rollingSpeed{ 25.0f };
 		Float32 rollingTime{ 0.75f };
