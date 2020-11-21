@@ -1,4 +1,5 @@
 #pragma once
+#if defined(DAGGER_DEBUG)
 #include "core/graphics/window.h"
 #include "core/system.h"
 #include "core/core.h"
@@ -24,3 +25,4 @@ public:
 	void Run() override;
 	void WindDown() override;
 };
+#endif

@@ -1,4 +1,6 @@
+
 #include "configure.h"
+#if defined(DAGGER_DEBUG)
 #include "tools/plotvar.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
@@ -62,3 +64,5 @@ void ConfigureSystem::WindDown()
 {
 	Engine::Dispatcher().sink<GUIRender>().disconnect<&ConfigureSystem::RenderGUI>(this);
 }
+#endif
+
