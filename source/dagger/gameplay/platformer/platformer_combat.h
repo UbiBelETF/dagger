@@ -2,9 +2,7 @@
 #include "core/system.h"
 #include "core/engine.h"
 #include "core/core.h"
-#include "core/graphics/sprite.h"
 
-#include "gameplay/platformer/parallax.h"
 
 using namespace dagger;
 

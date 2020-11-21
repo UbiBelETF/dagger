@@ -9,17 +9,20 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
-#include "gameplay/common/simple_collisions.h"
+#include "gameplay/platformer/platformer_collision.h"
 #include "gameplay/platformer/platformer_controller.h"
 #include "gameplay/platformer/platformer_main.h"
+
+#include "gameplay/platformer/character_complete_definition.h"
+
 
 using namespace platformer;
 
 void PlatformerCombatSystem::Run()
 {
-	auto view = Engine::Registry().view <SimpleCollision, Transform, PlatformerCharacter, CharacterHealth > ();
+	auto view = Engine::Registry().view <PlatformerCollision, Transform, PlatformerCharacter, CharacterHealth > ();
 	for (auto entity : view) {
-		SimpleCollision& col = Engine::Registry().get<SimpleCollision>(entity);
+		PlatformerCollision& col = Engine::Registry().get<PlatformerCollision>(entity);
 		Transform& t = Engine::Registry().get<Transform>(entity);
 		PlatformerCharacter& character = Engine::Registry().get<PlatformerCharacter>(entity);
 		CharacterHealth& chealth = Engine::Registry().get<CharacterHealth>(entity);
