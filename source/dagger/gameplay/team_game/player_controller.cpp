@@ -36,20 +36,23 @@ void PlayerControllerSystem::Run()
             Float32 rl = input_.values.at("rightleft");
             Float32 ud = input_.values.at("updown");
         
+            if(rl || ud)
+            {
+                AnimatorPlay(animator_, "main_character:run");
             if (rl != 0)
             { 
-
-                AnimatorPlay(animator_, "main_character:run");
+        
                 sprite_.scale.x = rl;
                 sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
             } 
-            else if (ud != 0)
+            if (ud != 0)
             { 
 
-                AnimatorPlay(animator_, "main_character:run");
                 sprite_.scale.y = 1;
                 sprite_.position.y += char_.speed * ud * Engine::DeltaTime();
-            }     
+            } 
+            }
+                
            else
             {
                 AnimatorPlay(animator_, "main_character:idle");
