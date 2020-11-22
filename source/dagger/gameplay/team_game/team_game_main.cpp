@@ -69,6 +69,9 @@ void team_game::SetupWorld(Engine &engine_)
         playerSprite.color.b = 0;
         playerSprite.size = { 20, 30 };
 
+        auto& playerTransform = reg.emplace<Transform>(player);
+        playerTransform.position = { 0, 0, 0 };
+
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThem");
 

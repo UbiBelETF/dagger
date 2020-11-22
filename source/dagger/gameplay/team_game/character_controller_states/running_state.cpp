@@ -2,7 +2,7 @@
 
 #include "core/engine.h"
 #include "core/input/inputs.h"
-#include "core/graphics/sprite.h"
+#include "core/game/transforms.h"
 
 #include "gameplay/team_game/character_controller.h"
 
@@ -22,8 +22,8 @@ void RunningStateSystem::SpinUp()
 
 void RunningStateSystem::Run()
 {
-	Engine::Registry().view<CharacterController, InputReceiver, Sprite>().each(
-		[](CharacterController& controller_, const InputReceiver input_, Sprite& sprite_)
+	Engine::Registry().view<CharacterController, InputReceiver, Transform>().each(
+		[](CharacterController& controller_, const InputReceiver input_, Transform& transform_)
 		{
 			if (controller_.state == ECharacterState::Running)
 			{
@@ -36,8 +36,8 @@ void RunningStateSystem::Run()
 				}
 				else
 				{
-					sprite_.position.x += horizontal * controller_.speed * Engine::DeltaTime();
-					sprite_.position.y += vertical * controller_.speed * Engine::DeltaTime();
+					transform_.position.x += horizontal * controller_.speed * Engine::DeltaTime();
+					transform_.position.y += vertical * controller_.speed * Engine::DeltaTime();
 				}
 			}
 		});
