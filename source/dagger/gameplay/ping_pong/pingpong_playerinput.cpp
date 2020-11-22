@@ -1,5 +1,7 @@
 #include "pingpong_playerinput.h"
 #include "pingpong_ball.h"
+#include "gameplay/ping_pong/ping_pong_gameplay.h"
+#include "gameplay/ping_pong/ping_pong_main.h"
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
@@ -8,8 +10,14 @@ using namespace ping_pong;
 
 Float32 PingPongPlayerInputSystem::s_BoarderDown = -20;
 Float32 PingPongPlayerInputSystem::s_BoarderUp = 20;
-
+bool PingPongPlayerInputSystem::AI = false;
 Float32 PingPongPlayerInputSystem::s_PlayerSpeed = 1.f;
+
+bool ping_pong::PingPongPlayerInputSystem::isSecondPlayer(ControllerMapping& m)
+{
+    if (m.up_key == EDaggerKeyboard::KeyUp) return true;
+    else return false;
+}
 
 void PingPongPlayerInputSystem::SpinUp()
 {
@@ -24,32 +32,36 @@ void PingPongPlayerInputSystem::WindDown()
 void PingPongPlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     Engine::Registry().view<ControllerMapping>().each([&](ControllerMapping& ctrl_)
-    {
-        if (kEvent_.key == ctrl_.esc_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
-            ctrl_.exit = true;
-        }
-        else if (kEvent_.key == ctrl_.space_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-        {
-            ctrl_.boost = true;
-        }
-        else if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
-        {
-            ctrl_.input.y = 1;
-        }
-        else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
-        {
-            ctrl_.input.y = 0;
-        }
-        else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
-        {
-            ctrl_.input.y = -1;
-        }
-        else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
-        {
-            ctrl_.input.y = 0;
-        }
-    });
+            if (PingPongPlayerInputSystem::isSecondPlayer(ctrl_) && PingPongPlayerInputSystem::AI == true)
+            {
+                return;
+            }
+            if (kEvent_.key == ctrl_.esc_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+            {
+                ctrl_.exit = true;
+            }
+            else if (kEvent_.key == ctrl_.space_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+            {
+                ctrl_.boost = true;
+            }
+            else if (kEvent_.key == ctrl_.up_key && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+            {
+                ctrl_.input.y = 1;
+            }
+            else if (kEvent_.key == ctrl_.up_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y > 0)
+            {
+                ctrl_.input.y = 0;
+            }
+            else if (kEvent_.key == ctrl_.down_key && (kEvent_.action == EDaggerInputState::Held || kEvent_.action == EDaggerInputState::Pressed))
+            {
+                ctrl_.input.y = -1;
+            }
+            else if (kEvent_.key == ctrl_.down_key && kEvent_.action == EDaggerInputState::Released && ctrl_.input.y < 0)
+            {
+                ctrl_.input.y = 0;
+            }
+        }); 
 }
 
 void PingPongPlayerInputSystem::Run()
@@ -59,11 +71,51 @@ void PingPongPlayerInputSystem::Run()
     {
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
+        if (PingPongPlayerInputSystem::AI)
+        {
+            auto view1 = Engine::Registry().view<Transform, ControllerMapping>();
+            auto view2 = Engine::Registry().view<PingPongBall, Transform>();
+            Float32 medium = 0.f;
+            UINT32 numofBalls = 0;
+            Float32 closest = 0;
+            for (auto entity : view2)
+            {
+                auto& ball = view2.get<PingPongBall>(entity);
+                auto& transform = view2.get<Transform>(entity);
+                if (!ball.processed)
+                {
+                    if (closest == 0)
+                    {
+                        closest = transform.position.x;
+                        medium = transform.position.y;
+                    }
+                    else if (closest < transform.position.x)
+                    {
+                        closest = transform.position.x;
+                        medium = transform.position.y;
+                    }
 
+
+                }
+            }
+            for (auto entity : view1)
+            {
+               
+                if (PingPongPlayerInputSystem::isSecondPlayer(ctrl))
+                {
+                    if (t.position.y > medium) ctrl.input.y = -1;
+                    else ctrl.input.y = 1;
+                    break;
+                }
+            }
+        }
         t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
         
         
-        if (ctrl.exit) exit(0);
+        if (ctrl.exit) {
+            exit(0);
+            ctrl.exit = false;
+        }
         if (ctrl.boost == true) {
             auto ball = Engine::Registry().view<PingPongBall>();
             for (auto entity : ball) {
@@ -81,6 +133,7 @@ void PingPongPlayerInputSystem::Run()
                 ctrl.boost = false;
             }
         }
+
         if (t.position.y > s_BoarderUp)
         {
             t.position.y = s_BoarderUp;
