@@ -2,9 +2,17 @@
 
 #include "core/core.h"
 
+enum struct TextAlignment
+{
+	LEFT,
+	CENTER,
+	RIGHT
+};
+
 struct Text
 {
 	String font;
+	TextAlignment alignment{ TextAlignment::CENTER };
 	Float32 spacing{ 1.0f };
 	Sequence<Entity> entities;
 

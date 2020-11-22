@@ -15,16 +15,35 @@ void Text::Set(String font, String message_, Vector3 pos_)
 	assert(Engine::Res<Texture>().contains(fmt::format("spritesheets:{}", font)));
 
 	if (entities.size() > 0)
+	{
 		registry.remove(entities.begin(), entities.end());
+		entities.clear();
+	}
 
-	int positionX = position.x;
+	UInt32 positionX = position.x;
 	auto& sheets = Engine::Res<Spritesheet>();
+
+	Map<UInt32, Spritesheet*> cache;
+	UInt32 fullStringWidth = 0;
 	for (char letter : message_)
 	{
-		auto& spritesheet = sheets[fmt::format("spritesheets:{}:{}", font, (int)letter)];
+		cache[letter] = sheets[fmt::format("spritesheets:{}:{}", font, (int)letter)];
+		fullStringWidth += cache[letter]->frame.size.x * spacing;
+	}
+
+	Float32 xOffsetDueToAlign = 0.0f;
+	if (alignment == TextAlignment::CENTER)
+		xOffsetDueToAlign = (Float32)fullStringWidth / 2.0f;
+	else if (alignment == TextAlignment::RIGHT)
+		xOffsetDueToAlign = (Float32)fullStringWidth;
+
+	for (char letter : message_)
+	{
+		auto spritesheet = cache[letter];
 		auto entity = registry.create();
 		auto& sprite = registry.emplace<Sprite>(entity);
-		sprite.position = { positionX, position.y, position.z };
+		sprite.position = { positionX - xOffsetDueToAlign, position.y, position.z };
+		
 		AssignSprite(sprite, spritesheet);
 
 		positionX += (int)(spritesheet->frame.size.x * spacing);
