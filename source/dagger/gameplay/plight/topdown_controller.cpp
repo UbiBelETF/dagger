@@ -8,7 +8,7 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
-using namespace topdown;
+using namespace plight;
 
 void TopdownControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
@@ -34,12 +34,12 @@ void TopdownControllerSystem::Run()
             if ((moveX || moveY) == 0)
             {
                 //Idle
-                //AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
+                AnimatorPlay(animator_, "Plight:big_deamon:IDLE");
             }
             else
             {
                 //Walking
-                //AnimatorPlay(animator_, "souls_like_knight_character:RUN");
+                AnimatorPlay(animator_, "Plight:big_deamon:RUN");
                 if (moveX) sprite_.scale.x = moveX;
                 sprite_.position.x += char_.speed * moveX * Engine::DeltaTime();
                 sprite_.position.y += char_.speed * moveY * Engine::DeltaTime();

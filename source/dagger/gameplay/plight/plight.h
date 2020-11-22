@@ -7,15 +7,16 @@
 
 using namespace dagger;
 
-namespace team_game
+namespace plight
 {
     void SetupWorld(Engine& engine_);
+    void SetupWorld_test1(Engine& engine_);
 
-    class TeamGame : public Game
+    class Plight : public Game
     {
         inline String GetIniFile() override
         {
-            return "teamgame.ini";
+            return "plight.ini";
         };
 
         void GameplaySystemsSetup(Engine& engine_) override;

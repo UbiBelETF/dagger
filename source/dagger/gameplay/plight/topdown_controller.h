@@ -5,7 +5,7 @@
 
 using namespace dagger;
 
-namespace topdown
+namespace plight
 {
 	struct TopdownCharacter
 	{
