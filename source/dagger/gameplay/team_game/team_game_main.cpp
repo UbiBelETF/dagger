@@ -59,6 +59,7 @@ void team_game::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
 
+        // PLAYER
         auto player = reg.create();
         
         auto& playerSprite = reg.emplace<Sprite>(player);
@@ -67,9 +68,6 @@ void team_game::SetupWorld(Engine &engine_)
         playerSprite.color.g = 0;
         playerSprite.color.b = 0;
         playerSprite.size = { 20, 30 };
-
-        auto& playerTransform = reg.emplace<Transform>(player);
-        playerTransform.position = { 0, 0, 0 };
 
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThem");

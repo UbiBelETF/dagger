@@ -22,7 +22,7 @@ void IdleStateSystem::SpinUp()
 void IdleStateSystem::Run()
 {
 	Engine::Registry().view<CharacterController, InputReceiver>().each(
-		[](CharacterController controller_, const InputReceiver input_)
+		[](CharacterController& controller_, const InputReceiver input_)
 		{
 			if (controller_.state == ECharacterState::Idle)
 			{

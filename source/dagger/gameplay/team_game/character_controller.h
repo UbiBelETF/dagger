@@ -19,14 +19,9 @@ struct CharacterController
 
 class CharacterControllerSystem : public System
 {
-	void OnInitialize(Registry& registry_, Entity entity_);
-
 public:
 	String SystemName() override
 	{
 		return "Character Controller System";
 	}
-
-	void SpinUp() override;
-	void WindDown() override;
 };

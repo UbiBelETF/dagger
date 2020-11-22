@@ -23,7 +23,7 @@ void RunningStateSystem::SpinUp()
 void RunningStateSystem::Run()
 {
 	Engine::Registry().view<CharacterController, InputReceiver, Sprite>().each(
-		[](CharacterController controller_, const InputReceiver input_, Sprite sprite_)
+		[](CharacterController& controller_, const InputReceiver input_, Sprite& sprite_)
 		{
 			if (controller_.state == ECharacterState::Running)
 			{
