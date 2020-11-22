@@ -31,7 +31,6 @@ void IdleStateSystem::Run()
 
 				if (horizontal != 0 || vertical != 0)
 				{
-					controller_.direction = { horizontal, vertical };
 					controller_.state = ECharacterState::Running;
 				}
 			}
