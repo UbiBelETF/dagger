@@ -1,15 +1,35 @@
 {
-	"context-name": "ASDW",
-	"commands": [
-		{ "command-name": "run", 
-		  "actions": [
-			{ "trigger": "KeyA", "value": -1 },
-			{ "trigger": "KeyD", "value": 1 } 
-		] }, 
-		{ "command-name": "jump", "trigger": "KeyW" },
-		{ "command-name": "down", "trigger": "KeyS" },
-		{ "command-name": "light", "trigger": "KeyR", "event": "Released" },
-		{ "command-name": "heavy", "trigger": "KeyR", "duration": 1000 },
-		{ "command-name": "use", "trigger": "KeyE" }
-	]
+  "context-name": "ASDW_topdown",
+  "commands": [
+    {
+      "command-name": "moveX",
+      "actions": [
+        {
+          "trigger": "KeyA",
+          "value": -1
+        },
+        {
+          "trigger": "KeyD",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "command-name": "moveY",
+      "actions": [
+        {
+          "trigger": "KeyW",
+          "value": 1
+        },
+        {
+          "trigger": "KeyS",
+          "value": -1
+        }
+      ]
+    },
+    {
+      "command-name": "use",
+      "trigger": "KeyE"
+    }
+  ]
 }
