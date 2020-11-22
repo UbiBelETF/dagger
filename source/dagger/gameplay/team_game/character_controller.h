@@ -16,12 +16,3 @@ struct CharacterController
 	Vector2 direction{ 0, 0 };
 	float speed{ 100 };
 };
-
-class CharacterControllerSystem : public System
-{
-public:
-	String SystemName() override
-	{
-		return "Character Controller System";
-	}
-};
