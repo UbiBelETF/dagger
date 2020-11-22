@@ -1,7 +1,5 @@
 #pragma once
 
-#include "core/system.h"
-
 using namespace dagger;
 
 enum class ECharacterState
