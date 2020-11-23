@@ -12,8 +12,6 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include "gameplay/team_game/character_controller.h"
-#include "gameplay/team_game/character_controller_states/idle_state.h"
-#include "gameplay/team_game/character_controller_states/running_state.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -22,8 +20,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
 
-    engine_.AddSystem<IdleStateSystem>();
-    engine_.AddSystem<RunningStateSystem>();
+    engine_.AddSystem<CharacterControllerSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -75,6 +72,6 @@ void team_game::SetupWorld(Engine &engine_)
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThemInput");
 
-        reg.emplace<CharacterController>(player);
+        auto& playerController = reg.emplace<CharacterController>(player);
     }
 }
