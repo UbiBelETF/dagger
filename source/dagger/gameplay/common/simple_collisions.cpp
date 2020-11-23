@@ -3,7 +3,7 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
-#include <iostream>
+#include <list>
 #include <math.h>
 
 using namespace dagger;
@@ -30,9 +30,11 @@ void SimpleCollisionsSystem::Run()
             {
                 collision.colided = true;
                 collision.colidedWith = *it2;
+                collision.colisions.emplace_back(*it2);
 
                 col.colided = true;
                 col.colidedWith = *it;
+                col.colisions.emplace_back(*it);
             }
             it2++;
         }
