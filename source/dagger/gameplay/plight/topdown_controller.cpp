@@ -34,13 +34,22 @@ void TopdownControllerSystem::Run()
         {
             Float32 moveX = input_.values.at("moveX");
             Float32 moveY = input_.values.at("moveY");
-            if ((moveX == 0 && moveY == 0) || cstats_.currentStamina < STAMINA_FOR_RUNNING_FRAME)
+
+            if (char_.resting) {
+                AnimatorPlay(animator_, "Plight:big_deamon:IDLE");
+                char_.currentRestingTime += Engine::DeltaTime();
+                if (char_.currentRestingTime >= char_.restingTime) {
+                    char_.resting = false;
+                    char_.currentRestingTime = 0.f;
+                }
+            }
+            else if ((moveX == 0 && moveY == 0) || cstats_.currentStamina < STAMINA_FOR_RUNNING_FRAME)
             {
                 //Idle
                 AnimatorPlay(animator_, "Plight:big_deamon:IDLE");
                 char_.running = false;
             }
-            else if(cstats_.currentStamina >= STAMINA_FOR_RUNNING_FRAME){
+            else if(cstats_.currentStamina >= STAMINA_FOR_RUNNING_FRAME && !char_.resting){
                 //Walking
                 AnimatorPlay(animator_, "Plight:big_deamon:RUN");
                 char_.running = true;

@@ -4,7 +4,7 @@
 #include "core/core.h"
 
 
-#define STAMINA_FOR_RUNNING_FRAME 0.5f
+#define STAMINA_FOR_RUNNING_FRAME 0.2f
 
 using namespace dagger;
 
