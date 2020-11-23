@@ -35,10 +35,17 @@ void PlightCombatSystem::Run()
 						auto& ch = Engine::Registry().get<CombatStats>(*it);
 						auto& pchar = Engine::Registry().get<TopdownCharacter>(*it);
 
-						ch.currentHealth -= 0.01f;
+						ch.currentHealth -= 0.1f;
 
-						auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);
+						if (ch.currentHealth <= 0.f) {
+							ch.currentHealth = 0.f;
+						}
+
+						auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);	
+						sprite.position.x -= (sprite.size.x - (  HEALTH_BAR_START_SIZE * (ch.currentHealth / ch.maxHealth)))/2;
 						sprite.size.x = HEALTH_BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
+						
+						
 					}
 
 				}

@@ -70,7 +70,7 @@ struct PlightCharacter
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
-        chr.character.speed = 50;
+        chr.character.speed = 100;
 
         return chr;
     }
@@ -104,9 +104,9 @@ void plight::SetupWorld(Engine &engine_)
 
 void setUpBackground(Engine& engine_) {
     auto& reg = engine_.Registry();
-    for (int i = -50; i < 50; i++)
+    for (int i = -30; i < 30; i++)
     {
-        for (int j = -50; j < 50; j++)
+        for (int j = -30; j < 30; j++)
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
