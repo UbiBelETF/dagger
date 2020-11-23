@@ -2,6 +2,8 @@
 #include "core/system.h"
 #include "core/core.h"
 
+#include <list>
+
 using namespace dagger;
 
 enum class EHitbox {
