@@ -1,8 +1,8 @@
 {
-  "context-name": "ASDW_topdown",
+  "context-name": "ASDW",
   "commands": [
     {
-      "command-name": "moveX",
+      "command-name": "run",
       "actions": [
         {
           "trigger": "KeyA",
@@ -15,17 +15,22 @@
       ]
     },
     {
-      "command-name": "moveY",
-      "actions": [
-        {
-          "trigger": "KeyW",
-          "value": 1
-        },
-        {
-          "trigger": "KeyS",
-          "value": -1
-        }
-      ]
+      "command-name": "jump",
+      "trigger": "KeyW"
+    },
+    {
+      "command-name": "down",
+      "trigger": "KeyS"
+    },
+    {
+      "command-name": "light",
+      "trigger": "KeyR",
+      "event": "Released"
+    },
+    {
+      "command-name": "heavy",
+      "trigger": "KeyR",
+      "duration": 1000
     },
     {
       "command-name": "use",
