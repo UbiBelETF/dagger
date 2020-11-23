@@ -1,4 +1,5 @@
 #include "team_game_main.h"
+#include "mage.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -12,11 +13,12 @@
 #include "gameplay/common/simple_collisions.h"
 
 using namespace dagger;
-using namespace team_game;
+using namespace ancient_defenders;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<MageBehaviorSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -30,10 +32,11 @@ void TeamGame::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    team_game::SetupWorld(engine_);
+    //ancient_defenders::SetupWorld(engine_);
+    ancient_defenders::SetupDemoCharacter(engine_);
 }
 
-void team_game::SetupWorld(Engine &engine_)
+void ancient_defenders::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
@@ -52,4 +55,49 @@ void team_game::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
     }
+}
+
+struct Mage {
+    Entity entity;
+    Sprite& sprite;
+    Transform& coordinates;
+    Animator& animator;
+    MageStats& mage;
+
+    static Mage Get(Entity entity)
+    {
+        auto& reg = Engine::Registry();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        auto& pos = reg.get_or_emplace<Transform>(entity);
+        auto& anim = reg.get_or_emplace<Animator>(entity);
+        auto& mag = reg.get_or_emplace<MageStats>(entity);
+        return Mage{ entity, sprite, pos, anim, mag };
+    }
+
+    static Mage Create()
+    {
+        auto& reg = Engine::Registry();
+        auto entity = reg.create();
+        auto mag = Mage::Get(entity);
+
+        AssignSpriteTexture(mag.sprite, "ancient_defenders:mage");
+        float ratio = mag.sprite.size.y / mag.sprite.size.x;
+        mag.sprite.size = { 200 / ratio, 200 };
+
+        mag.coordinates.position = { 300, 0, 1.0f };
+        
+        mag.mage.speed = 50.0f;
+
+        return mag;
+    }
+
+
+};
+
+void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
+    auto& reg = engine_.Registry();
+
+    float zPos = 1.f;
+
+    auto demoMage = Mage::Create();
 }

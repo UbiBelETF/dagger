@@ -7,9 +7,10 @@
 
 using namespace dagger;
 
-namespace team_game
+namespace ancient_defenders
 {
     void SetupWorld(Engine& engine_);
+    void SetupDemoCharacter(Engine& engine_);
 
     class TeamGame : public Game
     {
