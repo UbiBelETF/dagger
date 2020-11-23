@@ -32,6 +32,8 @@ void IdleStateSystem::Run()
 				if (horizontal != 0 || vertical != 0)
 				{
 					controller_.state = ECharacterState::Running;
+					CharacterController::activeStateCount[(int)ECharacterState::Idle]--;
+					CharacterController::activeStateCount[(int)ECharacterState::Running]++;
 				}
 			}
 		});

@@ -8,7 +8,7 @@ using namespace dagger;
 
 enum class ECharacterState
 {
-	Idle,
+	Idle = 0,
 	Running
 };
 
@@ -17,19 +17,26 @@ struct CharacterController
 	ECharacterState state{ ECharacterState::Idle };
 	Vector2 direction{ 0, 0 };
 	Float32 speed{ 100 };
+	static int activeStateCount[];
+
+	CharacterController()
+	{
+		activeStateCount[(int)ECharacterState::Idle]++;
+	}
 };
 
 class CharacterControllerSystem : public System
 {
-	std::vector<System*> m_Systems{};
+	std::map<ECharacterState, System*> m_Systems{};
 
 public:
 	template<typename Sys, typename... Args>
-	inline void AddSystem(Args&&... args_)
+	inline void AddSystem(ECharacterState index_, Args&&... args_)
 	{
 		auto sys = new Sys(std::forward<Args>(args_)...);
 //		PutDefaultResource<Sys>(sys);
-		m_Systems.push_back(sys);
+		m_Systems[index_] = sys;
+		CharacterController::activeStateCount[(int)index_] = 0;
 	}
 
 	String SystemName() override
