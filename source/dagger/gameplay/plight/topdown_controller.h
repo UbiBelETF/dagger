@@ -9,6 +9,7 @@ namespace plight
 {
 	struct TopdownCharacter
 	{
+		bool running{ false };
 		int speed{ 1 };
 	};
 

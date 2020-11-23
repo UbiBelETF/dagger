@@ -95,7 +95,7 @@ void Plight::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    plight::SetupWorld_test1(engine_);
+    plight::SetupWorld_CombatSystem(engine_);
 }
 
 void plight::SetupWorld(Engine &engine_)
@@ -121,13 +121,25 @@ void plight::SetupWorld_test1(Engine& engine_) {
    
     setUpBackground(engine_);
 
+    auto mainChar = PlightCharacter::Create("ASDW_topdown", { 1, 1, 1 }, { 0, 0 });
+
+}
+
+void plight::SetupWorld_CombatSystem(Engine& engine_){
+    setUpBackground(engine_);
+
     auto mainChar = PlightCharacter::Create("ASDW_topdown", { 1, 1, 1 }, { -100, 0 });
 
-    auto backgroundBar1 = Engine::Registry().create();
+    auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
 
-    mainChar.cstats.backgroundHealthBar = backgroundBar1;
+    auto backgroundStaminaBar1 = Engine::Registry().create();
+    auto currentStaminaBar1 = Engine::Registry().create();
+
+    mainChar.cstats.backgroundHealthBar = backgroundHealthBar1;
     mainChar.cstats.currentHealthBar = currentHealthBar1;
+    mainChar.cstats.backgroundStaminaBar = backgroundStaminaBar1;
+    mainChar.cstats.currentStaminaBar = currentStaminaBar1;
 
     auto& backgroundSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundHealthBar);
 
@@ -145,15 +157,35 @@ void plight::SetupWorld_test1(Engine& engine_) {
     frontSprite.scale = { 1, 1 };
     frontSprite.position = { -100, 125, 1 };
 
-   
+    auto& backgroundStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundStaminaBar);
+
+    AssignSpriteTexture(backgroundStaminaSprite, "EmptyWhitePixel");
+    backgroundStaminaSprite.color = { 0, 0, 0, 1 };
+    backgroundStaminaSprite.size = { 50, 5 };
+    backgroundStaminaSprite.scale = { 1, 1 };
+    backgroundStaminaSprite.position = { -100, 115, 2 };
+
+    auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
+
+    AssignSpriteTexture(frontStaminaSprite, "EmptyWhitePixel");
+    frontStaminaSprite.color = { 0, 1, 0, 1 };
+    frontStaminaSprite.size = { 50, 5 };
+    frontStaminaSprite.scale = { 1, 1 };
+    frontStaminaSprite.position = { -100, 115, 1 };
+
+
 
     auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 100, 0 });
 
-    auto backgroundBar2 = Engine::Registry().create();
+    auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
+    auto backgroundStaminaBar2 = Engine::Registry().create();
+    auto currentStaminaBar2 = Engine::Registry().create();
 
-    sndChar.cstats.backgroundHealthBar = backgroundBar2;
+    sndChar.cstats.backgroundHealthBar = backgroundHealthBar2;
     sndChar.cstats.currentHealthBar = currentHealthBar2;
+    sndChar.cstats.backgroundStaminaBar = backgroundStaminaBar2;
+    sndChar.cstats.currentStaminaBar = currentStaminaBar2;
 
     auto& backgroundSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundHealthBar);
 
@@ -171,6 +203,21 @@ void plight::SetupWorld_test1(Engine& engine_) {
     frontSprite2.scale = { 1, 1 };
     frontSprite2.position = { 100, 125, 1 };
 
+    auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
+
+    AssignSpriteTexture(backgroundStaminaSprite2, "EmptyWhitePixel");
+    backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
+    backgroundStaminaSprite2.size = { 50, 5 };
+    backgroundStaminaSprite2.scale = { 1, 1 };
+    backgroundStaminaSprite2.position = { 100, 115, 2 };
+
+    auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
+
+    AssignSpriteTexture(frontStaminaSprite2, "EmptyWhitePixel");
+    frontStaminaSprite2.color = { 0, 1, 0, 1 };
+    frontStaminaSprite2.size = { 50, 5 };
+    frontStaminaSprite2.scale = { 1, 1 };
+    frontStaminaSprite2.position = { 100, 115, 1 };
 }
 
 

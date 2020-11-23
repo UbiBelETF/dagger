@@ -13,7 +13,7 @@
 #include "gameplay/plight/topdown_controller.h"
 
 
-#define HEALTH_BAR_START_SIZE 50.f
+#define BAR_START_SIZE 50.f
 
 using namespace plight;
 
@@ -42,8 +42,8 @@ void PlightCombatSystem::Run()
 						}
 
 						auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);	
-						sprite.position.x -= (sprite.size.x - (  HEALTH_BAR_START_SIZE * (ch.currentHealth / ch.maxHealth)))/2;
-						sprite.size.x = HEALTH_BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
+						sprite.position.x -= (sprite.size.x - (BAR_START_SIZE * (ch.currentHealth / ch.maxHealth)))/2;
+						sprite.size.x = BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
 						
 						
 					}
@@ -52,6 +52,29 @@ void PlightCombatSystem::Run()
 				it++;
 			}
 		}
+
+		if (character.running) {
+			cstats.currentStamina -= STAMINA_FOR_RUNNING_FRAME;
+			if (cstats.currentStamina < 0) {
+				cstats.currentStamina = 0.f;
+				character.running = false;
+			}
+			auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+			sprite.position.x -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+			sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+		}
+		else {
+			cstats.currentStamina += STAMINA_FOR_RUNNING_FRAME/5;
+			if (cstats.currentStamina > 100) {
+				cstats.currentStamina = 100;
+			}
+			if (cstats.currentStamina < 100) {
+			auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+			sprite.position.x += std::abs((sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina)))/2);
+		    sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+			}
+		}
+
 	}
 
 }

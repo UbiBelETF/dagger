@@ -4,6 +4,8 @@
 #include "core/core.h"
 
 
+#define STAMINA_FOR_RUNNING_FRAME 0.5f
+
 using namespace dagger;
 
 namespace plight {

@@ -9,6 +9,8 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
+#include "gameplay/plight/plight_combat.h"
+
 using namespace plight;
 
 void TopdownControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
@@ -27,20 +29,21 @@ void TopdownControllerSystem::SpinUp()
 
 void TopdownControllerSystem::Run()
 {
-    Engine::Registry().view<InputReceiver, Sprite,Transform, Animator, TopdownCharacter>().each(
-        [](const InputReceiver input_, Sprite& sprite_,Transform& transform_, Animator& animator_, const TopdownCharacter& char_)
+    Engine::Registry().view<InputReceiver, Sprite,Transform, Animator, TopdownCharacter, CombatStats>().each(
+        [](const InputReceiver input_, Sprite& sprite_,Transform& transform_, Animator& animator_,TopdownCharacter& char_, CombatStats& cstats_)
         {
             Float32 moveX = input_.values.at("moveX");
             Float32 moveY = input_.values.at("moveY");
-            if ((moveX || moveY) == 0)
+            if ((moveX == 0 && moveY == 0) || cstats_.currentStamina < STAMINA_FOR_RUNNING_FRAME)
             {
                 //Idle
                 AnimatorPlay(animator_, "Plight:big_deamon:IDLE");
+                char_.running = false;
             }
-            else
-            {
+            else if(cstats_.currentStamina >= STAMINA_FOR_RUNNING_FRAME){
                 //Walking
                 AnimatorPlay(animator_, "Plight:big_deamon:RUN");
+                char_.running = true;
                 if (moveX) sprite_.scale.x = moveX;
                 sprite_.position.x += char_.speed * moveX * Engine::DeltaTime();
                 transform_.position.x += char_.speed * moveX * Engine::DeltaTime();
