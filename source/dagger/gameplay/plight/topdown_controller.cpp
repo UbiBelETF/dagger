@@ -3,6 +3,7 @@
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
+#include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "core/graphics/shaders.h"
@@ -26,8 +27,8 @@ void TopdownControllerSystem::SpinUp()
 
 void TopdownControllerSystem::Run()
 {
-    Engine::Registry().view<InputReceiver, Sprite, Animator, TopdownCharacter>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, const TopdownCharacter& char_)
+    Engine::Registry().view<InputReceiver, Sprite,Transform, Animator, TopdownCharacter>().each(
+        [](const InputReceiver input_, Sprite& sprite_,Transform& transform_, Animator& animator_, const TopdownCharacter& char_)
         {
             Float32 moveX = input_.values.at("moveX");
             Float32 moveY = input_.values.at("moveY");
@@ -42,7 +43,10 @@ void TopdownControllerSystem::Run()
                 AnimatorPlay(animator_, "Plight:big_deamon:RUN");
                 if (moveX) sprite_.scale.x = moveX;
                 sprite_.position.x += char_.speed * moveX * Engine::DeltaTime();
+                transform_.position.x += char_.speed * moveX * Engine::DeltaTime();
+
                 sprite_.position.y += char_.speed * moveY * Engine::DeltaTime();
+                transform_.position.y += char_.speed * moveY * Engine::DeltaTime();
             }
         });
 }
