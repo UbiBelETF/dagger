@@ -1,5 +1,5 @@
 {
-	"context-name": "AmongThem",
+	"context-name": "AmongThemInput",
 	"commands": [
 		{ "command-name": "horizontalRun", 
 		  "actions": [

@@ -73,7 +73,7 @@ void team_game::SetupWorld(Engine &engine_)
         playerTransform.position = { 0, 0, 0 };
 
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
-        playerInput.contexts.push_back("AmongThem");
+        playerInput.contexts.push_back("AmongThemInput");
 
         reg.emplace<CharacterController>(player);
     }
