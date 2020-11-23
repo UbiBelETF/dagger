@@ -7,15 +7,16 @@
 
 using namespace dagger;
 
-namespace team_game
+namespace tank_warfare
 {
     void SetupWorld(Engine& engine_);
+    void SetupTestWorld(Engine& engine_);
 
-    class TeamGame : public Game
+    class TankWarfare : public Game
     {
         inline String GetIniFile() override
         {
-            return "teamgame.ini";
+            return "tankwarfare.ini";
         };
 
         void GameplaySystemsSetup(Engine& engine_) override;

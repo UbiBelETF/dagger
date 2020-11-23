@@ -1,4 +1,4 @@
-#include "team_game_main.h"
+#include "tank_warfare_main.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -12,14 +12,14 @@
 #include "gameplay/common/simple_collisions.h"
 
 using namespace dagger;
-using namespace team_game;
+using namespace tank_warfare;
 
-void TeamGame::GameplaySystemsSetup(Engine &engine_)
+void TankWarfare::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
 }
 
-void TeamGame::WorldSetup(Engine &engine_)
+void TankWarfare::WorldSetup(Engine &engine_)
 {
     ShaderSystem::Use("standard");
 
@@ -30,10 +30,10 @@ void TeamGame::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    team_game::SetupWorld(engine_);
+    tank_warfare::SetupTestWorld(engine_);
 }
 
-void team_game::SetupWorld(Engine &engine_)
+void tank_warfare::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
@@ -52,4 +52,24 @@ void team_game::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
     }
+}
+
+void tank_warfare::SetupTestWorld(Engine& engine_)
+{
+    auto& reg = Engine::Registry();
+    for (int i = -10; i < 10; i++)
+    {
+        for (int j = -10; j < 10; j++)
+        {
+            auto entity = reg.create();
+            auto& sprite = reg.emplace<Sprite>(entity);
+            AssignSpriteTexture(sprite, fmt::format("jovanovici:tile_map:tile_grass{}", 1 + (rand() % 3)));
+            sprite.position = { i * 48, j * 48, 2 };
+        }
+    }
+
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    AssignSpriteTexture(sprite, "jovanovici:tank:tank3_side");
+    sprite.position = { 0, 0, 1 };
 }
