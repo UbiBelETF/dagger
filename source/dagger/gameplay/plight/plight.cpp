@@ -33,17 +33,17 @@ struct PlightCharacter
     Transform& transform;
     CombatStats& cstats;
 
-    static PlightCharacter Get(Entity entity)
+    static PlightCharacter Get(Entity entity_)
     {
         auto& reg = Engine::Registry();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        auto& anim = reg.get_or_emplace<Animator>(entity);
-        auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        auto& character = reg.get_or_emplace<TopdownCharacter>(entity);
-        auto& col = reg.get_or_emplace<PlightCollision>(entity);
-        auto& transform = reg.get_or_emplace<Transform>(entity);
-        auto& cstats = reg.get_or_emplace<CombatStats>(entity);
-        return PlightCharacter{ entity, sprite, anim, input, character ,col,transform,cstats};
+        auto& sprite = reg.get_or_emplace<Sprite>(entity_);
+        auto& anim = reg.get_or_emplace<Animator>(entity_);
+        auto& input = reg.get_or_emplace<InputReceiver>(entity_);
+        auto& character = reg.get_or_emplace<TopdownCharacter>(entity_);
+        auto& col = reg.get_or_emplace<PlightCollision>(entity_);
+        auto& transform = reg.get_or_emplace<Transform>(entity_);
+        auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
+        return PlightCharacter{ entity_, sprite, anim, input, character ,col,transform,cstats};
     }
 
     static PlightCharacter Create(
