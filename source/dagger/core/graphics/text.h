@@ -18,5 +18,10 @@ struct Text
 
 	Vector3 position;
 
-	void Set(String font, String message_, Vector3 pos_ = { 0, 0, 0 });
+	inline void Set(String font_, String message_)
+	{
+		Set(font_, message_, { 0, 0, 0 });
+	}
+
+	void Set(String font_, String message_, Vector3 pos_);
 };

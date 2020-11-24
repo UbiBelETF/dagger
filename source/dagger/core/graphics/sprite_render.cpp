@@ -62,18 +62,18 @@ void SpriteRenderSystem::SpinUp()
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
 
-    Engine::Dispatcher().sink<AssetLoadRequest<Spritesheet>>().connect<&SpriteRenderSystem::OnRequestSpritesheet>(this);
+    Engine::Dispatcher().sink<AssetLoadRequest<SpriteFrame>>().connect<&SpriteRenderSystem::OnRequestSpritesheet>(this);
 
     for (auto& entry : Files::recursive_directory_iterator("spritesheets"))
     {
         if (entry.path().extension() == ".spritesheet")
-            Engine::Dispatcher().trigger<AssetLoadRequest<Spritesheet>>(AssetLoadRequest<Spritesheet>{ entry.path().string() });
+            Engine::Dispatcher().trigger<AssetLoadRequest<SpriteFrame>>(AssetLoadRequest<SpriteFrame>{ entry.path().string() });
     }
 
     Engine::Dispatcher().sink<Render>().connect<&SpriteRenderSystem::OnRender>(this);
 }
 
-void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<Spritesheet> request_)
+void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<SpriteFrame> request_)
 {
     FilePath path{ request_.path };
     String name = path.stem().string();
@@ -133,7 +133,7 @@ void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<Spritesheet> requ
 
         for (UInt32 i = 0; i < count; ++i)
         {
-            Spritesheet* spritesheet = new Spritesheet();
+            SpriteFrame* spritesheet = new SpriteFrame();
             spritesheet->texture = texture;
 
             spritesheet->frame.size.x = w;
@@ -148,7 +148,7 @@ void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<Spritesheet> requ
             auto fullSpriteName = fmt::format(count > 1 ? "{}:{}:{}" : "{}:{}", 
                 textureName, spriteName, i + 1);
 
-            Engine::Res<Spritesheet>()[fullSpriteName] = spritesheet;
+            Engine::Res<SpriteFrame>()[fullSpriteName] = spritesheet;
 
             Logger::info("Spritesheet loaded: {} -> {} {} {} {} {}",
                 textureName.c_str(), fullSpriteName, x, y, w, h);

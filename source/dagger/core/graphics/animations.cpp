@@ -175,7 +175,7 @@ void AnimationSystem::OnLoadAsset(AssetLoadRequest<Animation> request_)
 
         if (frame.textureName.find("spritesheets:") == 0)
         {
-            auto spritesheet = Engine::Res<Spritesheet>()[frame.textureName];
+            auto spritesheet = Engine::Res<SpriteFrame>()[frame.textureName];
             frame.spritesheet.frame = spritesheet->frame;
             frame.spritesheet.texture = spritesheet->texture;
         }

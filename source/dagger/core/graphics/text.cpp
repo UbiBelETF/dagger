@@ -6,13 +6,13 @@
 
 using namespace dagger;
 
-void Text::Set(String font, String message_, Vector3 pos_)
+void Text::Set(String font_, String message_, Vector3 pos_)
 {
-	this->font = font;
+	font = font_;
 
 	auto& registry = Engine::Registry();
 
-	assert(Engine::Res<Texture>().contains(fmt::format("spritesheets:{}", font)));
+	assert(Engine::Res<Texture>().contains(fmt::format("spritesheets:{}", font_)));
 
 	if (entities.size() > 0)
 	{
@@ -21,9 +21,9 @@ void Text::Set(String font, String message_, Vector3 pos_)
 	}
 
 	UInt32 positionX = position.x;
-	auto& sheets = Engine::Res<Spritesheet>();
+	auto& sheets = Engine::Res<SpriteFrame>();
 
-	Map<UInt32, Spritesheet*> cache;
+	Map<UInt32, SpriteFrame*> cache;
 	UInt32 fullStringWidth = 0;
 	for (char letter : message_)
 	{

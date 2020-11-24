@@ -12,7 +12,7 @@ namespace dagger
 		UInt32 relativeLength{ 0 };
 		Float64 absoluteLength{ 0 };
 		Vector2 pivot;
-		Spritesheet spritesheet;
+		SpriteFrame spritesheet;
 	};
 
 	struct Animation

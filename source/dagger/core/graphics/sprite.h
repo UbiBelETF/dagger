@@ -6,7 +6,7 @@
 
 namespace dagger
 {
-	struct Spritesheet;
+	struct SpriteFrame;
 
 	struct SpriteCutoutData
 	{
@@ -20,7 +20,7 @@ namespace dagger
 			subOrigin = { 0.0f, 0.0f };
 		}
 
-		void Use(Spritesheet* spritesheet_);
+		void Use(SpriteFrame* spritesheet_);
 	};
 
 	struct SpriteData : public SpriteCutoutData
@@ -37,7 +37,7 @@ namespace dagger
 		ViewPtr<Shader> shader{ Shader::s_FirstLoadedShader };
 	};
 
-	struct Spritesheet
+	struct SpriteFrame
 	{
 		ViewPtr<Texture> texture;
 		SpriteCutoutData frame;
@@ -45,7 +45,7 @@ namespace dagger
 
 	void AssignSprite(Sprite& spriteTarget_, String textureName_);
 	void AssignSprite(Sprite& spriteTarget_, ViewPtr<Texture> texture_);
-	void AssignSprite(Sprite& spriteTarget_, ViewPtr<Spritesheet> texture_);
+	void AssignSprite(Sprite& spriteTarget_, ViewPtr<SpriteFrame> texture_);
 
 	void AssignSpriteShader(Sprite& spriteTarget_, String shaderName_);
 

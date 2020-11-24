@@ -44,7 +44,7 @@ public:
 	constexpr static UInt64 s_MaxNumberOfMeshes = 10000;
 	constexpr static UInt64 s_BufferSize = sizeof(Float32) * s_VertexCount * s_MaxNumberOfMeshes;
 
-	void OnRequestSpritesheet(AssetLoadRequest<Spritesheet> spritesheet_);
+	void OnRequestSpritesheet(AssetLoadRequest<SpriteFrame> spritesheet_);
 
 	void SpinUp() override;
 	void WindDown() override;

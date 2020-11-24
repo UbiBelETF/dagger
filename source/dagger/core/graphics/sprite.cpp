@@ -6,7 +6,7 @@
 
 using namespace dagger;
 
-void SpriteCutoutData::Use(Spritesheet* spritesheet_)
+void SpriteCutoutData::Use(SpriteFrame* spritesheet_)
 {
 	subSize = spritesheet_->frame.subSize;
 	subOrigin = spritesheet_->frame.subOrigin;
@@ -15,9 +15,9 @@ void SpriteCutoutData::Use(Spritesheet* spritesheet_)
 
 void dagger::AssignSprite(Sprite& spriteTarget_, String textureName_)
 {
-	if (Engine::Res<Spritesheet>().contains(textureName_))
+	if (Engine::Res<SpriteFrame>().contains(textureName_))
 	{
-		AssignSprite(spriteTarget_, Engine::Res<Spritesheet>()[textureName_]);
+		AssignSprite(spriteTarget_, Engine::Res<SpriteFrame>()[textureName_]);
 		return;
 	}
 	ViewPtr<Texture> texture = TextureSystem::Get(textureName_);
@@ -36,7 +36,7 @@ void dagger::AssignSprite(Sprite& spriteTarget_, ViewPtr<Texture> texture_)
 	spriteTarget_.UseFullImage();
 }
 
-void dagger::AssignSprite(Sprite& spriteTarget_, ViewPtr<Spritesheet> spritesheet_)
+void dagger::AssignSprite(Sprite& spriteTarget_, ViewPtr<SpriteFrame> spritesheet_)
 {
 	spriteTarget_.image = spritesheet_->texture.get();
 	spriteTarget_.size.x = spritesheet_->texture->Width();
