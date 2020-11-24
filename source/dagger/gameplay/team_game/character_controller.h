@@ -23,6 +23,8 @@ struct CharacterController
 	{
 		activeStateCount[(int)ECharacterState::Idle]++;
 	}
+
+	void ChangeState(ECharacterState newState_);
 };
 
 class CharacterControllerSystem : public System
@@ -34,7 +36,6 @@ public:
 	inline void AddSystem(ECharacterState index_, Args&&... args_)
 	{
 		auto sys = new Sys(std::forward<Args>(args_)...);
-//		PutDefaultResource<Sys>(sys);
 		m_Systems[index_] = sys;
 		CharacterController::activeStateCount[(int)index_] = 0;
 	}

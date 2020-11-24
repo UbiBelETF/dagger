@@ -7,6 +7,13 @@
 
 int CharacterController::activeStateCount[2] = { 0, 0 };
 
+void CharacterController::ChangeState(ECharacterState newState_)
+{
+	CharacterController::activeStateCount[(int)this->state]--;
+	this->state = newState_;
+	CharacterController::activeStateCount[(int)newState_]++;
+}
+
 void CharacterControllerSystem::SpinUp()
 {
 	this->AddSystem<IdleStateSystem>(ECharacterState::Idle);
