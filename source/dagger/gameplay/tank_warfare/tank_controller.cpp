@@ -27,6 +27,7 @@ void TankControllerSystem::SpinUp()
 
 void TankControllerSystem::Run()
 {
+	static std::string s_lastState = "jovanovici:tank:tank3_side";
 	Engine::Registry().view<InputReceiver, Sprite, Animator, Transform, TankCharacter>().each(
 		[](const InputReceiver input_, Sprite& sprite_, Animator& animator_, Transform& transform_, const TankCharacter& tank_)
 		{
@@ -35,7 +36,8 @@ void TankControllerSystem::Run()
 
 			if (driveLR == 0 && driveUD == 0)
 			{
-				AnimatorPlay(animator_, "tank:idle");
+			//	AnimatorPlay(animator_, "tank:idle");
+				AssignSpriteTexture(sprite_, s_lastState);
 			}
 			if (driveLR != 0)
 			{
@@ -43,6 +45,7 @@ void TankControllerSystem::Run()
 				sprite_.scale.x = driveLR * (-1);
 				sprite_.position.x += tank_.speed * driveLR * Engine::DeltaTime();
 				transform_.position.x += tank_.speed * driveLR * Engine::DeltaTime();
+				s_lastState = "jovanovici:tank:tank3_side";
 			}
 			else if (driveUD != 0)
 			{
@@ -50,10 +53,12 @@ void TankControllerSystem::Run()
 				if (driveUD == 1)
 				{
 					AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_back");
+					s_lastState = "jovanovici:tank:tank3_back";
 				}
 				else
 				{
 					AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_front");
+					s_lastState = "jovanovici:tank:tank3_front";
 				}
 				sprite_.position.y += tank_.speed * driveUD * Engine::DeltaTime();
 				transform_.position.y += tank_.speed * driveUD * Engine::DeltaTime();
