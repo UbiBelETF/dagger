@@ -1,0 +1,35 @@
+{
+  "context-name": "arrows_topdown",
+  "commands": [
+    {
+      "command-name": "moveX",
+      "actions": [
+        {
+          "trigger": "KeyLeft",
+          "value": -1
+        },
+        {
+          "trigger": "KeyRight",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "command-name": "moveY",
+      "actions": [
+        {
+          "trigger": "KeyUp",
+          "value": 1
+        },
+        {
+          "trigger": "KeyDown",
+          "value": -1
+        }
+      ]
+    },
+    {
+      "command-name": "use",
+      "trigger": "KeyO"
+    }
+  ]
+}
