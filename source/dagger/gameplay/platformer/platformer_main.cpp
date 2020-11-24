@@ -69,7 +69,7 @@ struct Character
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
 
-        AssignSpriteTexture(chr.sprite, "souls_like_knight_character:IDLE:idle1");
+        AssignSprite(chr.sprite, "souls_like_knight_character:IDLE:idle1");
         AnimatorPlay(chr.animator, "souls_like_knight_character:IDLE");
 
         if(input_ != "")
@@ -90,7 +90,7 @@ void CreateBackdrop()
         auto back = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(back);
         
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.color = { 0, 0, 0, 1 };
         sprite.size = { 200, 200 };
         sprite.scale = { 10, 1 };
@@ -101,7 +101,7 @@ void CreateBackdrop()
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Background");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Background");
         sprite.position.z = 10;
     }
 
@@ -112,7 +112,7 @@ void CreateBackdrop()
         parallax.lastCameraPosition = camera->position;
         parallax.strength = 0.5f;
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Grass");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Grass");
         sprite.position = { 0, -25, 5 };
     }
 
@@ -123,7 +123,7 @@ void CreateBackdrop()
         parallax.lastCameraPosition = camera->position;
         parallax.strength = 0.25f;
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Tree");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Tree");
         sprite.position = { 0, 30, 7 };
     }
 }

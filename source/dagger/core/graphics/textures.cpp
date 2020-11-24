@@ -1,6 +1,7 @@
 #include "textures.h"
 #include "core/engine.h"
 #include "core/filesystem.h"
+#include "core/graphics/sprite.h"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -21,11 +22,16 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
     Logger::info("Loading texture {}...", request_.path);
     stbi_set_flip_vertically_on_load(true);
 
-    const FilePath path{ request_.path };
+    FilePath path{ request_.path };
+    FilePath root{ request_.path };
+    root.remove_filename();
+
     String textureName = "";
     {
-        String pathName = path.string();
-        pathName = pathName.substr(9, pathName.length() - 13);
+        String pathName = root.append(path.stem().string()).string();
+        if(pathName.find("textures") == 0)
+            pathName = pathName.substr(9, pathName.length() - 9);
+
         std::replace(pathName.begin(), pathName.end(), '/', ':');
         std::replace(pathName.begin(), pathName.end(), '\\', ':');
         textureName = pathName;
@@ -50,6 +56,7 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
     assert(texture->m_Ratio != 0);
 
     Engine::Res<Texture>()[textureName] = texture;
+    Logger::info("Texture saved under \"{}\"", textureName);
     stbi_image_free(image);
 }
 
