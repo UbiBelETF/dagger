@@ -1,0 +1,16 @@
+{
+	"context-name": "tank2",
+	"commands": [
+		{ "command-name": "driveLeftRight", 
+		  "actions": [
+			{ "trigger": "KeyLeft", "value": -1 },
+			{ "trigger": "KeyRight", "value": 1 }		
+		] }, 
+		{ "command-name": "driveUpDown", 
+		  "actions": [
+			{ "trigger": "KeyUp", "value": 1 },
+			{ "trigger": "KeyDown", "value": -1 }		
+		] }, 
+		{ "command-name": "fire", "trigger": "KeyRightControl" }
+	]
+}

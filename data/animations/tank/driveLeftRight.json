@@ -1,0 +1,12 @@
+{
+	"animation-name": "tank:driveLeftRight",
+	"animation-length-ms": 500,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:tank:driving:tankLR1", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:driving:tankLR2", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:driving:tankLR3", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:driving:tankLR4", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:driving:tankLR5", "relative-length": 1 }
+	]
+}

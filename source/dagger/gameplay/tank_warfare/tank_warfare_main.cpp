@@ -10,6 +10,7 @@
 #include "core/game/transforms.h"
 
 #include "gameplay/common/simple_collisions.h"
+#include "gameplay/tank_warfare/tank_controller.h"
 
 using namespace dagger;
 using namespace tank_warfare;
@@ -17,6 +18,7 @@ using namespace tank_warfare;
 void TankWarfare::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<TankControllerSystem>();
 }
 
 void TankWarfare::WorldSetup(Engine &engine_)
@@ -26,7 +28,7 @@ void TankWarfare::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 2;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -67,9 +69,17 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
             sprite.position = { i * 48, j * 48, 2 };
         }
     }
-
+    
+    //tank1
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
-    AssignSpriteTexture(sprite, "jovanovici:tank:tank3_side");
+    auto& anim = reg.emplace<Animator>(entity);
+    auto& transform = reg.emplace<Transform>(entity);
+    auto& input = reg.emplace<InputReceiver>(entity);
+    auto& tank = reg.emplace<TankCharacter>(entity);
+    sprite.scale = { 1, 1 };
     sprite.position = { 0, 0, 1 };
+    input.contexts.push_back("tank1");
+    AssignSpriteTexture(sprite, "jovanovici:tank:tank3_side");
+
 }
