@@ -1,49 +1,71 @@
 #pragma once
 
 #include "core/system.h"
+#include "gameplay/common/fsm.h"
+#include "core/game/transforms.h"
 
 #include <utility>
 
 using namespace dagger;
 
+// so first we need to define an enum...
 enum class ECharacterState
 {
-	Idle = 0,
+	Idle,
 	Running
 };
 
-struct CharacterController
+// ...and some data (we call it internal if we're using it with the FSM)
+struct InternalCharacterController
 {
-	ECharacterState state{ ECharacterState::Idle };
+	Vector2 userInput;
+	ViewPtr<Transform> transform;
 	Vector2 direction{ 0, 0 };
 	Float32 speed{ 100 };
-	static int activeStateCount[];
-
-	CharacterController()
-	{
-		activeStateCount[(int)ECharacterState::Idle]++;
-	}
-
-	void ChangeState(ECharacterState newState_);
 };
 
+// we now create our FSM by extending the FiniteStateMachine class and passing in our enum and data!
+struct CharacterControllerFSM : public FiniteStateMachine<ECharacterState, InternalCharacterController>
+{
+	// the StateComponent wraps around our internal data, giving it one more field: currentState
+	using CharacterController = CharacterControllerFSM::StateComponent;
+
+	// we now define a state sub-class for every state. 
+	// it can have Enter(), Run() and Exit() functions, but here we need only Run()
+	struct IdleState : public State
+	{
+		IdleState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
+
+		void Run(CharacterController& ctrl_) override;
+	};
+
+	struct RunningState : public State
+	{
+		RunningState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
+
+		void Run(CharacterController& ctrl_) override;
+	};
+
+	// and very importantly, we add a constructor that maps every enum field to a class.
+	// if you don't do this, it WILL fail!
+	CharacterControllerFSM()
+	{
+		MAP_STATE_TO_CLASS(ECharacterState::Idle, IdleState);
+		MAP_STATE_TO_CLASS(ECharacterState::Running, RunningState);
+	}
+};
+
+// now we create a system...
 class CharacterControllerSystem : public System
 {
-	std::map<ECharacterState, System*> m_Systems{};
+	// and add the fsm as a field
+	CharacterControllerFSM m_CharStateMachine;
 
 public:
-	template<typename Sys, typename... Args>
-	inline void AddSystem(ECharacterState index_, Args&&... args_)
-	{
-		auto sys = new Sys(std::forward<Args>(args_)...);
-		m_Systems[index_] = sys;
-		CharacterController::activeStateCount[(int)index_] = 0;
-	}
+	// everything else is regular.
+	void OnInputConstructed(Registry& registry_, Entity entity_);
 
-	String SystemName() override
-	{
-		return "Character Controller System";
-	}
+	inline String SystemName() override { return "Character Controller System"; }
 
 	void SpinUp() override;
 	void Run() override;

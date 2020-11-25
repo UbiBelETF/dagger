@@ -1,47 +1,95 @@
 #include "character_controller.h"
 
 #include "core/engine.h"
+#include "core/input/inputs.h"
+#include "core/game/transforms.h"
 
-#include "gameplay/team_game/character_controller_states/idle_state.h"
-#include "gameplay/team_game/character_controller_states/running_state.h"
+#include <glm/gtc/epsilon.hpp>
 
-int CharacterController::activeStateCount[2] = { 0, 0 };
+// ----------------------------------------------------------
+// shortcuts
 
-void CharacterController::ChangeState(ECharacterState newState_)
+// you can call the states the same as in the enum
+using Idle = CharacterControllerFSM::IdleState;
+using Running = CharacterControllerFSM::RunningState;
+
+// you can call this like the Internal structure you created
+using CharacterController = CharacterControllerFSM::StateComponent;
+
+constexpr Float32 CHAR_CONTROLLER_EPSILON = 0.000001f;
+
+// ----------------------------------------------------------
+// system stuff
+
+void CharacterControllerSystem::OnInputConstructed(Registry& registry_, Entity entity_)
 {
-	CharacterController::activeStateCount[(int)this->state]--;
-	this->state = newState_;
-	CharacterController::activeStateCount[(int)newState_]++;
+	auto& receiver = registry_.get<InputReceiver>(entity_);
+	for (auto command : { "horizontalRun", "verticalRun" })
+	{
+		receiver.values[command] = 0;
+	}
 }
 
 void CharacterControllerSystem::SpinUp()
 {
-	this->AddSystem<IdleStateSystem>(ECharacterState::Idle);
-	this->AddSystem<RunningStateSystem>(ECharacterState::Running);
-
-	for (auto& system : this->m_Systems)
-	{
-		system.second->SpinUp();
-	}
+	Engine::Registry()
+		.on_construct<InputReceiver>()
+		.connect<&CharacterControllerSystem::OnInputConstructed>(this);
 }
 
 void CharacterControllerSystem::Run()
 {
-	for (auto& [state, system] : this->m_Systems)
-	{
-		if (CharacterController::activeStateCount[(int)state] > 0)
+	// we do all the inter-component work here to set up our controller so that it can be useful in the states.
+	// remember that once in a state, that component is all you have, so link it in how ever you want.
+	// for example, here we feed it some input data from the input component and point to the transform
+	// to be able to change it (can't use references because they can't ever be null)
+	Engine::Registry().view<CharacterController, InputReceiver, Transform>().each(
+		[&](CharacterController& controller_, const InputReceiver input_, Transform& transform_)
 		{
-			system->Run();
-		}
-	}
+			const Float32 horizontal = input_.values.at("horizontalRun");
+			const Float32 vertical = input_.values.at("verticalRun");
+
+			controller_.userInput = { horizontal, vertical };
+			controller_.transform = &transform_;
+
+			// and then we just run the machine!
+			m_CharStateMachine.Run(controller_);
+		});
 }
 
 void CharacterControllerSystem::WindDown()
 {
-	for (auto& system : this->m_Systems)
+	Engine::Registry()
+		.on_construct<InputReceiver>()
+		.disconnect<&CharacterControllerSystem::OnInputConstructed>(this);
+}
+
+// ----------------------------------------------------------
+// fsm stuff
+// idle
+
+void Idle::Run(CharacterController& ctrl_)
+{
+	// it's unsafe to compare floats precisely so we use epsilon
+	if (glm::epsilonNotEqual(glm::length(ctrl_.userInput), 0.0f, CHAR_CONTROLLER_EPSILON))
 	{
-		system.second->WindDown();
+		GoTo(ECharacterState::Running, ctrl_);
+	}
+}
+
+// ----------------------------------------------------------
+// running
+
+void Running::Run(CharacterController& ctrl_)
+{
+	if (glm::epsilonEqual(glm::length(ctrl_.userInput), 0.0f, CHAR_CONTROLLER_EPSILON))
+	{
+		GoTo(ECharacterState::Idle, ctrl_);
+		return;
 	}
 
-	this->m_Systems.clear();
+	// what was that math with Sqrt(2)? go review trig, guys! :D
+	Vector2 xy = glm::normalize(ctrl_.userInput) * ctrl_.speed * Engine::DeltaTime();
+	ctrl_.transform->position.x += xy.x;
+	ctrl_.transform->position.y += xy.y;
 }

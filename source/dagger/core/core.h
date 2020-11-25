@@ -27,6 +27,9 @@ using IniFile = CSimpleIni;
 using Registry = entt::registry;
 using Entity = entt::entity;
 
+// handy template for crashing if x is not an enum
+#define ENUM_ONLY(x) class = typename std::enable_if<std::is_enum<x>::value>::type
+
 // OwningPtr<T>: the pointer is owned and destroyed by whoever holds this instance.
 template<typename T>
 using OwningPtr = std::unique_ptr<T>;

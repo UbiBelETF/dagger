@@ -271,12 +271,14 @@ void InputSystem::Run()
 					}
 				}
 
-				for (auto& [key, value] : receiver_.values)
+				Map<String, Float32> newValues{ receiver_.values };
+				for (auto [key, value] : receiver_.values)
 				{
 					if (updatedCommands.contains(key)) continue;
-					receiver_.values[key] = 0;
+					newValues[key] = value;
 				}
 
+				receiver_.values = newValues;
 				updatedCommands.clear();
 			}
 		});
