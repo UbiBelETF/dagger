@@ -15,6 +15,7 @@
 #include "tools/diagnostics.h"
 
 #include "gameplay/platformer/platformer_controller.h"
+#include "gameplay/platformer/platformer_collision.h"
 #include "gameplay/platformer/parallax.h"
 #include "gameplay/platformer/camera_focus.h"
 
@@ -24,6 +25,7 @@ using namespace platformer;
 void Platformer::GameplaySystemsSetup(Engine& engine_)
 {
 	engine_.AddSystem<PlatformerControllerSystem>();
+    engine_.AddSystem<PlatformerCollisionSystem>();
     engine_.AddSystem<ParallaxSystem>();
     engine_.AddSystem<CameraFollowSystem>();
 }
@@ -44,7 +46,10 @@ struct Character
     Sprite& sprite;
     Animator& animator;
     InputReceiver& input;
+    Transform& transform;
     PlatformerCharacter& character;
+    PlatformerCollision& collision;
+    int id;
 
     static Character Get(Entity entity)
     {
@@ -52,15 +57,20 @@ struct Character
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
+        auto& transform = reg.get_or_emplace<Transform>(entity);
         auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
-        return Character{ entity, sprite, anim, input, character };
+        auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
+        return Character{ entity, sprite, anim, input, transform, character, collision};
     }
 
     static Character Create(
         String input_ = "", 
         ColorRGB color_ = { 1, 1, 1 }, 
-        Vector2 position_ = { 0, 0 })
+        Vector2 position_ = { 0, 0 }, int id=1)
     {
+        Float32 playerWidth{ 20.0f };
+        Float32 playerHeight{ 40.0f };
+
         auto& reg = Engine::Registry();
         auto entity = reg.create();
         auto chr = Character::Get(entity);
@@ -68,6 +78,9 @@ struct Character
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
+        chr.transform.position = { position_, 0.0f };
+        chr.collision.size = { playerWidth, playerHeight };
+        chr.character.id = id;
 
         AssignSpriteTexture(chr.sprite, "souls_like_knight_character:IDLE:idle1");
         AnimatorPlay(chr.animator, "souls_like_knight_character:IDLE");
@@ -133,10 +146,10 @@ void Platformer::WorldSetup(Engine& engine_)
     SetCamera();
     CreateBackdrop();
 
-    auto mainChar = Character::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = Character::Create("ASDW", { 1, 1, 1 }, { -100, 0 }, 0);
     Engine::Registry().emplace<CameraFollowFocus>(mainChar.entity);
 
-    auto sndChar = Character::Create("Arrows", { 1, 0, 0 }, { 100, 0 });
+    auto sndChar = Character::Create("Arrows", { 1, 0, 0 }, { 100, 0 }, 1);
     Engine::Registry().emplace<CameraFollowFocus>(sndChar.entity);
 }
 

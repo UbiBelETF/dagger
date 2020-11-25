@@ -5,6 +5,7 @@
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
+#include "core/game/transforms.h"
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
@@ -43,8 +44,8 @@ void platformer::AlignCharacter(Float32 run_, Sprite& sprite_)
 
 void PlatformerControllerSystem::Run()
 {
-    Engine::Registry().view<InputReceiver, Sprite, Animator, PlatformerCharacter>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, PlatformerCharacter& char_)
+    Engine::Registry().view<InputReceiver, Sprite, Animator, Transform, PlatformerCharacter>().each(
+        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, Transform& transform_, PlatformerCharacter& char_)
         {
             Float32 roll = input_.values.at("roll");
             Float32 run = input_.values.at("run");
@@ -81,9 +82,19 @@ void PlatformerControllerSystem::Run()
                     AlignCharacter(run, sprite_);
                     if (char_.timeRolling < char_.rollingTime)
                     {
-                        AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
-                        sprite_.position.x += char_.rollingSpeed * sprite_.scale.x * Engine::DeltaTime();
-                        char_.timeRolling += Engine::DeltaTime();
+                        if ((sprite_.scale.x == 1 && char_.canGoRight) || (sprite_.scale.x == -1 && char_.canGoLeft))
+                        {
+                            AnimatorPlay(animator_, "souls_like_knight_character:ROLL");
+                            sprite_.position.x += char_.rollingSpeed * sprite_.scale.x * Engine::DeltaTime();
+                            transform_.position.x += char_.rollingSpeed * sprite_.scale.x * Engine::DeltaTime();
+                            char_.timeRolling += Engine::DeltaTime();
+                        }
+                        else 
+                        {
+                            AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
+                            char_.isRolling = false;
+                            char_.timeRolling = 0;
+                        }
                     }
                     else
                     {
@@ -108,13 +119,19 @@ void PlatformerControllerSystem::Run()
 
                     char_.timeJumping += Engine::DeltaTime();
                     sprite_.position.y += char_.verticalSpeed * Engine::DeltaTime();
-                    if (char_.runningJump)
+                    transform_.position.y += char_.verticalSpeed * Engine::DeltaTime();
+                    if ((sprite_.scale.x == 1 && char_.canGoRight) || (sprite_.scale.x == -1 && char_.canGoLeft))
                     {
-                        sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
-                    }
-                    else if (char_.turningDuringJump)
-                    {
-                        sprite_.position.x += char_.speed / 2 * sprite_.scale.x * Engine::DeltaTime();
+                        if (char_.runningJump)
+                        {
+                            sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                            transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                        }
+                        else if (char_.turningDuringJump)
+                        {
+                            sprite_.position.x += char_.speed / 2 * sprite_.scale.x * Engine::DeltaTime();
+                            transform_.position.x += char_.speed / 2 * Engine::DeltaTime();
+                        }
                     }
 
                     if (char_.verticalSpeed <= 0)
@@ -141,7 +158,11 @@ void PlatformerControllerSystem::Run()
                 {
                     AnimatorPlay(animator_, "souls_like_knight_character:RUN");
                     sprite_.scale.x = run;
-                    sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                    if ((run == 1 && char_.canGoRight) || (run==-1 && char_.canGoLeft))
+                    {
+                        sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                        transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                    }
                 }
             }
         });
