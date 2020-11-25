@@ -23,7 +23,7 @@ struct PlatformerCollision
     
     // player, terrain, enemies, traps, collectables, weapons
     // For player it would be: false, true, true, true, ???, false
-    std::array<Bool, 6> collidesWith { true, true, true, true, true, false };
+    StaticArray<Bool, 6> collidesWith { true, true, true, true, true, false };
 
     CollisionInfo GetCollisionInfo(const Vector3& pos_, const PlatformerCollision& other_, const Vector3& posOther_);
 
