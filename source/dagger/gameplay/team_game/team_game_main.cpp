@@ -1,5 +1,6 @@
 #include "team_game_main.h"
 #include "mage.h"
+#include "range_of_attack.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -18,6 +19,7 @@ using namespace ancient_defenders;
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<RangedTargetingSystem>();
     engine_.AddSystem<MageBehaviorSystem>();
 }
 
