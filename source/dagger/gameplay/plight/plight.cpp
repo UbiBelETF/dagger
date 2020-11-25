@@ -91,7 +91,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<TopdownControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
-    //engine_.AddSystem<PlightCombatSystem>();
+    engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
 
 }
@@ -236,7 +236,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
     setUpBackground(engine_);
 
-    auto mainChar = PlightCharacter::Create("circular", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -100, 0 });
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();

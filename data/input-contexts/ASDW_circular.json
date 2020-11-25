@@ -1,0 +1,35 @@
+{
+  "context-name": "asdw_circular",
+  "commands": [
+    {
+      "command-name": "rotate",
+      "actions": [
+        {
+          "trigger": "KeyA",
+          "value": -0.1
+        },
+        {
+          "trigger": "KeyD",
+          "value": 0.1
+        }
+      ]
+    },
+    {
+      "command-name": "moveY",
+      "actions": [
+        {
+          "trigger": "KeyW",
+          "value": 1
+        },
+        {
+          "trigger": "KeyS",
+          "value": -1
+        }
+      ]
+    },
+    {
+      "command-name": "use",
+      "trigger": "KeyE"
+    }
+  ]
+}
