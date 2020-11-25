@@ -21,22 +21,6 @@ constexpr Float32 CHAR_CONTROLLER_EPSILON = 0.000001f;
 // ----------------------------------------------------------
 // system stuff
 
-void CharacterControllerSystem::OnInputConstructed(Registry& registry_, Entity entity_)
-{
-	auto& receiver = registry_.get<InputReceiver>(entity_);
-	for (auto command : { "horizontalRun", "verticalRun" })
-	{
-		receiver.values[command] = 0;
-	}
-}
-
-void CharacterControllerSystem::SpinUp()
-{
-	Engine::Registry()
-		.on_construct<InputReceiver>()
-		.connect<&CharacterControllerSystem::OnInputConstructed>(this);
-}
-
 void CharacterControllerSystem::Run()
 {
 	// we do all the inter-component work here to set up our controller so that it can be useful in the states.
@@ -44,10 +28,10 @@ void CharacterControllerSystem::Run()
 	// for example, here we feed it some input data from the input component and point to the transform
 	// to be able to change it (can't use references because they can't ever be null)
 	Engine::Registry().view<CharacterController, InputReceiver, Transform>().each(
-		[&](CharacterController& controller_, const InputReceiver input_, Transform& transform_)
+		[&](CharacterController& controller_, InputReceiver input_, Transform& transform_)
 		{
-			const Float32 horizontal = input_.values.at("horizontalRun");
-			const Float32 vertical = input_.values.at("verticalRun");
+			const Float32 horizontal = input_.Get("horizontalRun");
+			const Float32 vertical = input_.Get("verticalRun");
 
 			controller_.userInput = { horizontal, vertical };
 			controller_.transform = &transform_;
@@ -55,13 +39,6 @@ void CharacterControllerSystem::Run()
 			// and then we just run the machine!
 			m_CharStateMachine.Run(controller_);
 		});
-}
-
-void CharacterControllerSystem::WindDown()
-{
-	Engine::Registry()
-		.on_construct<InputReceiver>()
-		.disconnect<&CharacterControllerSystem::OnInputConstructed>(this);
 }
 
 // ----------------------------------------------------------

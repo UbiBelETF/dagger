@@ -16,6 +16,8 @@ enum class ECharacterState
 };
 
 // ...and some data (we call it internal if we're using it with the FSM)
+// note: we actually never use this ourselves. we just pass it to the FSM, which
+// extends it and uses _that_ in all the methods (called StateComponent)
 struct InternalCharacterController
 {
 	Vector2 userInput;
@@ -62,12 +64,7 @@ class CharacterControllerSystem : public System
 	CharacterControllerFSM m_CharStateMachine;
 
 public:
-	// everything else is regular.
-	void OnInputConstructed(Registry& registry_, Entity entity_);
-
 	inline String SystemName() override { return "Character Controller System"; }
 
-	void SpinUp() override;
 	void Run() override;
-	void WindDown() override;
 };
