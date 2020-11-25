@@ -1,0 +1,17 @@
+{
+	"animation-name": "character:RUN",
+	"animation-length-ms": 1500,
+	"animation-frames": [
+		{ "texture-name": "Light:run:run0" },
+		{ "texture-name": "Light:run:run1" },
+		{ "texture-name": "Light:run:run2" },
+		{ "texture-name": "Light:run:run3" },
+		{ "texture-name": "Light:run:run4" },
+		{ "texture-name": "Light:run:run5" },
+		{ "texture-name": "Light:run:run6" },
+		{ "texture-name": "Light:run:run7" },
+		{ "texture-name": "Light:run:run8" },
+		{ "texture-name": "Light:run:run9" }
+
+	]
+}

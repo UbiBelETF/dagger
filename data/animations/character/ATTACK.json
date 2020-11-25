@@ -1,0 +1,16 @@
+{
+	"animation-name": "character:ATTACK",
+	"animation-length-ms": 1000,
+	"animation-frames": [
+		{ "texture-name": "Light:attack1:attack1_0" },
+		{ "texture-name": "Light:attack1:attack1_1" },
+		{ "texture-name": "Light:attack1:attack1_2" },
+		{ "texture-name": "Light:attack1:attack1_3" },
+		{ "texture-name": "Light:attack1:attack1_4" },
+		{ "texture-name": "Light:attack1:attack1_5" },
+		{ "texture-name": "Light:attack1:attack1_6" },
+		{ "texture-name": "Light:attack1:attack1_7" },
+		{ "texture-name": "Light:attack1:attack1_8" },
+		{ "texture-name": "Light:attack1:attack1_9" }
+	]
+}

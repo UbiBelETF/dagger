@@ -1,0 +1,12 @@
+{
+	"context-name": "CONTROLS",
+	"commands": [
+		{ "command-name": "run", 
+		  "actions": [
+			{ "trigger": "KeyA", "value": -1 },
+			{ "trigger": "KeyD", "value": 1 } 
+		]},
+		{"command-name": "jump","trigger": "KeyW"},
+		{ "command-name": "light", "trigger": "KeyE", "event": "Released" }
+	]
+}
