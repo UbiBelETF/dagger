@@ -8,15 +8,11 @@
 
 int main(int argc_, char** argv_)
 {
-<<<<<<< HEAD
-	dagger::Engine engine;	
-=======
+
 	dagger::Engine engine;
 	return engine.Run<tiles_example::TilesExampleMain>();
-
->>>>>>> origin/main
 //	return engine.Run<team_game::TeamGame>();
 //	return engine.Run<ping_pong::PingPongGame>();
 //	return engine.Run<racing_game::RacingGame>();
-	return engine.Run<platformer::Platformer>();
+//	return engine.Run<platformer::Platformer>();
 }
