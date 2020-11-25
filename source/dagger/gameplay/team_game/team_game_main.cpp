@@ -1,4 +1,5 @@
 #include "team_game_main.h"
+#include <fstream>
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -9,14 +10,16 @@
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
 
-#include "gameplay/common/simple_collisions.h"
+#include "gameplay/team_game/game_manager.h"
+#include "gameplay/team_game/team_game_player_input.h"
 
 using namespace dagger;
 using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<GameManagerSystem>();
+    engine_.AddSystem<TeamGamePlayerInputSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -37,19 +40,6 @@ void team_game::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
-    float zPos = 1.f;
-
-    {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "logos:dagger");
-        float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 500 / ratio, 500  };
-
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position = { 0, 0, zPos };
-
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.size;
-    }
+    auto entity = reg.create();
+    auto& level = reg.get_or_emplace<Level>(entity);
 }
