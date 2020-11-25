@@ -5,11 +5,11 @@
       "command-name": "rotate",
       "actions": [
         {
-          "trigger": "KeyLeft",
+          "trigger": "KeyRight",
           "value": -0.1
         },
         {
-          "trigger": "KeyRight",
+          "trigger": "KeyLeft",
           "value": 0.1
         }
       ]

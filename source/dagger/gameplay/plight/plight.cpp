@@ -281,7 +281,49 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite.scale = { 1, 1 };
     frontStaminaSprite.position = { -100, 115, 1 };
 
+    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 100, 0 });
 
+    auto backgroundHealthBar2 = Engine::Registry().create();
+    auto currentHealthBar2 = Engine::Registry().create();
+    auto backgroundStaminaBar2 = Engine::Registry().create();
+    auto currentStaminaBar2 = Engine::Registry().create();
+
+    sndChar.cstats.backgroundHealthBar = backgroundHealthBar2;
+    sndChar.cstats.currentHealthBar = currentHealthBar2;
+    sndChar.cstats.backgroundStaminaBar = backgroundStaminaBar2;
+    sndChar.cstats.currentStaminaBar = currentStaminaBar2;
+
+    auto& backgroundSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundHealthBar);
+
+    AssignSpriteTexture(backgroundSprite2, "EmptyWhitePixel");
+    backgroundSprite2.color = { 0, 0, 0, 1 };
+    backgroundSprite2.size = { 50, 5 };
+    backgroundSprite2.scale = { 1, 1 };
+    backgroundSprite2.position = { 100, 125, 2 };
+
+    auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
+
+    AssignSpriteTexture(frontSprite2, "EmptyWhitePixel");
+    frontSprite2.color = { 1, 0, 0, 1 };
+    frontSprite2.size = { 50, 5 };
+    frontSprite2.scale = { 1, 1 };
+    frontSprite2.position = { 100, 125, 1 };
+
+    auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
+
+    AssignSpriteTexture(backgroundStaminaSprite2, "EmptyWhitePixel");
+    backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
+    backgroundStaminaSprite2.size = { 50, 5 };
+    backgroundStaminaSprite2.scale = { 1, 1 };
+    backgroundStaminaSprite2.position = { 100, 115, 2 };
+
+    auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
+
+    AssignSpriteTexture(frontStaminaSprite2, "EmptyWhitePixel");
+    frontStaminaSprite2.color = { 0, 1, 0, 1 };
+    frontStaminaSprite2.size = { 50, 5 };
+    frontStaminaSprite2.scale = { 1, 1 };
+    frontStaminaSprite2.position = { 100, 115, 1 };
 }
 
 
