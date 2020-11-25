@@ -11,7 +11,7 @@
 void plight::PlightAimingSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
 	InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
-	for (auto command : {"rotate"})
+	for (auto command : { "rotate","moveY", "use" })
 	{
 		receiver.values[command] = 0;
 	}

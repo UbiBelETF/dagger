@@ -23,7 +23,7 @@ using namespace plight;
 void TopdownControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
     InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
-    for (auto command : { "moveY", "use" })
+    for (auto command : { "rotate","moveY", "use" })
     {
         receiver.values[command] = 0;
     }
