@@ -10,6 +10,7 @@ namespace tank_warfare
 	struct TankCharacter
 	{
 		int speed{ 50 };
+		int lastOrientation{ 0 };
 	};
 
 	class TankControllerSystem

@@ -28,32 +28,39 @@ void TankControllerSystem::SpinUp()
 void TankControllerSystem::Run()
 {
 	Engine::Registry().view<InputReceiver, Sprite, Animator, Transform, TankCharacter>().each(
-		[](const InputReceiver input_, Sprite& sprite_, Animator& animator_, Transform& transform_, const TankCharacter& tank_)
+		[](const InputReceiver input_, Sprite& sprite_, Animator& animator_, Transform& transform_, TankCharacter& tank_)
 		{
 			Float32 driveLR = input_.values.at("driveLeftRight");
 			Float32 driveUD = input_.values.at("driveUpDown");
 
 			if (driveLR == 0 && driveUD == 0)
 			{
-				AnimatorPlay(animator_, "tank:idle");
+				switch (tank_.lastOrientation)
+				{
+				case 0: AnimatorPlay(animator_, "tank:idleLeftRight"); break;
+				case 1: AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_back"); break;
+				case 2: AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_front"); break;
+				}
 			}
 			if (driveLR != 0)
 			{
 				AnimatorPlay(animator_, "tank:driveLeftRight");
+				tank_.lastOrientation = 0;
 				sprite_.scale.x = driveLR * (-1);
 				sprite_.position.x += tank_.speed * driveLR * Engine::DeltaTime();
 				transform_.position.x += tank_.speed * driveLR * Engine::DeltaTime();
 			}
 			else if (driveUD != 0)
 			{
-				//need to add animations
 				if (driveUD == 1)
 				{
-					AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_back");
+					AnimatorPlay(animator_, "tank:driveUp");
+					tank_.lastOrientation = 1;
 				}
 				else
 				{
-					AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_front");
+					AnimatorPlay(animator_, "tank:driveDown");
+					tank_.lastOrientation = 2;
 				}
 				sprite_.position.y += tank_.speed * driveUD * Engine::DeltaTime();
 				transform_.position.y += tank_.speed * driveUD * Engine::DeltaTime();
