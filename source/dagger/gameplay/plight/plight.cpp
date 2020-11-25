@@ -76,9 +76,11 @@ struct PlightCharacter
         chr.character.speed = 100;
 
         chr.crosshair.crosshairSprite = reg.create();
+        chr.crosshair.angle = 0.f;
+        chr.crosshair.playerDistance = 20.f;
         auto& crosshairSprite = reg.emplace<Sprite>(chr.crosshair.crosshairSprite);
         AssignSpriteTexture(crosshairSprite, "Plight:crosshair:crosshair");
-        crosshairSprite.position.x = chr.sprite.position.x + 20;
+        crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
 
         return chr;
@@ -87,9 +89,10 @@ struct PlightCharacter
 
 void Plight::GameplaySystemsSetup(Engine &engine_)
 {
-   // engine_.AddSystem<TopdownControllerSystem>();
+    engine_.AddSystem<TopdownControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
     //engine_.AddSystem<PlightCombatSystem>();
+    engine_.AddSystem<PlightAimingSystem>();
 
 }
 
@@ -233,7 +236,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
     setUpBackground(engine_);
 
-    auto mainChar = PlightCharacter::Create("ASDW_topdown", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = PlightCharacter::Create("circular", { 1, 1, 1 }, { -100, 0 });
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();

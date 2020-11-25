@@ -12,7 +12,7 @@ namespace plight
 		bool running{ false };
 		bool resting{ false };
 
-		int speed{ 1 };
+		Float32 speed{ 0.1f };
 
 		Float32 restingTime = 0.75f;
 		Float32 currentRestingTime = 0.f;
