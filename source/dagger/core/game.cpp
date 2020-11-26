@@ -13,6 +13,7 @@
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
+#include "gameplay/team_game/tiles.h"
 
 void dagger::Game::CoreSystemsSetup(Engine& engine_)
 {
@@ -27,5 +28,6 @@ void dagger::Game::CoreSystemsSetup(Engine& engine_)
     engine_.AddSystem<DiagnosticSystem>();
     engine_.AddSystem<GUISystem>();
     engine_.AddSystem<ToolMenuSystem>();
+    engine_.AddSystem<TilemapLoadingSystem>();
 #endif //!defined(NDEBUG)
 }

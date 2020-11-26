@@ -1,0 +1,84 @@
+wall_top_left 0 0 16 16
+wall_top_mid 16 0 16 16
+wall_top_right 32 0 16 16
+wall_top_right_mirrored 64 0 16 16
+
+proba 64 144 16 16
+
+wall_top_second_left 0 16 16 16
+wall_top_second_mid 16 16 16 16
+wall_top_second_right 32 16 16 16
+
+near_wall_tiles_normal 0 32 16 16
+near_wall_tiles_hole 32 32 16 16
+near_wall_tiles_weel 144 48 16 16
+whatever_next_to_it 160 48 16 16
+
+side_wall_open 48 0 16 48
+side_wall_shadow 48 48 16 16
+
+floor_1 64 16 16 16
+floor_2 80 16 16 16
+floor_3 64 32 16 16
+floor_4 80 32 16 16
+floor_5 64 48 16 16
+floor_6 80 48 16 16
+
+wall_corner_top_left 0 64 16 16
+wall_hor_1 16 64 16 16
+wall_hor_1_long 16 64 48 16
+wall_corner_top_right 80 64 16 16
+
+wall_ver 0 80 16 16
+wall_inside 64 80 16 16
+wall_ver_mirrored 80 80 16 16
+
+
+wall_corner_down_left 0 96 16 16
+wall_hor_2 64 96 16 16
+wall_corner_down_right 80 112 16 16
+
+wall_1 0 64 16 16
+wall_2 16 64 16 16
+wall_3 80 64 16 16
+
+wall_4 0 80 16 16
+wall_5 16 80 16 16
+wall_6 80 80 16 16
+
+wall_7 0 96 16 16
+wall_8 16 96 16 16
+wall_9 80 96 16 16
+
+wall_10 0 112 16 16
+wall_11 16 112 16 16
+wall_12 32 112 16 16
+wall_13 48 112 16 16
+wall_14 64 112 16 16
+wall_15 80 112 16 16
+
+wall_classic 64 128 32 32
+wall_up_part 64 128 16 16
+wall_down_part 64 128 32 32
+
+
+tank_broken 96 112 32 32
+tank_wire 128 104 32 40
+tank_classic 160 104 32 40
+
+wall_bottom_1 0 160 16 16
+wall_bottom_2 16 160 16 16
+wall_bottom_3 48 160 16 16
+
+wall_bottom_4 0 160 16 16
+wall_bottom_5_blank 16 160 16 16
+
+wall_bottom_6 0 192 16 16
+wall_bottom_7 16 192 16 16
+wall_bottom_8 48 192 16 16
+
+slime 96 80 16 16
+acid_tenk 160 64 16 32
+acid_tenk_spill 160 64 16 32
+
+

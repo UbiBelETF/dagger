@@ -17,11 +17,9 @@ struct Text
 	Sequence<Entity> entities;
 
 	Vector3 position;
-
-	inline void Set(String font_, String message_)
-	{
-		Set(font_, message_, { 0, 0, 0 });
-	}
-
+	
 	void Set(String font_, String message_, Vector3 pos_);
+	void Set(String font_, String message_);
+
+	
 };

@@ -29,7 +29,7 @@ void racing_game::CreateStrike(float tileSize_,int life_)
      {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4"); 
+        AssignSprite(sprite, "Racing:police-car-bmw-z4"); 
         sprite.size = Vector2(1, 2) * tileSize_;
 
         sprite.color = ColorRGBA(1, 0.5f, 1, 1);

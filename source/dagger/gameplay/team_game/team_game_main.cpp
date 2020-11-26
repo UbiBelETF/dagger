@@ -1,4 +1,5 @@
 #include "team_game_main.h"
+#include "tiles.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -17,6 +18,7 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/player_controller.h"
+
 
 
 using namespace dagger;
@@ -72,7 +74,7 @@ struct Player
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
 
-        AssignSpriteTexture(chr.sprite, "main_character:idle:idle1");
+        AssignSprite(chr.sprite, "main_character:idle:idle1");
         AnimatorPlay(chr.animator, "main_character:idle");
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = chr.sprite.size;
@@ -86,14 +88,40 @@ struct Player
     }
 };
 
+    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 90 };
+        AssignSprite(sprite, "spritesheet:lab:floor_5");
+    }
+
+    Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_)
+    {   
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 90 };
+        AssignSprite(sprite, "spritesheet:lab::wall_classic");
+    
+    }
+
+    
+
 void lab::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
+    TilemapLegend legend;
+    legend['.'] = &CreateWall;
+    legend['#'] = &CreateFloor; 
+
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "data/tilemaps/lab/lab.map", &legend }); 
+
     float zPos = 1.f;
 
-    {
-        
+  /*   {
+  
+
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "logos:dagger");
@@ -106,31 +134,8 @@ void lab::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
     } 
-
-
-    auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
-/*      //  Player
-      {
-        auto& reg = Engine::Registry();
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        auto& anim = reg.get_or_emplace<Animator>(entity);
-        auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
-        String input_ = "ASDW"; 
-        ColorRGB color_ = { 1, 1, 1 }; 
-        Vector2 position_ = { 0, 0 };
-
-        sprite.scale = { 1, 1 };
-        sprite.position = { position_, 0.0f };
-        sprite.color = { color_, 1.0f };
-
-        AssignSpriteTexture(sprite, "lab:idle:idle1");
-        AnimatorPlay(anim, "lab:IDLE");
-
-        character.speed = 50;
-        //auto mainChar = Character::CreateC("ASDW", { 1, 1, 1 }, { 0, 0 });
-    }
 */
+    auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
+
 }
 

@@ -6,6 +6,7 @@
 
 using namespace dagger;
 
+
 void Text::Set(String font_, String message_, Vector3 pos_)
 {
 	font = font_;
@@ -49,3 +50,8 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 		positionX += (int)(spritesheet->frame.size.x * spacing);
 	}
 }
+
+void Text::Set(String font_, String message_)
+	{
+		this->Set(font_, message_, { 0, 0, 0 });
+	}
