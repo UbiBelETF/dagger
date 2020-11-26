@@ -14,6 +14,12 @@ namespace dagger
 		virtual inline void SpinUp() {};
 		virtual inline void Run() {};
 		virtual inline void WindDown() {};
+
+		Bool canBePaused{ false };
+		Bool isPaused{ false };
+
+		void Pause() { isPaused = true; }
+		void Unpause() { isPaused = false; }
 	};
 
 	template<typename... Ts>
