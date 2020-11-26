@@ -1,0 +1,35 @@
+{
+  "context-name": "ASDW_topdown",
+  "commands": [
+    {
+      "command-name": "moveX",
+      "actions": [
+        {
+          "trigger": "KeyA",
+          "value": -1
+        },
+        {
+          "trigger": "KeyD",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "command-name": "moveY",
+      "actions": [
+        {
+          "trigger": "KeyW",
+          "value": 1
+        },
+        {
+          "trigger": "KeyS",
+          "value": -1
+        }
+      ]
+    },
+    {
+      "command-name": "use",
+      "trigger": "KeyE"
+    }
+  ]
+}
