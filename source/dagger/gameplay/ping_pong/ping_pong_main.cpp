@@ -20,6 +20,7 @@
 #include "gameplay/ping_pong/pingpong_playerinput.h"
 #include "gameplay/ping_pong/pingpong_tools.h"
 
+
 using namespace dagger;
 using namespace ping_pong;
 
@@ -28,7 +29,7 @@ void ping_pong::CreatePingPongBall(float tileSize_, ColorRGBA color_, Vector3 sp
     auto& reg = Engine::Registry();
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
-    AssignSpriteTexture(sprite, "PingPong:ball");
+    AssignSprite(sprite, "PingPong:ball");
     sprite.size = Vector2(1, 1) * tileSize_;
 
     sprite.color = color_;
@@ -59,8 +60,8 @@ void PingPongGame::CoreSystemsSetup(Engine& engine_)
     engine_.AddSystem<ShaderSystem>();
     engine_.AddSystem<TextureSystem>();
     engine_.AddSystem<SpriteRenderSystem>();
-    engine_.AddSystem<AnimationSystem>();
-    engine_.AddSystem<TransformSystem>();
+    engine_.AddPausableSystem<TransformSystem>();
+    engine_.AddPausableSystem<AnimationSystem>();
 #if !defined(NDEBUG)
     engine_.AddSystem<DiagnosticSystem>();
     engine_.AddSystem<GUISystem>();
@@ -70,12 +71,12 @@ void PingPongGame::CoreSystemsSetup(Engine& engine_)
 
 void PingPongGame::GameplaySystemsSetup(Engine& engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
-    engine_.AddSystem<PingPongBallSystem>();
-    engine_.AddSystem<PingPongPlayerInputSystem>();
-    engine_.AddSystem<PlayerScoresSystem>();
+    engine_.AddPausableSystem<SimpleCollisionsSystem>();
+    engine_.AddPausableSystem<PingPongBallSystem>();
+    engine_.AddPausableSystem<PingPongPlayerInputSystem>();
+    engine_.AddPausableSystem<PlayerScoresSystem>();
 #if defined(DAGGER_DEBUG)
-    engine_.AddSystem<PingPongTools>();
+    engine_.AddPausableSystem<PingPongTools>();
 #endif //defined(DAGGER_DEBUG)
 }
 
@@ -114,7 +115,7 @@ void ping_pong::SetupWorld(Engine& engine_)
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSpriteTexture(sprite, "EmptyWhitePixel");
+            AssignSprite(sprite, "EmptyWhitePixel");
             sprite.size = scale * tileSize;
 
             if (i % 2 != j % 2)
@@ -237,7 +238,7 @@ void ping_pong::SetupWorld(Engine& engine_)
         transform.position.z = zPos;
 
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.size.x = tileSize;
         sprite.size.y = playerSize;
 
@@ -263,7 +264,7 @@ void ping_pong::SetupWorld(Engine& engine_)
         transform.position.z = zPos;
 
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.size.x = tileSize;
         sprite.size.y = playerSize;
 

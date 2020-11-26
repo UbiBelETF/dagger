@@ -67,7 +67,7 @@ struct PlightCharacter
 
         chr.transform.position = { position_, 0.0f };
 
-        AssignSpriteTexture(chr.sprite, "Plight:big_deamon:IDLE:big_demon_idle_anim_f0");
+        AssignSprite(chr.sprite, "Plight:big_deamon:IDLE:big_demon_idle_anim_f0");
         AnimatorPlay(chr.animator, "Plight:big_deamon:IDLE");
 
         if (input_ != "")
@@ -79,7 +79,7 @@ struct PlightCharacter
         chr.crosshair.angle = 0.f;
         chr.crosshair.playerDistance = 20.f;
         auto& crosshairSprite = reg.emplace<Sprite>(chr.crosshair.crosshairSprite);
-        AssignSpriteTexture(crosshairSprite, "Plight:crosshair:crosshair");
+        AssignSprite(crosshairSprite, "Plight:crosshair:crosshair");
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
 
@@ -122,7 +122,7 @@ void setUpBackground(Engine& engine_) {
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSpriteTexture(sprite, fmt::format("Plight:floor:floor_{}", 1 + (rand() % 8)));
+            AssignSprite(sprite, fmt::format("Plight:floor:floor_{}", 1 + (rand() % 8)));
             sprite.position = { i * 16, j * 16, 10 };
         }
     }
@@ -155,7 +155,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& backgroundSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundHealthBar);
 
-    AssignSpriteTexture(backgroundSprite, "EmptyWhitePixel");
+    AssignSprite(backgroundSprite, "EmptyWhitePixel");
     backgroundSprite.color = { 0, 0, 0, 1 };
     backgroundSprite.size = { 50, 5 };
     backgroundSprite.scale = { 1, 1 };
@@ -163,7 +163,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentHealthBar);
 
-    AssignSpriteTexture(frontSprite, "EmptyWhitePixel");
+    AssignSprite(frontSprite, "EmptyWhitePixel");
     frontSprite.color = { 1, 0, 0, 1 };
     frontSprite.size = { 50, 5 };
     frontSprite.scale = { 1, 1 };
@@ -171,7 +171,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& backgroundStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundStaminaBar);
 
-    AssignSpriteTexture(backgroundStaminaSprite, "EmptyWhitePixel");
+    AssignSprite(backgroundStaminaSprite, "EmptyWhitePixel");
     backgroundStaminaSprite.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite.size = { 50, 5 };
     backgroundStaminaSprite.scale = { 1, 1 };
@@ -179,7 +179,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
 
-    AssignSpriteTexture(frontStaminaSprite, "EmptyWhitePixel");
+    AssignSprite(frontStaminaSprite, "EmptyWhitePixel");
     frontStaminaSprite.color = { 0, 1, 0, 1 };
     frontStaminaSprite.size = { 50, 5 };
     frontStaminaSprite.scale = { 1, 1 };
@@ -201,7 +201,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& backgroundSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundHealthBar);
 
-    AssignSpriteTexture(backgroundSprite2, "EmptyWhitePixel");
+    AssignSprite(backgroundSprite2, "EmptyWhitePixel");
     backgroundSprite2.color = { 0, 0, 0, 1 };
     backgroundSprite2.size = { 50, 5 };
     backgroundSprite2.scale = { 1, 1 };
@@ -209,7 +209,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
 
-    AssignSpriteTexture(frontSprite2, "EmptyWhitePixel");
+    AssignSprite(frontSprite2, "EmptyWhitePixel");
     frontSprite2.color = { 1, 0, 0, 1 };
     frontSprite2.size = { 50, 5 };
     frontSprite2.scale = { 1, 1 };
@@ -217,7 +217,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
 
-    AssignSpriteTexture(backgroundStaminaSprite2, "EmptyWhitePixel");
+    AssignSprite(backgroundStaminaSprite2, "EmptyWhitePixel");
     backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite2.size = { 50, 5 };
     backgroundStaminaSprite2.scale = { 1, 1 };
@@ -225,7 +225,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
 
-    AssignSpriteTexture(frontStaminaSprite2, "EmptyWhitePixel");
+    AssignSprite(frontStaminaSprite2, "EmptyWhitePixel");
     frontStaminaSprite2.color = { 0, 1, 0, 1 };
     frontStaminaSprite2.size = { 50, 5 };
     frontStaminaSprite2.scale = { 1, 1 };
@@ -251,7 +251,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& backgroundSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundHealthBar);
 
-    AssignSpriteTexture(backgroundSprite, "EmptyWhitePixel");
+    AssignSprite(backgroundSprite, "EmptyWhitePixel");
     backgroundSprite.color = { 0, 0, 0, 1 };
     backgroundSprite.size = { 50, 5 };
     backgroundSprite.scale = { 1, 1 };
@@ -259,7 +259,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentHealthBar);
 
-    AssignSpriteTexture(frontSprite, "EmptyWhitePixel");
+    AssignSprite(frontSprite, "EmptyWhitePixel");
     frontSprite.color = { 1, 0, 0, 1 };
     frontSprite.size = { 50, 5 };
     frontSprite.scale = { 1, 1 };
@@ -267,7 +267,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& backgroundStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundStaminaBar);
 
-    AssignSpriteTexture(backgroundStaminaSprite, "EmptyWhitePixel");
+    AssignSprite(backgroundStaminaSprite, "EmptyWhitePixel");
     backgroundStaminaSprite.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite.size = { 50, 5 };
     backgroundStaminaSprite.scale = { 1, 1 };
@@ -275,7 +275,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
 
-    AssignSpriteTexture(frontStaminaSprite, "EmptyWhitePixel");
+    AssignSprite(frontStaminaSprite, "EmptyWhitePixel");
     frontStaminaSprite.color = { 0, 1, 0, 1 };
     frontStaminaSprite.size = { 50, 5 };
     frontStaminaSprite.scale = { 1, 1 };
@@ -295,7 +295,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& backgroundSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundHealthBar);
 
-    AssignSpriteTexture(backgroundSprite2, "EmptyWhitePixel");
+    AssignSprite(backgroundSprite2, "EmptyWhitePixel");
     backgroundSprite2.color = { 0, 0, 0, 1 };
     backgroundSprite2.size = { 50, 5 };
     backgroundSprite2.scale = { 1, 1 };
@@ -303,7 +303,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
 
-    AssignSpriteTexture(frontSprite2, "EmptyWhitePixel");
+    AssignSprite(frontSprite2, "EmptyWhitePixel");
     frontSprite2.color = { 1, 0, 0, 1 };
     frontSprite2.size = { 50, 5 };
     frontSprite2.scale = { 1, 1 };
@@ -311,7 +311,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
 
-    AssignSpriteTexture(backgroundStaminaSprite2, "EmptyWhitePixel");
+    AssignSprite(backgroundStaminaSprite2, "EmptyWhitePixel");
     backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite2.size = { 50, 5 };
     backgroundStaminaSprite2.scale = { 1, 1 };
@@ -319,7 +319,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
 
-    AssignSpriteTexture(frontStaminaSprite2, "EmptyWhitePixel");
+    AssignSprite(frontStaminaSprite2, "EmptyWhitePixel");
     frontStaminaSprite2.color = { 0, 1, 0, 1 };
     frontStaminaSprite2.size = { 50, 5 };
     frontStaminaSprite2.scale = { 1, 1 };
