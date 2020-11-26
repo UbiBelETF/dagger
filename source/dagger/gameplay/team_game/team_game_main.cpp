@@ -8,6 +8,7 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
+#include "core/graphics/animations.h"
 
 #include "gameplay/common/simple_collisions.h"
 
@@ -61,6 +62,9 @@ void SetupWorldJovica(Engine& engine_)
         auto& playerSprite = reg.emplace<Sprite>(player);
         AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
         playerSprite.scale = { 3, 3 };
+
+        auto& playerAnimator = reg.emplace<Animator>(player);
+        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
         auto& playerTransform = reg.emplace<Transform>(player);
         playerTransform.position = { 0, 0, 0 };
