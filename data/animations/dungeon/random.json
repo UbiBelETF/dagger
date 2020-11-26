@@ -1,0 +1,11 @@
+{
+	"animation-name": "dungeon:goblin_idle",
+	"animation-length-ms": 400,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:1" },
+		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:2" },
+		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:3" },
+		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:4" }
+	]
+}

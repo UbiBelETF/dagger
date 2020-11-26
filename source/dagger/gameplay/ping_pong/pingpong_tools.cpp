@@ -30,6 +30,7 @@ void PingPongTools::RenderToolMenu()
     {
         if (ImGui::MenuItem("Restart"))
         {
+            dagger::Engine::ToggleSystemsPause(false);
             m_RestartGame = true;
         }
 
