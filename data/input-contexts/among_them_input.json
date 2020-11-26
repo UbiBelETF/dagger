@@ -1,0 +1,15 @@
+{
+	"context-name": "AmongThemInput",
+	"commands": [
+		{ "command-name": "horizontalRun", 
+		  "actions": [
+			{ "trigger": "KeyA", "value": -1 },
+			{ "trigger": "KeyD", "value": 1 } 
+		] }, 
+		{ "command-name": "verticalRun", 
+		  "actions": [
+			{ "trigger": "KeyW", "value": 1 },
+			{ "trigger": "KeyS", "value": -1 } 
+		] }
+	]
+}
