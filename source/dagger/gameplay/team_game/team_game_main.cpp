@@ -72,7 +72,7 @@ struct Player
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
 
-        AssignSpriteTexture(chr.sprite, "main_character:idle:idle1");
+        AssignSprite(chr.sprite, "main_character:idle:idle1");
         AnimatorPlay(chr.animator, "main_character:idle");
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = chr.sprite.size;
