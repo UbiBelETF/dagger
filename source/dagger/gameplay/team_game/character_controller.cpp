@@ -20,7 +20,7 @@ using Running = CharacterControllerFSM::RunningState;
 void CharacterControllerSystem::Run()
 {
 	Engine::Registry().view<CharacterController, InputReceiver, Transform, Sprite, Animator>().each(
-		[&](CharacterController& controller_, InputReceiver input_, Transform& transform_, Sprite& sprite_, 
+		[&](CharacterController& controller_, InputReceiver input_, Transform& transform_, Sprite& sprite_,
 			Animator& animator_)
 		{
 			const Float32 horizontal = input_.Get("horizontalRun");
@@ -58,6 +58,16 @@ void Running::Run(CharacterController& ctrl_)
 	{
 		GoTo(ECharacterState::Idle, ctrl_);
 		return;
+	}
+
+	// Character orientation
+	if (ctrl_.userInput.x > 0.0f)
+	{
+		ctrl_.sprite->scale.x = 3;
+	}
+	else if (ctrl_.userInput.x < 0.0f)
+	{
+		ctrl_.sprite->scale.x = -3;
 	}
 
 	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_run");
