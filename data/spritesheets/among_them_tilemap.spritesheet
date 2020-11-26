@@ -1,0 +1,58 @@
+gold 0 0 16 16
+barrel 16 0 16 16
+bookshelf 32 0 16 16
+green_banner 48 0 16 16
+red_banner 64 0 16 16
+key 80 0 16 16
+green_potion 96 0 16 16
+red_potion 112 0 16 16
+yelow_potion 128 0 16 16
+big_table 0 16 32 16
+prisoner 64 16 16 16
+small_table 80 16 16 16
+
+door_floor 0 32 32 16
+floor_stair 0 48 16 16
+stair_next_level 16 48 16 16
+
+floor_1 32 16 16 16
+floor_2 48 16 16 16
+floor_3 32 32 16 16
+floor_4 48 32 16 16
+floor_5 64 32 16 16
+floor_6 80 32 16 61
+floor_7 32 48 16 16
+floor_8 48 48 16 16
+floor_9 64 48 16 16
+floor_10 80 48 16 61
+
+floor_up_left 96 16 16 16
+floor_up 112 16 16 16
+floor_up_right 128 16 16 16
+floor_left 96 32 16 16
+floor_right 128 32 16 16
+floor_down_left 96 48 16 16
+floor_down_right 128 48 16 16
+
+wall_1 96 64 16 16
+wall_2 112 64 16 16
+wall_3 128 64 16 16
+wall_4 96 80 16 16
+wall_bars 112 80 16 16
+wall_crack 128 80 16 16
+
+wall_arch_left 112 96 16 16
+wall_arch_right 128 96 16 16
+
+wall_top_inner_right 48 64 16 16
+wall_top_inner_left 64 64 16 16
+wall_top_right 48 80 16 16
+wall_top_left 64 80 16 16
+wall_bottom_left 16 96 16 16
+wall_bottom 32 96 16 16
+wall_bottom_inner_right 48 96 16 16
+wall_bottom_inner_left 64 96 16 16
+wall_bottom_right 80 96 16 16
+wall_top_inner_right_2 16 112 16 16
+wall_bottom 32 112 16 16
+wall_top_inner_left_2 80 112 16 16
