@@ -38,8 +38,8 @@ void TankControllerSystem::Run()
 				switch (tank_.lastOrientation)
 				{
 				case 0: AnimatorPlay(animator_, "tank:idleLeftRight"); break;
-				case 1: AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_back"); break;
-				case 2: AssignSpriteTexture(sprite_, "jovanovici:tank:tank3_front"); break;
+				case 1: AssignSprite(sprite_, "jovanovici:tank:tank3_back"); break;
+				case 2: AssignSprite(sprite_, "jovanovici:tank:tank3_front"); break;
 				}
 			}
 			if (driveLR != 0)

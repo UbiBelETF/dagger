@@ -44,7 +44,7 @@ void tank_warfare::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "logos:dagger");
+        AssignSprite(sprite, "logos:dagger");
         float ratio = sprite.size.y / sprite.size.x;
         sprite.size = { 500 / ratio, 500  };
 
@@ -65,7 +65,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSpriteTexture(sprite, fmt::format("jovanovici:tile_map:tile_grass{}", 1 + (rand() % 3)));
+            AssignSprite(sprite, fmt::format("jovanovici:tile_map:tile_grass{}", 1 + (rand() % 3)));
             sprite.position = { i * 48, j * 48, 2 };
         }
     }
@@ -80,6 +80,6 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     sprite.scale = { 1, 1 };
     sprite.position = { 0, 0, 1 };
     input.contexts.push_back("tank1");
-    AssignSpriteTexture(sprite, "jovanovici:tank:tank3_side");
+    AssignSprite(sprite, "jovanovici:tank:tank3_side");
 
 }
