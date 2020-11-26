@@ -1,0 +1,21 @@
+{
+	"animation-name": "among_them_animations:door_open",
+	"animation-length-ms": 1400,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:1" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:2" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:3" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:4" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:5" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:6" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:7" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:8" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:9" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:10" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:11" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:12" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:13" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:door_open_anim:14" }
+	]
+}

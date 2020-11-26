@@ -1,0 +1,11 @@
+{
+	"animation-name": "among_them_animations:bat",
+	"animation-length-ms": 400,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:among_them_spritesheet:bat_anim:1" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:bat_anim:2" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:bat_anim:3" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:bat_anim:4" }
+	]
+}

@@ -19,14 +19,17 @@ using Running = CharacterControllerFSM::RunningState;
 
 void CharacterControllerSystem::Run()
 {
-	Engine::Registry().view<CharacterController, InputReceiver, Transform>().each(
-		[&](CharacterController& controller_, InputReceiver input_, Transform& transform_)
+	Engine::Registry().view<CharacterController, InputReceiver, Transform, Sprite, Animator>().each(
+		[&](CharacterController& controller_, InputReceiver input_, Transform& transform_, Sprite& sprite_, 
+			Animator& animator_)
 		{
 			const Float32 horizontal = input_.Get("horizontalRun");
 			const Float32 vertical = input_.Get("verticalRun");
 
 			controller_.userInput = { horizontal, vertical };
 			controller_.transform = &transform_;
+			controller_.sprite = &sprite_;
+			controller_.animator = &animator_;
 
 			m_CharStateMachine.Run(controller_);
 		});
@@ -43,6 +46,8 @@ void Idle::Run(CharacterController& ctrl_)
 	{
 		GoTo(ECharacterState::Running, ctrl_);
 	}
+
+	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_idle");
 }
 
 // running
@@ -55,6 +60,7 @@ void Running::Run(CharacterController& ctrl_)
 		return;
 	}
 
+	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_run");
 	Vector2 xy = glm::normalize(ctrl_.userInput) * ctrl_.speed * Engine::DeltaTime();
 	ctrl_.transform->position.x += xy.x;
 	ctrl_.transform->position.y += xy.y;

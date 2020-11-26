@@ -1,0 +1,16 @@
+{
+	"animation-name": "among_them_animations:chest_shine",
+	"animation-length-ms": 900,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:1" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:2" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:3" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:4" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:5" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:6" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:7" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:8" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:chest_shine_anim:9" }
+	]
+}

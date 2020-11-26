@@ -3,6 +3,8 @@
 #include "core/system.h"
 #include "gameplay/common/fsm.h"
 #include "core/game/transforms.h"
+#include "core/graphics/sprite.h"
+#include "core/graphics/animations.h"
 
 #include <utility>
 
@@ -22,6 +24,8 @@ struct CharacterController : public FiniteStateComponent<ECharacterState>
 {
 	Vector2 userInput;
 	ViewPtr<Transform> transform;
+	ViewPtr<Sprite> sprite;
+	ViewPtr<Animator> animator;
 	Vector2 direction{ 0, 0 };
 	Float32 speed{ 100 };
 };
