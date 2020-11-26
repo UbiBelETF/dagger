@@ -68,7 +68,10 @@ void Engine::EngineLoop()
 #if defined(MEASURE_SYSTEMS)
 		systemStart = TimeSnapshot();
 #endif//defined(MEASURE_SYSTEMS)
-		system->Run();
+		if (!system->isPaused)
+		{
+			system->Run();
+		}
 #if defined(MEASURE_SYSTEMS)
 		systemEnd = TimeSnapshot();
 		frameDuration += (systemEnd - systemStart);
@@ -102,4 +105,25 @@ void Engine::EngineStop()
 
 	this->m_EventDispatcher.reset();
 	this->m_Registry.reset();
+}
+
+void Engine::ToggleSystemsPause(Bool toPause_)
+{
+	s_Instance->s_IsPaused = toPause_;
+
+	for (auto& system : s_Instance->m_Systems)
+	{
+		if (system->canBePaused)
+		{
+			if (toPause_)
+			{
+				system->Pause();
+			}
+			else
+			{
+				system->Unpause();
+			}
+			
+		}
+	}
 }

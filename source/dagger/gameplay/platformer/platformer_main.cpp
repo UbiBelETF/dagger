@@ -53,7 +53,7 @@ void CreateBackdrop()
         auto back = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(back);
         
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.color = { 0, 0, 0, 1 };
         sprite.size = { 200, 200 };
         sprite.scale = { 10, 1 };
@@ -64,7 +64,7 @@ void CreateBackdrop()
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Background");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Background");
         sprite.position.z = 10;
     }
 
@@ -75,7 +75,7 @@ void CreateBackdrop()
         parallax.lastCameraPosition = camera->position;
         parallax.strength = 0.5f;
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Grass");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Grass");
         sprite.position = { 0, -25, 5 };
     }
 
@@ -86,7 +86,7 @@ void CreateBackdrop()
         parallax.lastCameraPosition = camera->position;
         parallax.strength = 0.25f;
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Tree");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Tree");
         sprite.position = { 0, 30, 7 };
     }
 }
@@ -131,7 +131,7 @@ struct Character {
 
         chr.transform.position = { position_, 0.0f };
 
-        AssignSpriteTexture(chr.sprite, "souls_like_knight_character:IDLE:idle1");
+        AssignSprite(chr.sprite, "souls_like_knight_character:IDLE:idle1");
         AnimatorPlay(chr.animator, "souls_like_knight_character:IDLE");
 
         if (input_ != "")
@@ -159,7 +159,7 @@ void Platformer::WorldSetup(Engine& engine_)
 
     auto& backgroundSprite = Engine::Registry().emplace<Sprite>(mainChar.chealth.backgroundBar);
 
-    AssignSpriteTexture(backgroundSprite, "EmptyWhitePixel");
+    AssignSprite(backgroundSprite, "EmptyWhitePixel");
     backgroundSprite.color = { 0, 0, 0, 1 };
     backgroundSprite.size = { 50, 5 };
     backgroundSprite.scale = { 1, 1 };
@@ -167,7 +167,7 @@ void Platformer::WorldSetup(Engine& engine_)
 
     auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.chealth.currentHealthBar);
 
-    AssignSpriteTexture(frontSprite, "EmptyWhitePixel");
+    AssignSprite(frontSprite, "EmptyWhitePixel");
     frontSprite.color = { 1, 0, 0, 1 };
     frontSprite.size = { 50, 5 };
     frontSprite.scale = { 1, 1 };
@@ -195,7 +195,7 @@ void Platformer::WorldSetup(Engine& engine_)
 
     auto& backgroundSprite2 = Engine::Registry().emplace<Sprite>(sndChar.chealth.backgroundBar);
 
-    AssignSpriteTexture(backgroundSprite2, "EmptyWhitePixel");
+    AssignSprite(backgroundSprite2, "EmptyWhitePixel");
     backgroundSprite2.color = { 0, 0, 0, 1 };
     backgroundSprite2.size = { 50, 5 };
     backgroundSprite2.scale = { 1, 1 };
@@ -203,7 +203,7 @@ void Platformer::WorldSetup(Engine& engine_)
 
     auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.chealth.currentHealthBar);
 
-    AssignSpriteTexture(frontSprite2, "EmptyWhitePixel");
+    AssignSprite(frontSprite2, "EmptyWhitePixel");
     frontSprite2.color = { 1, 0, 0, 1 };
     frontSprite2.size = { 50, 5 };
     frontSprite2.scale = { 1, 1 };
