@@ -6,6 +6,11 @@
 			{ "trigger": "KeyLeft", "value": -1 },
 			{ "trigger": "KeyRight", "value": 1 } 
 		] }, 
+		{ "command-name": "roll", 
+		  "actions": [
+			{ "trigger": "KeyLeft", "value": -1 , "event": "Released"  },
+			{ "trigger": "KeyRight", "value": 1 , "event": "Released" } 
+		] }, 
 		{ "command-name": "jump", "trigger": "KeyUp" },
 		{ "command-name": "down", "trigger": "KeyDown" },
 		{ "command-name": "light", "trigger": "KeyL", "event": "Released" },
