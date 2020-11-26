@@ -59,7 +59,7 @@ void team_game::SetupWorld(Engine &engine_)
         auto player = reg.create();
         
         auto& playerSprite = reg.emplace<Sprite>(player);
-        AssignSpriteTexture(playerSprite, "EmptyWhitePixel");
+        AssignSprite(playerSprite, "EmptyWhitePixel");
         playerSprite.color.r = 0;
         playerSprite.color.g = 0;
         playerSprite.color.b = 0;
