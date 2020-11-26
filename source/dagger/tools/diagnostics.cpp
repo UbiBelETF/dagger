@@ -17,6 +17,12 @@ void DiagnosticSystem::RenderGUI()
 {
 	ImGui::SetNextWindowSize(ImVec2(200, 60), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Diagnostics");
+	{
+		auto isPaused = dagger::Engine::s_IsPaused;
+		ImGui::Text(isPaused ? "SYSTEMS PAUSED" : "SYSTEMS RUNNING");
+	}
+	ImGui::Separator();
+
 	ImGui::PlotVar("FPS", (Float32)m_LastFrameCounter);
 	ImGui::Separator();
 
