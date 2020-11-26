@@ -71,6 +71,6 @@ void team_game::SetupWorld(Engine &engine_)
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThemInput");
 
-        auto& playerController = reg.emplace<CharacterControllerFSM::StateComponent>(player);
+        auto& playerController = reg.emplace<CharacterController>(player);
     }
 }

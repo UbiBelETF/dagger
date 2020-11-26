@@ -30,6 +30,13 @@ using Entity = entt::entity;
 // handy template for crashing if x is not an enum
 #define ENUM_ONLY(x) class = typename std::enable_if<std::is_enum<x>::value>::type
 
+// handy template for crashing if y is not the superclass of x
+#define IS_A(x, y) class = typename std::enable_if<std::is_base_of<y, x>::value>::type
+
+#define EPSILON 0.000001f
+#define EPSILON_EQUAL(a, b) glm::epsilonEqual((a), (b), EPSILON)
+#define EPSILON_NOT_EQUAL(a, b) glm::epsilonNotEqual((a), (b), EPSILON)
+
 // OwningPtr<T>: the pointer is owned and destroyed by whoever holds this instance.
 template<typename T>
 using OwningPtr = std::unique_ptr<T>;

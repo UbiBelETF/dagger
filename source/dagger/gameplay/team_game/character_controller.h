@@ -18,7 +18,7 @@ enum class ECharacterState
 // ...and some data (we call it internal if we're using it with the FSM)
 // note: we actually never use this ourselves. we just pass it to the FSM, which
 // extends it and uses _that_ in all the methods (called StateComponent)
-struct InternalCharacterController
+struct CharacterController : public FiniteStateComponent<ECharacterState>
 {
 	Vector2 userInput;
 	ViewPtr<Transform> transform;
@@ -27,11 +27,8 @@ struct InternalCharacterController
 };
 
 // we now create our FSM by extending the FiniteStateMachine class and passing in our enum and data!
-struct CharacterControllerFSM : public FiniteStateMachine<ECharacterState, InternalCharacterController>
+struct CharacterControllerFSM : public FiniteStateMachine<ECharacterState, CharacterController>
 {
-	// the StateComponent wraps around our internal data, giving it one more field: currentState
-	using CharacterController = CharacterControllerFSM::StateComponent;
-
 	// we now define a state sub-class for every state. 
 	// it can have Enter(), Run() and Exit() functions, but here we need only Run()
 	struct IdleState : public State

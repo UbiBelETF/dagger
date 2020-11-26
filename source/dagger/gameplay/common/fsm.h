@@ -5,26 +5,28 @@
 
 #include <limits>
 
-template<typename States, typename DataComponent, ENUM_ONLY(States)>
+template<typename States, ENUM_ONLY(States)>
+struct FiniteStateComponent
+{
+	States currentState;
+};
+
+template<typename States, typename DataComponent, ENUM_ONLY(States), IS_A(DataComponent, FiniteStateComponent<States>)>
 struct FiniteStateMachine
 {
 	using FSM = FiniteStateMachine<States, DataComponent>;
-	struct StateComponent : public DataComponent
-	{
-		States currentState;
-	};
 
 	struct State
 	{
-		inline virtual void Enter(StateComponent& component_) {}
-		inline virtual void Run(StateComponent& component_) {}
-		inline virtual void Exit(StateComponent& component_) {}
+		inline virtual void Enter(DataComponent& component_) {}
+		inline virtual void Run(DataComponent& component_) {}
+		inline virtual void Exit(DataComponent& component_) {}
 
 		State(FSM* parent_)
 			: m_Parent{ parent_ }
 		{}
 
-		inline void GoTo(States nextState_, StateComponent& component_)
+		inline void GoTo(States nextState_, DataComponent& component_)
 		{
 			assert(m_Parent != nullptr);
 			m_Parent->GoTo(nextState_, component_);
@@ -34,7 +36,7 @@ struct FiniteStateMachine
 		ViewPtr<FSM> m_Parent;
 	};
 
-	inline void GoTo(States nextState_, StateComponent& component_)
+	inline void GoTo(States nextState_, DataComponent& component_)
 	{
 		auto currentState = component_.currentState;
 		if (currentState != nextState_)
@@ -45,7 +47,7 @@ struct FiniteStateMachine
 		}
 	}
 
-	inline void Run(StateComponent& component_)
+	inline void Run(DataComponent& component_)
 	{
 		m_StatePointers[component_.currentState]->Run(component_);
 	}
@@ -53,7 +55,7 @@ struct FiniteStateMachine
 	template<typename... T>
 	inline void Run(Registry& registry_)
 	{
-		registry_.view<StateComponent, T...>().each([&](StateComponent& component_, T...&)
+		registry_.view<DataComponent, T...>().each([&](DataComponent& component_, T...&)
 			{
 				Run(component_);
 			});
