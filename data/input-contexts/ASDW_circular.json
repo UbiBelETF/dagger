@@ -6,11 +6,11 @@
       "actions": [
         {
           "trigger": "KeyA",
-          "value": -0.1
+          "value": 0.05
         },
         {
           "trigger": "KeyD",
-          "value": 0.1
+          "value": -0.05
         }
       ]
     },
