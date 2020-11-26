@@ -91,7 +91,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<TopdownControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
-    //engine_.AddSystem<PlightCombatSystem>();
+    engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
 
 }

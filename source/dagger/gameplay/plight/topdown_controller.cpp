@@ -39,7 +39,7 @@ void TopdownControllerSystem::Run()
     Engine::Registry().view<InputReceiver, Sprite,Transform, Animator, TopdownCharacter, CombatStats , PlightCrosshair>().each(
         [](const InputReceiver input_, Sprite& sprite_,Transform& transform_, Animator& animator_,TopdownCharacter& char_, CombatStats& cstats_, PlightCrosshair& crosshair_)
         {
-            Float32 moveY = input_.values.at("moveY");
+            Float32 move = input_.values.at("moveY");
 
             if (char_.resting) {
                 AnimatorPlay(animator_, "Plight:big_deamon:IDLE");
@@ -49,7 +49,7 @@ void TopdownControllerSystem::Run()
                     char_.currentRestingTime = 0.f;
                 }
             }
-            else if ( moveY == 0 || cstats_.currentStamina < STAMINA_FOR_RUNNING_FRAME)
+            else if (move == 0 || cstats_.currentStamina < STAMINA_FOR_RUNNING_FRAME)
             {
                 //Idle
                 AnimatorPlay(animator_, "Plight:big_deamon:IDLE");
@@ -60,9 +60,9 @@ void TopdownControllerSystem::Run()
                 AnimatorPlay(animator_, "Plight:big_deamon:RUN");
                 char_.running = true;
 
-                if (moveY) {
-                    Float32 dx = char_.speed * cos(crosshair_.angle) * Engine::DeltaTime() * moveY;
-                    Float32 dy = char_.speed * sin(crosshair_.angle) * Engine::DeltaTime()* moveY;
+                if (move) {
+                    Float32 dx = char_.speed * cos(crosshair_.angle) * Engine::DeltaTime() * move;
+                    Float32 dy = char_.speed * sin(crosshair_.angle) * Engine::DeltaTime()* move;
 
                     sprite_.position.x += dx;
                     sprite_.position.y += dy;
