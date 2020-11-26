@@ -1,0 +1,10 @@
+{
+	"animation-name": "tank:driveUp",
+	"animation-length-ms": 400,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:tank:driveU:driveU1", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:driveU:driveU2", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:driveU:driveU3", "relative-length": 1 }
+	]
+}

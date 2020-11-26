@@ -1,0 +1,11 @@
+{
+	"animation-name": "tank:idleLeftRight",
+	"animation-length-ms": 500,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:tank:idleLR:idleLR1", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:idleLR:idleLR2", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:idleLR:idleLR3", "relative-length": 1 },
+		{ "texture-name": "jovanovici:tank:idleLR:idleLR4", "relative-length": 1 }
+	]
+}
