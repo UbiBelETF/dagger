@@ -38,6 +38,7 @@ namespace dagger
 		static inline Engine* s_Instance = nullptr;
 	public:
 
+		static inline Bool s_IsPaused{ false };
 		static inline uint64_t s_EntityId = 0;
 
 		template<typename Sys, typename... Args>
@@ -47,6 +48,17 @@ namespace dagger
 			PutDefaultResource<Sys>(sys);
 			m_Systems.push_back(sys);
 		}
+
+		template<typename Sys>
+		inline void AddPausableSystem()
+		{
+			auto sys = new Sys();
+			sys->canBePaused = true;
+			PutDefaultResource<Sys>(sys);
+			m_Systems.push_back(sys);
+		}
+
+		static void ToggleSystemsPause(Bool toPause_);
 
 		static inline IniFile& GetIniFile()
 		{
