@@ -1,0 +1,10 @@
+{
+	"animation-name": "chara_slime:slime_move_up",
+	"animation-length-ms": 400,
+	"animation-frames": [
+		{ "texture-name": "spritesheets:chara_slime:slime_move_up_anim:1" },
+		{ "texture-name": "spritesheets:chara_slime:slime_move_up_anim:2" },
+		{ "texture-name": "spritesheets:chara_slime:slime_move_up_anim:3" },
+		{ "texture-name": "spritesheets:chara_slime:slime_move_up_anim:4" }
+	]
+}

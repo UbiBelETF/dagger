@@ -8,15 +8,19 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
-
-#include "gameplay/common/simple_collisions.h"
+#include "core/graphics/sprite_render.h"
+#include "core/graphics/textures.h"
+#include "core/graphics/animations.h"
+#include "core/graphics/gui.h"
+#include "tools/diagnostics.h"
+#include "core/graphics/text.h"
 
 using namespace dagger;
 using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
+   
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -35,21 +39,46 @@ void TeamGame::WorldSetup(Engine &engine_)
 
 void team_game::SetupWorld(Engine &engine_)
 {
-    auto& reg = engine_.Registry();
-
-    float zPos = 1.f;
-
+    auto& reg = Engine::Registry();
+    for (int i = -50; i < 50; i++)
     {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "logos:dagger");
-        float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 500 / ratio, 500  };
-
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position = { 0, 0, zPos };
-
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.size;
+        for (int j = -50; j < 50; j++)
+        {
+            auto entity = reg.create();
+            auto& sprite = reg.emplace<Sprite>(entity);
+            AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:floor_{}", 1 + (rand() % 12)));
+            sprite.position = { i * 16, j * 16, 99 };
+        }
     }
+
+    String anims[] = { "idle", "move_up", "move_down", "move_side", "attack_up", "attack_side", "attack_down", "hit_up", "hit_down", "hit_side" };
+    for (int i = 0; i < 10 ; i++)
+    {
+        auto slime = reg.create();
+        auto& sprite = reg.emplace<Sprite>(slime);
+        AssignSprite(sprite, "spritesheets:chara_slime:slime_"+anims[i%10]+"_anim:1");
+        sprite.position = { rand() % 300 -300, rand() % 300 - 150, 0 };
+        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
+        sprite.scale = { 3, 3 };
+
+        auto& anim = reg.emplace<Animator>(slime);
+        AnimatorPlay(anim, "chara_slime:slime_"+anims[i%10]);
+    }
+    for (int i = 0; i < 10; i++)
+    {
+        auto hero = reg.create();
+        auto& sprite = reg.emplace<Sprite>(hero);
+        AssignSprite(sprite, "spritesheets:chara_hero:hero_" + anims[i % 10] + "_anim:1");
+        sprite.position = { rand() % 300 , rand() % 300 -150 , 0 };
+        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
+        sprite.scale = { 3, 3 };
+
+        auto& anim = reg.emplace<Animator>(hero);
+        AnimatorPlay(anim, "chara_hero:hero_" + anims[i % 10]);
+    }
+
+    auto ui = reg.create();
+    auto& text = reg.emplace<Text>(ui);
+    text.spacing = 0.6f;
+    text.Set("pixel-font", "hello world");
 }

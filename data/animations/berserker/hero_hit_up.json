@@ -1,0 +1,10 @@
+{
+	"animation-name": "chara_hero:hero_hit_up",
+	"animation-length-ms": 360,
+	"animation-frames": [
+		{ "texture-name": "spritesheets:chara_hero:hero_hit_up_anim:1" ,"relative-length": 3},
+		{ "texture-name": "spritesheets:chara_hero:hero_hit_up_anim:2" ,"relative-length": 2},
+		{ "texture-name": "spritesheets:chara_hero:hero_hit_up_anim:3" ,"relative-length": 2},
+		{ "texture-name": "spritesheets:chara_hero:hero_hit_up_anim:1" ,"relative-length": 2}
+	]
+}
