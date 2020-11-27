@@ -1,0 +1,15 @@
+{
+	"context-name": "Controls",
+	"commands": [
+		{ "command-name": "run", 
+		  "actions": [
+			{ "trigger": "KeyLeft", "value": -1 },
+			{ "trigger": "KeyRight", "value": 1 } 
+		] }, 
+		{ "command-name": "jump", "trigger": "KeyUp" },
+		{ "command-name": "attack", "trigger": "KeyZ"},
+		{ "command-name": "use", "trigger": "KeyC" }
+		{ "command-name": "dash", "trigger": "KeyX" }
+		{ "command-name": "toss", "trigger": "KeyV" }
+	]
+}
