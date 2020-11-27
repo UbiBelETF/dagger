@@ -50,7 +50,7 @@ void ping_pong::CreatePingPongBallSplit(float tileSize_, ColorRGBA color_, Vecto
     auto& reg = Engine::Registry();
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
-    AssignSpriteTexture(sprite, "PingPong:ball");
+    AssignSprite(sprite, "PingPong:ball");
     sprite.size = Vector2(1, 1) * tileSize_;
 
     sprite.color = color_;
