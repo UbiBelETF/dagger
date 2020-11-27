@@ -13,14 +13,15 @@
 
 #include "gameplay/common/simple_collisions.h"
 
+
 using namespace dagger;
 using namespace ancient_defenders;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
-    engine_.AddSystem<RangedTargetingSystem>();
-    engine_.AddSystem<MageBehaviorSystem>();
+ //   engine_.AddSystem<SimpleCollisionsSystem>();
+ //   engine_.AddSystem<RangedTargetingSystem>();
+      engine_.AddSystem<MageBehaviorSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -35,6 +36,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     camera->Update();
 
     //ancient_defenders::SetupWorld(engine_);
+    ancient_defenders::LoadPath();
     ancient_defenders::SetupDemoCharacter(engine_);
 }
 
@@ -59,42 +61,7 @@ void ancient_defenders::SetupWorld(Engine &engine_)
     }
 }
 
-struct Mage {
-    Entity entity;
-    Sprite& sprite;
-    Transform& coordinates;
-    Animator& animator;
-    MageStats& mage;
 
-    static Mage Get(Entity entity)
-    {
-        auto& reg = Engine::Registry();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        auto& pos = reg.get_or_emplace<Transform>(entity);
-        auto& anim = reg.get_or_emplace<Animator>(entity);
-        auto& mag = reg.get_or_emplace<MageStats>(entity);
-        return Mage{ entity, sprite, pos, anim, mag };
-    }
-
-    static Mage Create()
-    {
-        auto& reg = Engine::Registry();
-        auto entity = reg.create();
-        auto mag = Mage::Get(entity);
-
-        AssignSpriteTexture(mag.sprite, "ancient_defenders:mage");
-        float ratio = mag.sprite.size.y / mag.sprite.size.x;
-        mag.sprite.size = { 200 / ratio, 200 };
-
-        mag.coordinates.position = { 300, 0, 1.0f };
-        
-        mag.mage.speed = 50.0f;
-
-        return mag;
-    }
-
-
-};
 
 void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
     auto& reg = engine_.Registry();
@@ -102,4 +69,18 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
     float zPos = 1.f;
 
     auto demoMage = Mage::Create();
+
+}
+
+void ancient_defenders::LoadPath() {
+
+    FileInputStream inFile{ "path.txt" };
+
+    Vector2 point;
+
+    while (inFile >> point.x >> point.y) {
+       WalkingPath::path.emplace_back(point);
+    }
+
+    WalkingPath::numberOfPoints = WalkingPath::path.size();
 }

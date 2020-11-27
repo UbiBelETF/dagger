@@ -1,0 +1,10 @@
+{
+	"animation-name": "ancient_defenders:mage:IDLE",
+	"animation-length-ms": 3000,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:mage:mage_stand_side:1", "relative-lenght": 1 },
+		{ "texture-name": "spritesheets:mage:mage_stand_side:3", "relative-lenght": 1 },
+		{ "texture-name": "spritesheets:mage:mage_stand_side:4", "relative-lenght": 2 }
+	]
+}

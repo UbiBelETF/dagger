@@ -1,0 +1,11 @@
+{
+	"animation-name": "ancient_defenders:mage:WALK_UP",
+	"animation-length-ms": 1250,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:mage:mage_walk_back:1" },
+		{ "texture-name": "spritesheets:mage:mage_walk_back:2" },
+		{ "texture-name": "spritesheets:mage:mage_walk_back:3" },
+		{ "texture-name": "spritesheets:mage:mage_walk_back:4" }
+	]
+}

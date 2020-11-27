@@ -1,7 +1,14 @@
 #pragma once
 
+#include "range_of_attack.h"
+
 #include "core/core.h"
 #include "core/system.h"
+#include "core/game/transforms.h"
+#include "core/graphics/animation.h"
+#include "core/graphics/sprite.h"
+
+#include "gameplay/common/simple_collisions.h"
 
 using namespace dagger;
 
@@ -9,19 +16,47 @@ namespace ancient_defenders {
 
     enum class EAction {
         Idling = 1,
-        Attacking = 2,
-        Moving = 3,
+        Moving = 2,
+        Attacking = 3,
+        Chanting = 4,
+        Defending = 5,
     };
 
     struct MageStats {
         Float32 health;
         Float32 speed;
+        Float32 meleeDmg;
 
-        EAction currentAction = EAction::Idling;
-        Float32 actionTime = 0; // Time spent either idling or moving
+        SInt32 postition = 0;
+        Vector2 direction = { -1, 0 };
 
-        static constexpr Float32 s_maxActionTime = 3.0f;
+        EAction currentAction = EAction::Moving;
     };
+
+    struct Mage {
+        Entity entity;
+        Sprite & sprite;
+        Transform & coordinates;
+        Animator & animator;
+        MageStats & mage;
+        SimpleCollision & hitbox;
+        RangeOfAttack & range;
+
+        static Mage Get(Entity entity_);
+
+        static Mage Create();
+        
+    };
+
+    struct Enemy { // Until proper system is done
+        Float32 health = 100.0f;
+    };
+
+    struct WalkingPath {
+        static UInt32 numberOfPoints;
+        static std::list<Vector2> path;
+    };
+
 
     class MageBehaviorSystem
         : public System

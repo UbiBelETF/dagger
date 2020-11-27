@@ -6,20 +6,20 @@
 
 #include <list>
 
-struct Enemy;
-
 void ancient_defenders::RangedTargetingSystem::Run() {
 
     Engine::Registry().view<SimpleCollision, RangeOfAttack>().each(
-        [](SimpleCollision& collision, RangeOfAttack& range) 
+        [](SimpleCollision& collision_, RangeOfAttack& range_) 
     {
-        std::for_each(collision.colisions.begin(), collision.colisions.end(),
-            [](const entt::entity col) 
-        {
-            if (Engine::Registry().view<Enemy>.has(col)) {
-                // Signal the mage this ROA is tied to, if mage isn't attacking already
+        range_.targetFound = false;
+        if (collision_.colided) {
+            for (auto const& col : collision_.colisions) {
+                if (range_.targetType == Engine::Registry().get<RangeOfAttack>(col).unitType) {
+                    range_.targetFound = true;
+                    range_.target = col;
+                    break;
+                }
             }
-        });
-    
+        }
     });
 }

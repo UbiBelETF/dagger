@@ -1,0 +1,23 @@
+mage_stand_side 0 0 32 32 4
+
+mage_walk_side 0 32 32 32 4
+
+mage_raise_staff 0 64 32 32 6
+
+mage_magic_circle 0 96 32 32 8
+
+mage_death 0 128 32 32 5
+
+mage_stand_front 0 160 32 32 4
+
+mage_walk_front 0 192 32 32 4
+
+mage_stand_back 0 224 32 32 4
+
+mage_walk_back 0 256 32 32 4
+
+mage_swing_side 0 288 32 32 7
+
+mage_swing_front 0 320 32 32 5
+
+mage_swing_back 0 352 32 32 5
