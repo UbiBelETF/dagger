@@ -1,0 +1,9 @@
+{
+	"animation-name": "chara_slime:slime_green_idle",
+	"animation-length-ms": 400,
+	"animation-frames": [
+		{ "texture-name": "spritesheets:chara_slime:slime_green_idle_anim:1" },
+		{ "texture-name": "spritesheets:chara_slime:slime_green_idle_anim:2" },
+		{ "texture-name": "spritesheets:chara_slime:slime_green_idle_anim:3" }
+	]
+}
