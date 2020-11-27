@@ -3,6 +3,8 @@
 #include "core/core.h"
 #include "core/system.h"
 
+
+
 using namespace dagger;
 
 namespace lab
@@ -10,6 +12,7 @@ namespace lab
 	struct PlayerCharacter
 	{
 		int speed{ 1 };
+		int cooldown = 5;
 	};
 
 	class PlayerControllerSystem
