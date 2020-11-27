@@ -9,67 +9,70 @@
 
 using namespace dagger;
 
-enum class ECharacterState
+namespace team_game
 {
-	Idle,
-	Running,
-	Dashing,
-	Jumping,
-	Falling,
-	DoubleJumping,
-	Using,
-	Attacking,
-	Tossing,
-	Dead
-};
-
-struct CharacterController : public FiniteStateComponent<ECharacterState>
-{
-	ViewPtr<InputReceiver> userInput;
-	ViewPtr<Transform> transform;
-
-	Float32 speed{ 100 };
-};
-
-struct CharacterControllerFSM : public FiniteStateMachine<ECharacterState, CharacterController>
-{
-
-	struct IdleState : public State
+	enum class ECharacterState
 	{
-		IdleState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
-
-		void Run(CharacterController& ctrl_) override;
+		Idle,
+		Running,
+		Dashing,
+		Jumping,
+		Falling,
+		DoubleJumping,
+		Using,
+		Attacking,
+		Tossing,
+		Dead
 	};
 
-	struct RunningState : public State
+	struct CharacterController : public FiniteStateComponent<ECharacterState>
 	{
-		RunningState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
+		ViewPtr<InputReceiver> userInput;
+		ViewPtr<Transform> transform;
 
-		void Run(CharacterController& ctrl_) override;
+		Float32 speed{ 100 };
 	};
 
-	CharacterControllerFSM()
+	struct CharacterControllerFSM : public FiniteStateMachine<ECharacterState, CharacterController>
 	{
-		MAP_STATE_TO_CLASS(ECharacterState::Idle, IdleState);
-		MAP_STATE_TO_CLASS(ECharacterState::Running, RunningState);
-//		MAP_STATE_TO_CLASS(ECharacterState::Dashing, DashingState);
-//		MAP_STATE_TO_CLASS(ECharacterState::Jumping, JumpingState);
-//		MAP_STATE_TO_CLASS(ECharacterState::Falling, FallingState);
-//		MAP_STATE_TO_CLASS(ECharacterState::DoubleJumping, DoubleJumpingState);
-//		MAP_STATE_TO_CLASS(ECharacterState::Using, UsingState);
-//		MAP_STATE_TO_CLASS(ECharacterState::Attacking, AttackingState);
-//		MAP_STATE_TO_CLASS(ECharacterState::Tossing, TossingState);
-//		MAP_STATE_TO_CLASS(ECharacterState::Dead, DeadState);
-	}
-};
 
-class CharacterControllerSystem : public System
-{
-	
-	CharacterControllerFSM m_CharStateMachine;
+		struct IdleState : public State
+		{
+			IdleState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
 
-public:
-	inline String SystemName() override { return "Character Controller System"; }
+			void Run(CharacterController& ctrl_) override;
+		};
 
-	void Run() override;
+		struct RunningState : public State
+		{
+			RunningState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
+
+			void Run(CharacterController& ctrl_) override;
+		};
+
+		CharacterControllerFSM()
+		{
+			MAP_STATE_TO_CLASS(ECharacterState::Idle, IdleState);
+			MAP_STATE_TO_CLASS(ECharacterState::Running, RunningState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::Dashing, DashingState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::Jumping, JumpingState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::Falling, FallingState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::DoubleJumping, DoubleJumpingState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::Using, UsingState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::Attacking, AttackingState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::Tossing, TossingState);
+			//		MAP_STATE_TO_CLASS(ECharacterState::Dead, DeadState);
+		}
+	};
+
+	class CharacterControllerSystem : public System
+	{
+
+		CharacterControllerFSM m_CharStateMachine;
+
+	public:
+		inline String SystemName() override { return "Character Controller System"; }
+
+		void Run() override;
+	};
 };

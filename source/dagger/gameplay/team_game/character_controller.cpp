@@ -7,6 +7,7 @@
 #include <glm/gtc/epsilon.hpp>
 
 
+using namespace team_game;
 
 void CharacterControllerSystem::Run()
 {

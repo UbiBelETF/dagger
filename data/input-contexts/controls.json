@@ -8,8 +8,8 @@
 		] }, 
 		{ "command-name": "jump", "trigger": "KeyUp" },
 		{ "command-name": "attack", "trigger": "KeyZ"},
-		{ "command-name": "use", "trigger": "KeyC" }
-		{ "command-name": "dash", "trigger": "KeyX" }
+		{ "command-name": "use", "trigger": "KeyC" },
+		{ "command-name": "dash", "trigger": "KeyX" },
 		{ "command-name": "toss", "trigger": "KeyV" }
 	]
 }
