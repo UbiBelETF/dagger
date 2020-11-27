@@ -51,17 +51,30 @@ void team_game::SetupWorld(Engine &engine_)
         }
     }
 
-    for (int i = 0; i < 10; i++)
+    String anims[] = { "idle", "move_up", "move_down", "move_side", "attack_up", "attack_side", "attack_down", "hit_up", "hit_down", "hit_side" };
+    for (int i = 0; i < 10 ; i++)
     {
         auto slime = reg.create();
         auto& sprite = reg.emplace<Sprite>(slime);
-        AssignSprite(sprite, "spritesheets:chara_slime:slime_green_idle_anim:1");
-        sprite.position = { rand() % 300 - 150, rand() % 300 - 150, 0 };
+        AssignSprite(sprite, "spritesheets:chara_slime:slime_"+anims[i%10]+"_anim:1");
+        sprite.position = { rand() % 300 -300, rand() % 300 - 150, 0 };
         sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
         sprite.scale = { 3, 3 };
 
         auto& anim = reg.emplace<Animator>(slime);
-        AnimatorPlay(anim, "chara_slime:slime_green_idle");
+        AnimatorPlay(anim, "chara_slime:slime_"+anims[i%10]);
+    }
+    for (int i = 0; i < 10; i++)
+    {
+        auto hero = reg.create();
+        auto& sprite = reg.emplace<Sprite>(hero);
+        AssignSprite(sprite, "spritesheets:chara_hero:hero_" + anims[i % 10] + "_anim:1");
+        sprite.position = { rand() % 300 , rand() % 300 -150 , 0 };
+        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
+        sprite.scale = { 3, 3 };
+
+        auto& anim = reg.emplace<Animator>(hero);
+        AnimatorPlay(anim, "chara_hero:hero_" + anims[i % 10]);
     }
 
     auto ui = reg.create();
