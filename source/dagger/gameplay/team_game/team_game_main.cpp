@@ -65,6 +65,7 @@ struct Player
     {
         auto& reg = Engine::Registry();
         auto entity = reg.create();
+        team/tired_bunch/feature/team_game_player_movement
         auto chr = Player::Get(entity);
 
         chr.sprite.scale = { 1, 1 };
@@ -73,6 +74,7 @@ struct Player
 
         AssignSpriteTexture(chr.sprite, "Light:idle");
         AnimatorPlay(chr.animator, "character:IDLE");
+
 
         if (input_ != "")
             chr.input.contexts.push_back(input_);
