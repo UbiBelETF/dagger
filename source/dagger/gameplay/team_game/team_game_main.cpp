@@ -19,8 +19,8 @@ using namespace ancient_defenders;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
- //   engine_.AddSystem<SimpleCollisionsSystem>();
- //   engine_.AddSystem<RangedTargetingSystem>();
+      engine_.AddSystem<SimpleCollisionsSystem>();
+      engine_.AddSystem<RangedTargetingSystem>();
       engine_.AddSystem<MageBehaviorSystem>();
 }
 
@@ -70,6 +70,73 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
 
     auto demoMage = Mage::Create();
 
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+        sprite.scale = { -4,4 };
+        sprite.color = { 0.5f,0.5f,0.5f,0.5f };
+
+        auto & coordinates = reg.emplace<Transform>(entity);
+        coordinates.position = { 0, -200 , 1.0f };
+
+        auto & en = reg.emplace<Enemy>(entity);
+        en.health = 100.0f;
+
+        auto & sc = reg.emplace<SimpleCollision>(entity);
+        sc.size = sprite.size;
+        auto & roa = reg.emplace<RangeOfAttack>(entity);
+        roa.range = sc.size.x;
+
+        roa.unitType = ETarget::Golem;
+        roa.targetType = ETarget::Mage;
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+        sprite.scale = { 4,4 };
+        sprite.color = { 0.5f,0.5f,0.5f,0.5f };
+
+        auto & coordinates = reg.emplace<Transform>(entity);
+        coordinates.position = { 0, 0 , 1.0f };
+
+        auto & en = reg.emplace<Enemy>(entity);
+        en.health = 30.0f;
+
+        auto & sc = reg.emplace<SimpleCollision>(entity);
+        sc.size = sprite.size;
+        auto & roa = reg.emplace<RangeOfAttack>(entity);
+        roa.range = sc.size.x;
+
+        roa.unitType = ETarget::Golem;
+        roa.targetType = ETarget::Mage;
+    }
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+        sprite.scale = { -4,4 };
+        sprite.color = { 0.5f,0.5f,0.5f,0.5f };
+
+        auto & coordinates = reg.emplace<Transform>(entity);
+        coordinates.position = { -50, -200 , 1.0f };
+
+        auto & en = reg.emplace<Enemy>(entity);
+        en.health = 10.0f;
+
+        auto & sc = reg.emplace<SimpleCollision>(entity);
+        sc.size = sprite.size;
+        auto & roa = reg.emplace<RangeOfAttack>(entity);
+        roa.range = sc.size.x;
+
+        roa.unitType = ETarget::Golem;
+        roa.targetType = ETarget::Mage;
+    }
 }
 
 void ancient_defenders::LoadPath() {

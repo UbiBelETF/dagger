@@ -15,9 +15,11 @@ void SimpleCollisionsSystem::Run()
     auto it = view.begin();
     while (it != view.end())
     {
-        auto &collision = view.get<SimpleCollision>(*it);
-        collision.colided = false;
-        collision.colisions.clear();
+        auto &coll = view.get<SimpleCollision>(*it);
+        coll.colided = false;
+        coll.colisions.clear();
+
+        it++;
     }
 
     it = view.begin();

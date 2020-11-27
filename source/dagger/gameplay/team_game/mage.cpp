@@ -9,7 +9,6 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include <math.h>
-#include <iostream>
 #include <list>
 
 using namespace ancient_defenders;
@@ -113,7 +112,8 @@ void ancient_defenders::MageBehaviorSystem::Run()
             else {
                 AnimatorPlay(animation_, "ancient_defenders:mage:ATTACK_FRONT");
             }
-            //Engine::Registry().get<Enemy>(range_.target).health -= mage_.meleeDmg;
+            Engine::Registry().get<Enemy>(range_.target).health -= mage_.meleeDmg;
+            mage_.currentAction = EAction::Moving; // Go back to moving after attacking
         }
         else if (mage_.currentAction == EAction::Chanting) {
             // Increase tower building progres
@@ -127,6 +127,16 @@ void ancient_defenders::MageBehaviorSystem::Run()
 
 void ancient_defenders::MageBehaviorSystem::OnEndOfFrame()
 {
+    auto view = Engine::Registry().view<Enemy>();
+
+    auto it = view.begin();
+    while (it != view.end()) {
+        auto & en = view.get<Enemy>(*it);
+        if (en.health <= 0.0f) {
+            Engine::Registry().destroy(*it);
+        }
+        it++;
+    }
 }
 
 Mage ancient_defenders::Mage::Get(Entity entity_)
@@ -155,6 +165,8 @@ Mage ancient_defenders::Mage::Create()
     auto start = WalkingPath::path.front();
     
     mag.coordinates.position = { start.x, start.y, 1.0f };
+
+    mag.mage.meleeDmg = 1.0f;
 
     mag.mage.speed = 150.0f;
     mag.mage.direction = { -1,0 };

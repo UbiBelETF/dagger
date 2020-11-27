@@ -22,7 +22,7 @@ struct SimpleCollision
 
     bool colided = false;
     Entity colidedWith; // Kept for compatibility with the current code
-    std::list<Entity> colisions;
+    std::list<Entity> colisions = {};
 
     bool IsCollided(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_);
 
