@@ -13,6 +13,7 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/tilemap.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -21,6 +22,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
+    engine_.AddSystem<TilemapSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -37,6 +39,18 @@ void TeamGame::WorldSetup(Engine &engine_)
     team_game::SetupWorld(engine_);
 }
 
+namespace jovica
+{
+    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 90 };
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
+        return entity;
+    }
+}
+
 void SetupWorldJovica(Engine& engine_)
 {
     auto& reg = engine_.Registry();
@@ -44,17 +58,10 @@ void SetupWorldJovica(Engine& engine_)
     float zPos = 1.f;
 
     {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "logos:dagger");
-        float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 500 / ratio, 500 };
+        TilemapLegend legend;
+        legend['.'] = &jovica::CreateFloor;
 
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position = { 0, 0, zPos };
-
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.size;
+        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemap_test.map", &legend });
 
         // PLAYER
         auto player = reg.create();
@@ -67,7 +74,7 @@ void SetupWorldJovica(Engine& engine_)
         AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
         auto& playerTransform = reg.emplace<Transform>(player);
-        playerTransform.position = { 0, 0, 0 };
+        playerTransform.position = { 0, 0, zPos };
 
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThemInput");
