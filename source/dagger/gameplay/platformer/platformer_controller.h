@@ -2,6 +2,7 @@
 
 #include "core/core.h"
 #include "core/system.h"
+#include "gameplay/platformer/character_controller.h"
 
 using namespace dagger;
 
@@ -15,15 +16,13 @@ namespace platformer
 	class PlatformerControllerSystem
 		: public System
 	{
-		void OnInitialize(Registry& registry_, Entity entity_);
+		CharacterControllerFSM characterFSM;
 
 	public:
 		String SystemName() override {
 			return "Character Controller System";
 		}
 
-		void SpinUp() override;
 		void Run() override;
-		void WindDown() override;
 	};
 }
