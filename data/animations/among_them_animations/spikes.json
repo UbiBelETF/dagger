@@ -1,0 +1,17 @@
+{
+	"animation-name": "among_them_animations:spikes",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:1" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:2" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:3" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:4" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:5" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:6" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:7" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:8" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:9" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:spikes_anim:10" }
+	]
+}

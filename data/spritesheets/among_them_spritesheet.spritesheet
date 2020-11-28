@@ -1,0 +1,17 @@
+bat_anim 0 0 16 16 4
+goblin_idle_anim 0 16 16 16 6
+goblin_run_anim 0 32 16 16 6
+slime_idle_anim 0 48 16 16 6
+slime_run_anim 0 64 16 16 6
+knight_idle_anim 0 80 16 16 6
+knight_run_anim 0 96 16 16 6
+
+door_open_anim  0 112 32 32 14
+chest_shine_anim 96 16 16 16 9
+torch_anim 96 48 16 16 6
+spikes_anim 96 64 16 16 10
+
+chest_closed 96 16 16 16
+chest_open 224 16 16 16
+spikes_down 96 64 16 16
+spikes_up 240 64 16 16

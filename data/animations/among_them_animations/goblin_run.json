@@ -1,0 +1,13 @@
+{
+	"animation-name": "among_them_animations:goblin_run",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_run_anim:1" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_run_anim:2" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_run_anim:3" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_run_anim:4" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_run_anim:5" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_run_anim:6" }
+	]
+}

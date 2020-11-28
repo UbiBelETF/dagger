@@ -8,6 +8,7 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
+#include "core/graphics/animations.h"
 
 #include "gameplay/common/simple_collisions.h"
 
@@ -36,7 +37,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     team_game::SetupWorld(engine_);
 }
 
-void team_game::SetupWorld(Engine &engine_)
+void SetupWorldJovica(Engine& engine_)
 {
     auto& reg = engine_.Registry();
 
@@ -57,13 +58,13 @@ void team_game::SetupWorld(Engine &engine_)
 
         // PLAYER
         auto player = reg.create();
-        
+
         auto& playerSprite = reg.emplace<Sprite>(player);
-        AssignSprite(playerSprite, "EmptyWhitePixel");
-        playerSprite.color.r = 0;
-        playerSprite.color.g = 0;
-        playerSprite.color.b = 0;
-        playerSprite.size = { 20, 30 };
+        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+        playerSprite.scale = { 3, 3 };
+
+        auto& playerAnimator = reg.emplace<Animator>(player);
+        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
         auto& playerTransform = reg.emplace<Transform>(player);
         playerTransform.position = { 0, 0, 0 };
@@ -73,4 +74,10 @@ void team_game::SetupWorld(Engine &engine_)
 
         auto& playerController = reg.emplace<CharacterController>(player);
     }
+}
+
+void team_game::SetupWorld(Engine &engine_)
+{
+    // You can add your own WorldSetup functions when testing, call them here and comment out mine
+    SetupWorldJovica(engine_);
 }

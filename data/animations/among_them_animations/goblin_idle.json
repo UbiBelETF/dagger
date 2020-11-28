@@ -1,0 +1,13 @@
+{
+	"animation-name": "among_them_animations:goblin_idle",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_idle_anim:1" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_idle_anim:2" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_idle_anim:3" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_idle_anim:4" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_idle_anim:5" },
+		{ "texture-name": "spritesheets:among_them_spritesheet:goblin_idle_anim:6" }
+	]
+}
