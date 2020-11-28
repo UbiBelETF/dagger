@@ -2,6 +2,8 @@
 #include "tools/toolmenu.h"
 #include "core/engine.h"
 
+#include <fstream>
+
 #include "core/core.h"
 #include "core/graphics/texture.h"
 #include "core/graphics/animation.h"
@@ -36,6 +38,9 @@ void RenderMenu(Folder* path_, CreationQueue<T>& queue_)
 
 void Finder::OnToolMenuRender()
 {
+    Bool saveFile = false;
+    Bool loadFile = true;
+
     if (ImGui::BeginMenu("Finder"))
     {
         if (ImGui::BeginMenu("Entities"))
@@ -62,7 +67,68 @@ void Finder::OnToolMenuRender()
             RenderMenu<Animation>((Folder*)path, m_AnimationQueue);
             ImGui::EndMenu();
         }
+
+        if (ImGui::BeginMenu("Scene"))
+        {
+            if (ImGui::MenuItem("Save"))
+            {
+                saveFile = true;
+            }
+            if (ImGui::MenuItem("Load"))
+            {
+                loadFile = true;
+            }
+
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMenu();
+    }
+
+    if (saveFile)
+    {
+        ImGui::OpenPopup("save");
+    }
+    if (loadFile)
+    {
+        ImGui::OpenPopup("load");
+    }
+
+    if (ImGui::BeginPopupModal("save"))
+    {
+        const UInt8 capacity = 128;
+        static Char fileName[capacity];
+        ImGui::InputText("", fileName, capacity);
+
+        if (ImGui::Button("Save"))
+        {
+            SaveScene((String)fileName);
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::Button("Cancel"))
+        {
+            ImGui::CloseCurrentPopup();
+
+        }
+        ImGui::EndPopup();
+    }
+
+    if (ImGui::BeginPopupModal("load"))
+    {
+        const UInt8 capacity = 255;
+        static Char fileName[capacity];
+        ImGui::InputText("", fileName, capacity);
+
+        if (ImGui::Button("Load"))
+        {
+            LoadScene((String)fileName);
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::Button("Cancel"))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
     }
 }
 
@@ -167,6 +233,69 @@ void Finder::OnRequestCreateAnimation(AssetCreateRequest<Animation> animation_)
     auto clip = Engine::GetDefaultResource<AnimationSystem>()->Get(animation_.path);
     AssignSpriteTexture(sprite, clip->frames[0].textureName);
     AnimatorPlay(anim, animation_.path);
+}
+
+void Finder::SaveScene(String fileName_)
+{
+    // Preprocess the file name
+    /*fileName_ = trim(fileName_);
+    if (!ends_with(fileName_, ".txt"))
+    {
+        fileName_ += ".txt";
+    }*/
+
+    std::ofstream outputFile(fileName_);
+
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    String cameraInfo = fmt::format("{} {} {} {} {} {}\n",
+                                     camera->size.x, 
+                                     camera->size.y,
+                                     camera->zoom,
+                                     camera->position.x,
+                                     camera->position.y,
+                                     camera->position.z);
+
+    outputFile << cameraInfo;
+
+    auto view = Engine::Registry().view<NameTag, Sprite, Transform>();
+    for (auto entity : view)
+    {
+        auto& nameTag = view.get<NameTag>(entity);
+        auto& sprite = view.get<Sprite>(entity);
+        auto& transform = view.get<Transform>(entity);
+
+        String animationName = "NoAnimation";
+        if (Engine::Registry().has<Animator>(entity))
+        {
+            auto animView = Engine::Registry().view<Animator>();
+            auto& animator = animView.get<Animator>(entity);
+            animationName = animator.path;
+        }
+
+        String entityDescription = fmt::format("{} {} {} {} {}\n",
+                                                sprite.path, nameTag.name,
+                                                transform.position.x,
+                                                transform.position.y,
+                                                animationName);
+
+        outputFile << entityDescription;
+    }
+
+    outputFile.close();
+}
+
+void Finder::LoadScene(String fileName_)
+{
+    /*
+    std::ifstream inputFile(fileName_);
+    String texturePath, animationPath, name;
+    Float32 posX, posY;
+    
+    while (inputFile >> texturePath >> name >> posX >> posY >> animationPath)
+    {
+
+    }
+    */
 }
 
 void Finder::OnRequestReloadingStructure()

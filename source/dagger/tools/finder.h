@@ -99,6 +99,9 @@ class Finder : public System
 
 	void OnRequestReloadingStructure();
 
+	void SaveScene(String fileName_);
+	void LoadScene(String fileName_);
+
 	void SpinUp() override;
 	void Run() override;
 	void WindDown() override;

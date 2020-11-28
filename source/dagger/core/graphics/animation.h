@@ -30,6 +30,8 @@ namespace dagger
 		UInt32 currentFrame{ 0 };
 		Float64 currentFrameTime{ 0 };
 
+		String path;
+
 		static void PropertiesDrawer(Entity entity_);
 	};
 

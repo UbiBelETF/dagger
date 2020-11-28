@@ -13,6 +13,8 @@ void dagger::AssignSpriteTexture(Sprite& spriteTarget_, String textureName_)
 	spriteTarget_.image = texture.get();
 	spriteTarget_.size.x = texture->Width();
 	spriteTarget_.size.y = texture->Height();
+
+	spriteTarget_.path = textureName_;
 }
 
 void dagger::AssignSpriteTexture(Sprite& spriteTarget_, ViewPtr<Texture> texture_)

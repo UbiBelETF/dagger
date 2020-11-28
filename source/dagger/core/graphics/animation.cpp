@@ -13,6 +13,8 @@ void dagger::AnimatorPlay(Animator& animator_, String animationName_)
 	animator_.currentFrame = 0;
 	animator_.currentFrameTime = 0;
 	animator_.animationPlaying = true;
+
+	animator_.path = animationName_;
 }
 
 void dagger::AnimatorStop(Animator& animator_)

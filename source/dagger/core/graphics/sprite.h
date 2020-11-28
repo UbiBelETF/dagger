@@ -13,6 +13,8 @@ namespace dagger
 		ColorRGBA   color{ 1.0f, 1.0f, 1.0f, 1.0f };	// 4
 		Vector2 size{ 1.0f, 1.0f };					// 2
 		Vector2 scale{ 1.0f, 1.0f };				// 2
+
+		String path;
 	};
 
 	struct Sprite : public SpriteData
