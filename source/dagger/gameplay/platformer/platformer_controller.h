@@ -2,7 +2,7 @@
 
 #include "core/core.h"
 #include "core/system.h"
-#include "gameplay/platformer/character_controller.h"
+#include "gameplay/platformer/character_controller_fsm.h"
 
 using namespace dagger;
 

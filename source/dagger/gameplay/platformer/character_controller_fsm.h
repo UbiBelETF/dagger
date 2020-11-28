@@ -15,7 +15,7 @@ struct CharacterControllerFSM : public FSM<CharacterStates>
 
 	CharacterControllerFSM()
 	{
-		MAP_STATE_TO_CLASS(CharacterStates::Idle, Idle);
-		MAP_STATE_TO_CLASS(CharacterStates::Running, Running);
+		CONNECT_STATE(CharacterStates, Idle);
+		CONNECT_STATE(CharacterStates, Running);
 	}
 };
