@@ -38,6 +38,7 @@ void CharacterControllerFSM::Running::Enter(CharacterControllerFSM::StateCompone
 	AnimatorPlay(animator, "souls_like_knight_character:RUN");
 }
 
+// same as: DEFAULT_EXIT(CharacterControllerFSM, Running);
 void CharacterControllerFSM::Running::Exit(CharacterControllerFSM::StateComponent& state_) 
 {}
 
