@@ -20,6 +20,7 @@ void PlatformerCollisionSystem::Run()
         auto& transform = view.get<Transform>(*it);
 
         auto it2 = view.begin();
+        //it2++;
         while (it2 != view.end())
         {
             auto& col = view.get<PlatformerCollision>(*it2);
@@ -28,12 +29,12 @@ void PlatformerCollisionSystem::Run()
 
             if (ch.id != character.id)
             {
-                // Perform the collision check
-                CollisionInfo collisionInfo = collision.GetCollisionInfo(transform.position, col, tr.position);
-
-                if (collisionInfo.hasCollided)
+                if (collision.collidesWith[col.entityType])
                 {
-                    if (collision.collidesWith[col.entityType])
+                    // Perform the collision check
+                    CollisionInfo collisionInfo = collision.GetCollisionInfo(transform.position, col, tr.position);
+
+                    if (collisionInfo.hasCollided)
                     {
                         if (collision.entityType == PlatformerCollisionSystem::playerID)
                         {
@@ -45,10 +46,10 @@ void PlatformerCollisionSystem::Run()
                         }
 
                     }
-                }
-                else
-                {
-                    LimitPlayerMovement(character, collisionInfo);
+                    else
+                    {
+                        LimitPlayerMovement(character, collisionInfo);
+                    }
                 }
             }
             it2++;
@@ -65,65 +66,65 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
     Vector2 p(pos_.x + pivot.x * size.x, pos_.y + pivot.y * size.y);
     Vector2 p2(posOther_.x + other_.pivot.x * other_.size.x, posOther_.y + other_.pivot.y * other_.size.y);
 
-    if (((p.x + size.x) > p2.x && (p2.y + other_.size.y) <= p.y)
-        || p.x <= (p2.x + other_.size.x) || p.y > (p2.y + other_.size.y)
-        || (p.y + size.y) <= p2.y)
+    if (p.x < p2.x + other_.size.x &&
+        p.x + size.x > p2.x &&
+        p.y < p2.y + other_.size.y &&
+        p.y + size.y > p2.y)
     {
         collisionInfo.hasCollided = true;
+        
+        if ((p.x + size.x) > p2.x && ((p2.x+other_.size.x) > (p.x + size.x)))
+        {
+            if ((abs(p.x + size.x - p2.x) < abs(p.y - p2.y - other_.size.y)) && ((abs(p.x + size.x - p2.x) < abs(p.y + size.y - p2.y))))
+            {
+                // bumped into other_ from the left side
+                collisionInfo.collisionSide = CollisionSide::RIGHT;
+            }
+        }
+        
 
-        if ((p.x + size.x) > p2.x && ((p2.x+other_.size.x)> (p.x + size.x)))
+        if (p.x <= (p2.x + other_.size.x) && p.x >= p2.x)
         {
-            // bumped into other_ from the left side
-            collisionInfo.collisionSide[0] = true;
+            if ((abs(p.x - p2.x - other_.size.x) < abs(p.y - p2.y - other_.size.y)) && ((abs(p.x - p2.x - other_.size.x) < abs(p.y + size.y - p2.y))))
+            {
+                // bumped into other_ from the right side
+                collisionInfo.collisionSide = CollisionSide::LEFT;
+            }
         }
-        else
+        
+
+        if ((p.y + size.y) >= p2.y && (p2.y + other_.size.y) >= (p.y + size.y))
         {
-            collisionInfo.collisionSide[0] = false;
+            if ((abs(p.y + size.y - p2.y) < abs(p.x - p2.x - other_.size.x)) && ((abs(p.y + size.y - p2.y) < abs(p.x + size.x - p2.x))))
+            {
+                // bumped into other_ from the bottom side
+                collisionInfo.collisionSide = CollisionSide::BOTTOM;
+            }
         }
-        if (p.x <= (p2.x + other_.size.x) && p.x>=p2.x)
+
+        if (p.y <= (p2.y + other_.size.y) && p.y >= p2.y)
         {
-            // bumped into other_ form the right side 
-            collisionInfo.collisionSide[1] = true;
+            if ((abs(p.y - p2.y - other_.size.y) < abs(p.x - p2.x - other_.size.x)) && ((abs(p.y - p2.y - other_.size.y) < abs(p.x + size.x - p2.x))))
+            {
+                // bumped into other_ from the top side
+                collisionInfo.collisionSide = CollisionSide::TOP;
+            }
         }
-        else
-        {
-            collisionInfo.collisionSide[1] = false;
-        }
-        if (p.y > (p2.y + other_.size.y))
-        {
-            // bumped into other_ from the bottom (ex: jumping)
-            collisionInfo.collisionSide[2] = true;
-        }
-        else
-        {
-            collisionInfo.collisionSide[2] = false;
-        }
-        if ((p.y + size.y) <= p2.y)
-        {
-            // standing on the other_
-            collisionInfo.collisionSide[3] = true;
-        }
-        else
-        {
-            collisionInfo.collisionSide[3] = false;
-        }
-    }
-    else 
-    {
-        collisionInfo.hasCollided = false;
-        for (auto& col : collisionInfo.collisionSide)
-        {
-            col = false;
-        }
-    }
+
+  }
+  else 
+  {
+      collisionInfo.hasCollided = false;
+      collisionInfo.collisionSide = CollisionSide::NONE;
+  }
 
     return collisionInfo;
 }
 
 void PlatformerCollisionSystem::LimitPlayerMovement(PlatformerCharacter& character_, CollisionInfo info_)
 {
-    character_.canGoRight = !info_.collisionSide[0];
-    character_.canGoLeft = !info_.collisionSide[1];
-    character_.canGoUp = !info_.collisionSide[2];
-    character_.canGoDown = !info_.collisionSide[3];
+    character_.canGoRight = (info_.collisionSide == CollisionSide::RIGHT) ? false : true;//character_.canGoRight;
+    character_.canGoLeft = (info_.collisionSide == CollisionSide::LEFT) ? false : true; //character_.canGoLeft;
+    character_.canGoUp = (info_.collisionSide == CollisionSide::TOP) ? false : true; //character_.canGoUp;
+    character_.canGoDown = (info_.collisionSide == CollisionSide::BOTTOM) ? false : true; //character_.canGoDown;
 }

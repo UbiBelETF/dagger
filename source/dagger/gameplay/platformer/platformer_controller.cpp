@@ -130,7 +130,7 @@ void PlatformerControllerSystem::Run()
                         else if (char_.turningDuringJump)
                         {
                             sprite_.position.x += char_.speed / 2 * sprite_.scale.x * Engine::DeltaTime();
-                            transform_.position.x += char_.speed / 2 * Engine::DeltaTime();
+                            transform_.position.x += char_.speed / 2 * sprite_.scale.x * Engine::DeltaTime();
                         }
                     }
 

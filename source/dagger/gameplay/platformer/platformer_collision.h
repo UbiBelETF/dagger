@@ -8,11 +8,13 @@
 using namespace dagger;
 using namespace platformer;
 
+enum class CollisionSide {NONE, RIGHT, LEFT, TOP, BOTTOM};
+
 struct CollisionInfo
 {
     Bool hasCollided{ false };
-    // 0: right | 1: left | 2: top  |  3: down
-    std::array<Bool, 4> collisionSide{ false, false,false,false };
+
+    CollisionSide collisionSide = CollisionSide::NONE;
 };
 
 struct PlatformerCollision
