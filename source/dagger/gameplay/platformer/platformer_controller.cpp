@@ -11,6 +11,7 @@
 
 using namespace platformer;
 
+<<<<<<< HEAD
 void PlatformerControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
     InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
@@ -171,4 +172,13 @@ void PlatformerControllerSystem::Run()
 void PlatformerControllerSystem::WindDown()
 {
     Engine::Registry().on_construct<InputReceiver>().disconnect<&PlatformerControllerSystem::OnInitialize>(this);
+=======
+void PlatformerControllerSystem::Run()
+{
+    Engine::Registry().view<CharacterControllerFSM::StateComponent>()
+        .each([&](CharacterControllerFSM::StateComponent& state_)
+            {
+                characterFSM.Run(state_);
+            });
+>>>>>>> main
 }

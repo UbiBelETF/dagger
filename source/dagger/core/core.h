@@ -5,6 +5,7 @@
 #include "core/view_ptr.h"
 #include "core/filesystem.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/epsilon.hpp>
 #include <spdlog/spdlog.h>
 #include <tsl/sparse_map.h>
 #include <tsl/sparse_set.h>
@@ -33,9 +34,17 @@ using Entity = entt::entity;
 // handy template for crashing if y is not the superclass of x
 #define IS_A(x, y) class = typename std::enable_if<std::is_base_of<y, x>::value>::type
 
+<<<<<<< HEAD
 #define EPSILON 0.000001f
 #define EPSILON_EQUAL(a, b) glm::epsilonEqual((a), (b), EPSILON)
 #define EPSILON_NOT_EQUAL(a, b) glm::epsilonNotEqual((a), (b), EPSILON)
+=======
+#define EPSILON 0.00001f
+#define EPSILON_EQUAL(a, b)     glm::epsilonEqual((a), (b), EPSILON)
+#define EPSILON_NOT_EQUAL(a, b) glm::epsilonNotEqual((a), (b), EPSILON)
+#define EPSILON_ZERO(a)         EPSILON_EQUAL(a, 0.0f)
+#define EPSILON_NOT_ZERO(a)     EPSILON_NOT_EQUAL(a, 0.0f)
+>>>>>>> main
 
 // OwningPtr<T>: the pointer is owned and destroyed by whoever holds this instance.
 template<typename T>
@@ -270,7 +279,7 @@ enum class EDaggerInputState
 
 struct Log
 {
-	String message;
+    String message;
 };
 
 template<typename PhantomT>
@@ -281,37 +290,37 @@ struct AssetLoadRequest
 
 struct KeyboardEvent
 {
-	EDaggerKeyboard key;
+    EDaggerKeyboard key;
     EDaggerInputState action;
     UInt32 scancode;
-	UInt32 modifiers;
+    UInt32 modifiers;
 };
 
 struct CharEvent
 {
-	UInt8 codepoint;
+    UInt8 codepoint;
 };
 
 typedef glm::dvec2 ScrollEvent;
 
 struct MouseEvent
 {
-	EDaggerMouse button;
-	EDaggerInputState action;
-	UInt32 modifiers;
+    EDaggerMouse button;
+    EDaggerInputState action;
+    UInt32 modifiers;
 };
 
 typedef glm::dvec2 CursorEvent;
 
 struct Error
 {
-	String message;
+    String message;
 };
 
 struct SystemRunStats
 {
-	String name;
-	Duration length;
+    String name;
+    Duration length;
 };
 
 struct NextFrame EMPTY_EVENT {};

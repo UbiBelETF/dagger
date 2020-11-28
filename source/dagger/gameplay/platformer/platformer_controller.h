@@ -2,7 +2,11 @@
 
 #include "core/core.h"
 #include "core/system.h"
+<<<<<<< HEAD
 #include "core/graphics/sprite.h"
+=======
+#include "gameplay/platformer/character_controller_fsm.h"
+>>>>>>> main
 
 using namespace dagger;
 
@@ -38,16 +42,14 @@ namespace platformer
 	class PlatformerControllerSystem
 		: public System
 	{
-		void OnInitialize(Registry& registry_, Entity entity_);
+		CharacterControllerFSM characterFSM;
 
 	public:
 		String SystemName() override {
 			return "Character Controller System";
 		}
 
-		void SpinUp() override;
 		void Run() override;
-		void WindDown() override;
 	};
 
 	Float32 CalculateVerticalSpeed(Float32 speed_, Float32 acceleration_, Float32 time_);

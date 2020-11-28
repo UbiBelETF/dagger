@@ -44,7 +44,7 @@ void team_game::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "logos:dagger");
+        AssignSprite(sprite, "logos:dagger");
         float ratio = sprite.size.y / sprite.size.x;
         sprite.size = { 500 / ratio, 500  };
 
