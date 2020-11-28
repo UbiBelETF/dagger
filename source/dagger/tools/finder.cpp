@@ -39,7 +39,7 @@ void RenderMenu(Folder* path_, CreationQueue<T>& queue_)
 void Finder::OnToolMenuRender()
 {
     Bool saveFile = false;
-    Bool loadFile = true;
+    Bool loadFile = false;
 
     if (ImGui::BeginMenu("Finder"))
     {
