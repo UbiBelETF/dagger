@@ -44,8 +44,8 @@ void CharacterControllerFSM::Running::Exit(CharacterControllerFSM::StateComponen
 
 void CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_) 
 {
-	auto& [sprite, input, animator, character] = Engine::Registry()
-		.get<Sprite, InputReceiver, Animator, platformer::PlatformerCharacter>(state_.entity);
+	auto& [sprite, input, character] = Engine::Registry()
+		.get<Sprite, InputReceiver, platformer::PlatformerCharacter>(state_.entity);
 
 	Float32 run = input.Get("run");
 
