@@ -3,7 +3,7 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
-#include <iostream>
+#include <list>
 #include <math.h>
 
 using namespace dagger;
@@ -13,6 +13,16 @@ void SimpleCollisionsSystem::Run()
     auto view = Engine::Registry().view<SimpleCollision, Transform>();
 
     auto it = view.begin();
+    while (it != view.end())
+    {
+        auto &coll = view.get<SimpleCollision>(*it);
+        coll.colided = false;
+        coll.colisions.clear();
+
+        it++;
+    }
+
+    it = view.begin();
     while(it != view.end())
     {
         auto &collision = view.get<SimpleCollision>(*it);
@@ -30,9 +40,11 @@ void SimpleCollisionsSystem::Run()
             {
                 collision.colided = true;
                 collision.colidedWith = *it2;
+                collision.colisions.emplace_back(*it2);
 
                 col.colided = true;
                 col.colidedWith = *it;
+                col.colisions.emplace_back(*it);
             }
             it2++;
         }

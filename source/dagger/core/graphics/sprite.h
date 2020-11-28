@@ -16,7 +16,7 @@ namespace dagger
 
 		inline void UseFullImage()
 		{
-			subSize = { 0.5, 0.5f };
+			subSize = { 1.0f, 1.0f };
 			subOrigin = { 0.0f, 0.0f };
 		}
 

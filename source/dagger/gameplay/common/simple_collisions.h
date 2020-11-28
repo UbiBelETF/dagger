@@ -2,6 +2,8 @@
 #include "core/system.h"
 #include "core/core.h"
 
+#include <list>
+
 using namespace dagger;
 
 enum class EHitbox {
@@ -19,7 +21,8 @@ struct SimpleCollision
     EHitbox shape = EHitbox::Rectangular;
 
     bool colided = false;
-    entt::entity colidedWith;
+    Entity colidedWith; // Kept for compatibility with the current code
+    std::list<Entity> colisions = {};
 
     bool IsCollided(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_);
 

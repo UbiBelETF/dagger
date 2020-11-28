@@ -5,11 +5,15 @@
 #include "core/game.h"
 #include "core/engine.h"
 
+#include <list>
+
 using namespace dagger;
 
-namespace team_game
+namespace ancient_defenders
 {
     void SetupWorld(Engine& engine_);
+    void SetupDemoCharacter(Engine& engine_);
+    void LoadPath();
 
     class TeamGame : public Game
     {
