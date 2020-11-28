@@ -17,6 +17,7 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/player_controller.h"
+#include "gameplay/team_game/shoot.h"
 
 
 using namespace dagger;
@@ -26,6 +27,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PlayerControllerSystem>();
+    engine_.AddSystem<ShootingSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -91,7 +93,7 @@ void lab::SetupWorld(Engine &engine_)
     auto& reg = engine_.Registry();
 
     float zPos = 1.f;
-
+    /*
     {
         
         auto entity = reg.create();
@@ -106,7 +108,7 @@ void lab::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
     } 
-
+    */
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
 /*      //  Player
