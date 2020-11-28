@@ -11,6 +11,22 @@ using namespace platformer;
 void PlatformerCollisionSystem::Run()
 {
     auto view = Engine::Registry().view<PlatformerCollision, PlatformerCharacter, Transform>();
+    auto iterator = view.begin();
+
+    while (iterator != view.end())//this for loop clears all previous collision data
+    {
+        auto& collision = view.get<PlatformerCollision>(*iterator);
+        auto& character = view.get<PlatformerCharacter>(*iterator);
+
+        collision.listOfEntities.clear();
+        collision.listOfCollisionSides.clear();
+        character.canGoLeft = true;
+        character.canGoRight = true;
+        character.canGoUp = true;
+        character.canGoDown = true;
+        iterator++;
+    }
+
     auto it = view.begin();
 
     while (it != view.end())
@@ -19,8 +35,8 @@ void PlatformerCollisionSystem::Run()
         auto& character = view.get<PlatformerCharacter>(*it);
         auto& transform = view.get<Transform>(*it);
 
-        auto it2 = view.begin();
-        //it2++;
+        auto it2 = it;
+        it2++;
         while (it2 != view.end())
         {
             auto& col = view.get<PlatformerCollision>(*it2);
@@ -29,31 +45,36 @@ void PlatformerCollisionSystem::Run()
 
             if (ch.id != character.id)
             {
-                if (collision.collidesWith[col.entityType])
+                if (collision.collidesWith[(int)col.entityType])
                 {
                     // Perform the collision check
                     CollisionInfo collisionInfo = collision.GetCollisionInfo(transform.position, col, tr.position);
 
                     if (collisionInfo.hasCollided)
                     {
-                        if (collision.entityType == PlatformerCollisionSystem::playerID)
-                        {
-                            if (col.entityType == PlatformerCollisionSystem::terrainID ||
-                                col.entityType == PlatformerCollisionSystem::playerID)
+                        if (collision.entityType == PlatformerCollisionID::PLAYER)                         //
+                        {                                                                                  //These are placeholders for now
+                            if (col.entityType == PlatformerCollisionID::TERRAIN ||                        //
+                                col.entityType == PlatformerCollisionID::PLAYER)                           //
                             {
-                                LimitPlayerMovement(character, collisionInfo);
+                                collision.listOfEntities.push_back(*it2);
+                                collision.listOfCollisionSides.push_back(collisionInfo.collisionSide);
+
+                                col.listOfEntities.push_back(*it);
+                                col.listOfCollisionSides.push_back(collisionInfo.collisionSideOther);
                             }
                         }
 
                     }
                     else
                     {
-                        LimitPlayerMovement(character, collisionInfo);
+                        
                     }
                 }
             }
             it2++;
         }
+        LimitPlayerMovement(character, collision);//goes through all the collisions and limits the movement of the player depending on said collisions
         it++;
     }
 
@@ -79,6 +100,7 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             {
                 // bumped into other_ from the left side
                 collisionInfo.collisionSide = CollisionSide::RIGHT;
+                collisionInfo.collisionSideOther = CollisionSide::LEFT;
             }
         }
         
@@ -89,6 +111,7 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             {
                 // bumped into other_ from the right side
                 collisionInfo.collisionSide = CollisionSide::LEFT;
+                collisionInfo.collisionSideOther = CollisionSide::RIGHT;
             }
         }
         
@@ -99,6 +122,7 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             {
                 // bumped into other_ from the bottom side
                 collisionInfo.collisionSide = CollisionSide::BOTTOM;
+                collisionInfo.collisionSideOther = CollisionSide::TOP;
             }
         }
 
@@ -108,6 +132,7 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             {
                 // bumped into other_ from the top side
                 collisionInfo.collisionSide = CollisionSide::TOP;
+                collisionInfo.collisionSideOther = CollisionSide::BOTTOM;
             }
         }
 
@@ -116,15 +141,22 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
   {
       collisionInfo.hasCollided = false;
       collisionInfo.collisionSide = CollisionSide::NONE;
+      collisionInfo.collisionSideOther = CollisionSide::NONE;
   }
 
     return collisionInfo;
 }
 
-void PlatformerCollisionSystem::LimitPlayerMovement(PlatformerCharacter& character_, CollisionInfo info_)
+void PlatformerCollisionSystem::LimitPlayerMovement(PlatformerCharacter& character_, PlatformerCollision collision_)
 {
-    character_.canGoRight = (info_.collisionSide == CollisionSide::RIGHT) ? false : true;//character_.canGoRight;
-    character_.canGoLeft = (info_.collisionSide == CollisionSide::LEFT) ? false : true; //character_.canGoLeft;
-    character_.canGoUp = (info_.collisionSide == CollisionSide::TOP) ? false : true; //character_.canGoUp;
-    character_.canGoDown = (info_.collisionSide == CollisionSide::BOTTOM) ? false : true; //character_.canGoDown;
+    if (!collision_.listOfEntities.empty())
+    {
+        for (int i = 0; i < collision_.listOfEntities.size(); i++)
+        {
+            character_.canGoRight = (collision_.listOfCollisionSides[i] == CollisionSide::RIGHT) ? false : character_.canGoRight;//character_.canGoRight;
+            character_.canGoLeft = (collision_.listOfCollisionSides[i] == CollisionSide::LEFT) ? false : character_.canGoLeft; //character_.canGoLeft;
+            character_.canGoUp = (collision_.listOfCollisionSides[i] == CollisionSide::TOP) ? false : character_.canGoUp; //character_.canGoUp;
+            character_.canGoDown = (collision_.listOfCollisionSides[i] == CollisionSide::BOTTOM) ? false : character_.canGoDown; //character_.canGoDown;
+        }
+    }
 }
