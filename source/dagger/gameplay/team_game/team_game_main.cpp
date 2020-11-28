@@ -32,7 +32,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 3;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -45,7 +45,7 @@ namespace jovica
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 90 };
+        sprite.position = { x_ * 16, y_ * 16, 30 };
         AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
         return entity;
     }
@@ -68,7 +68,6 @@ void SetupWorldJovica(Engine& engine_)
 
         auto& playerSprite = reg.emplace<Sprite>(player);
         AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-        playerSprite.scale = { 3, 3 };
 
         auto& playerAnimator = reg.emplace<Animator>(player);
         AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");

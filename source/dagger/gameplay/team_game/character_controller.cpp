@@ -63,11 +63,11 @@ void Running::Run(CharacterController& ctrl_)
 	// Character orientation
 	if (ctrl_.userInput.x > 0.0f)
 	{
-		ctrl_.sprite->scale.x = 3;
+		ctrl_.sprite->scale.x = 1;
 	}
 	else if (ctrl_.userInput.x < 0.0f)
 	{
-		ctrl_.sprite->scale.x = -3;
+		ctrl_.sprite->scale.x = -1;
 	}
 
 	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_run");

@@ -27,7 +27,7 @@ struct CharacterController : public FiniteStateComponent<ECharacterState>
 	ViewPtr<Sprite> sprite;
 	ViewPtr<Animator> animator;
 	Vector2 direction{ 0, 0 };
-	Float32 speed{ 100 };
+	Float32 speed{ 70 };
 };
 
 // we now create our FSM by extending the FiniteStateMachine class and passing in our enum and data!
