@@ -2,11 +2,8 @@
 
 #include "core/core.h"
 #include "core/system.h"
-<<<<<<< HEAD
 #include "core/graphics/sprite.h"
-=======
 #include "gameplay/platformer/character_controller_fsm.h"
->>>>>>> main
 
 using namespace dagger;
 

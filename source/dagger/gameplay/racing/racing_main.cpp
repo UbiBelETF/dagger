@@ -96,11 +96,7 @@ void racing_game::SetupWorld(Engine &engine_)
     //{
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-<<<<<<< HEAD
-        AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4-bfl");
-=======
         AssignSprite(sprite, "Racing:police-car-bmw-z4");
->>>>>>> main
         float ratio = sprite.size.y / sprite.size.x;
         sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
 
@@ -125,7 +121,7 @@ void racing_game::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "Racing:laser-long-off");
+        AssignSprite(sprite, "Racing:laser-long-off");
         float ratio = sprite.size.y / sprite.size.x;
         sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
         sprite.position.z = zPos;

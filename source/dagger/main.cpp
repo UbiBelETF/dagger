@@ -15,10 +15,6 @@ int main(int argc_, char** argv_)
 //	return engine.Run<ping_pong::PingPongGame>();
 
 //	return engine.Run<racing_game::RacingGame>();
-<<<<<<< HEAD
-
 //	return engine.Run<platformer::Platformer>();
-=======
 	return engine.Run<platformer::Platformer>();
->>>>>>> main
 }

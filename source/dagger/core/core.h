@@ -34,17 +34,11 @@ using Entity = entt::entity;
 // handy template for crashing if y is not the superclass of x
 #define IS_A(x, y) class = typename std::enable_if<std::is_base_of<y, x>::value>::type
 
-<<<<<<< HEAD
-#define EPSILON 0.000001f
-#define EPSILON_EQUAL(a, b) glm::epsilonEqual((a), (b), EPSILON)
-#define EPSILON_NOT_EQUAL(a, b) glm::epsilonNotEqual((a), (b), EPSILON)
-=======
 #define EPSILON 0.00001f
 #define EPSILON_EQUAL(a, b)     glm::epsilonEqual((a), (b), EPSILON)
 #define EPSILON_NOT_EQUAL(a, b) glm::epsilonNotEqual((a), (b), EPSILON)
 #define EPSILON_ZERO(a)         EPSILON_EQUAL(a, 0.0f)
 #define EPSILON_NOT_ZERO(a)     EPSILON_NOT_EQUAL(a, 0.0f)
->>>>>>> main
 
 // OwningPtr<T>: the pointer is owned and destroyed by whoever holds this instance.
 template<typename T>

@@ -59,13 +59,8 @@ struct Character
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& transform = reg.get_or_emplace<Transform>(entity);
         auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
-<<<<<<< HEAD
         auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
         return Character{ entity, sprite, anim, input, transform, character, collision};
-=======
-
-        return Character{ entity, sprite, anim, input, character };
->>>>>>> main
     }
 
     static Character Create(

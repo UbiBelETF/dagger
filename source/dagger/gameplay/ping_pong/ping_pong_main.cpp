@@ -65,19 +65,10 @@ void PingPongGame::CoreSystemsSetup(Engine& engine_)
 
 void PingPongGame::GameplaySystemsSetup(Engine& engine_)
 {
-<<<<<<< HEAD
-    engine_.AddSystem<SimpleCollisionsSystem>();
-    engine_.AddSystem<PingPongBallSystem>();
-    engine_.AddSystem<PingPongPlayerInputSystem>();
-    engine_.AddSystem<PlayerScoresSystem>();
-    engine_.AddSystem<PowerUpSystem>();
-    engine_.AddSystem<FlickeringSystem>();
-=======
     engine_.AddPausableSystem<SimpleCollisionsSystem>();
     engine_.AddPausableSystem<PingPongBallSystem>();
     engine_.AddPausableSystem<PingPongPlayerInputSystem>();
     engine_.AddPausableSystem<PlayerScoresSystem>();
->>>>>>> main
 #if defined(DAGGER_DEBUG)
     engine_.AddPausableSystem<PingPongTools>();
 #endif //defined(DAGGER_DEBUG)
