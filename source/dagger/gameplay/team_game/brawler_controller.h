@@ -9,6 +9,7 @@ namespace team_game
 	struct BrawlerCharacter
 	{
 		int speed{ 1 };
+		bool double_jump{ false };
 		bool jump{ false };
 		bool attack{ false };
 		Float32 attack_time{ 0 };

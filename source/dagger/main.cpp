@@ -12,9 +12,9 @@ int main(int argc_, char** argv_)
 
 
 
-	return engine.Run<tiles_example::TilesExampleMain>();
+	//return engine.Run<tiles_example::TilesExampleMain>();
 
-//	return engine.Run<team_game::TeamGame>();
+	return engine.Run<team_game::TeamGame>();
 //	return engine.Run<ping_pong::PingPongGame>();
 
 //	return engine.Run<racing_game::RacingGame>();

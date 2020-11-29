@@ -1,0 +1,10 @@
+{
+	"animation-name": "character:FALL",
+	"animation-length-ms": 500,
+	"animation-frames": [
+		{ "texture-name": "Light:fall:fall0" },
+		{ "texture-name": "Light:fall:fall1" },
+		{ "texture-name": "Light:fall:fall2" },
+		{ "texture-name": "Light:fall:fall3" }
+	]
+}
