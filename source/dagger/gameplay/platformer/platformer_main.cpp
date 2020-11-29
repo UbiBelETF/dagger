@@ -46,7 +46,6 @@ struct Character
     Sprite& sprite;
     Animator& animator;
     InputReceiver& input;
-    Transform& transform;
     PlatformerCharacter& character;
     PlatformerCollision& collision;
     int id;
@@ -57,10 +56,9 @@ struct Character
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        auto& transform = reg.get_or_emplace<Transform>(entity);
         auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
         auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
-        return Character{ entity, sprite, anim, input, transform, character, collision};
+        return Character{ entity, sprite, anim, input, character, collision};
     }
 
     static Character Create(
@@ -81,7 +79,6 @@ struct Character
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
-        chr.transform.position = { position_, 0.0f };
         chr.collision.size = { playerWidth, playerHeight };
         chr.character.id = id;
 
