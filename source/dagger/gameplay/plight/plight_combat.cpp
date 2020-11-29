@@ -10,7 +10,8 @@
 #include "core/graphics/window.h"
 
 #include "gameplay/plight/plight_collisions.h"
-#include "gameplay/plight/topdown_controller.h"
+#include "gameplay/plight/plight_state_idle.h"
+#include "gameplay/plight/plight_state_running.h"
 
 
 #define BAR_START_SIZE 50.f
@@ -19,11 +20,10 @@ using namespace plight;
 
 void PlightCombatSystem::Run()
 {
-	auto view = Engine::Registry().view <PlightCollision, Transform, TopdownCharacter, CombatStats >();
+	auto view = Engine::Registry().view <PlightCollision, Transform, CombatStats >();
 	for (auto entity : view) {
 		PlightCollision& col = Engine::Registry().get<PlightCollision>(entity);
 		Transform& t = Engine::Registry().get<Transform>(entity);
-		TopdownCharacter& character = Engine::Registry().get<TopdownCharacter>(entity);
 		CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
 
 		//Will add conditions based on the current character state (to be implemented in character controller system)
@@ -31,10 +31,8 @@ void PlightCombatSystem::Run()
 			auto it = col.colidedWith.begin();
 			while (it != col.colidedWith.end()) {
 				if (Engine::Registry().valid(*it)) {
-					if (Engine::Registry().has<TopdownCharacter>(*it)) {
+					if (Engine::Registry().has<StateIdle>(*it) || Engine::Registry().has<StateRunning>(*it)) {
 						auto& ch = Engine::Registry().get<CombatStats>(*it);
-						auto& pchar = Engine::Registry().get<TopdownCharacter>(*it);
-
 						ch.currentHealth -= 0.1f;
 
 						if (ch.currentHealth <= 0.f) {
@@ -54,21 +52,21 @@ void PlightCombatSystem::Run()
 		}
 
 		//Stamina will not be affecting running , it will be used for special movement like dashing or rolling when it gets implemented (used on running for example here)
-		if (character.running) {
+		if (Engine::Registry().has<StateRunning>(entity)) {
+			auto& state = Engine::Registry().get<StateRunning>(entity);
 			cstats.currentStamina -= STAMINA_FOR_RUNNING_FRAME;
 			if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
 				if (cstats.currentStamina < 0.f) {
 					cstats.currentStamina = 0.f;
 				}
-				character.running = false;
-				character.resting = true;
+				state.nextState = EPlightState::idle;
 			}
 			auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
 			sprite.position.x -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
 			sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 		}
 		else {
-			cstats.currentStamina += STAMINA_FOR_RUNNING_FRAME/5;
+			cstats.currentStamina += STAMINA_FOR_RUNNING_FRAME/2;
 			if (cstats.currentStamina > 100) {
 				cstats.currentStamina = 100;
 			}

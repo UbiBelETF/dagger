@@ -14,9 +14,11 @@
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
 
-#include "gameplay/plight/topdown_controller.h"
+
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
+#include "gameplay/plight/plight_state_idle.h"
+#include "gameplay/plight/plight_state_running.h"
 
 
 using namespace dagger;
@@ -28,10 +30,10 @@ struct PlightCharacter
     Sprite& sprite;
     Animator& animator;
     InputReceiver& input;
-    TopdownCharacter& character;
     PlightCollision& col;
     Transform& transform;
     CombatStats& cstats;
+    
 
     static PlightCharacter Get(Entity entity_)
     {
@@ -39,11 +41,10 @@ struct PlightCharacter
         auto& sprite = reg.get_or_emplace<Sprite>(entity_);
         auto& anim = reg.get_or_emplace<Animator>(entity_);
         auto& input = reg.get_or_emplace<InputReceiver>(entity_);
-        auto& character = reg.get_or_emplace<TopdownCharacter>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
-        return PlightCharacter{ entity_, sprite, anim, input, character ,col,transform,cstats};
+        return PlightCharacter{ entity_, sprite, anim, input,col,transform,cstats};
     }
 
     static PlightCharacter Create(
@@ -54,6 +55,8 @@ struct PlightCharacter
         auto& reg = Engine::Registry();
         auto entity = reg.create();
         auto chr = PlightCharacter::Get(entity);
+
+        reg.emplace<StateIdle>(entity); // Start state is state idle
 
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
@@ -70,7 +73,6 @@ struct PlightCharacter
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
-        chr.character.speed = 100;
 
         return chr;
     }
@@ -78,9 +80,10 @@ struct PlightCharacter
 
 void Plight::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<TopdownControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
+    engine_.AddSystem<PlightIdleStateSystem>();
+    engine_.AddSystem<PlightRunningStateSystem>();
 
 }
 
