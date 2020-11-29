@@ -1,7 +1,6 @@
 #include "tiles.h"
 #include "tile.h"
 
-
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/graphics/shaders.h"
@@ -10,9 +9,6 @@
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "core/graphics/window.h"
-//#include "core/files.h"
-//#include "core/stringops.h"
-//#include "core/filesystem.h"
 #include <ios>
 
 
@@ -31,16 +27,15 @@ void TilemapLoadingSystem::OnLoadAsset(TilemapLoadRequest request_)
 
     while (input >> std::noskipws >> ch) 
     {
-        std::printf("its working");
         if(ch == '\n')
         {
             x = 0; y++;
         }
         else
         {
-            assert(request_.legend->contains(ch));
+           assert(request_.legend->contains(ch));
            tilemap->tiles.push_back(request_.legend->at(ch)(Engine::Registry(), x, y));
-           
+           x++;
         }
     }
      Engine::Res<Tilemap>()[request_.path] = tilemap;

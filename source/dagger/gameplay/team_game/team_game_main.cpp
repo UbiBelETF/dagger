@@ -92,17 +92,18 @@ struct Player
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 90 };
-        AssignSprite(sprite, "spritesheet:lab:floor_5");
+        AssignSprite(sprite, "spritesheets:lab:floor_1");
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+        return entity;
     }
 
     Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_)
     {   
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 90 };
-        AssignSprite(sprite, "spritesheet:lab::wall_classic");
-    
+        AssignSprite(sprite, "spritesheets:lab:wall_top_left");
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+        return entity;
     }
 
     
@@ -112,10 +113,10 @@ void lab::SetupWorld(Engine &engine_)
     auto& reg = engine_.Registry();
 
     TilemapLegend legend;
-    legend['.'] = &CreateWall;
-    legend['#'] = &CreateFloor; 
+    legend['#'] = &CreateWall;
+    legend['.'] = &CreateFloor; 
 
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "data/tilemaps/lab/lab.map", &legend }); 
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
 
     float zPos = 1.f;
 
