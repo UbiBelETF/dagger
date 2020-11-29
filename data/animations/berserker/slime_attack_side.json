@@ -1,0 +1,10 @@
+{
+	"animation-name": "chara_slime:slime_attack_side",
+	"animation-length-ms": 400,
+	"animation-frames": [
+		{ "texture-name": "spritesheets:chara_slime:slime_attack_side_anim:1" },
+		{ "texture-name": "spritesheets:chara_slime:slime_attack_side_anim:2" },
+		{ "texture-name": "spritesheets:chara_slime:slime_attack_side_anim:3" },
+		{ "texture-name": "spritesheets:chara_slime:slime_attack_side_anim:4" }
+	]
+}

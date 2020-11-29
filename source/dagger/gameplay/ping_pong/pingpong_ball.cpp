@@ -74,7 +74,11 @@ void PingPongBallSystem::Run()
         }
         else
         {
+            #if defined(DAGGER_DEBUG)
             t.position += (ball.speed * Engine::DeltaTime()*ConfigureSystem::BallSpeedMultiplier()*ConfigureSystem::GameSpeedMultiplier());
+            #else
+            t.position += (ball.speed * Engine::DeltaTime();
+            #endif
         }
     }
 }

@@ -1,0 +1,10 @@
+slime_idle_anim 0 0 48 48 3
+slime_move_down_anim 0 96 48 48 4
+slime_move_side_anim 0 144 48 48 4
+slime_move_up_anim 0 192 48 48 4
+slime_attack_down_anim 0 240 48 48 4
+slime_attack_side_anim 0 288 48 48 4
+slime_attack_up_anim 0 336 48 48 4
+slime_hit_down_anim 0 384 48 48 4
+slime_hit_side_anim 0 432 48 48 4
+slime_hit_up_anim 0 480 48 48 4

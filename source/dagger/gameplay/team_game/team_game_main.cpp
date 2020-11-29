@@ -9,15 +9,18 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
-
-#include "gameplay/common/simple_collisions.h"
+#include "core/graphics/sprite_render.h"
+#include "core/graphics/textures.h"
+#include "core/graphics/animations.h"
+#include "core/graphics/gui.h"
+#include "tools/diagnostics.h"
+#include "core/graphics/text.h"
 
 using namespace dagger;
 using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<TeamGameControllerSystem>();
 }
 
@@ -51,17 +54,17 @@ struct MainCharacter
         auto entity = reg.create();
         auto chr = MainCharacter::Get(entity);
 
-        chr.sprite.scale = { 1, 1 };
+        chr.sprite.scale = { 3, 3 };
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
 
-        AssignSpriteTexture(chr.sprite, "TeamGame:MainCharacter:IDLE:idle1");
-        //AnimatorPlay(animator_, "TeamGame:MainCharacter:IDLE");
+        AssignSprite(chr.sprite, "spritesheets:chara_hero:hero_idle_anim:1");
+        AnimatorPlay(chr.animator, "chara_hero:hero_idle");
 
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
-        chr.character.speed = 50;
+        chr.character.speed = 100;
 
         return chr;
     }
@@ -85,6 +88,47 @@ void TeamGame::WorldSetup(Engine &engine_)
 
 void team_game::SetupWorld(Engine &engine_)
 {
-    auto& reg = engine_.Registry();
     //TODO: Setup world
+    auto& reg = Engine::Registry();
+    for (int i = -50; i < 50; i++)
+    {
+        for (int j = -50; j < 50; j++)
+        {
+            auto entity = reg.create();
+            auto& sprite = reg.emplace<Sprite>(entity);
+            AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:floor_{}", 1 + (rand() % 12)));
+            sprite.position = { i * 16, j * 16, 99 };
+        }
+    }
+
+    String anims[] = { "idle", "move_up", "move_down", "move_side", "attack_up", "attack_side", "attack_down", "hit_up", "hit_down", "hit_side" };
+    for (int i = 0; i < 10 ; i++)
+    {
+        auto slime = reg.create();
+        auto& sprite = reg.emplace<Sprite>(slime);
+        AssignSprite(sprite, "spritesheets:chara_slime:slime_"+anims[i%10]+"_anim:1");
+        sprite.position = { rand() % 300 -300, rand() % 300 - 150, 0 };
+        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
+        sprite.scale = { 3, 3 };
+
+        auto& anim = reg.emplace<Animator>(slime);
+        AnimatorPlay(anim, "chara_slime:slime_"+anims[i%10]);
+    }
+    for (int i = 0; i < 10; i++)
+    {
+        auto hero = reg.create();
+        auto& sprite = reg.emplace<Sprite>(hero);
+        AssignSprite(sprite, "spritesheets:chara_hero:hero_" + anims[i % 10] + "_anim:1");
+        sprite.position = { rand() % 300 , rand() % 300 -150 , 0 };
+        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
+        sprite.scale = { 3, 3 };
+
+        auto& anim = reg.emplace<Animator>(hero);
+        AnimatorPlay(anim, "chara_hero:hero_" + anims[i % 10]);
+    }
+
+    auto ui = reg.create();
+    auto& text = reg.emplace<Text>(ui);
+    text.spacing = 0.6f;
+    text.Set("pixel-font", "hello world");
 }

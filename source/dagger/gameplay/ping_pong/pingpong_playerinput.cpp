@@ -52,8 +52,11 @@ void PingPongPlayerInputSystem::Run()
         auto &t = view.get<Transform>(entity);
         auto &ctrl = view.get<ControllerMapping>(entity);
 
+        #if defined(DAGGER_DEBUG)
         t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime()*ConfigureSystem::PlayerSpeedMultiplier()*ConfigureSystem::GameSpeedMultiplier();
-
+        #else
+        t.position.y += ctrl.input.y * s_PlayerSpeed * Engine::DeltaTime();
+        #endif
         if (t.position.y > s_BoarderUp)
         {
             t.position.y = s_BoarderUp;

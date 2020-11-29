@@ -1,0 +1,11 @@
+{
+	"animation-name": "chara_hero:hero_attack_down",
+	"animation-length-ms": 400,
+	"animation-frames": [
+		{ "texture-name": "spritesheets:chara_hero:hero_attack_down_anim:1" },
+		{ "texture-name": "spritesheets:chara_hero:hero_attack_down_anim:2" },
+		{ "texture-name": "spritesheets:chara_hero:hero_attack_down_anim:3" },
+		{ "texture-name": "spritesheets:chara_hero:hero_attack_down_anim:4" }
+	]
+}
+

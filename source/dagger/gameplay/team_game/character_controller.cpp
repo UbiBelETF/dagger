@@ -74,16 +74,38 @@ void TeamGameControllerSystem::Run()
     {
         if (ctrl_.input.x == 0 && ctrl_.input.y == 0)
         {
-            //AnimatorPlay(animator_, "souls_like_knight_character:IDLE");
+            AnimatorPlay(animator_, "chara_hero:hero_idle");
         }
         else
         {
-            //AnimatorPlay(animator_, "souls_like_knight_character:RUN");
+            if (ctrl_.input.y == 1)
+            {
+                AnimatorPlay(animator_, "chara_hero:hero_move_up");
+            }
 
+            else if (ctrl_.input.y == -1)
+            {
+                AnimatorPlay(animator_, "chara_hero:hero_move_down");
+            }
+                
+
+            else
+            {
+                AnimatorPlay(animator_, "chara_hero:hero_move_side");
+            }
+            
             if(ctrl_.input.x != 0)
-                sprite_.scale.x = ctrl_.input.x;
-            transform_.position.x += ctrl_.input.x * char_.speed * Engine::DeltaTime();
-            transform_.position.y += ctrl_.input.y * char_.speed * Engine::DeltaTime();
+                sprite_.scale.x = ctrl_.input.x * abs(sprite_.scale.x);
+            if (ctrl_.input.x != 0 && ctrl_.input.y != 0)
+            {
+                transform_.position.x += ctrl_.input.x * char_.speed * sqrt(2) / 2 * Engine::DeltaTime();
+                transform_.position.y += ctrl_.input.y * char_.speed * sqrt(2) / 2 * Engine::DeltaTime();
+            }
+            else
+            {
+                transform_.position.x += ctrl_.input.x * char_.speed * Engine::DeltaTime();
+                transform_.position.y += ctrl_.input.y * char_.speed * Engine::DeltaTime();
+            }
         }
     });
 }
