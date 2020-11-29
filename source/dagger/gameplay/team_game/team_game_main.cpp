@@ -32,10 +32,10 @@ void TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 3;
+    camera->zoom = 2;
     camera->position = { 0, 0, 0 };
     camera->Update();
-
+    
     team_game::SetupWorld(engine_);
 }
 
@@ -83,12 +83,38 @@ namespace jovica
         return entity;
     }
 }
+namespace smiljana {
+    
+    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
+    {
+       
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16 , y_ * 16 , 30};
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
+        
+
+        return entity;
+    }
+    Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
+
+        return entity;
+    }
+}
+    
+
 
 void SetupWorldJovica(Engine& engine_)
 {
     auto& reg = engine_.Registry();
 
     float zPos = 1.f;
+   
 
     {
         TilemapLegend legend;
@@ -114,9 +140,41 @@ void SetupWorldJovica(Engine& engine_)
         auto& playerController = reg.emplace<CharacterController>(player);
     }
 }
+void SetupWorldSmiljana(Engine& engine_) {
+  
+        auto& reg = engine_.Registry();
 
+        float zPos = 1.f;
+
+        {
+            TilemapLegend legend;
+            legend['.'] = &smiljana::CreateFloor;
+            legend['#'] = &smiljana::CreateWall;
+
+            Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
+
+            // PLAYER
+            auto player = reg.create();
+
+            auto& playerSprite = reg.emplace<Sprite>(player);
+            AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+
+            auto& playerAnimator = reg.emplace<Animator>(player);
+            AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
+
+            auto& playerTransform = reg.emplace<Transform>(player);
+            playerTransform.position = { 0, 0, zPos };
+
+            auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
+            playerInput.contexts.push_back("AmongThemInput");
+
+            auto& playerController = reg.emplace<CharacterController>(player);
+        
+    }
+}
 void team_game::SetupWorld(Engine &engine_)
 {
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-    SetupWorldJovica(engine_);
+   // SetupWorldJovica(engine_);
+    SetupWorldSmiljana(engine_);
 }
