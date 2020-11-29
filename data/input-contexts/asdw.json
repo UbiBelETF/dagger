@@ -11,6 +11,14 @@
 			  { "trigger": "KeyW", "value": 1 },
 			  { "trigger": "KeyS", "value": -1 } 
 		  ] },
+		{
+			"command-name": "shoot",
+			"actions": [
+				{
+					"trigger": "MouseButton1",
+					"value": 1
+				}
+		] },
 		{ "command-name": "light", "trigger": "KeyR", "event": "Released" },
 		{ "command-name": "heavy", "trigger": "KeyR", "duration": 1000 },
 		{ "command-name": "use", "trigger": "KeyE" },
