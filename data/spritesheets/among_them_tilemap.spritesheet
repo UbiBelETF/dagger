@@ -20,11 +20,11 @@ floor_2 48 16 16 16
 floor_3 32 32 16 16
 floor_4 48 32 16 16
 floor_5 64 32 16 16
-floor_6 80 32 16 61
+floor_6 80 32 16 16
 floor_7 32 48 16 16
 floor_8 48 48 16 16
 floor_9 64 48 16 16
-floor_10 80 48 16 61
+floor_10 80 48 16 16
 
 floor_up_left 96 16 16 16
 floor_up 112 16 16 16
