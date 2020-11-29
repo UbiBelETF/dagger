@@ -148,71 +148,11 @@ void Platformer::WorldSetup(Engine& engine_)
     auto mainChar = Character::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
     Engine::Registry().emplace<CameraFollowFocus>(mainChar.entity);
 
-    auto backgroundBar1 = Engine::Registry().create();
-    auto currentHealthBar1 = Engine::Registry().create();
-
-    mainChar.chealth.backgroundBar = backgroundBar1;
-    mainChar.chealth.currentHealthBar = currentHealthBar1;
-
-    auto& backgroundSprite = Engine::Registry().emplace<Sprite>(mainChar.chealth.backgroundBar);
-
-    AssignSprite(backgroundSprite, "EmptyWhitePixel");
-    backgroundSprite.color = { 0, 0, 0, 1 };
-    backgroundSprite.size = { 50, 5 };
-    backgroundSprite.scale = { 1, 1 };
-    backgroundSprite.position = { -100, 125, 2 };
-
-    auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.chealth.currentHealthBar);
-
-    AssignSprite(frontSprite, "EmptyWhitePixel");
-    frontSprite.color = { 1, 0, 0, 1 };
-    frontSprite.size = { 50, 5 };
-    frontSprite.scale = { 1, 1 };
-    frontSprite.position = {-100, 125, 1 };
-
-    auto* camera = Engine::GetDefaultResource<Camera>();
-
-    auto& backgroundParallax = Engine::Registry().emplace<Parallax>(mainChar.chealth.backgroundBar);
-    backgroundParallax.lastCameraPosition = camera->position;
-    backgroundParallax.strength = 1.0f;
-
-    auto& frontParallax = Engine::Registry().emplace<Parallax>(mainChar.chealth.currentHealthBar);
-    frontParallax.lastCameraPosition = camera->position;
-    frontParallax.strength = 1.0f;
-
 
     auto sndChar = Character::Create("Arrows", { 1, 0, 0 }, { 100, 0 });
     Engine::Registry().emplace<CameraFollowFocus>(sndChar.entity);
 
-    auto backgroundBar2 = Engine::Registry().create();
-    auto currentHealthBar2 = Engine::Registry().create();
-
-    sndChar.chealth.backgroundBar = backgroundBar2;
-    sndChar.chealth.currentHealthBar = currentHealthBar2;
-
-    auto& backgroundSprite2 = Engine::Registry().emplace<Sprite>(sndChar.chealth.backgroundBar);
-
-    AssignSprite(backgroundSprite2, "EmptyWhitePixel");
-    backgroundSprite2.color = { 0, 0, 0, 1 };
-    backgroundSprite2.size = { 50, 5 };
-    backgroundSprite2.scale = { 1, 1 };
-    backgroundSprite2.position = { 100, 125, 2 };
-
-    auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.chealth.currentHealthBar);
-
-    AssignSprite(frontSprite2, "EmptyWhitePixel");
-    frontSprite2.color = { 1, 0, 0, 1 };
-    frontSprite2.size = { 50, 5 };
-    frontSprite2.scale = { 1, 1 };
-    frontSprite2.position = { 100, 125, 1 };
-
-    auto& backgroundParallax2 = Engine::Registry().emplace<Parallax>(sndChar.chealth.backgroundBar);
-    backgroundParallax2.lastCameraPosition = camera->position;
-    backgroundParallax2.strength = 1.0f;
-
-    auto& frontParallax2 = Engine::Registry().emplace<Parallax>(sndChar.chealth.currentHealthBar);
-    frontParallax2.lastCameraPosition = camera->position;
-    frontParallax2.strength = 1.0f;
+    
 }
 
 
