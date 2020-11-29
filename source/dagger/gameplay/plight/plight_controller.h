@@ -3,33 +3,35 @@
 #include "core/core.h"
 #include "core/system.h"
 
+#include "gameplay/plight/plight_controller_fsm.h"
+
 using namespace dagger;
 
 namespace plight
 {
-	struct TopdownCharacter
+	struct PlightCharacterController
 	{
 		bool running{ false };
 		bool resting{ false };
 
-		Float32 speed{ 0.1f };
+		Float32 speed{ 100.f };
 
 		Float32 restingTime = 0.75f;
 		Float32 currentRestingTime = 0.f;
+		
+		Float32 firstMoveInput{ 0.f };
 	};
 
-	class TopdownControllerSystem
+	class PlightControllerSystem
 		: public System
 	{
-		void OnInitialize(Registry& registry_, Entity entity_);
+		PlightCharacterControllerFSM characterFSM;
 
 	public:
 		String SystemName() override {
-			return "Character Controller System";
+			return "Plight Character Controller System";
 		}
 
-		void SpinUp() override;
 		void Run() override;
-		void WindDown() override;
 	};
 }

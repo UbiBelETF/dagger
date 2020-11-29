@@ -15,7 +15,7 @@
       ]
     },
     {
-      "command-name": "moveY",
+      "command-name": "move",
       "actions": [
         {
           "trigger": "KeyW",

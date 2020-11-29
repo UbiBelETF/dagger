@@ -10,7 +10,7 @@
 #include "core/graphics/window.h"
 
 #include "gameplay/plight/plight_collisions.h"
-#include "gameplay/plight/topdown_controller.h"
+#include "gameplay/plight/plight_controller.h"
 
 
 #define BAR_START_SIZE 50.f
@@ -19,11 +19,11 @@ using namespace plight;
 
 void PlightCombatSystem::Run()
 {
-	auto view = Engine::Registry().view <PlightCollision, Transform, TopdownCharacter, CombatStats >();
+	auto view = Engine::Registry().view <PlightCollision, Transform, PlightCharacterController, CombatStats >();
 	for (auto entity : view) {
 		PlightCollision& col = Engine::Registry().get<PlightCollision>(entity);
 		Transform& t = Engine::Registry().get<Transform>(entity);
-		TopdownCharacter& character = Engine::Registry().get<TopdownCharacter>(entity);
+		PlightCharacterController& character = Engine::Registry().get<PlightCharacterController>(entity);
 		CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
 
 		//Will add conditions based on the current character state (to be implemented in character controller system)
@@ -31,9 +31,9 @@ void PlightCombatSystem::Run()
 			auto it = col.colidedWith.begin();
 			while (it != col.colidedWith.end()) {
 				if (Engine::Registry().valid(*it)) {
-					if (Engine::Registry().has<TopdownCharacter>(*it)) {
+					if (Engine::Registry().has<PlightCharacterController>(*it)) {
 						auto& ch = Engine::Registry().get<CombatStats>(*it);
-						auto& pchar = Engine::Registry().get<TopdownCharacter>(*it);
+						auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
 
 						ch.currentHealth -= 0.1f;
 

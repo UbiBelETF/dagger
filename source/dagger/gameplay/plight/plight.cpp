@@ -14,7 +14,7 @@
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
 
-#include "gameplay/plight/topdown_controller.h"
+#include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_aiming.h"
@@ -29,7 +29,7 @@ struct PlightCharacter
     Sprite& sprite;
     Animator& animator;
     InputReceiver& input;
-    TopdownCharacter& character;
+    PlightCharacterController& character;
     PlightCollision& col;
     Transform& transform;
     CombatStats& cstats;
@@ -41,11 +41,12 @@ struct PlightCharacter
         auto& sprite = reg.get_or_emplace<Sprite>(entity_);
         auto& anim = reg.get_or_emplace<Animator>(entity_);
         auto& input = reg.get_or_emplace<InputReceiver>(entity_);
-        auto& character = reg.get_or_emplace<TopdownCharacter>(entity_);
+        auto& character = reg.get_or_emplace<PlightCharacterController>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
+
         return PlightCharacter{ entity_, sprite, anim, input, character ,col,transform,cstats,crosshair};
     }
 
@@ -57,6 +58,8 @@ struct PlightCharacter
         auto& reg = Engine::Registry();
         auto entity = reg.create();
         auto chr = PlightCharacter::Get(entity);
+
+        ATTACH_TO_FSM(PlightCharacterControllerFSM, entity);
 
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
@@ -73,7 +76,7 @@ struct PlightCharacter
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
-        chr.character.speed = 100;
+        chr.character.speed = 100.f;
 
         chr.crosshair.crosshairSprite = reg.create();
         chr.crosshair.angle = 0.f;
@@ -89,7 +92,7 @@ struct PlightCharacter
 
 void Plight::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<TopdownControllerSystem>();
+    engine_.AddSystem<PlightControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
