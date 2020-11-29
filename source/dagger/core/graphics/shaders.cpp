@@ -1,5 +1,6 @@
 #include "core/graphics/shaders.h"
 #include "core/engine.h"
+#include "core/stringops.h"
 #include "core/filesystem.h"
 #include <string>
 #include <regex>

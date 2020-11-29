@@ -2,7 +2,6 @@
 
 #include "core/core.h"
 #include "core/system.h"
-#include "gameplay/platformer/character_controller_fsm.h"
 
 using namespace dagger;
 
@@ -58,13 +57,15 @@ namespace platformer
 	class PlatformerControllerSystem
 		: public System
 	{
-		CharacterControllerFSM characterFSM;
+		void OnInitialize(Registry& registry_, Entity entity_);
 
 	public:
 		String SystemName() override {
 			return "Character Controller System";
 		}
 
+		void SpinUp() override;
 		void Run() override;
+		void WindDown() override;
 	};
 }
