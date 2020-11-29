@@ -15,10 +15,11 @@
 #include "tools/diagnostics.h"
 
 
+#include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
-#include "gameplay/plight/plight_state_idle.h"
-#include "gameplay/plight/plight_state_running.h"
+#include "gameplay/plight/plight_aiming.h"
+
 
 
 using namespace dagger;
@@ -30,10 +31,12 @@ struct PlightCharacter
     Sprite& sprite;
     Animator& animator;
     InputReceiver& input;
+    PlightCharacterController& character;
     PlightCollision& col;
     Transform& transform;
     CombatStats& cstats;
-    
+    PlightCrosshair& crosshair;
+
 
     static PlightCharacter Get(Entity entity_)
     {
@@ -41,10 +44,15 @@ struct PlightCharacter
         auto& sprite = reg.get_or_emplace<Sprite>(entity_);
         auto& anim = reg.get_or_emplace<Animator>(entity_);
         auto& input = reg.get_or_emplace<InputReceiver>(entity_);
+
+        auto& character = reg.get_or_emplace<PlightCharacterController>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
-        return PlightCharacter{ entity_, sprite, anim, input,col,transform,cstats};
+        auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
+
+        return PlightCharacter{ entity_, sprite, anim, input, character ,col,transform,cstats,crosshair};
+
     }
 
     static PlightCharacter Create(
@@ -56,7 +64,9 @@ struct PlightCharacter
         auto entity = reg.create();
         auto chr = PlightCharacter::Get(entity);
 
-        reg.emplace<StateIdle>(entity); // Start state is state idle
+
+        ATTACH_TO_FSM(PlightCharacterControllerFSM, entity);
+
 
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
@@ -73,6 +83,16 @@ struct PlightCharacter
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
+        chr.character.speed = 100.f;
+
+        chr.crosshair.crosshairSprite = reg.create();
+        chr.crosshair.angle = 0.f;
+        chr.crosshair.playerDistance = 20.f;
+        auto& crosshairSprite = reg.emplace<Sprite>(chr.crosshair.crosshairSprite);
+        AssignSprite(crosshairSprite, "Plight:crosshair:crosshair");
+        crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
+        crosshairSprite.position.y = chr.sprite.position.y;
+
 
         return chr;
     }
@@ -80,10 +100,12 @@ struct PlightCharacter
 
 void Plight::GameplaySystemsSetup(Engine &engine_)
 {
+
+    engine_.AddSystem<PlightControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
-    engine_.AddSystem<PlightIdleStateSystem>();
-    engine_.AddSystem<PlightRunningStateSystem>();
+    engine_.AddSystem<PlightAimingSystem>();
+
 
 }
 
@@ -98,7 +120,9 @@ void Plight::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    plight::SetupWorld_CombatSystem(engine_);
+
+    plight::SetupWorld_AimingSystem(engine_);
+
 }
 
 void plight::SetupWorld(Engine &engine_)
@@ -179,6 +203,101 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
 
     auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 100, 0 });
+
+    auto backgroundHealthBar2 = Engine::Registry().create();
+    auto currentHealthBar2 = Engine::Registry().create();
+    auto backgroundStaminaBar2 = Engine::Registry().create();
+    auto currentStaminaBar2 = Engine::Registry().create();
+
+    sndChar.cstats.backgroundHealthBar = backgroundHealthBar2;
+    sndChar.cstats.currentHealthBar = currentHealthBar2;
+    sndChar.cstats.backgroundStaminaBar = backgroundStaminaBar2;
+    sndChar.cstats.currentStaminaBar = currentStaminaBar2;
+
+    auto& backgroundSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundHealthBar);
+
+    AssignSprite(backgroundSprite2, "EmptyWhitePixel");
+    backgroundSprite2.color = { 0, 0, 0, 1 };
+    backgroundSprite2.size = { 50, 5 };
+    backgroundSprite2.scale = { 1, 1 };
+    backgroundSprite2.position = { 100, 125, 2 };
+
+    auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
+
+    AssignSprite(frontSprite2, "EmptyWhitePixel");
+    frontSprite2.color = { 1, 0, 0, 1 };
+    frontSprite2.size = { 50, 5 };
+    frontSprite2.scale = { 1, 1 };
+    frontSprite2.position = { 100, 125, 1 };
+
+    auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
+
+    AssignSprite(backgroundStaminaSprite2, "EmptyWhitePixel");
+    backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
+    backgroundStaminaSprite2.size = { 50, 5 };
+    backgroundStaminaSprite2.scale = { 1, 1 };
+    backgroundStaminaSprite2.position = { 100, 115, 2 };
+
+    auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
+
+    AssignSprite(frontStaminaSprite2, "EmptyWhitePixel");
+    frontStaminaSprite2.color = { 0, 1, 0, 1 };
+    frontStaminaSprite2.size = { 50, 5 };
+    frontStaminaSprite2.scale = { 1, 1 };
+    frontStaminaSprite2.position = { 100, 115, 1 };
+}
+
+
+void plight::SetupWorld_AimingSystem(Engine& engine_)
+{
+    setUpBackground(engine_);
+
+    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -100, 0 });
+
+    auto backgroundHealthBar1 = Engine::Registry().create();
+    auto currentHealthBar1 = Engine::Registry().create();
+
+    auto backgroundStaminaBar1 = Engine::Registry().create();
+    auto currentStaminaBar1 = Engine::Registry().create();
+
+    mainChar.cstats.backgroundHealthBar = backgroundHealthBar1;
+    mainChar.cstats.currentHealthBar = currentHealthBar1;
+    mainChar.cstats.backgroundStaminaBar = backgroundStaminaBar1;
+    mainChar.cstats.currentStaminaBar = currentStaminaBar1;
+
+    auto& backgroundSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundHealthBar);
+
+    AssignSprite(backgroundSprite, "EmptyWhitePixel");
+    backgroundSprite.color = { 0, 0, 0, 1 };
+    backgroundSprite.size = { 50, 5 };
+    backgroundSprite.scale = { 1, 1 };
+    backgroundSprite.position = { -100, 125, 2 };
+
+    auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentHealthBar);
+
+    AssignSprite(frontSprite, "EmptyWhitePixel");
+    frontSprite.color = { 1, 0, 0, 1 };
+    frontSprite.size = { 50, 5 };
+    frontSprite.scale = { 1, 1 };
+    frontSprite.position = { -100, 125, 1 };
+
+    auto& backgroundStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundStaminaBar);
+
+    AssignSprite(backgroundStaminaSprite, "EmptyWhitePixel");
+    backgroundStaminaSprite.color = { 0, 0, 0, 1 };
+    backgroundStaminaSprite.size = { 50, 5 };
+    backgroundStaminaSprite.scale = { 1, 1 };
+    backgroundStaminaSprite.position = { -100, 115, 2 };
+
+    auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
+
+    AssignSprite(frontStaminaSprite, "EmptyWhitePixel");
+    frontStaminaSprite.color = { 0, 1, 0, 1 };
+    frontStaminaSprite.size = { 50, 5 };
+    frontStaminaSprite.scale = { 1, 1 };
+    frontStaminaSprite.position = { -100, 115, 1 };
+
+    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 100, 0 });
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
