@@ -3,7 +3,7 @@ wall_top_mid 16 0 16 16
 wall_top_right 32 0 16 16
 wall_top_right_mirrored 64 0 16 16
 
-proba 64 144 16 16
+proba 64 128 16 16
 
 wall_top_second_left 0 16 16 16
 wall_top_second_mid 16 16 16 16
@@ -59,7 +59,7 @@ wall_15 80 112 16 16
 
 wall_classic 64 128 32 32
 wall_up_part 64 128 16 16
-wall_down_part 64 128 32 32
+wall_down_part 64 144 16 16
 
 
 tank_broken 96 112 32 32

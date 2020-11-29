@@ -18,6 +18,7 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/player_controller.h"
+#include "tilemap_entities.h"
 
 
 
@@ -87,25 +88,6 @@ struct Player
         return chr;
     }
 };
-
-    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
-    {
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        AssignSprite(sprite, "spritesheets:lab:floor_1");
-        sprite.position = { x_ * 16, y_ * 16, 30 };
-        return entity;
-    }
-
-    Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_)
-    {   
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        AssignSprite(sprite, "spritesheets:lab:wall_top_left");
-        sprite.position = { x_ * 16, y_ * 16, 30 };
-        return entity;
-    }
-
     
 
 void lab::SetupWorld(Engine &engine_)
@@ -113,9 +95,15 @@ void lab::SetupWorld(Engine &engine_)
     auto& reg = engine_.Registry();
 
     TilemapLegend legend;
-    legend['#'] = &CreateWall;
-    legend['.'] = &CreateFloor; 
-
+    legend['#'] = &CreateWallTop;
+    legend['='] = &CreateWallUpPart;
+    legend['-'] = &CreateWallDownPart;
+    legend['.'] = &CreateFloor;
+    legend['|'] = &CreateSideWallRight;  
+    legend[':'] = &CreateSideWallLeft;
+    legend['1'] = &CreateWall1;
+    legend['3'] = &CreateWall3;
+    
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
 
     float zPos = 1.f;
