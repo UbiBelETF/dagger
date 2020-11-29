@@ -61,7 +61,7 @@ void SetupWorldJovica(Engine& engine_)
         TilemapLegend legend;
         legend['.'] = &jovica::CreateFloor;
 
-        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemap_test.map", &legend });
+        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test.map", &legend });
 
         // PLAYER
         auto player = reg.create();
