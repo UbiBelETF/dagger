@@ -79,7 +79,7 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { 0, -200 , 1.0f };
+        coordinates.position = { 0, -200 , 2.0f };
 
         auto & en = reg.emplace<Enemy>(entity);
         en.health = 100.0f;
@@ -119,12 +119,12 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
 
-        AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
         sprite.scale = { -4,4 };
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { -50, -200 , 1.0f };
+        coordinates.position = { -300, -100 , 1.0f };
 
         auto & en = reg.emplace<Enemy>(entity);
         en.health = 10.0f;
@@ -136,6 +136,23 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
 
         roa.unitType = ETarget::Golem;
         roa.targetType = ETarget::Mage;
+    }
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
+        sprite.scale = { -4,4 };
+        sprite.color = { 0.5f,0.5f,0.5f,0.5f };
+
+        auto & coordinates = reg.emplace<Transform>(entity);
+        coordinates.position = { 300, -200 , 1.0f };
+
+        auto & en = reg.emplace<Enemy>(entity);
+        en.health = 10.0f;
+
+        auto & sc = reg.emplace<SimpleCollision>(entity);
+        sc.size = sprite.size;
     }
 }
 
