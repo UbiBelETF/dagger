@@ -1,12 +1,16 @@
 #pragma once
 
-#include "core/core.h"
 #include "core/game.h"
+#include "core/core.h"
+
+
+#define HEALTH_BAR_START_SIZE 50.f
 
 using namespace dagger;
 
 namespace platformer
-{
+{  
+
     class Platformer : public Game
     {
         String GetIniFile() override

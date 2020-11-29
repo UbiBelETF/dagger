@@ -14,10 +14,12 @@
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
 
+
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_aiming.h"
+
 
 
 using namespace dagger;
@@ -35,12 +37,14 @@ struct PlightCharacter
     CombatStats& cstats;
     PlightCrosshair& crosshair;
 
+
     static PlightCharacter Get(Entity entity_)
     {
         auto& reg = Engine::Registry();
         auto& sprite = reg.get_or_emplace<Sprite>(entity_);
         auto& anim = reg.get_or_emplace<Animator>(entity_);
         auto& input = reg.get_or_emplace<InputReceiver>(entity_);
+
         auto& character = reg.get_or_emplace<PlightCharacterController>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
@@ -48,6 +52,7 @@ struct PlightCharacter
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
 
         return PlightCharacter{ entity_, sprite, anim, input, character ,col,transform,cstats,crosshair};
+
     }
 
     static PlightCharacter Create(
@@ -59,7 +64,9 @@ struct PlightCharacter
         auto entity = reg.create();
         auto chr = PlightCharacter::Get(entity);
 
+
         ATTACH_TO_FSM(PlightCharacterControllerFSM, entity);
+
 
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
@@ -86,16 +93,19 @@ struct PlightCharacter
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
 
+
         return chr;
     }
 };
 
 void Plight::GameplaySystemsSetup(Engine &engine_)
 {
+
     engine_.AddSystem<PlightControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
+
 
 }
 
@@ -110,7 +120,9 @@ void Plight::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
+
     plight::SetupWorld_AimingSystem(engine_);
+
 }
 
 void plight::SetupWorld(Engine &engine_)
@@ -234,6 +246,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
     frontStaminaSprite2.scale = { 1, 1 };
     frontStaminaSprite2.position = { 100, 115, 1 };
 }
+
 
 void plight::SetupWorld_AimingSystem(Engine& engine_)
 {

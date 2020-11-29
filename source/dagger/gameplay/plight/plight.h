@@ -14,6 +14,7 @@ namespace plight
     void SetupWorld_CombatSystem(Engine& engine_);
     void SetupWorld_AimingSystem(Engine& engine_);
 
+
     class Plight : public Game
     {
         inline String GetIniFile() override
