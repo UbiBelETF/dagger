@@ -69,13 +69,13 @@ void PlayerControllerSystem::Run()
                     else if (cursorInWindow.x == sprite_.position.x)
                         directions.x = 0;
 
-                    if (cursorInWindow.y < sprite_.position.y)
+                    if ((-1 * cursorInWindow.y) < sprite_.position.y)
                         directions.y = -1;
-                    else if (cursorInWindow.y == sprite_.position.y)
+                    else if ((-1 * cursorInWindow.y) == sprite_.position.y)
                         directions.y = 0;
 
                     Float32 distanceX = cursorInWindow.x - sprite_.position.x;
-                    Float32 distanceY = cursorInWindow.y - sprite_.position.y;
+                    Float32 distanceY = (cursorInWindow.y * -1) - sprite_.position.y;
                     Float32 ratio = distanceY / distanceX;
                     ratio *= (ratio > 0) ? 1 : -1;
 
