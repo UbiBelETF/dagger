@@ -45,14 +45,12 @@ void PlayerControllerSystem::Run()
             if (rl != 0)
             {
                 sprite_.scale.x = rl;
-                auto dt = Engine::DeltaTime();
-                transform_.position.x += char_.speed * sprite_.scale.x * dt;
+                transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
             }
             if (ud != 0)
             { 
                 sprite_.scale.y = 1;
-                auto dt = Engine::DeltaTime();
-                transform_.position.y += char_.speed * ud * dt;
+                transform_.position.y += char_.speed * ud * Engine::DeltaTime();
             }
             }
                 
