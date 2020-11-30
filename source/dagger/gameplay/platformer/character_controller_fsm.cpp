@@ -25,7 +25,7 @@ void CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateComponent& s
 
 	if (EPSILON_NOT_ZERO(input.Get("run")))
 	{
-		GoTo(CharacterStates::Running, state_);
+		GoTo(ECharacterStates::Running, state_);
 	}
 }
 
@@ -50,7 +50,7 @@ void CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent
 
 	if (EPSILON_ZERO(run))
 	{
-		GoTo(CharacterStates::Idle, state_);
+		GoTo(ECharacterStates::Idle, state_);
 	}
 	else
 	{
