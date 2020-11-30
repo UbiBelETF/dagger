@@ -57,6 +57,7 @@ namespace jovica
 
     Entity Nothing(Registry& reg_, SInt32 x_, SInt32 y_)
     {
+        // TODO - these functions really do not need to return Entity, need to look into this
         return Entity();
     }
 
@@ -82,16 +83,9 @@ namespace jovica
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 30 };
+        sprite.position = { x_ * 16, (y_ + 1) * 16, 29 };
 
-        int type = 1 + rand() % 4;
-        AssignSprite(sprite, fmt::format("spritesheets:among_them_tilemap:wall_{}", type));
-
-        Entity top = reg_.create();
-        auto& topSprite = reg_.emplace<Sprite>(top);
-        topSprite.position = { x_ * 16, (y_ + 1) * 16, 29 };
-
-        AssignSprite(topSprite, "spritesheets:among_them_tilemap:wall_bottom");
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_bottom");
 
         return entity;
     }
@@ -117,6 +111,62 @@ namespace jovica
 
         return entity;
     }
+
+    Entity CreateTopLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_top_left");
+
+        Entity top = reg_.create();
+        auto& topSprite = reg_.emplace<Sprite>(top);
+        topSprite.position = { x_ * 16, (y_ + 1) * 16, 29 };
+
+        AssignSprite(topSprite, "spritesheets:among_them_tilemap:wall_top_inner_left");
+
+        return entity;
+    }
+
+    Entity CreateTopRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_top_right");
+
+        Entity top = reg_.create();
+        auto& topSprite = reg_.emplace<Sprite>(top);
+        topSprite.position = { x_ * 16, (y_ + 1) * 16, 29 };
+
+        AssignSprite(topSprite, "spritesheets:among_them_tilemap:wall_top_inner_right");
+
+        return entity;
+    }
+
+    Entity CreateBottomLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 29 };
+
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_bottom_inner_left");
+
+        return entity;
+    }
+
+    Entity CreateBottomRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 29 };
+
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_bottom_inner_right");
+
+        return entity;
+    }
 }
 
 void SetupWorldJovica(Engine& engine_)
@@ -133,6 +183,10 @@ void SetupWorldJovica(Engine& engine_)
         legend['-'] = &jovica::CreateBottomWall;
         legend['/'] = &jovica::CreateLeftWall;
         legend['\\'] = &jovica::CreateRightWall;
+        legend['T'] = &jovica::CreateTopLeftWall;
+        legend['Y'] = &jovica::CreateTopRightWall;
+        legend['L'] = &jovica::CreateBottomLeftWall;
+        legend['J'] = &jovica::CreateBottomRightWall;
 
         Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
