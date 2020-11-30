@@ -8,21 +8,13 @@
 #include <cmath>
 #include <math.h>
 
-void plight::PlightAimingSystem::OnInitialize(Registry& registry_, Entity entity_)
-{
-	InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
-	for (auto command : { "rotate","moveY", "use" })
-	{
-		receiver.values[command] = 0;
-	}
-}
 
 void plight::PlightAimingSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, PlightCrosshair>().each(
-        [](const InputReceiver input_, Sprite& sprite_,PlightCrosshair& crosshair_)
+        [](InputReceiver input_, Sprite& sprite_,PlightCrosshair& crosshair_)
         {
-            Float32 rotate = input_.values.at("rotate");
+            Float32 rotate = input_.Get("rotate");
            
                 if (rotate) { //Change the angle of the crosshair
                     crosshair_.angle += rotate;
@@ -56,14 +48,4 @@ void plight::PlightAimingSystem::Run()
                
             
         });
-}
-
-void plight::PlightAimingSystem::SpinUp()
-{
-	Engine::Registry().on_construct<InputReceiver>().connect<&PlightAimingSystem::OnInitialize>(this);
-}
-
-void plight::PlightAimingSystem::WindDown()
-{
-	Engine::Registry().on_construct<InputReceiver>().disconnect<&PlightAimingSystem::OnInitialize>(this);
 }

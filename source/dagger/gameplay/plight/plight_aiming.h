@@ -15,12 +15,10 @@ namespace plight {
 
     class PlightAimingSystem : public System
     {
-        void OnInitialize(Registry& registry_, Entity entity_);
+        
     public:
         inline String SystemName() { return "Plight Aiming System"; }
 
         void Run() override;
-        void SpinUp() override;
-        void WindDown() override;
     };
 }
