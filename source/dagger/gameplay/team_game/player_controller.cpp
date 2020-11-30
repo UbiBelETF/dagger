@@ -39,7 +39,7 @@ void PlayerControllerSystem::Run()
             Float32 ud = input_.values.at("updown");
             Float32 shoot = input_.values.at("shoot");
         
-            if(rl || ud)
+            if(rl || ud) 
             {
                 AnimatorPlay(animator_, "main_character:run");
             if (rl != 0)

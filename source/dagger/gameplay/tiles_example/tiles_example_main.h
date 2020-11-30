@@ -9,6 +9,13 @@ using namespace dagger;
 
 namespace tiles_example
 {
+    class ClickSpawnerSystem : public System
+    {
+        String SystemName() override { return "Click Spawner"; }
+
+        void Run() override;
+    };
+
     class TilesExampleMain : public Game
     {
         inline String GetIniFile() override

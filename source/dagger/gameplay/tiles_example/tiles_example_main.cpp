@@ -18,8 +18,28 @@
 using namespace dagger;
 using namespace tiles_example;
 
+void ClickSpawnerSystem::Run()
+{
+    if (dagger::Input::IsInputDown(EDaggerMouse::MouseButton1))
+    {
+        auto& reg = Engine::Registry();
+        auto goblin = reg.create();
+        auto& sprite = reg.emplace<Sprite>(goblin);
+        AssignSprite(sprite, "spritesheets:dungeon:goblin_idle_anim:1");
+        Vector2 pos = dagger::Input::CursorPositionInWorld();
+        sprite.position = { pos.x, pos.y, 0.0f };
+        sprite.position.z = 5000.0f + sprite.position.y;
+        sprite.scale = { 3, 3 };
+
+        auto& anim = reg.emplace<Animator>(goblin);
+        AnimatorPlay(anim, "dungeon:goblin_idle");
+    }
+}
+
 void TilesExampleMain::GameplaySystemsSetup(Engine& engine_) 
-{}
+{
+    engine_.AddSystem<ClickSpawnerSystem>();
+}
 
 void TilesExampleMain::WorldSetup(Engine& engine_) 
 {
@@ -31,27 +51,12 @@ void TilesExampleMain::WorldSetup(Engine& engine_)
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSprite(sprite, fmt::format("spritesheets:dungeon:floor_{}", 1 + (rand() % 8)));
-            sprite.position = { i * 16, j * 16, 99 };
+            sprite.position = { i * 16, j * 16, 9999 };
         }
-    }
-
-    for (int i = 0; i < 10; i++)
-    {
-        auto goblin = reg.create();
-        auto& sprite = reg.emplace<Sprite>(goblin);
-        AssignSprite(sprite, "spritesheets:dungeon:goblin_idle_anim:1");
-        sprite.position = { rand() % 300 - 150, rand() % 300 - 150, 0 };
-        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
-        sprite.scale = { 3, 3 };
-
-        auto& anim = reg.emplace<Animator>(goblin);
-        AnimatorPlay(anim, "dungeon:goblin_idle");
     }
 
     auto ui = reg.create();
     auto& text = reg.emplace<Text>(ui);
     text.spacing = 0.6f;
     text.Set("pixel-font", "hello world");
-
-    
 }

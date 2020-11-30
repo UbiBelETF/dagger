@@ -1,7 +1,7 @@
 {
 	"context-name": "ASDW",
 	"commands": [
-		{ "command-name": "rightleft", 
+		{ "command-name": "run", 
 		  "actions": [
 			{ "trigger": "KeyA", "value": -1 },
 			{ "trigger": "KeyD", "value": 1 } 

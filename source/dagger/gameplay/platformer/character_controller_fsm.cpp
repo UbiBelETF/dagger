@@ -5,6 +5,7 @@
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "gameplay/platformer/platformer_controller.h"
+#include "core/game/transforms.h"
 
 using namespace dagger;
 
@@ -44,7 +45,7 @@ void CharacterControllerFSM::Running::Exit(CharacterControllerFSM::StateComponen
 
 void CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_) 
 {
-	auto&& [sprite, input, character] = Engine::Registry().get<Sprite, InputReceiver, platformer::PlatformerCharacter>(state_.entity);
+	auto& [sprite, input, character] = Engine::Registry().get<Sprite, InputReceiver, platformer::PlatformerCharacter>(state_.entity);
 
 	Float32 run = input.Get("run");
 
