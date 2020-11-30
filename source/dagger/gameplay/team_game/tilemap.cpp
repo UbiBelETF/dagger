@@ -20,7 +20,7 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_)
 	Tilemap* tilemap = new Tilemap();
 
 	Char ch;
-	UInt32 x = 0, y = 0;
+	SInt32 x = 0, y = 0;
 
 	FileInputStream input{ request_.path };
 
@@ -29,7 +29,7 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_)
 		if (ch == '\n')
 		{
 			x = 0;
-			y++;
+			y--;
 		}
 		else
 		{

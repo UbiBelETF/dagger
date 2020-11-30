@@ -43,7 +43,7 @@ void TeamGame::WorldSetup(Engine &engine_)
 
 namespace jovica
 {
-    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
+    Entity CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
@@ -55,7 +55,7 @@ namespace jovica
         return entity;
     }
 
-    Entity CreateTopWall(Registry& reg_, UInt32 x_, UInt32 y_)
+    Entity CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
@@ -83,7 +83,7 @@ void SetupWorldJovica(Engine& engine_)
     {
         TilemapLegend legend;
         legend['.'] = &jovica::CreateFloor;
-        legend['-'] = &jovica::CreateTopWall;
+        legend['_'] = &jovica::CreateTopWall;
 
         Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
