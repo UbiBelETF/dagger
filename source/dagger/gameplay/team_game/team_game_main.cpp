@@ -90,7 +90,7 @@ namespace smiljana {
        
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16 , y_ * 16 , 30};
+        sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
         AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
         
 
@@ -100,7 +100,7 @@ namespace smiljana {
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 30 };
+        sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
         AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
 
         return entity;
