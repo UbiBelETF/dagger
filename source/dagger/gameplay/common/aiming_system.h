@@ -16,11 +16,8 @@ using namespace dagger;
 
     class AimingSystem : public System
     {
-        void OnInitialize(Registry& registry_, Entity entity_);
     public:
         inline String SystemName() { return "Aiming System"; }
 
         void Run() override;
-        void SpinUp() override;
-        void WindDown() override;
     };

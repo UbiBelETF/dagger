@@ -8,19 +8,11 @@
 #include <cmath>
 #include <math.h>
 
-void AimingSystem::OnInitialize(Registry& registry_, Entity entity_)
-{
-    InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
-    for (auto command : { "rotate" })      //Input context has to have a key bound for "rotate" command (or you can rename the command to something you like)
-    {
-        receiver.values[command] = 0;
-    }
-}
 
 void AimingSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Crosshair>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Crosshair& crosshair_) //The sprite component with the same entity as this crosshair component is of a sprite that is used for center of rotation (like character for example)
+        [](InputReceiver input_, Sprite& sprite_, Crosshair& crosshair_) //The sprite component with the same entity as this crosshair component is of a sprite that is used for center of rotation (like character for example)
         {
         /*
          Example setup of for "rotate" command in input-context :
@@ -37,7 +29,7 @@ void AimingSystem::Run()
                      }
                     ]
        */
-            Float32 rotate = input_.values.at("rotate");        //Get the input value of the rotate command - the amount the angle changes if the button is pressed 
+            Float32 rotate = input_.Get("rotate");        //Get the input value of the rotate command - the amount the angle changes if the button is pressed 
 
 
             if (rotate) { 
@@ -73,14 +65,4 @@ void AimingSystem::Run()
 
 
         });
-}
-
-void AimingSystem::SpinUp()
-{
-    Engine::Registry().on_construct<InputReceiver>().connect<&AimingSystem::OnInitialize>(this);
-}
-
-void AimingSystem::WindDown()
-{
-    Engine::Registry().on_construct<InputReceiver>().disconnect<&AimingSystem::OnInitialize>(this);
 }
