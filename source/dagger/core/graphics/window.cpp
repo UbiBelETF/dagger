@@ -3,6 +3,8 @@
 #include "core/core.h"
 #include "core/engine.h"
 
+#include "tools/toolmenu.h"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

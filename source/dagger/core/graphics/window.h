@@ -4,8 +4,6 @@
 #include "core/system.h"
 #include "core/core.h"
 
-#include "tools/toolmenu.h"
-
 #include <spdlog/spdlog.h>
 
 #include <glad/glad.h>
@@ -78,7 +76,7 @@ struct Camera
 struct WindowSystem 
 	: public System
 	, public Publisher<PreRender, Render, ToolRender, 
-				KeyboardEvent, MouseEvent, CursorEvent, Error, ToolMenuRender>
+				KeyboardEvent, MouseEvent, CursorEvent, Error>
 {
 	inline String SystemName() { return "Window System"; }
 
