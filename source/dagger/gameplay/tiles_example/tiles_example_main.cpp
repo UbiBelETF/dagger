@@ -33,6 +33,8 @@ void ClickSpawnerSystem::Run()
 
         auto& anim = reg.emplace<Animator>(goblin);
         AnimatorPlay(anim, "dungeon:goblin_idle");
+
+        dagger::Input::ConsumeInput(EDaggerMouse::MouseButton1);
     }
 }
 
