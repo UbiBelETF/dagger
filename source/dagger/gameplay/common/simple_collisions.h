@@ -2,7 +2,6 @@
 #include "core/system.h"
 #include "core/core.h"
 
-#include <list>
 
 using namespace dagger;
 
@@ -22,7 +21,7 @@ struct SimpleCollision
 
     bool colided = false;
     Entity colidedWith; // Kept for compatibility with the current code
-    std::list<Entity> colisions = {}; // List of all entities collision happened with
+    Sequence<Entity> colisions = {}; // List of all entities collision happened with
 
     bool IsCollided(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_);
 

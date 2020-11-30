@@ -15,7 +15,6 @@
 #include "gameplay/racing/racing_player_car.h"
 #include "gameplay/racing/racing_car.h"
 
-#include <iostream>
 #include <random>
 
 using namespace dagger;

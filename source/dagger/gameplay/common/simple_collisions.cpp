@@ -3,7 +3,6 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
-#include <list>
 #include <math.h>
 
 using namespace dagger;
