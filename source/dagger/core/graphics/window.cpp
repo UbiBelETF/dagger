@@ -67,7 +67,7 @@ void WindowSystem::SetViewProjectionMatrix(RenderConfig& config_, Camera& camera
 	{
 		Float32 halfWidth = camera_.size.x / 2;
 		Float32 halfHeight = camera_.size.y / 2;
-		config_.projection = glm::ortho(0.0f, (Float32)camera_.size.x, 0.0f, (Float32)camera_.size.y, 0.0f, 100.0f);
+		config_.projection = glm::ortho(0.0f, (Float32)camera_.size.x, 0.0f, (Float32)camera_.size.y, 0.0f, 10000.0f);
 		config_.viewport = glm::translate(glm::vec3(halfWidth, halfHeight, 0.0f));
 		config_.viewOffset = Vector2{ halfWidth, halfHeight };
 		config_.viewBounds = Vector4{ 0, 0, camera_.size.x, camera_.size.y };
@@ -75,7 +75,7 @@ void WindowSystem::SetViewProjectionMatrix(RenderConfig& config_, Camera& camera
 	break;
 	case ECameraMode::ShowAsMuchAsPossible:
 	default:
-		config_.projection = glm::ortho(0.0f, width_, 0.0f, height_, 0.0f, 100.0f);
+		config_.projection = glm::ortho(0.0f, width_, 0.0f, height_, 0.0f, 10000.0f);
 		config_.viewport = glm::translate(glm::vec3(width_ / 2.0f, height_ / 2.0f, 0.0f));
 		config_.viewOffset = Vector2{ width_ / 2.0f, height_ / 2.0f };
 		config_.viewBounds = Vector4{ 0, 0, width_, height_ };
@@ -126,7 +126,7 @@ void WindowSystem::UpdateCameraMatrix()
 	auto* camera = Engine::GetDefaultResource<Camera>();
 
 	glm::mat4 scaleMatrix = glm::scale(glm::vec3(camera->zoom));
-	m_Config.camera = scaleMatrix * glm::lookAt(camera->position, camera->position - glm::vec3(0, 0, 100), glm::vec3(0, 1, 0));
+	m_Config.camera = scaleMatrix * glm::lookAt(camera->position, camera->position - glm::vec3(0, 0, 10000), glm::vec3(0, 1, 0));
 	glUniformMatrix4fv((GLuint)m_Matrices.cameraMatrixId, 1, false, glm::value_ptr(m_Config.camera));
 }
 
