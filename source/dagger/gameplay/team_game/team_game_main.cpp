@@ -48,40 +48,10 @@ namespace jovica
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
         sprite.position = { x_ * 16, y_ * 16, 30 };
-        int type = rand() % 10;
-        switch (type)
-        {
-        default:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
-            break;
-        case 0:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_2");
-            break;
-        case 1:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_3");
-            break;
-        case 2:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_4");
-            break;
-        case 3:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_5");
-            break;
-        case 4:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_6");
-            break;
-        case 5:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_7");
-            break;
-        case 6:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_8");
-            break;
-        case 7:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_9");
-            break;
-        case 8:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_10");
-            break;
-        }
+       
+        int type = 1 + rand() % 9;
+        AssignSprite(sprite, fmt::format("spritesheets:among_them_tilemap:floor_{}", type));
+        
         return entity;
     }
 }
