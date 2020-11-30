@@ -72,6 +72,24 @@ namespace jovica
 
         return entity;
     }
+
+    Entity CreateBottomWall(Registry& reg_, SInt32 x_, SInt32 y_)
+    {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+
+        int type = 1 + rand() % 4;
+        AssignSprite(sprite, fmt::format("spritesheets:among_them_tilemap:wall_{}", type));
+
+        Entity top = reg_.create();
+        auto& topSprite = reg_.emplace<Sprite>(top);
+        topSprite.position = { x_ * 16, (y_ + 1) * 16, 29 };
+
+        AssignSprite(topSprite, "spritesheets:among_them_tilemap:wall_bottom");
+
+        return entity;
+    }
 }
 
 void SetupWorldJovica(Engine& engine_)
@@ -84,6 +102,7 @@ void SetupWorldJovica(Engine& engine_)
         TilemapLegend legend;
         legend['.'] = &jovica::CreateFloor;
         legend['_'] = &jovica::CreateTopWall;
+        legend['-'] = &jovica::CreateBottomWall;
 
         Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
