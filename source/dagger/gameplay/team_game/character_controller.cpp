@@ -14,7 +14,11 @@ using namespace team_game;
 
 void TeamGameControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
-    
+    InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
+    for (auto command : { "run", "jump", "down", "heavy", "light", "use" })
+    {
+        receiver.values[command] = 0;
+    }
 }
 
 void TeamGameControllerSystem::SpinUp()
