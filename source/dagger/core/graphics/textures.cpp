@@ -63,12 +63,8 @@ void TextureSystem::OnLoadAsset(AssetLoadRequest<Texture> request_)
 void TextureSystem::SpinUp()
 {
     Engine::Dispatcher().sink<AssetLoadRequest<Texture>>().connect<&TextureSystem::OnLoadAsset>(this);
-
-    for (auto& entry : Files::recursive_directory_iterator("textures"))
-    {
-        if (entry.path().extension() == ".png")
-            Engine::Dispatcher().trigger<AssetLoadRequest<Texture>>(AssetLoadRequest<Texture>{ entry.path().string() });
-    }
+    Engine::Dispatcher().sink<ToolMenuRender>().connect<&TextureSystem::RenderToolMenu>(this);
+    LoadDefaultAssets();
 }
 
 void TextureSystem::WindDown()
@@ -82,4 +78,26 @@ void TextureSystem::WindDown()
     textures.clear();
 
     Engine::Dispatcher().sink<AssetLoadRequest<Texture>>().disconnect<&TextureSystem::OnLoadAsset>(this);
+    Engine::Dispatcher().sink<ToolMenuRender>().disconnect<&TextureSystem::RenderToolMenu>(this);
+}
+
+void TextureSystem::LoadDefaultAssets()
+{
+    for (auto& entry : Files::recursive_directory_iterator("textures"))
+    {
+        if (entry.path().extension() == ".png")
+            Engine::Dispatcher().trigger<AssetLoadRequest<Texture>>(AssetLoadRequest<Texture>{ entry.path().string() });
+    }
+}
+
+void TextureSystem::RenderToolMenu()
+{
+    if (ImGui::BeginMenu("Textures"))
+    {
+        if (ImGui::MenuItem("Reload"))
+        {
+            LoadDefaultAssets();
+        }
+        ImGui::EndMenu();
+    }
 }

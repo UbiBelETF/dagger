@@ -4,6 +4,8 @@
 #include "core/system.h"
 #include "core/core.h"
 
+#include "tools/toolmenu.h"
+
 #include <spdlog/spdlog.h>
 
 #include <glad/glad.h>
@@ -76,7 +78,7 @@ struct Camera
 struct WindowSystem 
 	: public System
 	, public Publisher<PreRender, Render, ToolRender, 
-				KeyboardEvent, MouseEvent, CursorEvent, Error>
+				KeyboardEvent, MouseEvent, CursorEvent, Error, ToolMenuRender>
 {
 	inline String SystemName() { return "Window System"; }
 
@@ -99,6 +101,8 @@ struct WindowSystem
 	void SetViewProjectionMatrix(RenderConfig& config_, Camera& camera_, Float32 width_, Float32 height_);
 
 	void UpdateCameraMatrix();
+
+	void RenderToolMenu();
 
 	void OnWindowResized(WindowResized resized_);
 	void OnShaderChanged(ShaderChangeRequest request_);

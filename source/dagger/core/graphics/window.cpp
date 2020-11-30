@@ -196,6 +196,7 @@ void WindowSystem::SpinUp()
 
 	Engine::Dispatcher().sink<ShaderChangeRequest>().connect<&WindowSystem::OnShaderChanged>(this);
 	Engine::Dispatcher().sink<WindowResized>().connect<&WindowSystem::OnWindowResized>(this);
+	Engine::Dispatcher().sink<ToolMenuRender>().connect<&WindowSystem::RenderToolMenu>(this);
 	
 	WindowResizeCallback(window, m_Config.windowWidth, m_Config.windowHeight);
 
@@ -244,6 +245,7 @@ void WindowSystem::WindDown()
 
 	Engine::Dispatcher().sink<ShaderChangeRequest>().disconnect<&WindowSystem::OnShaderChanged>(this);
 	Engine::Dispatcher().sink<WindowResized>().disconnect<&WindowSystem::OnWindowResized>(this);
+	Engine::Dispatcher().sink<ToolMenuRender>().disconnect<&WindowSystem::RenderToolMenu>(this);
 }
 
 Vector2 Camera::WindowToScreen(Vector2 windowCoord_)
@@ -285,4 +287,22 @@ Vector2 Camera::WorldToWindow(Vector2 worldCoord_)
 	cursorInWindow.x = pos.x;
 	cursorInWindow.y = pos.y;
 	return cursorInWindow;
+}
+
+void WindowSystem::RenderToolMenu()
+{
+	if (ImGui::BeginMenu("Game"))
+	{
+		if (ImGui::MenuItem("Pause"))
+		{
+			dagger::Engine::ToggleSystemsPause(true);
+		}
+
+		if (ImGui::MenuItem("Unpause"))
+		{
+			dagger::Engine::ToggleSystemsPause(false);
+		}
+
+		ImGui::EndMenu();
+	}
 }

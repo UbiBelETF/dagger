@@ -14,9 +14,7 @@ ViewPtr<Animation> AnimationSystem::Get(String name_)
 void AnimationSystem::SpinUp()
 {
     Engine::Dispatcher().sink<AssetLoadRequest<Animation>>().connect<&AnimationSystem::OnLoadAsset>(this);
-#if !defined(NDEBUG)
     Engine::Dispatcher().sink<ToolMenuRender>().connect<&AnimationSystem::RenderToolMenu>(this);
-#endif //!defined(NDEBUG)
     LoadDefaultAssets();
 }
 
@@ -50,31 +48,12 @@ void AnimationSystem::WindDown()
     for (auto [_, value] : library) delete value;
 
     Engine::Dispatcher().sink<AssetLoadRequest<Animation>>().disconnect<&AnimationSystem::OnLoadAsset>(this);
-#if !defined(NDEBUG)
     Engine::Dispatcher().sink<ToolMenuRender>().disconnect<&AnimationSystem::RenderToolMenu>(this);
-#endif //!defined(NDEBUG)
 }
 
 
-
-#if !defined(NDEBUG)
 void AnimationSystem::RenderToolMenu()
 {
-    if (ImGui::BeginMenu("Game"))
-    {
-        if (ImGui::MenuItem("Pause"))
-        {
-            dagger::Engine::ToggleSystemsPause(true);
-        }
-
-        if (ImGui::MenuItem("Unpause"))
-        {
-            dagger::Engine::ToggleSystemsPause(false);
-        }
-
-        ImGui::EndMenu();
-    }
-
     if (ImGui::BeginMenu("Animations"))
     {
         if (ImGui::MenuItem("Reload All"))
@@ -105,7 +84,6 @@ void AnimationSystem::RenderToolMenu()
         ImGui::EndMenu();
     }
 }
-#endif //!defined(NDEBUG)
 
 
 void AnimationSystem::OnLoadAsset(AssetLoadRequest<Animation> request_)
