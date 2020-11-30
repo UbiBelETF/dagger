@@ -4,7 +4,7 @@
 
 using namespace dagger;
 
-Entity level_generator::jovica::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -13,16 +13,15 @@ Entity level_generator::jovica::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_
     int type = 1 + rand() % 10;
     AssignSprite(sprite, fmt::format("spritesheets:among_them_tilemap:floor_{}", type));
 
-    return entity;
+    return { entity };
 }
 
-Entity level_generator::jovica::Nothing(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::Nothing(Registry& reg_, SInt32 x_, SInt32 y_)
 {
-    // TODO - these functions really do not need to return Entity, need to look into this
-    return Entity();
+    return {};
 }
 
-Entity level_generator::jovica::CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -37,10 +36,10 @@ Entity level_generator::jovica::CreateTopWall(Registry& reg_, SInt32 x_, SInt32 
 
     AssignSprite(topSprite, "spritesheets:among_them_tilemap:wall_top");
 
-    return entity;
+    return { entity, top };
 }
 
-Entity level_generator::jovica::CreateBottomWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateBottomWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -48,10 +47,10 @@ Entity level_generator::jovica::CreateBottomWall(Registry& reg_, SInt32 x_, SInt
 
     AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_bottom");
 
-    return entity;
+    return { entity };
 }
 
-Entity level_generator::jovica::CreateLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -59,10 +58,10 @@ Entity level_generator::jovica::CreateLeftWall(Registry& reg_, SInt32 x_, SInt32
 
     AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_top_left");
 
-    return entity;
+    return { entity };
 }
 
-Entity level_generator::jovica::CreateRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -70,10 +69,10 @@ Entity level_generator::jovica::CreateRightWall(Registry& reg_, SInt32 x_, SInt3
 
     AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_top_right");
 
-    return entity;
+    return { entity };
 }
 
-Entity level_generator::jovica::CreateTopLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateTopLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -87,10 +86,10 @@ Entity level_generator::jovica::CreateTopLeftWall(Registry& reg_, SInt32 x_, SIn
 
     AssignSprite(topSprite, "spritesheets:among_them_tilemap:wall_top_inner_left");
 
-    return entity;
+    return { entity, top };
 }
 
-Entity level_generator::jovica::CreateTopRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateTopRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -104,10 +103,10 @@ Entity level_generator::jovica::CreateTopRightWall(Registry& reg_, SInt32 x_, SI
 
     AssignSprite(topSprite, "spritesheets:among_them_tilemap:wall_top_inner_right");
 
-    return entity;
+    return { entity, top };
 }
 
-Entity level_generator::jovica::CreateBottomLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateBottomLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -115,10 +114,10 @@ Entity level_generator::jovica::CreateBottomLeftWall(Registry& reg_, SInt32 x_, 
 
     AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_bottom_inner_left");
 
-    return entity;
+    return { entity };
 }
 
-Entity level_generator::jovica::CreateBottomRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+std::vector<Entity> level_generator::jovica::CreateBottomRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -126,5 +125,5 @@ Entity level_generator::jovica::CreateBottomRightWall(Registry& reg_, SInt32 x_,
 
     AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_bottom_inner_right");
 
-    return entity;
+    return { entity };
 }

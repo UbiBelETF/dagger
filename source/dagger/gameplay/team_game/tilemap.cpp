@@ -34,7 +34,11 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_)
 		else
 		{
 			assert(request_.legend->contains(ch));
-			tilemap->tiles.push_back((request_.legend->at(ch))(Engine::Registry(), x, y));
+			auto entities = (request_.legend->at(ch))(Engine::Registry(), x, y);
+			for (auto entity : entities)
+			{
+				tilemap->tiles.push_back(entity);
+			}
 			x++;
 		}
 	}

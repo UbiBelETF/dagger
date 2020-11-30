@@ -4,7 +4,7 @@
 
 using namespace dagger;
 
-using TileProcessor = std::function<Entity(Registry&, SInt32, SInt32)>;
+using TileProcessor = std::function<std::vector<Entity>(Registry&, SInt32, SInt32)>;
 using TilemapLegend = Map<Char, TileProcessor>;
 
 struct Tilemap
