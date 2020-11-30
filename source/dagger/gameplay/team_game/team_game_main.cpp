@@ -1,4 +1,5 @@
 #include "team_game_main.h"
+#include "tiles.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -17,6 +18,8 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/player_controller.h"
+
+#include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
 
 
@@ -87,12 +90,26 @@ struct Player
         return chr;
     }
 };
+    
 
 void lab::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
+    TilemapLegend legend;
+    legend['#'] = &CreateWallTop;
+    legend['='] = &CreateWallUpPart;
+    legend['-'] = &CreateWallDownPart;
+    legend['.'] = &CreateFloor;
+    legend['|'] = &CreateSideWallRight;  
+    legend[':'] = &CreateSideWallLeft;
+    legend['1'] = &CreateWall1;
+    legend['3'] = &CreateWall3;
+    
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
+
     float zPos = 1.f;
+
     /*
     {
         
@@ -108,31 +125,11 @@ void lab::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
     } 
+
     */
 
+
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
-/*      //  Player
-      {
-        auto& reg = Engine::Registry();
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        auto& anim = reg.get_or_emplace<Animator>(entity);
-        auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
-        String input_ = "ASDW"; 
-        ColorRGB color_ = { 1, 1, 1 }; 
-        Vector2 position_ = { 0, 0 };
 
-        sprite.scale = { 1, 1 };
-        sprite.position = { position_, 0.0f };
-        sprite.color = { color_, 1.0f };
-
-        AssignSpriteTexture(sprite, "lab:idle:idle1");
-        AnimatorPlay(anim, "lab:IDLE");
-
-        character.speed = 50;
-        //auto mainChar = Character::CreateC("ASDW", { 1, 1, 1 }, { 0, 0 });
-    }
-*/
 }
 
