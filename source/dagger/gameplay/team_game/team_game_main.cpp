@@ -13,6 +13,7 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/camera.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -21,6 +22,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
+    engine_.AddSystem<CameraSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
