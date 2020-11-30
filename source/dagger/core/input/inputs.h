@@ -36,6 +36,14 @@ namespace dagger
     {
         Sequence<String> contexts;
         Map<String, Float32> values;
+
+        inline Float32 Get(String name_)
+        {
+            if (!values.contains(name_))
+                values[name_] = 0.0f;
+
+            return values[name_];
+        }
     };
 
     struct InputState

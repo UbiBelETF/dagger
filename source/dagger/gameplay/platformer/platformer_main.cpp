@@ -53,6 +53,7 @@ struct Character
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
+
         return Character{ entity, sprite, anim, input, character };
     }
 
@@ -63,6 +64,9 @@ struct Character
     {
         auto& reg = Engine::Registry();
         auto entity = reg.create();
+
+        ATTACH_TO_FSM(CharacterControllerFSM, entity);
+
         auto chr = Character::Get(entity);
 
         chr.sprite.scale = { 1, 1 };
