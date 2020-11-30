@@ -55,13 +55,20 @@ void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 	}
 	else
 	{
-		if (!EPSILON_ZERO(run_left_right))
+		if (!EPSILON_ZERO(run_up_down) && !EPSILON_ZERO(run_left_right))
+		{
+			sprite.scale.x = run_left_right * abs(sprite.scale.x);
+			Vector3 normalized_vector = glm::normalize(Vector3(run_left_right, run_up_down, 0));
+			sprite.position += Vector3(normalized_vector.x * character.speed, normalized_vector.y * character.speed, 0)  * Engine::DeltaTime();
+		}
+
+		else if (!EPSILON_ZERO(run_left_right))
 		{
 			sprite.scale.x = run_left_right * abs(sprite.scale.x);;
 			sprite.position.x += character.speed * run_left_right * Engine::DeltaTime();
 		}
 		
-		if (!EPSILON_ZERO(run_up_down))
+		else if (!EPSILON_ZERO(run_up_down))
 		{
 			sprite.position.y += character.speed * run_up_down * Engine::DeltaTime();
 		}
