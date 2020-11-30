@@ -27,6 +27,7 @@ void lab::CreateBullet(Vector2 position, Float32 ratio, Vector2 directions)
 	Float32 distance = sqrt((11 * 11) / (1 + ratio * ratio));
 	transform.position.x = position.x + distance * directions.x;
 	transform.position.y = position.y + distance * ratio * directions.y;
+	transform.position.z = 0.0f;
 }
 
 void lab::ShootingSystem::Run()

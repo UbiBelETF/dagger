@@ -21,6 +21,7 @@
 
 #include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
+#include "gameplay/team_game/enemy.h"
 
 
 using namespace dagger;
@@ -31,6 +32,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PlayerControllerSystem>();
     engine_.AddSystem<ShootingSystem>();
+    engine_.AddSystem<EnemySystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -128,6 +130,18 @@ void lab::SetupWorld(Engine &engine_)
 
     */
 
+    auto entity = reg.create();
+    auto& bandit = reg.emplace<Bandit>(entity);
+    auto& sprite = reg.emplace<Sprite>(entity);
+    AssignSprite(sprite, "Bandit");
+    sprite.scale = { 1, 1 };
+    sprite.position = { 100, 0, 0.0f };
+
+    auto& transform = reg.emplace<Transform>(entity);
+    transform.position = sprite.position;
+
+    auto& col = reg.emplace<SimpleCollision>(entity);
+    col.size = sprite.size;
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
 
