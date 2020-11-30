@@ -8,6 +8,7 @@
 #include "core/graphics/animation.h"
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
+#include "core/game/transforms.h"
 
 using namespace lab;
 
@@ -30,8 +31,8 @@ void PlayerControllerSystem::SpinUp()
 
 void PlayerControllerSystem::Run()
 {
-    Engine::Registry().view<InputReceiver, Sprite, Animator, PlayerCharacter>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, /*const*/ PlayerCharacter& char_)
+    Engine::Registry().view<InputReceiver, Sprite, Animator, PlayerCharacter, Transform>().each(
+        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, /*const*/ PlayerCharacter& char_, Transform transform_)
         {
         
             Float32 rl = input_.values.at("rightleft");
@@ -42,18 +43,20 @@ void PlayerControllerSystem::Run()
             {
                 AnimatorPlay(animator_, "main_character:run");
             if (rl != 0)
-            { 
+            {
                 sprite_.scale.x = rl;
-                sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
-            } 
+                auto dt = Engine::DeltaTime();
+                transform_.position.x += char_.speed * sprite_.scale.x * dt;
+            }
             if (ud != 0)
             { 
                 sprite_.scale.y = 1;
-                sprite_.position.y += char_.speed * ud * Engine::DeltaTime();
-            } 
+                auto dt = Engine::DeltaTime();
+                transform_.position.y += char_.speed * ud * dt;
+            }
             }
                 
-           else
+            else
             {
                 AnimatorPlay(animator_, "main_character:idle");
             }

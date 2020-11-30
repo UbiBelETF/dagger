@@ -31,6 +31,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PlayerControllerSystem>();
     engine_.AddSystem<ShootingSystem>();
+    engine_.AddPausableSystem<TransformSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -53,6 +54,7 @@ struct Player
     Animator& animator;
     InputReceiver& input;
     PlayerCharacter& character;
+    Transform& transform;
 
     static Player Get(Entity entity)
     {
@@ -61,17 +63,24 @@ struct Player
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
-        return Player{ entity, sprite, anim, input, character };
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        return Player{ entity, sprite, anim, input, character, transform };
     }
 
     static Player Create(
         String input_ = "", 
         ColorRGB color_ = { 1, 1, 1 }, 
         Vector2 position_ = { 0, 0 })
+
+
     {
         auto& reg = Engine::Registry();
         auto entity = reg.create();
         auto chr = Player::Get(entity);
+
+
+        
+        chr.transform.position = { position_, 0.0f };
 
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
