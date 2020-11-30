@@ -22,21 +22,23 @@ void AimingSystem::Run()
     Engine::Registry().view<InputReceiver, Sprite, Crosshair>().each(
         [](const InputReceiver input_, Sprite& sprite_, Crosshair& crosshair_) //The sprite component with the same entity as this crosshair component is of a sprite that is used for center of rotation (like character for example)
         {
+        /*
+         Example setup of for "rotate" command in input-context :
+
+                    "command-name": "rotate",
+                       "actions" : [
+                     {
+                       "trigger": "KeyA",
+                       "value" : 0.05
+                     },
+                     {
+                      "trigger": "KeyD",
+                      "value" : -0.05
+                     }
+                    ]
+       */
             Float32 rotate = input_.values.at("rotate");        //Get the input value of the rotate command - the amount the angle changes if the button is pressed 
 
-        /*    
-        *            Example setup of for "rotate" command in input-context
-                     "command-name": "rotate",
-                        "actions" : [
-                      {
-                        "trigger": "KeyA",
-                        "value" : 0.05
-                      },
-                      {
-                       "trigger": "KeyD",
-                       "value" : -0.05
-                      }
-                ]*/
 
             if (rotate) { 
                 crosshair_.angle += rotate;   //Change the angle of the crosshair
