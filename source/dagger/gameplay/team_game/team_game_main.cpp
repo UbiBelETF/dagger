@@ -1,5 +1,5 @@
 #include "gameplay/team_game/team_game_main.h"
-#include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/hero_controller.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -31,7 +31,6 @@ struct MainCharacter
     Animator& animator;
     InputReceiver& input;
     TeamGameCharacter& character;
-    Transform& transform;
 
     static MainCharacter Get(Entity entity)
     {
@@ -40,9 +39,7 @@ struct MainCharacter
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& character = reg.get_or_emplace<TeamGameCharacter>(entity);
-        auto& transform = reg.emplace<Transform>(entity);
-        reg.emplace<ControllerMapping>(entity);
-        return MainCharacter{ entity, sprite, anim, input, character, transform };
+        return MainCharacter{ entity, sprite, anim, input, character };
     }
 
     static MainCharacter Create(
@@ -53,6 +50,8 @@ struct MainCharacter
         auto& reg = Engine::Registry();
         auto entity = reg.create();
         auto chr = MainCharacter::Get(entity);
+
+        ATTACH_TO_FSM(HeroControllerFSM, entity);
 
         chr.sprite.scale = { 3, 3 };
         chr.sprite.position = { position_, 0.0f };
