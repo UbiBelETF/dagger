@@ -21,6 +21,7 @@
 
 #include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
+#include "gameplay/team_game/chests.h"
 
 
 using namespace dagger;
@@ -131,5 +132,6 @@ void lab::SetupWorld(Engine &engine_)
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
 
+    CreateChest({10, 10}, 50);
 }
 

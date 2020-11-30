@@ -13,6 +13,8 @@ namespace lab
 	{
 		int speed{ 1 };
 		int cooldown = 5;
+		Float32 hp = 100;
+		Float32 maxHp = 100;
 	};
 
 	class PlayerControllerSystem
