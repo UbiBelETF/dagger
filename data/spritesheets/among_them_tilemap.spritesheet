@@ -38,8 +38,8 @@ wall_1 96 64 16 16
 wall_2 112 64 16 16
 wall_3 128 64 16 16
 wall_4 96 80 16 16
-wall_bars 112 80 16 16
-wall_crack 128 80 16 16
+wall_5 112 80 16 16
+wall_6 128 80 16 16
 
 wall_arch_left 112 96 16 16
 wall_arch_right 128 96 16 16

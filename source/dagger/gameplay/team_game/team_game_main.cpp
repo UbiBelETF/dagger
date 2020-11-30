@@ -67,7 +67,7 @@ namespace jovica
         auto& sprite = reg_.emplace<Sprite>(entity);
         sprite.position = { x_ * 16, y_ * 16, 30 };
 
-        int type = 1 + rand() % 4;
+        int type = 1 + rand() % 6;
         AssignSprite(sprite, fmt::format("spritesheets:among_them_tilemap:wall_{}", type));
 
         Entity top = reg_.create();
