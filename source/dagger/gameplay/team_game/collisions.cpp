@@ -69,8 +69,7 @@ void team_game::CollisionSystem::Run()
 
                     }
                     physics.velocity.x = (temp_t.x - t.position.x)/Engine::DeltaTime();
-                    physics.velocity.y = (temp_t.x - t.position.x) / Engine::DeltaTime();
-                    if (physics.velocity.y == 0) exit(0);
+                    physics.velocity.y = (temp_t.y - t.position.y) / Engine::DeltaTime();
                 }
             }
         }
