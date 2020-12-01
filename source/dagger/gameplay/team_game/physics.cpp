@@ -26,47 +26,6 @@ void team_game::PhysicsSystem::Run()
         [](Physics& physics_)
         {
             if (!physics_.Static) physics_.velocity.y += -10 * Engine::DeltaTime();
-
-
-
-
-
-            /*if (char_.jump) 
-            {
-                sprite_.position.y += char_.speed*char_.jump_time*2 * Engine::DeltaTime();
-                char_.jump_time -= Engine::DeltaTime();
-                if(char_.jump_time<=0) 
-                {
-                    char_.jump = false;
-                    char_.fall = true;
-                    char_.fall_time = 0;
-                }
-            }
-            else if (char_.fall) 
-            {
-                sprite_.position.y -= char_.speed *(1+char_.fall_time)* Engine::DeltaTime();
-                char_.fall_time += Engine::DeltaTime();
-                if (sprite_.position.y + 10 <= ground)
-                {
-                    sprite_.position.y = -16;
-                    char_.fall = false;
-                    char_.double_jump = false;
-                }
-            }
-            else if( sprite_.position.y+10 > ground)
-            {
-                char_.fall = true;
-                char_.fall_time = 0;
-            }
-
-
-
-            if (char_.run)
-            {
-                sprite_.position.x += char_.speed *sprite_.scale.x* Engine::DeltaTime();
-                char_.run = false;
-            }
-            */
         });
 }
 
