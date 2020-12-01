@@ -14,16 +14,19 @@
 #include "gameplay/team_game/player_camera_focus.h"
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/physics.h"
+#include "gameplay/team_game/collisions.h"
 
 using namespace dagger;
 using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    //engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CameraFollowSystem>();
-    engine_.AddSystem<BrawlerControllerSystem>();
     engine_.AddSystem<PhysicsSystem>();
+    engine_.AddSystem<BrawlerControllerSystem>();
+    engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<CollisionSystem>();
+    engine_.AddSystem<TransformSystem>();
 }
 
 
@@ -49,6 +52,10 @@ struct Player
     Animator& animator;
     InputReceiver& input;
     BrawlerCharacter& character;
+    Transform& transform;
+    Physics& physics;
+    SimpleCollision& col;
+
 
     static Player Get(Entity entity)
     {
@@ -57,7 +64,13 @@ struct Player
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& character = reg.get_or_emplace<BrawlerCharacter>(entity);
-        return Player{ entity, sprite, anim, input, character };
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        auto& physics = reg.get_or_emplace<Physics>(entity);
+        auto& col=reg.get_or_emplace<SimpleCollision>(entity);
+        col.size.x = 5;
+        col.size.y = 15;
+        physics.Static = false;
+        return Player{ entity, sprite, anim, input, character,transform,physics,col };
     }
 
     static Player Create(
@@ -72,6 +85,8 @@ struct Player
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
+        
+        chr.transform.position = { position_,0.0f };
 
         AssignSprite(chr.sprite, "Light:idle");
         AnimatorPlay(chr.animator, "character:IDLE");
@@ -94,13 +109,28 @@ void CreateBackground()
     /* Create terrain */ {
         auto back = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(back);
-
         AssignSprite(sprite, "EmptyWhitePixel");
         sprite.color = { 0, 0, 0, 1 };
         sprite.size = { 200, 200 };
         sprite.scale = { 10, 1 };
         sprite.position = { 0, -125, 1 };
+        
+       
     }
+
+    // down
+    {
+        auto entity = reg.create();
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size.x =  800;
+        col.size.y = 2;
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position.x = 0;
+        transform.position.y = -25;
+        transform.position.z = 0;
+    }
+
 
     /* Put background image */ {
         auto entity = reg.create();
@@ -141,7 +171,7 @@ void team_game::SetupWorld_Demo(Engine& engine_)
     SetupCamera();
     CreateBackground();
 
-    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, -15 });
+    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, 100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);
 }
 void TeamGame::WorldSetup(Engine& engine_)

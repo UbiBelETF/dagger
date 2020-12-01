@@ -8,6 +8,9 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
+
+
+#include "gameplay/team_game/physics.h"
 using namespace team_game;
 
 void BrawlerControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
@@ -27,15 +30,20 @@ void BrawlerControllerSystem::SpinUp()
 void BrawlerControllerSystem::Run()
 {
 
-    Engine::Registry().view<InputReceiver, Sprite, Animator, BrawlerCharacter>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, BrawlerCharacter& char_)
+    Engine::Registry().view<Physics,InputReceiver, Sprite, Animator, BrawlerCharacter>().each(
+        [](Physics& physics_,const InputReceiver input_, Sprite& sprite_, Animator& animator_, BrawlerCharacter& char_)
         {
 
             Float32 run = input_.values.at("run");
             Float32 jump = input_.values.at("jump");
-            Float32 attack = input_.values.at("light");
+           // Float32 attack = input_.values.at("light");
 
-            if(!char_.jump )
+            if (run != 0) {
+                sprite_.scale.x = run;
+                physics_.velocity.x += sprite_.scale.x* char_.speed;
+                char_.run = true;
+            }
+            /*if(!char_.jump )
             {
                 if(jump==1 && char_.fall && !char_.double_jump)
                 {
@@ -79,7 +87,7 @@ void BrawlerControllerSystem::Run()
                 }
             }
 
-
+            */
             if (char_.attack) AnimatorPlay(animator_, "character:ATTACK");
             else if (char_.jump) AnimatorPlay(animator_, "character:JUMP");
             else if (char_.fall) AnimatorPlay(animator_, "character:FALL");

@@ -5,16 +5,21 @@
 using namespace dagger;
 
 namespace team_game {
+    struct Physics {
+        Vector2 velocity = { 0,0 };
+        bool Static = false;
+    };
+
+
     class PhysicsSystem : public System
     {
-        static Float32 ground ;
     public:
         String SystemName() override {
             return "Physic System";
         }
-        static void SetGround(Float32 ground_);
-        //void SpinUp() override;
+        void SpinUp() override;
         void Run() override;
-        // void WindDown() override;
+        void WindDown() override;
+        void OnEndOfFrame();
     };
 }
