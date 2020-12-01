@@ -43,11 +43,15 @@ void GameManagerSystem::Run()
 void GameManagerSystem::LoadNextLevel(Level& level_)
 {
     level_.level += 1;
-    String levelName = fmt::format("levels/level_{}.txt", level_.level);
+    LoadBackDrop(level_.level);
+    LoadPlatforms(level_.level);
+}
+
+void GameManagerSystem::LoadBackDrop(UInt8 level_)
+{
+    String levelName = fmt::format("levels/backdrop_{}.txt", level_);
     FilePath path{ levelName };
     std::ifstream fin(Files::absolute(path).string().c_str());
-
-    Vector2 pivotGlobal = { 400.0f, 300.0f };
 
     String baseDir, textureName;
     Float32 zPos, horizontalBlocks, verticalBlocks;
@@ -57,7 +61,7 @@ void GameManagerSystem::LoadNextLevel(Level& level_)
 
     while (fin >> baseDir >> textureName >> zPos >>
         blockSize.x >> blockSize.y >>
-        scale.x >> scale.y >> bias.x >> bias.y >>
+        bias.x >> bias.y >>
         horizontalBlocks >> verticalBlocks)
     {
         for (int i = 0; i < horizontalBlocks; i++)
@@ -70,13 +74,22 @@ void GameManagerSystem::LoadNextLevel(Level& level_)
 
                 String rootDir = "TeamGame:";
                 AssignSpriteTexture(spriteBlock, rootDir + baseDir + ":" + textureName);
-                spriteBlock.position = { i * blockSize.x - pivotGlobal.x + blockSize.x / 2 + bias.x,
-                                         j * blockSize.y - pivotGlobal.y + blockSize.y / 2 + bias.y,
+                spriteBlock.position = { i * blockSize.x + blockSize.x / 2 + bias.x,
+                                         j * blockSize.y + blockSize.y / 2 + bias.y,
                                          zPos };
+
+                scale.x = blockSize.x / spriteBlock.size.x;
+                scale.y = blockSize.y / spriteBlock.size.y;
+
                 spriteBlock.scale = scale;
             }
         }
     }
+}
+
+void GameManagerSystem::LoadBackDrop(UInt8 level_)
+{
+
 }
 
 void GameManagerSystem::OnEndOfFrame()

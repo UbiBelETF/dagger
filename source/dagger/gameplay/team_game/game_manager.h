@@ -32,6 +32,8 @@ namespace team_game
         void Run() override;
 
         void LoadNextLevel(Level& level_);
+        void LoadBackDrop(UInt8 level_);
+        void LoadPlatforms(UInt8 level_);
     
     private:
         void OnEndOfFrame();
