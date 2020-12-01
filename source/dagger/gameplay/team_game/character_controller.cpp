@@ -3,75 +3,73 @@
 #include "core/engine.h"
 #include "core/input/inputs.h"
 #include "core/game/transforms.h"
+#include "core/graphics/sprite.h"
+#include "core/graphics/animations.h"
 
 #include <glm/gtc/epsilon.hpp>
 
-// ----------------------------------------------------------
-// shortcuts
-
-// you can call the states the same as in the enum
-// it's a bother to write the whole thing out
-using Idle = CharacterControllerFSM::IdleState;
-using Running = CharacterControllerFSM::RunningState;
-
-// ----------------------------------------------------------
-// system stuff
-
 void CharacterControllerSystem::Run()
 {
-	Engine::Registry().view<CharacterController, InputReceiver, Transform, Sprite, Animator>().each(
-		[&](CharacterController& controller_, InputReceiver input_, Transform& transform_, Sprite& sprite_,
-			Animator& animator_)
+	Engine::Registry().view<CharacterFSM::StateComponent>().each(
+		[&](CharacterFSM::StateComponent& state_)
 		{
-			const Float32 horizontal = input_.Get("horizontalRun");
-			const Float32 vertical = input_.Get("verticalRun");
-
-			controller_.userInput = { horizontal, vertical };
-			controller_.transform = &transform_;
-			controller_.sprite = &sprite_;
-			controller_.animator = &animator_;
-
-			m_CharStateMachine.Run(controller_);
+			m_CharStateMachine.Run(state_);
 		});
 }
 
-// ----------------------------------------------------------
-// fsm stuff
-
-// idle
-
-void Idle::Run(CharacterController& ctrl_)
+void CharacterFSM::Idle::Enter(CharacterFSM::StateComponent& state_)
 {
-	if (EPSILON_NOT_EQUAL(glm::length(ctrl_.userInput), 0.0f))
-	{
-		GoTo(ECharacterState::Running, ctrl_);
-	}
-
-	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_idle");
+	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+	AnimatorPlay(animator, "among_them_animations:knight_idle");
 }
 
-// running
-
-void Running::Run(CharacterController& ctrl_)
+void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 {
-	if (EPSILON_EQUAL(glm::length(ctrl_.userInput), 0.0f))
+	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
+	
+	if (EPSILON_NOT_ZERO(input.Get("horizontalRun")) || EPSILON_NOT_ZERO(input.Get("verticalRun")))
 	{
-		GoTo(ECharacterState::Idle, ctrl_);
+		GoTo(ECharacterState::Running, state_);
+	}
+}
+
+DEFAULT_EXIT(CharacterFSM, Idle);
+
+void CharacterFSM::Running::Enter(CharacterFSM::StateComponent& state_)
+{
+	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+	AnimatorPlay(animator, "among_them_animations:knight_run");
+}
+
+void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
+{
+	auto& ctrl = Engine::Registry().get<CharacterController>(state_.entity);
+	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
+	auto& sprite = Engine::Registry().get<Sprite>(state_.entity);
+	auto& transform = Engine::Registry().get<Transform>(state_.entity);
+
+	float runX = input.Get("horizontalRun");
+	float runY = input.Get("verticalRun");
+
+	if (EPSILON_ZERO(runX) && EPSILON_ZERO(runY))
+	{
+		GoTo(ECharacterState::Idle, state_);
 		return;
 	}
 
 	// Character orientation
-	if (ctrl_.userInput.x > 0.0f)
+	if (runX > 0.0f)
 	{
-		ctrl_.sprite->scale.x = 3;
+		sprite.scale.x = 3;
 	}
-	else if (ctrl_.userInput.x < 0.0f)
+	else if (runX < 0.0f)
 	{
-		ctrl_.sprite->scale.x = -3;
+		sprite.scale.x = -3;
 	}
 
-	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_run");
-	Vector2 xy = glm::normalize(ctrl_.userInput) * ctrl_.speed * Engine::DeltaTime();
-	ctrl_.transform->position.x += xy.x;
-	ctrl_.transform->position.y += xy.y;
+	Vector2 xy = glm::normalize(Vector2{ runX, runY }) * ctrl.speed * Engine::DeltaTime();
+	transform.position.x += xy.x;
+	transform.position.y += xy.y;
 }
+
+DEFAULT_EXIT(CharacterFSM, Running);
