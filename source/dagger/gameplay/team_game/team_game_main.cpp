@@ -31,8 +31,8 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PlayerControllerSystem>();
-    engine_.AddSystem<ShootingSystem>();
     engine_.AddSystem<EnemySystem>();
+    engine_.AddSystem<ShootingSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -129,19 +129,29 @@ void lab::SetupWorld(Engine &engine_)
     } 
 
     */
+    
+    for (int i = 0; i < 3; i++)
+    {
+        auto entity = reg.create();
+        auto& bandit = reg.emplace<Bandit>(entity);
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "Bandit");
+        sprite.scale = { 1, 1 };
+        if (i == 0)
+        sprite.position = { 100, 0, 0.0f };
 
-    auto entity = reg.create();
-    auto& bandit = reg.emplace<Bandit>(entity);
-    auto& sprite = reg.emplace<Sprite>(entity);
-    AssignSprite(sprite, "Bandit");
-    sprite.scale = { 1, 1 };
-    sprite.position = { 100, 0, 0.0f };
+        if (i == 1)
+        sprite.position = { 100, 50, 0.0f };
 
-    auto& transform = reg.emplace<Transform>(entity);
-    transform.position = sprite.position;
+        if (i == 2)
+            sprite.position = { 100, -50, 0.0f };
 
-    auto& col = reg.emplace<SimpleCollision>(entity);
-    col.size = sprite.size;
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = sprite.position;
+
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size = { 0.5f, 10 };
+    }
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
 
