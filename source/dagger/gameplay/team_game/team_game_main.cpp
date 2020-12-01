@@ -74,7 +74,7 @@ struct MainCharacter
         chr.character.speed = 100;
 
         //Collision setup:        
-        chr.col.size = { 44, 44 };
+        chr.col.size = { 25, 28 };
         chr.tm.position = { position_ , 0.0f };
         CharacterCollisionSystem::MainCharacterEntity = entity;
 
@@ -115,21 +115,13 @@ void team_game::SetupWorld(Engine &engine_)
             sprite.position = { i * 48, j * 48, 99 };
             sprite.scale = { 3, 3 };
 
-            
-            if (i == -5 || i == 5 || j == -5 || j == 5) {
-                // add collision to walls
-                auto& col = reg.emplace<CharacterCollision>(entity);
-                auto& tm = reg.emplace<Transform>(entity);
-                col.size = { 48, 48 };
-                tm.position = sprite.position;
-            }
         }
     }
     for (int i = -5; i < 5; i++) {
         if (i == 0) continue;
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == -5 ? 12 : i == 4 ? 13 : 3));
+        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == -5 ? 12 : i == 4 ? 13 : i == 1 ? 2 : i == -1 ? 4 : 3));
         sprite.position = { i * 48, -5 * 48, 99 };
         sprite.scale = { 3, 3 };
 
@@ -142,7 +134,7 @@ void team_game::SetupWorld(Engine &engine_)
         if (i == 0) continue;
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == -5 ? 7 : i == 4 ? 8 : 3));
+        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == -5 ? 7 : i == 4 ? 8 : i == 1 ? 2 : i == -1 ? 4 : 3));
         sprite.position = { i * 48, 4 * 48, 99 };
         sprite.scale = { 3, 3 };
 
@@ -155,7 +147,7 @@ void team_game::SetupWorld(Engine &engine_)
         if (i == 0) continue;
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_11"));
+        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == 1 ? 16 : i == -1 ? 6 : 11));
         sprite.position = { -5 * 48, i * 48, 99 };
         sprite.scale = { 3, 3 };
 
@@ -169,7 +161,7 @@ void team_game::SetupWorld(Engine &engine_)
         if (i == 0) continue;
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_11"));
+        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == 1 ? 16 : i == -1 ? 6 : 11));
         sprite.position = { 4 * 48, i * 48, 99 };
         sprite.scale = { 3, 3 };
 
@@ -178,35 +170,4 @@ void team_game::SetupWorld(Engine &engine_)
         col.size = { 48, 48 };
         tm.position = sprite.position;
     }
-
-    /*String anims[] = { "idle", "move_up", "move_down", "move_side", "attack_up", "attack_side", "attack_down", "hit_up", "hit_down", "hit_side" };
-    for (int i = 0; i < 10 ; i++)
-    {
-        auto slime = reg.create();
-        auto& sprite = reg.emplace<Sprite>(slime);
-        AssignSprite(sprite, "spritesheets:chara_slime:slime_"+anims[i%10]+"_anim:1");
-        sprite.position = { rand() % 300 -300, rand() % 300 - 150, 0 };
-        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
-        sprite.scale = { 3, 3 };
-
-        auto& anim = reg.emplace<Animator>(slime);
-        AnimatorPlay(anim, "chara_slime:slime_"+anims[i%10]);
-    }
-    for (int i = 0; i < 10; i++)
-    {
-        auto hero = reg.create();
-        auto& sprite = reg.emplace<Sprite>(hero);
-        AssignSprite(sprite, "spritesheets:chara_hero:hero_" + anims[i % 10] + "_anim:1");
-        sprite.position = { rand() % 300 , rand() % 300 -150 , 0 };
-        sprite.position.z = (150.0f + sprite.position.y) / 10.0f;
-        sprite.scale = { 3, 3 };
-
-        auto& anim = reg.emplace<Animator>(hero);
-        AnimatorPlay(anim, "chara_hero:hero_" + anims[i % 10]);
-    }
-
-    auto ui = reg.create();
-    auto& text = reg.emplace<Text>(ui);
-    text.spacing = 0.6f;
-    text.Set("pixel-font", "hello world");*/
 }

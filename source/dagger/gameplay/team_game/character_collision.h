@@ -7,7 +7,7 @@ using namespace dagger;
 struct CharacterCollision
 {
     Vector2 size;
-    Vector2 pivot{ -0.5f, -0.5f };
+    Vector2 pivot{ -0.5f, 0.0f };
 
     bool colided = false;
     entt::entity colidedWith;
