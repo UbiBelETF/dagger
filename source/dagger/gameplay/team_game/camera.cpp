@@ -7,6 +7,7 @@
 #include "gameplay/team_game/character_controller.h"
 
 using namespace dagger;
+using namespace team_game;
 
 void CameraSystem::Run()
 {

@@ -4,11 +4,14 @@
 
 using namespace dagger;
 
-class CameraSystem : public System
+namespace team_game
 {
-    inline String SystemName() override {
-        return "Camera System";
-    };
+    class CameraSystem : public System
+    {
+        inline String SystemName() override {
+            return "Camera System";
+        };
 
-    void Run() override;
-};
+        void Run() override;
+    };
+}
