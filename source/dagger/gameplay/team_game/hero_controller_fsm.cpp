@@ -3,6 +3,7 @@
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
+#include "core/game/transforms.h"
 
 #include "gameplay/team_game/hero_controller.h"
 #include "gameplay/team_game/hero_controller_fsm.h"
@@ -43,7 +44,7 @@ void HeroControllerFSM::Running::Exit(HeroControllerFSM::StateComponent& state_)
 
 void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, input, character] = Engine::Registry().get<Sprite, InputReceiver, team_game::TeamGameCharacter>(state_.entity);
+	auto&& [transform, sprite, input, character] = Engine::Registry().get<Transform, Sprite, InputReceiver, team_game::TeamGameCharacter>(state_.entity);
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 
 	Float32 run_left_right = input.Get("run-left-right");
@@ -59,18 +60,18 @@ void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 		{
 			sprite.scale.x = run_left_right * abs(sprite.scale.x);
 			Vector3 normalized_vector = glm::normalize(Vector3(run_left_right, run_up_down, 0));
-			sprite.position += Vector3(normalized_vector.x * character.speed, normalized_vector.y * character.speed, 0)  * Engine::DeltaTime();
+			transform.position += Vector3(normalized_vector.x * character.speed, normalized_vector.y * character.speed, 0)  * Engine::DeltaTime();
 		}
 
 		else if (!EPSILON_ZERO(run_left_right))
 		{
 			sprite.scale.x = run_left_right * abs(sprite.scale.x);;
-			sprite.position.x += character.speed * run_left_right * Engine::DeltaTime();
+			transform.position.x += character.speed * run_left_right * Engine::DeltaTime();
 		}
 		
 		else if (!EPSILON_ZERO(run_up_down))
 		{
-			sprite.position.y += character.speed * run_up_down * Engine::DeltaTime();
+			transform.position.y += character.speed * run_up_down * Engine::DeltaTime();
 		}
 		
 	}
