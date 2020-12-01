@@ -19,8 +19,8 @@ using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
+    engine_.AddSystem<SimpleCollisionsSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -58,6 +58,9 @@ void SetupWorldJovica(Engine& engine_)
 
         // PLAYER
         auto player = reg.create();
+
+        auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+        playerState.currentState = ECharacterState::Idle;
 
         auto& playerSprite = reg.emplace<Sprite>(player);
         AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
