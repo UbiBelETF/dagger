@@ -31,9 +31,11 @@ void team_game::CollisionSystem::Run()
                Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
 
                 Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
-                
+                UInt32 attempts = 0;
+
                 do
                 {
+                    attempts++;
                     // get back for 1 frame 
                     Float32 dt = Engine::DeltaTime();
                     if (std::abs(collisionSides.x) > 0)
@@ -46,6 +48,8 @@ void team_game::CollisionSystem::Run()
                         t.position.y -= physics.velocity.y*dt;
                     }
 
+                    if (attempts > 100) break;
+
                 } while (col.IsCollided(t.position, collision, transform.position));
                 
                 Vector3 temp_t = { 0,0,0 };
@@ -53,8 +57,13 @@ void team_game::CollisionSystem::Run()
                 temp_t.y = t.position.y + physics.velocity.y * Engine::DeltaTime();
                 temp_t.z = t.position.z;
                 if (col.IsCollided(temp_t, collision, transform.position)) {
+
+                    attempts = 0;
                     while (col.IsCollided(temp_t, collision, transform.position))
                     {
+
+                        attempts++;
+
                         // get back for 1 frame 
                         Float32 dt = Engine::DeltaTime();
                         if (std::abs(collisionSides.x) > 0)
@@ -67,6 +76,7 @@ void team_game::CollisionSystem::Run()
                             temp_t.y -= physics.velocity.y * dt;
                         }
 
+                        if (attempts > 100) break;
                     }
                     physics.velocity.x = (temp_t.x - t.position.x)/Engine::DeltaTime();
                     physics.velocity.y = (temp_t.y - t.position.y) / Engine::DeltaTime();
