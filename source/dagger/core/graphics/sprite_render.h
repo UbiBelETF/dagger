@@ -14,14 +14,6 @@
 
 using namespace dagger;
 
-class Texture;
-class Shader;
-
-class Invisible
-{
-	char context;
-};
-
 class SpriteRenderSystem
 	: public System
 	, public Subscriber<Render, ShaderChangeRequest>

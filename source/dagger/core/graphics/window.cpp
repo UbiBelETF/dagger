@@ -207,13 +207,17 @@ void WindowSystem::SpinUp()
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+
+//	glEnable(GL_ALPHA_TEST);
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_LEQUAL);
 }
 
 void WindowSystem::Run()
 {
 	auto* window = m_Config.window;
 	Engine::Dispatcher().trigger<PreRender>();
-	glfwGetFramebufferSize(m_Config.window, &m_Config.windowWidth, &m_Config.windowHeight);
+
 	glViewport(0, 0, m_Config.windowWidth, m_Config.windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
@@ -265,7 +269,7 @@ Vector2 Camera::WindowToWorld(Vector2 windowCoord_)
 	auto pos = glm::unProject(Vector3{ windowCoord_ - config->viewOffset, 0 },
 		config->camera, config->projection, config->viewBounds);
 	cursorInWorld.x = pos.x;
-	cursorInWorld.y = pos.y;
+	cursorInWorld.y = -pos.y;
 	return cursorInWorld;
 }
 
@@ -279,6 +283,6 @@ Vector2 Camera::WorldToWindow(Vector2 worldCoord_)
 		config->camera, config->projection, config->viewBounds);
 
 	cursorInWindow.x = pos.x;
-	cursorInWindow.y = pos.y;
+	cursorInWindow.y = config->windowHeight - pos.y;
 	return cursorInWindow;
 }
