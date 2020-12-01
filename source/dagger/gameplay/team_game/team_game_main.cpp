@@ -131,7 +131,18 @@ void CreateBackground()
         transform.position.z = 0;
     }
 
+    // left
+    {
+        auto entity = reg.create();
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size.x = 100;
+        col.size.y = 200;
 
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position.x =-200;
+        transform.position.y = -75;
+        transform.position.z = 0;
+    }
     /* Put background image */ {
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
