@@ -106,7 +106,34 @@ namespace smiljana {
         return entity;
     }
 }
-    
+namespace kosta {
+    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_) {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
+
+        return entity;
+    }
+
+    Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_) {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_2");
+
+        return entity;
+    }
+
+    Entity CreateDoor(Registry& reg_, UInt32 x_, UInt32 y_) {
+        Entity entity = reg_.create();
+        auto& sprite = reg_.emplace<Sprite>(entity);
+        sprite.position = { x_ * 16, y_ * 16, 30 };
+        AssignSprite(sprite, "spritesheets:among_them_tilemap:door_floor");
+
+        return entity;
+    }
+ }
 
 
 void SetupWorldJovica(Engine& engine_)
@@ -172,9 +199,37 @@ void SetupWorldSmiljana(Engine& engine_) {
         
     }
 }
+void SetupWorldKosta(Engine& enigne_) {
+    auto& reg = enigne_.Registry();
+    float zPos = 1.f;
+    {
+        TilemapLegend legend;
+        legend['.'] = &kosta::CreateFloor;
+        legend['#'] = &kosta::CreateWall;
+       // legend['>'] = &kosta::CreateDoor;
+        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/kostaLevel.map", &legend });
+        // PLAYER
+        auto player = reg.create();
+
+        auto& playerSprite = reg.emplace<Sprite>(player);
+        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+
+        auto& playerAnimator = reg.emplace<Animator>(player);
+        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
+
+        auto& playerTransform = reg.emplace<Transform>(player);
+        playerTransform.position = { 0, 0, zPos };
+
+        auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
+        playerInput.contexts.push_back("AmongThemInput");
+
+        auto& playerController = reg.emplace<CharacterController>(player);
+    }
+}
 void team_game::SetupWorld(Engine &engine_)
 {
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
    // SetupWorldJovica(engine_);
-    SetupWorldSmiljana(engine_);
+  //  SetupWorldSmiljana(engine_);
+    SetupWorldKosta(engine_);
 }
