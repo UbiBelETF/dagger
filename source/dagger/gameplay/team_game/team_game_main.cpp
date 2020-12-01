@@ -60,6 +60,14 @@ void SetupWorldJovica(Engine& engine_)
         legend['Y'] = &level_generator::jovica::CreateTopRightWall;
         legend['L'] = &level_generator::jovica::CreateBottomLeftWall;
         legend['J'] = &level_generator::jovica::CreateBottomRightWall;
+        legend['q'] = &level_generator::jovica::CreateBottomLeftConcWall;
+        legend['p'] = &level_generator::jovica::CreateBottomRightConcWall;
+        legend['d'] = &level_generator::jovica::CreateTopLeftConcWall;
+        legend['b'] = &level_generator::jovica::CreateTopRightConcWall;
+        legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
+        legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
+        legend['t'] = &level_generator::jovica::CreateTopLeftConcWallS;
+        legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
 
         Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
