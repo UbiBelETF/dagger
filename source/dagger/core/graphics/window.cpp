@@ -218,6 +218,8 @@ void WindowSystem::Run()
 	auto* window = m_Config.window;
 	Engine::Dispatcher().trigger<PreRender>();
 
+	glfwGetFramebufferSize(m_Config.window, &m_Config.windowWidth, &m_Config.windowHeight);
+
 	glViewport(0, 0, m_Config.windowWidth, m_Config.windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
