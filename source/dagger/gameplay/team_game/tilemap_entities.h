@@ -34,6 +34,13 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_2");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
+        
         return entity;
     }
      Entity CreateWallUpPart(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -42,6 +49,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_5");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
         return entity;
     }
     Entity CreateWallDownPart(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -50,6 +63,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_top_second_left");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
         return entity;
     }
     Entity CreateSideWallLeft(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -58,6 +77,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_4");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
         return entity;
     }
     Entity CreateSideWallRight(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -66,6 +91,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_6");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
         return entity;
     }
     Entity CreateWall1(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -74,6 +105,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_1");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
         return entity;
     }
     Entity CreateWall3(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -82,6 +119,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_3");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
         return entity;
     }
 
@@ -95,6 +138,10 @@ using namespace dagger;
         AnimatorPlay(anim, "lab:door");       
         sprite.position = { x_ * 16-125.0f, y_ * 16-107.1f, 30 };
         sprite.scale = { 1, 1 };
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
         return entity;
     }
 
@@ -104,6 +151,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_bottom_1");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
         return entity;
     }
     Entity CreateWallBottom6(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -112,6 +165,12 @@ using namespace dagger;
         auto& sprite = reg_.emplace<Sprite>(entity);
         AssignSprite(sprite, "spritesheets:lab:wall_bottom_6");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
+        auto& idd=reg_.emplace<lab::CollideW>(entity);
+        idd.id=0;
+        auto& col=reg_.emplace<SimpleCollision>(entity);
+        col.size={sprite.size.x/2,sprite.size.y/2};
+        auto& trn=reg_.emplace<Transform>(entity);
+        trn.position=sprite.position;
         return entity;
     }
 
@@ -124,7 +183,7 @@ using namespace dagger;
         AssignSprite(sprite, "spritesheets:lab:floor_1");
         sprite.position = { x_ * 16-125.0f, y_ * 16-100.0f, 30 };
         auto& col=reg_.emplace<SimpleCollision>(entity);
-        col.size=sprite.size;
+        col.size={sprite.size.x/2,sprite.size.y/2};
         auto& trn=reg_.emplace<Transform>(entity);
         trn.position=sprite.position;
         return entity;

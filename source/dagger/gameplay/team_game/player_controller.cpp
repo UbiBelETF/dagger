@@ -41,6 +41,7 @@ void PlayerControllerSystem::Run()
             Float32 rl = input_.values.at("rightleft");
             Float32 ud = input_.values.at("updown");
             Float32 shoot = input_.values.at("shoot");
+            float old;
         
             if(rl || ud)
             {
@@ -48,14 +49,16 @@ void PlayerControllerSystem::Run()
             if (rl != 0)
             { 
                 sprite_.scale.x = rl;
-                //sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                old=transform_.position.x;
                 transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                
             } 
             if (ud != 0)
             { 
                 sprite_.scale.y = 1;
-                //sprite_.position.y += char_.speed * ud * Engine::DeltaTime();
+                old=transform_.position.y;
                 transform_.position.y += char_.speed * ud * Engine::DeltaTime();
+                
             } 
             }
                 
@@ -91,36 +94,68 @@ void PlayerControllerSystem::Run()
                 }
             }
             char_.cooldown--;
+
+
         });
-              
-
-    
-        auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
-        for (auto entity : view)
-        {
-            auto &t = view.get<Transform>(entity);
-            auto &player = view.get<PlayerCharacter>(entity);
-            auto &col = view.get<SimpleCollision>(entity);
-
-            if (col.colided)
+            auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
+            auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
+            for (auto entity : view)
             {
-                if (Engine::Registry().valid(col.colidedWith))
+                auto &t = view.get<Transform>(entity);
+                auto &player = view.get<PlayerCharacter>(entity);
+                auto &col = view.get<SimpleCollision>(entity);
+
+                if (col.colided)
                 {
-                
-                    if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
+                    if (Engine::Registry().valid(col.colidedWith))
                     {
-                        lab::NextLvl& lvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
-                        
-                        if(lvl.id==1)
+                        SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
+                        Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
+
+                        Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
+
+                    do
+                    {
+                        Float32 dt = Engine::DeltaTime();
+                        if (collisionSides.x > 0)
                         {
-                            printf("its working completely");
+                            t.position.x -= (player.speed * dt);
                         }
+
+                        if (collisionSides.y > 0)
+                        {
+                            t.position.y -= (player.speed* dt);
+                        }
+                        if (collisionSides.x < 0)
+                        {
+                            t.position.x += (player.speed * dt);
+                        }
+
+                        if (collisionSides.y < 0)
+                        {
+                            t.position.y += (player.speed* dt);
+                        }
+                        
+                    } while (col.IsCollided(t.position, collision, transform.position));
             
+            
+                        if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
+                        {
+                            lab::NextLvl& lvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
+                            
+                            if(lvl.id==1)
+                            {
+                                printf("its working");//Placeholder for future level transition
+                            }
+                
+                        }
                     }
+
+                col.colided = false;
                 }
-            col.colided = false;
             }
-        }
+            
+        
 
 
 

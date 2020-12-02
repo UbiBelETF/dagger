@@ -14,6 +14,10 @@ namespace lab
         int id=0;
     };
 
+	struct CollideW{
+		int id; //id=0->wall id=1->enemy id=2->chect
+	};
+
 	struct PlayerCharacter
 	{
 		int speed{ 1 };
