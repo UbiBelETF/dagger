@@ -1,4 +1,5 @@
 #include "team_game_main.h"
+
 #include <fstream>
 
 #include "core/core.h"
@@ -36,10 +37,6 @@ void TeamGame::WorldSetup(Engine &engine_)
     team_game::SetupWorld(engine_);
 }
 
-void team_game::SetupWorld(Engine &engine_)
+void team_game::SetupWorld(Engine& engine_)
 {
-    auto& reg = engine_.Registry();
-
-    auto entity = reg.create();
-    auto& level = reg.get_or_emplace<Level>(entity);
 }

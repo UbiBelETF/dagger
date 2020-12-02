@@ -28,10 +28,7 @@ void TeamGamePlayerInputSystem::Run()
 {
     if (triggeredTransition)
     {
-        Engine::Registry().view<Level>().each([&](Level& level_)
-        {
-            level_.completedObjective = true;
-        });
+        GameManagerSystem::completedObjective = true;
         triggeredTransition = false;
     }
 }

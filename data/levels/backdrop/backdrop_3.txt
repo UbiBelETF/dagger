@@ -9,10 +9,4 @@ Other Heart 4.0 64.0 64.0 53.0 20.0 1 1
 Other Table 4.0 160.0 64.0 100.0 -184.0 1 1
 Other Chair 4.0 48.0 85.0 265.0 -184.0 1 1
 
-Platforms PlatformSmallWhole 4.0 128.0 30.0 -400.0 140.0 1 1
-Platforms PlatformSmallWhole 4.0 128.0 30.0 -220.0 50.0 1 1
-Platforms PlatformSmallWhole 4.0 128.0 30.0 -400.0 -60.0 1 1
-Platforms PlatformSmallWhole 4.0 192.0 30.0 -45.0 -10.0 1 1
-
-
 

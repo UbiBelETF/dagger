@@ -1,0 +1,6 @@
+Platforms PlatformOutVertical 4.0 64.0 288.0 300.0 -95.0 1 1
+Platforms PlatformOut_1 4.0 64.0 48.0 -368.0 135.0 1 1
+Platforms PlatformOut_2 4.0 96.0 32.0 -320.0 50.0 1 1
+Platforms PlatformOut_2 4.0 96.0 32.0 200.0 100.0 1 1
+Platforms PlatformOut_2 4.0 96.0 32.0 62.5 25.0 1 1
+Platforms PlatformOut_2 4.0 96.0 32.0 -99.5 25.0 1 1

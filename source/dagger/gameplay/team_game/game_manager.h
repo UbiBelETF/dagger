@@ -23,6 +23,8 @@ namespace team_game
     class GameManagerSystem : public System
     {
     public:
+        inline static UInt8 currentLevel{ 0 };
+        inline static Bool completedObjective{ true };
 
         inline String SystemName() { return " Game Manager System "; }
 
@@ -31,9 +33,11 @@ namespace team_game
 
         void Run() override;
 
-        void LoadNextLevel(Level& level_);
-        void LoadBackDrop(UInt8 level_);
-        void LoadPlatforms(UInt8 level_);
+        void LoadNextLevel();
+        void LoadTextures(String filePath_, Bool addCollision_);
+        void LoadBackDrop();
+        void LoadPlatforms();
+        void LoadTraps();
     
     private:
         void OnEndOfFrame();

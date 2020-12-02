@@ -3,6 +3,8 @@
 #include <core/engine.h>
 #include <core/graphics/sprite.h>
 
+#include <gameplay/team_game/team_game_main.h>
+
 using namespace dagger;
 using namespace team_game;
 
@@ -18,50 +20,49 @@ void GameManagerSystem::WindDown()
 
 void GameManagerSystem::Run()
 {
-    auto view = Engine::Registry().view<Level>();
-    for (auto entity : view)
-    {
-        auto& level = view.get<Level>(entity);
-        UInt8 currentLevel = level.level;
-
-        if (level.completedObjective)
-        {
-            auto& level = Engine::Registry().get_or_emplace<Level>(entity);
-            level.level = currentLevel;
-            level.completedObjective = false;
-
-            Engine::Registry().view<ComponentOfLevel>().each([](ComponentOfLevel& levelComponent_) 
-            {
-                levelComponent_.discard = true;
-            });
-
-            LoadNextLevel(level);
-        }
-    }
 }
 
-void GameManagerSystem::LoadNextLevel(Level& level_)
+void GameManagerSystem::LoadNextLevel()
 {
-    level_.level += 1;
-    LoadBackDrop(level_.level);
-    LoadPlatforms(level_.level);
+    currentLevel++;
+    LoadBackDrop();
+    LoadPlatforms();
+    completedObjective = false;
 }
 
-void GameManagerSystem::LoadBackDrop(UInt8 level_)
+void GameManagerSystem::LoadBackDrop()
 {
-    String levelName = fmt::format("levels/backdrop_{}.txt", level_);
-    FilePath path{ levelName };
+    String filePath = fmt::format("levels/backdrop/backdrop_{}.txt", currentLevel);
+    LoadTextures(filePath, true);
+}
+
+void GameManagerSystem::LoadPlatforms()
+{
+    String filePath = fmt::format("levels/platforms/platforms_{}.txt", currentLevel);
+    LoadTextures(filePath, true);
+}
+
+void GameManagerSystem::LoadTraps()
+{
+    String filePath = fmt::format("levels/traps/traps_{}.txt", currentLevel);
+    LoadTextures(filePath, true);
+}
+
+void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
+{
+    
+    FilePath path{ filePath_ };
     std::ifstream fin(Files::absolute(path).string().c_str());
 
     String baseDir, textureName;
     Float32 zPos, horizontalBlocks, verticalBlocks;
-    Vector2 blockSize, scale, bias;
+    Vector2 spriteSize, scale, pos;
 
     auto& reg = Engine::Registry();
 
     while (fin >> baseDir >> textureName >> zPos >>
-        blockSize.x >> blockSize.y >>
-        bias.x >> bias.y >>
+        spriteSize.x >> spriteSize.y >>
+        pos.x >> pos.y >>
         horizontalBlocks >> verticalBlocks)
     {
         for (int i = 0; i < horizontalBlocks; i++)
@@ -74,39 +75,31 @@ void GameManagerSystem::LoadBackDrop(UInt8 level_)
 
                 String rootDir = "TeamGame:";
                 AssignSpriteTexture(spriteBlock, rootDir + baseDir + ":" + textureName);
-                spriteBlock.position = { i * blockSize.x + blockSize.x / 2 + bias.x,
-                                         j * blockSize.y + blockSize.y / 2 + bias.y,
+                spriteBlock.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
+                                         j * spriteSize.y + spriteSize.y / 2 + pos.y,
                                          zPos };
 
-                scale.x = blockSize.x / spriteBlock.size.x;
-                scale.y = blockSize.y / spriteBlock.size.y;
+                scale.x = spriteSize.x / spriteBlock.size.x;
+                scale.y = spriteSize.y / spriteBlock.size.y;
 
                 spriteBlock.scale = scale;
+
+                if (addCollision_)
+                {
+                    // TODO: add collision and make sure that the collider size aligns with the spriteSize
+                }
             }
         }
     }
 }
 
-void GameManagerSystem::LoadPlatforms(UInt8 level_)
-{
-
-}
-
 void GameManagerSystem::OnEndOfFrame()
 {
-    auto levelComponentsView = Engine::Registry().view<ComponentOfLevel>();
-
-    for (auto& entity : levelComponentsView)
+    if (completedObjective)
     {
-        auto& levelComponent = levelComponentsView.get<ComponentOfLevel>(entity);
-        if (levelComponent.discard)
-        {
-            Engine::Registry().remove_all(entity);
-        }
+        Engine::Registry().clear();
+        team_game::SetupWorld(Engine::Instance());
 
-        if (Engine::Registry().orphan(entity))
-        {
-            Engine::Registry().destroy(entity);
-        }
+        LoadNextLevel();
     }
 }

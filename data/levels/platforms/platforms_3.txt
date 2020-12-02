@@ -1,0 +1,4 @@
+Platforms PlatformSmallWhole 4.0 128.0 30.0 -400.0 140.0 1 1
+Platforms PlatformSmallWhole 4.0 128.0 30.0 -220.0 50.0 1 1
+Platforms PlatformSmallWhole 4.0 128.0 30.0 -400.0 -60.0 1 1
+Platforms PlatformSmallWhole 4.0 192.0 30.0 -45.0 -10.0 1 1

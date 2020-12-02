@@ -10,9 +10,3 @@ Other Spikes 4.0 64.0 64.0 175.0 -150.8 1 1
 Other Candle 4.0 32.0 32.0 -212.0 -80.8 1 1
 Other Seashell 4.0 72.0 57.0 245.5 130.0 1 1
 
-Platforms PlatformSmallWhole 4.0 128.0 30.0 0.0 0.0 1 1
-Platforms PlatformSmallWhole 4.0 96.0 30.0 -150.0 -75.0 1 1
-Platforms PlatformSmallWhole 4.0 128.0 30.0 -304.0 25.0 1 1
-Platforms PlatformSmallLeft 4.0 96.0 30.0 -400.0 100 1 1
-Platforms PlatformLarge 4.0 190.5 30.0 209.5 100 1 1
-
