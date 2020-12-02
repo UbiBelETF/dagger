@@ -87,7 +87,7 @@ void GameManagerSystem::LoadBackDrop(UInt8 level_)
     }
 }
 
-void GameManagerSystem::LoadBackDrop(UInt8 level_)
+void GameManagerSystem::LoadPlatforms(UInt8 level_)
 {
 
 }
