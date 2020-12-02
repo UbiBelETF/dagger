@@ -129,15 +129,9 @@ void lab::SetupWorld(Engine &engine_)
     legend['W'] = &CreateWallBottom6;
     legend['8'] = &Hall; //next room
 
-    /*
-    TilemapLegend deq;
-    deq['F'] = &Door;
-    deq['0'] = &Empty;
-    */
+    
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
-    //Engine::Dispatcher().enqueue<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
-    //Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
-    //Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/addons.map", &deq }); 
+    
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
 

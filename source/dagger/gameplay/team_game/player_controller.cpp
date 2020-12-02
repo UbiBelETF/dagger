@@ -35,13 +35,12 @@ void PlayerControllerSystem::SpinUp()
 void PlayerControllerSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Animator, PlayerCharacter, Transform>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, /*const*/ PlayerCharacter& char_, Transform& transform_)
+        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, PlayerCharacter& char_, Transform& transform_)
         {
         
             Float32 rl = input_.values.at("rightleft");
             Float32 ud = input_.values.at("updown");
             Float32 shoot = input_.values.at("shoot");
-            float old;
         
             if(rl || ud)
             {
@@ -49,14 +48,12 @@ void PlayerControllerSystem::Run()
             if (rl != 0)
             { 
                 sprite_.scale.x = rl;
-                old=transform_.position.x;
                 transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
                 
             } 
             if (ud != 0)
             { 
                 sprite_.scale.y = 1;
-                old=transform_.position.y;
                 transform_.position.y += char_.speed * ud * Engine::DeltaTime();
                 
             } 
