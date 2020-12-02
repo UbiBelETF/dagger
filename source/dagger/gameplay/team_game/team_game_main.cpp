@@ -83,7 +83,7 @@ struct Player
         auto chr = Player::Get(entity);
 
         chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { position_, 0.0f };
+        chr.sprite.position = { position_, 1.0f };
         chr.sprite.color = { color_, 1.0f };
         
         chr.transform.position = { position_,0.0f };
@@ -123,12 +123,12 @@ void CreateBackground()
         auto entity = reg.create();
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size.x =  800;
-        col.size.y = 2;
+        col.size.y = 200;
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position.x = 0;
-        transform.position.y = -25;
-        transform.position.z = 0;
+        transform.position.y = -125;
+        transform.position.z = 1;
     }
 
     // left
@@ -141,7 +141,7 @@ void CreateBackground()
         auto& transform = reg.emplace<Transform>(entity);
         transform.position.x =-200;
         transform.position.y = -75;
-        transform.position.z = 0;
+        transform.position.z = 1;
     }
     /* Put background image */ {
         auto entity = reg.create();

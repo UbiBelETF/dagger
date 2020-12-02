@@ -20,68 +20,50 @@ void team_game::CollisionSystem::Run()
     auto view = Engine::Registry().view< Physics, Transform, SimpleCollision>();
     for (auto entity : view)
     {
+
         auto& t = view.get<Transform>(entity);
         auto& col = view.get<SimpleCollision>(entity);
         auto& physics = view.get<Physics>(entity);
-       if (col.colided)
-        {
-            if (Engine::Registry().valid(col.colidedWith))
+        UInt32 attempts = 0;
+   
+            for (auto entity2 : viewCollisions)
             {
-                SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
-               Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
-
-                Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
-                UInt32 attempts = 0;
-
-                do
+                if (entity2 != entity)
                 {
-                    attempts++;
-                    // get back for 1 frame 
-                    Float32 dt = Engine::DeltaTime();
-                    if (std::abs(collisionSides.x) > 0)
+                    Vector3 temp_t = { 0,0,0 };
+                    temp_t.x = t.position.x + physics.velocity.x * Engine::DeltaTime();
+                    temp_t.y = t.position.y + physics.velocity.y * Engine::DeltaTime();
+                    temp_t.z = 1;
+                    SimpleCollision& collision = viewCollisions.get<SimpleCollision>(entity2);
+                    Transform& transform = viewCollisions.get<Transform>(entity2);
+                    if (col.IsCollided(temp_t, collision, transform.position))
                     {
-                        t.position.x -= physics.velocity.x*dt;
-                    }
+                        attempts = 0;
+                        Vector2 collisionSides = col.GetCollisionSides(temp_t, collision, transform.position);
 
-                    if (std::abs(collisionSides.y) > 0)
-                    {
-                        t.position.y -= physics.velocity.y*dt;
-                    }
-
-                    if (attempts > 100) break;
-
-                } while (col.IsCollided(t.position, collision, transform.position));
-                
-                Vector3 temp_t = { 0,0,0 };
-                temp_t.x = t.position.x + physics.velocity.x * Engine::DeltaTime();
-                temp_t.y = t.position.y + physics.velocity.y * Engine::DeltaTime();
-                temp_t.z = t.position.z;
-                if (col.IsCollided(temp_t, collision, transform.position)) {
-
-                    attempts = 0;
-                    while (col.IsCollided(temp_t, collision, transform.position))
-                    {
-
-                        attempts++;
-
-                        // get back for 1 frame 
-                        Float32 dt = Engine::DeltaTime();
-                        if (std::abs(collisionSides.x) > 0)
+                        do
                         {
-                            temp_t.x -= physics.velocity.x * dt;
-                        }
+                            attempts++;
 
-                        if (std::abs(collisionSides.y) > 0)
-                        {
-                            temp_t.y -= physics.velocity.y * dt;
-                        }
+                            // get back for 1 frame 
+                            Float32 dt = Engine::DeltaTime();
+                            if (std::abs(collisionSides.x) > 0)
+                            {
+                                temp_t.x -= physics.velocity.x * dt;
+                            }
 
-                        if (attempts > 100) break;
+                            if (std::abs(collisionSides.y) > 0)
+                            {
+                                temp_t.y -= physics.velocity.y * dt;
+                            }
+
+                            if (attempts > 100) exit(0);
+                        } while (col.IsCollided(temp_t, collision, transform.position));
+                        physics.velocity.x = (temp_t.x - t.position.x) / Engine::DeltaTime();
+                        physics.velocity.y = (temp_t.y - t.position.y) / Engine::DeltaTime();
                     }
-                    physics.velocity.x = (temp_t.x - t.position.x)/Engine::DeltaTime();
-                    physics.velocity.y = (temp_t.y - t.position.y) / Engine::DeltaTime();
                 }
             }
-        }
+       
     }
 }
