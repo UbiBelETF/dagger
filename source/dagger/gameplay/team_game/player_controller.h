@@ -9,6 +9,11 @@ using namespace dagger;
 
 namespace lab
 {
+	struct NextLvl
+    {
+        int id=0;
+    };
+
 	struct PlayerCharacter
 	{
 		int speed{ 1 };

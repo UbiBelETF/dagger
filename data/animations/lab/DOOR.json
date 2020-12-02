@@ -1,0 +1,26 @@
+{
+	"animation-name": "lab:door",
+	"animation-length-ms": 3000,
+	"animation-frames": 
+	[
+		{ "texture-name": "lab:door:lab anims_Animation 5_00" },
+		{ "texture-name": "lab:door:lab anims_Animation 5_01" },
+		{ "texture-name": "lab:door:lab anims_Animation 5_02" },
+		{ "texture-name": "lab:door:lab anims_Animation 5_03" },
+        { "texture-name": "lab:door:lab anims_Animation 5_04" },
+        { "texture-name": "lab:door:lab anims_Animation 5_05" },
+        { "texture-name": "lab:door:lab anims_Animation 5_06" },
+        { "texture-name": "lab:door:lab anims_Animation 5_07" },
+        { "texture-name": "lab:door:lab anims_Animation 5_08" },
+        { "texture-name": "lab:door:lab anims_Animation 5_09" },
+        { "texture-name": "lab:door:lab anims_Animation 5_10" },
+        { "texture-name": "lab:door:lab anims_Animation 5_11" },
+        { "texture-name": "lab:door:lab anims_Animation 5_12" },
+        { "texture-name": "lab:door:lab anims_Animation 5_13" },
+        { "texture-name": "lab:door:lab anims_Animation 5_14" },
+        { "texture-name": "lab:door:lab anims_Animation 5_15" },
+        { "texture-name": "lab:door:lab anims_Animation 5_16" },
+        { "texture-name": "lab:door:lab anims_Animation 5_17" }
+
+	]
+}

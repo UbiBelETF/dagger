@@ -8,7 +8,11 @@
 #include "core/graphics/animation.h"
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
+#include "gameplay/common/simple_collisions.h"
 
+#include "core/game/transforms.h"
+
+using namespace dagger;
 using namespace lab;
 
 
@@ -30,8 +34,8 @@ void PlayerControllerSystem::SpinUp()
 
 void PlayerControllerSystem::Run()
 {
-    Engine::Registry().view<InputReceiver, Sprite, Animator, PlayerCharacter>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, /*const*/ PlayerCharacter& char_)
+    Engine::Registry().view<InputReceiver, Sprite, Animator, PlayerCharacter, Transform>().each(
+        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, /*const*/ PlayerCharacter& char_, Transform& transform_)
         {
         
             Float32 rl = input_.values.at("rightleft");
@@ -44,12 +48,14 @@ void PlayerControllerSystem::Run()
             if (rl != 0)
             { 
                 sprite_.scale.x = rl;
-                sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                //sprite_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
+                transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
             } 
             if (ud != 0)
             { 
                 sprite_.scale.y = 1;
-                sprite_.position.y += char_.speed * ud * Engine::DeltaTime();
+                //sprite_.position.y += char_.speed * ud * Engine::DeltaTime();
+                transform_.position.y += char_.speed * ud * Engine::DeltaTime();
             } 
             }
                 
@@ -86,6 +92,40 @@ void PlayerControllerSystem::Run()
             }
             char_.cooldown--;
         });
+              
+
+    
+        auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
+        for (auto entity : view)
+        {
+            auto &t = view.get<Transform>(entity);
+            auto &player = view.get<PlayerCharacter>(entity);
+            auto &col = view.get<SimpleCollision>(entity);
+
+            if (col.colided)
+            {
+                if (Engine::Registry().valid(col.colidedWith))
+                {
+                
+                    if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
+                    {
+                        lab::NextLvl& lvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
+                        
+                        if(lvl.id==1)
+                        {
+                            printf("its working completely");
+                        }
+            
+                    }
+                }
+            col.colided = false;
+            }
+        }
+
+
+
+
+
 }
 
 void PlayerControllerSystem::WindDown()

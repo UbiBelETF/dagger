@@ -67,6 +67,9 @@ sources = [
 'source/dagger/tools/diagnostics.cpp',
 'source/dagger/tools/toolmenu.cpp',
 'source/dagger/tools/console.cpp',
+'source/dagger/gameplay/team_game/shoot.cpp',
+
+
 
 
 
