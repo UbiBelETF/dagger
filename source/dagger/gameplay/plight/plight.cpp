@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include "plight.h"
 
 #include "core/core.h"
@@ -13,8 +14,10 @@
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
+#include <time.h>
+#include <math.h>
 
-
+#include "gameplay/plight/plight_tilemaps_initialization.h"
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
@@ -109,15 +112,6 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TilemapSystem>();
 }
 
-Entity CreateTest(Registry& reg_, INT32 x_, INT32 y_)
-{
-    Entity entity = reg_.create();
-    auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 90 };
-    AssignSprite(sprite, "spritesheets:dungeon:floor_1");
-    return entity;
-}
-
 void Plight::WorldSetup(Engine &engine_)
 {
     ShaderSystem::Use("standard");
@@ -129,6 +123,7 @@ void Plight::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
+    srand(time(NULL));
     plight::SetupTilemaps();
     plight::SetupWorld_AimingSystem(engine_);
 
@@ -164,7 +159,7 @@ void plight::SetupWorld_test1(Engine& engine_) {
 void plight::SetupWorld_CombatSystem(Engine& engine_){
     setUpBackground(engine_);
 
-    auto mainChar = PlightCharacter::Create("ASDW_topdown", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = PlightCharacter::Create("ASDW_topdown", { 1, 1, 1 }, { -356,32 });
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -211,7 +206,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
 
 
-    auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 100, 0 });
+    auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 356,32 });
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
@@ -261,7 +256,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
     //setUpBackground(engine_);
 
-    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -306,7 +301,10 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite.scale = { 1, 1 };
     frontStaminaSprite.position = { -100, 115, 1 };
 
-    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 100, 0 });
+    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 });
+    sndChar.crosshair.angle = M_PI;
+    auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
+    crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
@@ -353,10 +351,36 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
 void plight::SetupTilemaps()
 {
-    TilemapLegend legend;
-    legend['.'] = &CreateTest;
+    TilemapLegend floorLegend;
+    floorLegend['.'] = &CreateFloor;
+    floorLegend[','] = &CreateBlackBackground;
 
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1.map", &legend });
+    TilemapLegend wallLegend;
+    wallLegend['.'] = &CreateEmpty;
+    wallLegend['1'] = &CreateWallSideTopLeft;
+    wallLegend['2'] = &CreateWallSideTopRight;
+    wallLegend['3'] = &CreateWallCornerBottomLeft;
+    wallLegend['4'] = &CreateWallCornerBottomRight;
+    wallLegend['J'] = &CreateWallCornerMidRight;
+    wallLegend['|'] = &CreateWallSideMidLeft;
+    wallLegend['}'] = &CreateSideWallMidRight;
+    wallLegend['#'] = &CreateWallMid;
+    wallLegend['L'] = &CreateWallSideFrontLeft;
+    wallLegend['_'] = &CreateFrontWall;
+    wallLegend['-'] = &CreateWallCornerRight;
+    wallLegend['R'] = &CreateWallSideFrontRight;
+    wallLegend['C'] = &CreateWallColumn;
+    wallLegend['Z'] = &CreateWallBannerBlue;
+    wallLegend['X'] = &CreateWallBannerRed;
+    wallLegend['K'] = &CreateWallCornerLeft;
+
+    TilemapLegend featuresLegend;
+    featuresLegend[','] = &CreateEmpty;
+    featuresLegend['.'] = &CreateEmpty;
+
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_floor.map", &floorLegend });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_walls.map", &wallLegend });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_features.map", &featuresLegend });
 }
 
 

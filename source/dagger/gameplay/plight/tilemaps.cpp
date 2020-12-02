@@ -19,14 +19,14 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_)
     Tilemap* tilemap = new Tilemap();
 
     Char ch;
-    UInt32 x = -25, y = -20;
+    UInt32 x = -25, y = 20;
 
     FileInputStream input{ request_.path };
 
     while (input >> std::noskipws >> ch) {
         if (ch == '\n')
         {
-            x = -25; y++;
+            x = -25; y--;
         }
         else
         {
