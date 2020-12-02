@@ -14,8 +14,11 @@ void plight::PlightAimingSystem::Run()
     Engine::Registry().view<InputReceiver, Sprite, PlightCrosshair>().each(
         [](InputReceiver input_, Sprite& sprite_,PlightCrosshair& crosshair_)
         {
-            Float32 rotate = input_.Get("rotate");
-           
+            crosshair_.currentTimer += Engine::DeltaTime();
+            if (crosshair_.currentTimer >= crosshair_.rotationTimer) {
+               
+                Float32 rotate = input_.Get("rotate");
+      
                 if (rotate) { //Change the angle of the crosshair
                     crosshair_.angle += rotate;
                     if (crosshair_.angle >= 2 * M_PI) {
@@ -24,8 +27,7 @@ void plight::PlightAimingSystem::Run()
                     else if (crosshair_.angle < 0) {
                         crosshair_.angle = 2 * M_PI - (-crosshair_.angle);
                     }
-
-                    
+                     
                         auto& sprite = Engine::Registry().get<Sprite>(crosshair_.crosshairSprite);
 
                         Float32 x = crosshair_.playerDistance * cos(crosshair_.angle);
@@ -42,7 +44,9 @@ void plight::PlightAimingSystem::Run()
                             sprite_.scale = { 1,1 };
                         }
                     
-    
+                }
+               
+                    crosshair_.currentTimer = 0.f;
                 }
                
                

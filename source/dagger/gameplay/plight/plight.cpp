@@ -19,6 +19,7 @@
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/tilemaps.h"
 
 
 
@@ -77,7 +78,7 @@ struct PlightCharacter
 
         chr.transform.position = { position_, 0.0f };
 
-        AssignSprite(chr.sprite, "Plight:big_deamon:IDLE:big_demon_idle_anim_f0");
+        AssignSprite(chr.sprite, "spritesheets:dungeon:big_demon_idle_anim:1");
         AnimatorPlay(chr.animator, "Plight:big_deamon:IDLE");
 
         if (input_ != "")
@@ -105,8 +106,16 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightCollisionsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
+    engine_.AddSystem<TilemapSystem>();
+}
 
-
+Entity CreateTest(Registry& reg_, INT32 x_, INT32 y_)
+{
+    Entity entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
+    sprite.position = { x_ * 16, y_ * 16, 90 };
+    AssignSprite(sprite, "spritesheets:dungeon:floor_1");
+    return entity;
 }
 
 void Plight::WorldSetup(Engine &engine_)
@@ -120,7 +129,7 @@ void Plight::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-
+    plight::SetupTilemaps();
     plight::SetupWorld_AimingSystem(engine_);
 
 }
@@ -137,7 +146,7 @@ void setUpBackground(Engine& engine_) {
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSprite(sprite, fmt::format("Plight:floor:floor_{}", 1 + (rand() % 8)));
+            AssignSprite(sprite, fmt::format("spritesheets:dungeon:floor_{}", 1 + (rand() % 8)));
             sprite.position = { i * 16, j * 16, 10 };
         }
     }
@@ -250,7 +259,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
 void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
-    setUpBackground(engine_);
+    //setUpBackground(engine_);
 
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -100, 0 });
 
@@ -340,6 +349,14 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite2.size = { 50, 5 };
     frontStaminaSprite2.scale = { 1, 1 };
     frontStaminaSprite2.position = { 100, 115, 1 };
+}
+
+void plight::SetupTilemaps()
+{
+    TilemapLegend legend;
+    legend['.'] = &CreateTest;
+
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1.map", &legend });
 }
 
 

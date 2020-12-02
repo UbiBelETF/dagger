@@ -11,7 +11,10 @@ namespace plight {
         Entity crosshairSprite;
         Float32 angle { 0.f };
         Float32 playerDistance{ 20.f };
-;    };
+
+        Float32 rotationTimer{ 0.01f };
+        Float32 currentTimer{ 0.f };
+    };
 
     class PlightAimingSystem : public System
     {

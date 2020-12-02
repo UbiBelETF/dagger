@@ -13,6 +13,7 @@ namespace plight
     void SetupWorld_test1(Engine& engine_);
     void SetupWorld_CombatSystem(Engine& engine_);
     void SetupWorld_AimingSystem(Engine& engine_);
+    void SetupTilemaps();
 
 
     class Plight : public Game
