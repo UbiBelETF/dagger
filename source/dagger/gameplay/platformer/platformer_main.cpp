@@ -25,9 +25,9 @@ using namespace platformer;
 void Platformer::GameplaySystemsSetup(Engine& engine_)
 {
 	engine_.AddSystem<PlatformerControllerSystem>();
-    engine_.AddSystem<PlatformerCollisionSystem>();
     engine_.AddSystem<ParallaxSystem>();
     engine_.AddSystem<CameraFollowSystem>();
+    engine_.AddSystem<PlatformerCollisionSystem>();
 }
 
 void SetCamera()
@@ -99,7 +99,7 @@ void CreateBackdrop()
     auto& reg = Engine::Registry();
     auto* camera = Engine::GetDefaultResource<Camera>();
 
-    /* Create terrain */ {
+    /* Create terrain  {
         auto back = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(back);
         
@@ -108,7 +108,7 @@ void CreateBackdrop()
         sprite.size = { 200, 200 };
         sprite.scale = { 10, 1 };
         sprite.position = { 0, -125, 1 };
-    }
+    }*/
 
     /* Put background image */ {
         auto entity = reg.create();
@@ -138,6 +138,24 @@ void CreateBackdrop()
 
         AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Tree");
         sprite.position = { 0, 30, 7 };
+    }
+
+    /*Put white block*/ {
+        auto entity = reg.create();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        sprite.scale = { 1000.0f, 20.0f };
+        sprite.position = { 0.0f, -32.0f, 1 };
+
+        auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
+        collision.state = MovementState::IMMOBILE;
+        collision.size = { 1000.0f, 20.0f };
+        collision.entityType = PlatformerCollisionID::TERRAIN;
+
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        transform.position = { 0.0f, -32.0f, 1 };
+
+        auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
     }
 }
 

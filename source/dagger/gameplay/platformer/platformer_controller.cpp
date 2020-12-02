@@ -138,7 +138,7 @@ void PlatformerControllerSystem::Run()
                     {
                         char_.reachedMax = true;
                     }
-                    if (sprite_.position.y <= 0)
+                    if (char_.canGoDown == false)
                     {
                         char_.reachedMax = false;
                         char_.isJumping = false;

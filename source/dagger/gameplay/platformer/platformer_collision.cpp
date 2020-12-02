@@ -35,6 +35,8 @@ void PlatformerCollisionSystem::Run()
         auto& character = view.get<PlatformerCharacter>(*it);
         auto& transform = view.get<Transform>(*it);
 
+        Vector2 p{};
+
         auto it2 = it;
         it2++;
         while (it2 != view.end())
@@ -43,35 +45,28 @@ void PlatformerCollisionSystem::Run()
             auto& ch = view.get<PlatformerCharacter>(*it2);
             auto& tr = view.get<Transform>(*it2);
 
-            if (ch.id != character.id)
+            if (collision.collidesWith[(int)col.entityType])
             {
-                if (collision.collidesWith[(int)col.entityType])
+                // Perform the collision check
+                CollisionInfo collisionInfo = collision.GetCollisionInfo(transform.position, col, tr.position);
+
+                if (collisionInfo.hasCollided)
                 {
-                    // Perform the collision check
-                    CollisionInfo collisionInfo = collision.GetCollisionInfo(transform.position, col, tr.position);
+                    if (collision.entityType == PlatformerCollisionID::PLAYER)                         //
+                    {                                                                                  //These are placeholders for now
+                        if (col.entityType == PlatformerCollisionID::TERRAIN ||                        //
+                            col.entityType == PlatformerCollisionID::PLAYER)                           //
+                        {
+                            collision.listOfEntities.push_back(*it2);
+                            collision.listOfCollisionSides.push_back(collisionInfo.collisionSide);
 
-                    if (collisionInfo.hasCollided)
-                    {
-                        if (collision.entityType == PlatformerCollisionID::PLAYER)                         //
-                        {                                                                                  //These are placeholders for now
-                            if (col.entityType == PlatformerCollisionID::TERRAIN ||                        //
-                                col.entityType == PlatformerCollisionID::PLAYER)                           //
-                            {
-                                collision.listOfEntities.push_back(*it2);
-                                collision.listOfCollisionSides.push_back(collisionInfo.collisionSide);
-
-                                col.listOfEntities.push_back(*it);
-                                col.listOfCollisionSides.push_back(collisionInfo.collisionSideOther);
-                            }
+                            col.listOfEntities.push_back(*it);
+                            col.listOfCollisionSides.push_back(collisionInfo.collisionSideOther);
                         }
+                    }
 
-                    }
-                    else
-                    {
-                        
-                    }
                 }
-            }
+            }            
             it2++;
         }
         LimitPlayerMovement(character, collision);//goes through all the collisions and limits the movement of the player depending on said collisions
@@ -80,7 +75,7 @@ void PlatformerCollisionSystem::Run()
 
 }
 
-CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const PlatformerCollision& other_, const Vector3& posOther_)
+CollisionInfo PlatformerCollision::GetCollisionInfo(Vector3& pos_, const PlatformerCollision& other_, Vector3& posOther_)
 {
     CollisionInfo collisionInfo;
 
@@ -100,7 +95,10 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             {
                 // bumped into other_ from the left side
                 collisionInfo.collisionSide = CollisionSide::RIGHT;
+                if (state == MovementState::MOVEABLE) pos_.x -= p.x + size.x - p2.x + 0.1f;
+
                 collisionInfo.collisionSideOther = CollisionSide::LEFT;
+                if (other_.state == MovementState::MOVEABLE) posOther_.x -= p2.x - p.x - size.x - 0.1f;
             }
         }
         
@@ -111,7 +109,10 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             {
                 // bumped into other_ from the right side
                 collisionInfo.collisionSide = CollisionSide::LEFT;
+                if (state == MovementState::MOVEABLE) pos_.x -= p.x - p2.x - other_.size.x - 0.1f;
+
                 collisionInfo.collisionSideOther = CollisionSide::RIGHT;
+                if (other_.state == MovementState::MOVEABLE) posOther_.x -= p2.x + other_.size.x - p.x + 0.1f;
             }
         }
         
@@ -121,8 +122,10 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             if ((abs(p.y + size.y - p2.y) < abs(p.x - p2.x - other_.size.x)) && ((abs(p.y + size.y - p2.y) < abs(p.x + size.x - p2.x))))
             {
                 // bumped into other_ from the bottom side
-                collisionInfo.collisionSide = CollisionSide::BOTTOM;
-                collisionInfo.collisionSideOther = CollisionSide::TOP;
+                collisionInfo.collisionSide = CollisionSide::TOP;
+
+                collisionInfo.collisionSideOther = CollisionSide::BOTTOM;
+                /*if (other_.state == MovementState::MOVEABLE)*/ posOther_.y -= p2.y - p.y - size.y - 0.1f;
             }
         }
 
@@ -131,8 +134,10 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(const Vector3& pos_, const P
             if ((abs(p.y - p2.y - other_.size.y) < abs(p.x - p2.x - other_.size.x)) && ((abs(p.y - p2.y - other_.size.y) < abs(p.x + size.x - p2.x))))
             {
                 // bumped into other_ from the top side
-                collisionInfo.collisionSide = CollisionSide::TOP;
-                collisionInfo.collisionSideOther = CollisionSide::BOTTOM;
+                collisionInfo.collisionSide = CollisionSide::BOTTOM;
+                /*if (other_.state == MovementState::MOVEABLE)*/ pos_.y -= p.y - p2.y - other_.size.y - 0.1f;
+
+                collisionInfo.collisionSideOther = CollisionSide::TOP;
             }
         }
 
