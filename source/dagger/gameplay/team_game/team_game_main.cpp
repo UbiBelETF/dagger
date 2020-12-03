@@ -19,30 +19,16 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
 }
 
-// NEW !!! Name of the method must be something different from SetCamera() because that name is already used in platformer_main.cpp ??
-void SetCamera_team()
-{
-    auto* camera = Engine::GetDefaultResource<Camera>();
-    camera->mode = ECameraMode::FixedResolution;
-    camera->size = { 800, 600 };
-    camera->zoom = 1;
-    camera->position = { 0, 0, 0 };
-    camera->Update();
-}
-
 void TeamGame::WorldSetup(Engine &engine_)
 {
     ShaderSystem::Use("standard");
 
-    /*
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
     camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
-    */
-    SetCamera_team();
 
     team_game::SetupWorld(engine_);
 }
@@ -57,56 +43,59 @@ void team_game::SetupWorld(Engine &engine_)
     constexpr int screenWidth = 800;
     constexpr int screenHeight = 600;
 
-    constexpr int height = 20;
-    constexpr int width = 26;
-    constexpr float tileSize = 20.f;// / static_cast<float>(Width);
-
+    constexpr int height = 40;
+    constexpr int width = 30;
+    constexpr float tileSize = 30.f;
+    
     float zPos = 1.f;
 
-    constexpr float Space = 0.05f;
-    for (int i = 0; i < height; i++)
+    // 40x30 je teren (nemamo plocice iscrtane vise pa je nebitno)
+    for (int i = -25; i < 26; i++)
     {
-        for (int j = 0; j < width; j++)
+        for (int j = -20; j < 20; j++)
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            //AssignSpriteTexture(sprite, "EmptyWhitePixel");
+
+            //AssignSprite(sprite, fmt::format("spritesheets:dungeon:wall_top_left", 1 + (rand() % 8)));
+            AssignSprite(sprite, "tile_new");
             sprite.size = scale * tileSize;
+            sprite.position = { i * 16, j * 16, 99 };
 
-            /*if (i % 2 != j % 2)
+            if (j == 17) 
             {
-                sprite.color.r = 0.4f;
-                sprite.color.g = 0.4f;
-                sprite.color.b = 0.4f;
+                AssignSprite(sprite, fmt::format("spritesheets:tileset:wall_upper_mid", 1 + (rand() % 8)));
+               
             }
-            else
+            if(j == -18 || j == -19 ) 
             {
-                sprite.color.r = 0.6f;
-                sprite.color.g = 0.6f;
-                sprite.color.b = 0.6f;
+                AssignSprite(sprite, fmt::format("spritesheets:tileset:wall_down_mid", 1 + (rand() % 8)));
             }
 
-            if (i == 0 || i == height - 1 || j == 0 || j == width - 1)
+            if(i == -24)
+                AssignSprite(sprite, fmt::format("spritesheets:tileset:wall_upper_mid", 1 + (rand() % 8)));
+            if(i == 25 )
+                AssignSprite(sprite, fmt::format("spritesheets:tileset:wall_upper_mid", 1 + (rand() % 8)));
+
+            if ((j == -1) && (i != 2 && i != 3 && i != -23 && i != 16))
             {
-                sprite.color.r = 0.0f;
-                sprite.color.g = 0.0f;
-                sprite.color.b = 0.0f;
+                AssignSprite(sprite, fmt::format("spritesheets:tileset:wall_upper_mid", 1 + (rand() % 8)));
+            }
 
-                //auto& col = reg.emplace<SimpleCollision>(entity);
-                //col.size.x = TileSize;
-                //col.size.y = TileSize;
-            }*/
+            if (j == 13 && i == -10)
+            {
+                AssignSprite(sprite, fmt::format("spritesheets:dungeon:doors_leaf_open"));
+                //AssignSprite(sprite, "parti_team_game:door_front");
+            }
 
-            auto& transform = reg.emplace<Transform>(entity);
-            transform.position.x = (0.5f + j + j * Space - static_cast<float>(width * (1 + Space)) / 2.f) * tileSize;
-            transform.position.y = (0.5f + i + i * Space - static_cast<float>(height * (1 + Space)) / 2.f) * tileSize;
-            transform.position.z = zPos;
+                /*auto& transform = reg.emplace<Transform>(entity);
+                transform.position.x = (0.5f + j + j * Space - static_cast<float>(width * (1 + Space)) / 2.f) * tileSize;
+                transform.position.y = (0.5f + i + i * Space - static_cast<float>(height * (1 + Space)) / 2.f) * tileSize;
+                transform.position.z = zPos;*/
         }
     }
-
-    zPos -= 1.f;
-
-    /*{
+    /*
+    {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "logos:dagger");

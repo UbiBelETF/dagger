@@ -1,0 +1,13 @@
+wall_left_upper_corner 9 0 6 16
+wall_left_down_corner 9 32 6 16
+wall_right_upper_corner 32 0 6 16
+wall_right_down_corner 32 32 6 16
+
+wall_side 447 0 16 16
+
+wall_left_mid 9 16 16 16
+wall_right_mid 32 16 16 16
+wall_upper_mid 16 0 16 16
+wall_down_mid 16 32 16 16
+
+tile 16 16 16 16
