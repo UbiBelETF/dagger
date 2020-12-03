@@ -8,14 +8,13 @@
 
 #include "gameplay/common/simple_collisions.h"
 
-#include <math.h>
-#include <list>
+#include <random>
 
 using namespace ancient_defenders;
 
 // Initialize static members
 UInt32 ancient_defenders::WalkingPath::numberOfPoints = 0;
-std::list<Vector2> ancient_defenders::WalkingPath::path = {};
+Sequence<Vector2> ancient_defenders::WalkingPath::path = {};
 
 void ancient_defenders::MageBehaviorSystem::SpinUp()
 {
@@ -50,8 +49,8 @@ void ancient_defenders::MageBehaviorSystem::Run()
                 i++;
             }
 
-            auto destinationX = coords.x; // Maybe add +/- a few percent to make paths bit more varied
-            auto destinationY = coords.y;
+            auto destinationX = coords.x + mage_.offset.x;
+            auto destinationY = coords.y + mage_.offset.y;
 
             if (transform_.position.x < destinationX) {
                 mage_.direction.x = 1;
@@ -92,7 +91,7 @@ void ancient_defenders::MageBehaviorSystem::Run()
                 transform_.position.y = destinationY;
             }
 
-            if (transform_.position.x == coords.x && transform_.position.y == coords.y) {
+            if (transform_.position.x == destinationX && transform_.position.y == destinationY) {
                 mage_.postition++;
                 if ((mage_.postition + 1) >= WalkingPath::numberOfPoints) {
                     mage_.currentAction = EAction::Idling;
@@ -160,16 +159,26 @@ Mage ancient_defenders::Mage::Create()
 
     AssignSprite(mag.sprite, "spritesheets:mage:mage_stand_side:1");
     float ratio = mag.sprite.size.y / mag.sprite.size.x;
-    mag.sprite.scale = { 4,4 };
-
-    auto start = WalkingPath::path.front();
-    
-    mag.coordinates.position = { start.x, start.y, 1.0f };
+    mag.sprite.scale = { 2,2 };
 
     mag.mage.meleeDmg = 1.0f;
 
-    mag.mage.speed = 150.0f;
-    mag.mage.direction = { -1,0 };
+    mag.mage.speed = 50.0f;
+    mag.mage.direction = { 0,1 };
+
+    // Randomly create offset 
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> randomOffset(0, 22);
+    std::uniform_int_distribution<std::mt19937::result_type> randomDirection(0, 1);
+ 
+    mag.mage.offset = { (randomDirection(rng)?randomOffset(rng): 0.0f-randomOffset(rng)),(randomDirection(rng) ? randomOffset(rng) : 0.0f-randomOffset(rng)) };
+
+    auto start = WalkingPath::path.front();
+
+    // Z axis is calculated this way to make bottom most character appear closest to the screen
+    // offset + 22 value will range between 0 and 44 devided by 50 gives values from 0 to aproximately 0.9
+    mag.coordinates.position = { start.x + mag.mage.offset.x, start.y + mag.mage.offset.y, 1.0f + (mag.mage.offset.y + 22.0f)/50.0f }; // Setting z over 1.9 makes character invisible
 
     mag.hitbox.size = mag.sprite.size;
     mag.range.range = mag.hitbox.size.x;

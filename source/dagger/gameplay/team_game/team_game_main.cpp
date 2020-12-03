@@ -35,7 +35,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    //ancient_defenders::SetupWorld(engine_);
+    ancient_defenders::SetupWorld(engine_);
     ancient_defenders::LoadPath();
     ancient_defenders::SetupDemoCharacter(engine_);
 }
@@ -44,20 +44,17 @@ void ancient_defenders::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
-    float zPos = 1.f;
+    float zPos = 1.0f;
 
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "logos:dagger");
+        AssignSprite(sprite, "ancient_defenders:level1-ground");
         float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 500 / ratio, 500  };
+        sprite.size = { 800 , 600  };
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { 0, 0, zPos };
-
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.size;
     }
 }
 
@@ -68,18 +65,20 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
 
     float zPos = 1.f;
 
-    auto demoMage = Mage::Create();
+    auto demoMage1 = Mage::Create();
+    auto demoMage2 = Mage::Create();
+    auto demoMage3 = Mage::Create();
 
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
 
         AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
-        sprite.scale = { -4,4 };
+        sprite.scale = { -2,2 };
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { 0, -200 , 1.0f };
+        coordinates.position = { 38, -178 , 1.0f };
 
         auto & en = reg.emplace<Enemy>(entity);
         en.health = 100.0f;
@@ -98,11 +97,11 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         auto& sprite = reg.emplace<Sprite>(entity);
 
         AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
-        sprite.scale = { 4,4 };
+        sprite.scale = { 2,2 };
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { 0, 0 , 1.0f };
+        coordinates.position = { 292, 8 , 1.0f };
 
         auto & en = reg.emplace<Enemy>(entity);
         en.health = 30.0f;
@@ -119,12 +118,12 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
 
-        AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
-        sprite.scale = { -4,4 };
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
+        sprite.scale = { 2,2 };
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { -50, -200 , 1.0f };
+        coordinates.position = { -312, -100 , 1.0f };
 
         auto & en = reg.emplace<Enemy>(entity);
         en.health = 10.0f;
