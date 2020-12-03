@@ -1,5 +1,36 @@
 #pragma once
 
+#include "core/core.h"
+#include "core/system.h"
+#include "gameplay/team_game/controller_fsm.h"
+
+using namespace dagger;
+
+namespace team_game
+{
+	struct PlayerCharacter
+	{
+		float speed{ 1.f };
+	};
+
+	class CharacterControllerSystem
+		: public System
+	{
+		CharacterControllerFSM characterFSM;
+
+	public:
+		String SystemName() override {
+			return "Character Controller System";
+		}
+
+		void Run() override;
+	};
+}
+
+// OLD FSM
+
+/*#pragma once
+
 #include "core/system.h"
 #include "core/input/inputs.h"
 #include "gameplay/common/fsm.h"
@@ -75,4 +106,4 @@ namespace team_game
 
 		void Run() override;
 	};
-};
+};*/
