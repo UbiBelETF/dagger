@@ -73,13 +73,13 @@ struct PlightCharacter
 
 
         chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { position_, 0.0f };
+        chr.sprite.position = { position_, 2.f };
         chr.sprite.color = { color_, 1.0f };
 
         chr.col.size.x = 16;
         chr.col.size.y = 16;
 
-        chr.transform.position = { position_, 0.0f };
+        chr.transform.position = { position_, 2.0f };
 
         AssignSprite(chr.sprite, "spritesheets:dungeon:big_demon_idle_anim:1");
         AnimatorPlay(chr.animator, "Plight:big_deamon:IDLE");
@@ -96,6 +96,7 @@ struct PlightCharacter
         AssignSprite(crosshairSprite, "Plight:crosshair:crosshair");
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
+        crosshairSprite.position.z = chr.sprite.position.z;
 
 
         return chr;
@@ -354,6 +355,10 @@ void plight::SetupTilemaps()
     TilemapLegend floorLegend;
     floorLegend['.'] = &CreateFloor;
     floorLegend[','] = &CreateBlackBackground;
+    floorLegend['S'] = &CreateFloorSpikes;
+    floorLegend['R'] = &CreateWallMid;
+    floorLegend['C'] = &CreateRoof;
+    floorLegend['P'] = &CreateWallColumn;
 
     TilemapLegend wallLegend;
     wallLegend['.'] = &CreateEmpty;
@@ -369,10 +374,13 @@ void plight::SetupTilemaps()
     wallLegend['_'] = &CreateFrontWall;
     wallLegend['-'] = &CreateWallCornerRight;
     wallLegend['R'] = &CreateWallSideFrontRight;
-    wallLegend['C'] = &CreateWallColumn;
     wallLegend['Z'] = &CreateWallBannerBlue;
     wallLegend['X'] = &CreateWallBannerRed;
     wallLegend['K'] = &CreateWallCornerLeft;
+    wallLegend['G'] = &CreateWallGoo;
+    wallLegend['U'] = &CreateBlueFountain;
+    wallLegend['V'] = &CreateRedFountain;
+
 
     TilemapLegend featuresLegend;
     featuresLegend[','] = &CreateEmpty;
