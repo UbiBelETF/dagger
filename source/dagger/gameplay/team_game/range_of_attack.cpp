@@ -14,6 +14,7 @@ void ancient_defenders::RangedTargetingSystem::Run() {
         range_.targetFound = false;
         if (collision_.colided) {
             for (auto const& col : collision_.colisions) {
+                if (!Engine::Registry().has<RangeOfAttack>(col)) continue;
                 if (range_.targetType == Engine::Registry().get<RangeOfAttack>(col).unitType) {
                     range_.targetFound = true;
                     range_.target = col;
