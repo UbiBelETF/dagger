@@ -36,7 +36,6 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_)
         }
     }
 
-    // save the loaded tilemap into shared memory
     Engine::Res<Tilemap>()[std::filesystem::path(request_.path).filename().string()] = tilemap;
 }
 
