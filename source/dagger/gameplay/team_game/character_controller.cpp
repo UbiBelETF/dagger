@@ -9,9 +9,7 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 
-using namespace team_game;
-
-void CharacterControllerSystem::Run()
+void team_game::CharacterControllerSystem::Run()
 {
 	Engine::Registry().view<CharacterControllerFSM::StateComponent>()
 		.each([&](CharacterControllerFSM::StateComponent& state_)
