@@ -43,51 +43,6 @@ void BrawlerControllerSystem::Run()
                 physics_.velocity.x += sprite_.scale.x* char_.speed;
                 char_.run = true;
             }
-            /*if(!char_.jump )
-            {
-                if(jump==1 && char_.fall && !char_.double_jump)
-                {
-                    char_.double_jump = true;
-                    char_.jump = true;
-                    char_.jump_time = 1;
-                }
-                if(jump==1 && !char_.double_jump)
-                {
-                    if (!char_.double_jump)
-                    {
-                        char_.jump = true;
-                        char_.jump_time = 1;
-                    }
-                }
-                else if ((attack == 1 || char_.attack) && !char_.fall)
-                {
-                    if(char_.attack==false)
-                    {
-                        char_.attack = true;
-                        char_.attack_time = 1;
-                    }
-                    else
-                    {
-                        char_.attack_time -= Engine::DeltaTime();
-                        if (char_.attack_time <= 0) char_.attack = false;
-                    }
-                }
-                else if (run != 0)
-                {
-                    sprite_.scale.x = run;
-                    char_.run = true;
-                }
-            }
-            else
-            {
-                if (run != 0)
-                {
-                    sprite_.scale.x = run;
-                    char_.run = true;
-                }
-            }
-
-            */
             if (char_.attack) AnimatorPlay(animator_, "character:ATTACK");
             else if (char_.jump) AnimatorPlay(animator_, "character:JUMP");
             else if (char_.fall) AnimatorPlay(animator_, "character:FALL");
