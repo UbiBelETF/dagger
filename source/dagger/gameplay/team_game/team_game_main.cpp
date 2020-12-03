@@ -9,14 +9,15 @@
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
 
-#include "gameplay/common/simple_collisions.h"
+#include "gameplay/team_game/team_game_collisions.h"
+#include "gameplay/team_game/team_game_controller.h"
 
 using namespace dagger;
 using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<PlatformerCollisionSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -26,7 +27,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 2;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -49,7 +50,7 @@ void team_game::SetupWorld(Engine &engine_)
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { 0, 0, zPos };
 
-        auto& col = reg.emplace<SimpleCollision>(entity);
+        auto& col = reg.emplace<PlatformerCollision>(entity);
         col.size = sprite.size;
     }
 }
