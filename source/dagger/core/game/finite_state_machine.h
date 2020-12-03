@@ -52,7 +52,7 @@ struct FSM
 	}
 
 protected:
-	const UInt32 stateSize = (UInt32) std::numeric_limits<enum States>::max();
+	const UInt32 stateSize = (UInt32) std::numeric_limits<States>::max();
 
 	Map<States, OwningPtr<State>> m_StatePointers;
 };

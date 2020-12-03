@@ -25,7 +25,7 @@ void CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateComponent& s
 
 	if (EPSILON_NOT_ZERO(input.Get("run")))
 	{
-		GoTo(CharacterStates::Running, state_);
+		GoTo(ECharacterStates::Running, state_);
 	}
 }
 
@@ -44,14 +44,13 @@ void CharacterControllerFSM::Running::Exit(CharacterControllerFSM::StateComponen
 
 void CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_) 
 {
-	auto& [sprite, input, character] = Engine::Registry()
-		.get<Sprite, InputReceiver, platformer::PlatformerCharacter>(state_.entity);
+	auto&& [sprite, input, character] = Engine::Registry().get<Sprite, InputReceiver, platformer::PlatformerCharacter>(state_.entity);
 
 	Float32 run = input.Get("run");
 
 	if (EPSILON_ZERO(run))
 	{
-		GoTo(CharacterStates::Idle, state_);
+		GoTo(ECharacterStates::Idle, state_);
 	}
 	else
 	{
