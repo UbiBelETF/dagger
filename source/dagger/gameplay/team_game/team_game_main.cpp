@@ -8,6 +8,11 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
+#include "core/graphics/sprite_render.h"
+#include "core/graphics/textures.h"
+#include "core/graphics/animations.h"
+#include "core/graphics/gui.h"
+#include "tools/diagnostics.h"
 
 #include "gameplay/team_game/team_game_collisions.h"
 #include "gameplay/team_game/team_game_controller.h"
@@ -17,6 +22,7 @@ using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
+    engine_.AddSystem<PlatformerControllerSystem>();
     engine_.AddSystem<PlatformerCollisionSystem>();
 }
 
@@ -40,17 +46,78 @@ void team_game::SetupWorld(Engine &engine_)
 
     float zPos = 1.f;
 
+    //Black Backdrop
     {
         auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "logos:dagger");
-        float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 500 / ratio, 500  };
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        sprite.color = { 0, 0, 0, 1 };
+        sprite.size = { 1000, 1000 };
+        sprite.scale = { 10, 1 };
+        sprite.position = { 0, -125, 10 };
+    }
+    
+    {//First Character
+        auto entity = reg.create();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        sprite.size = { 20, 40 };
+        sprite.position = { -100, 40, 5 };
 
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position = { 0, 0, zPos };
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        transform.position = sprite.position;
 
-        auto& col = reg.emplace<PlatformerCollision>(entity);
-        col.size = sprite.size;
+        auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
+        collision.size = { 20, 40 };
+        collision.entityType = PlatformerCollisionID::PLAYER;
+        collision.state = MovementState::MOVEABLE;
+
+        auto& controller = reg.get_or_emplace<PlatformerCharacter>(entity);
+        controller.speed = 50;
+
+        auto& input = reg.get_or_emplace<InputReceiver>(entity);
+        String inputContext = "ASDW";
+        input.contexts.push_back(inputContext);
+    }
+
+    {//Second Character
+        auto entity = reg.create();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        sprite.size = { 20, 40 };
+        sprite.position = { 100, 40, 5 };
+
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        transform.position = sprite.position;
+
+        auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
+        collision.size = { 20, 40 };
+        collision.entityType = PlatformerCollisionID::PLAYER;
+        collision.state = MovementState::MOVEABLE;
+
+        auto& controller = reg.get_or_emplace<PlatformerCharacter>(entity);
+        controller.speed = 50;
+
+        auto& input = reg.get_or_emplace<InputReceiver>(entity);
+        String inputContext = "Arrows";
+        input.contexts.push_back(inputContext);
+    }
+
+    {//Platform they stand on
+        auto entity = reg.create();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        sprite.size = { 1000, 20 };
+        sprite.position = { 0, 0, 5 };
+
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        transform.position = sprite.position;
+
+        auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
+        collision.size = { 1000, 20 };
+        collision.entityType = PlatformerCollisionID::TERRAIN;
+        collision.state = MovementState::IMMOBILE;
+
+        auto& controller = reg.get_or_emplace<PlatformerCharacter>(entity);
     }
 }

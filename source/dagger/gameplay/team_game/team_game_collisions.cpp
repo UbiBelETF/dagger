@@ -52,18 +52,18 @@ void PlatformerCollisionSystem::Run()
 
                 if (collisionInfo.hasCollided)
                 {
-                    if (collision.entityType == PlatformerCollisionID::PLAYER)                         //
-                    {                                                                                  //These are placeholders for now
-                        if (col.entityType == PlatformerCollisionID::TERRAIN ||                        //
-                            col.entityType == PlatformerCollisionID::PLAYER)                           //
-                        {
+//                    if (collision.entityType == PlatformerCollisionID::PLAYER)                         //
+//                    {                                                                                  //These are placeholders for now
+//                        if (col.entityType == PlatformerCollisionID::TERRAIN ||                        //
+//                            col.entityType == PlatformerCollisionID::PLAYER)                           //
+//                        {
                             collision.listOfEntities.push_back(*it2);
                             collision.listOfCollisionSides.push_back(collisionInfo.collisionSide);
 
                             col.listOfEntities.push_back(*it);
                             col.listOfCollisionSides.push_back(collisionInfo.collisionSideOther);
-                        }
-                    }
+//                        }
+//                    }
 
                 }
             }
@@ -95,10 +95,10 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(Vector3& pos_, const Platfor
             {
                 // bumped into other_ from the left side
                 collisionInfo.collisionSide = CollisionSide::RIGHT;
-                if (state == MovementState::MOVEABLE) pos_.x -= p.x + size.x - p2.x + 0.1f;
+                if (state == MovementState::MOVEABLE) pos_.x -= p.x + size.x - p2.x;// +0.1f;
 
                 collisionInfo.collisionSideOther = CollisionSide::LEFT;
-                if (other_.state == MovementState::MOVEABLE) posOther_.x -= p2.x - p.x - size.x - 0.1f;
+                if (other_.state == MovementState::MOVEABLE) posOther_.x -= p2.x - p.x - size.x;// - 0.1f;
             }
         }
 
@@ -109,10 +109,10 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(Vector3& pos_, const Platfor
             {
                 // bumped into other_ from the right side
                 collisionInfo.collisionSide = CollisionSide::LEFT;
-                if (state == MovementState::MOVEABLE) pos_.x -= p.x - p2.x - other_.size.x - 0.1f;
+                if (state == MovementState::MOVEABLE) pos_.x -= p.x - p2.x - other_.size.x;// -0.1f;
 
                 collisionInfo.collisionSideOther = CollisionSide::RIGHT;
-                if (other_.state == MovementState::MOVEABLE) posOther_.x -= p2.x + other_.size.x - p.x + 0.1f;
+                if (other_.state == MovementState::MOVEABLE) posOther_.x -= p2.x + other_.size.x - p.x;// +0.1f;
             }
         }
 
