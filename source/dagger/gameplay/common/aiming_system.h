@@ -11,7 +11,9 @@ using namespace dagger;
         Entity crosshairSprite;            //used for getting a Sprite component for our crosshair to be drawn on screen
         Float32 angle{ 0.f };              //current angle of the crosshair (between the X axis and the crosshair position)
         Float32 playerDistance{ 20.f };   //distance of the crosshair relative to the player position
-        ;
+        
+        Float32 rotationTimer{ 0.01f };
+        Float32 currentTimer{ 0.f };
     };
 
     class AimingSystem : public System
