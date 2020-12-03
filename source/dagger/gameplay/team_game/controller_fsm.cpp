@@ -10,16 +10,15 @@ using namespace dagger;
 
 // Idle
 
-
-void CharacterControllerFSM::Idle::Enter(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::Idle::Enter(CharacterControllerFSM::StateComponent& state_)
 {
 //	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 //	idle animation
 }
 
-DEFAULT_EXIT(CharacterControllerFSM, Idle);
+DEFAULT_EXIT(team_game::CharacterControllerFSM, Idle);
 
-void CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateComponent& state_)
 {
 	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
 
@@ -32,17 +31,17 @@ void CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateComponent& s
 
 // Running
 
-void CharacterControllerFSM::Running::Enter(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::Running::Enter(CharacterControllerFSM::StateComponent& state_)
 {
 //	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 //	run animation
 }
 
 // same as: DEFAULT_EXIT(CharacterControllerFSM, Running);
-void CharacterControllerFSM::Running::Exit(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::Running::Exit(CharacterControllerFSM::StateComponent& state_)
 {}
 
-void CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_)
 {
 	auto&& [sprite, input, character] = Engine::Registry().get<Sprite, InputReceiver, team_game::PlayerCharacter>(state_.entity);
 
