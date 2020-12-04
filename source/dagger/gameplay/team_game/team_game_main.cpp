@@ -129,11 +129,14 @@ void lab::SetupWorld(Engine &engine_)
     legend['W'] = &CreateWallBottom6;
     legend['8'] = &Hall; //next room
 
-    
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
-    
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
+   
+    auto view = Engine::Registry().view<Tilemap>();
+    Engine::Registry().destroy(view.begin(),view.end());
+
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
+    //Engine::Registry().destroy(mainChar.entity);
 
 }
 
