@@ -39,15 +39,7 @@ void ancient_defenders::MageBehaviorSystem::Run()
         else if (mage_.currentAction == EAction::Moving) {
             auto nextPosition = mage_.postition + 1;
 
-            auto coords = WalkingPath::path.front();
-            int i = 0;
-            for (auto iter : WalkingPath::path) {
-                if (i == nextPosition) {
-                    coords = iter;
-                    break;
-                }
-                i++;
-            }
+            auto coords = WalkingPath::path[nextPosition];
 
             auto destinationX = coords.x + mage_.offset.x;
             auto destinationY = coords.y + mage_.offset.y;
@@ -169,16 +161,21 @@ Mage ancient_defenders::Mage::Create()
     // Randomly create offset 
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> randomOffset(0, 22);
+
+    std::uniform_int_distribution<std::mt19937::result_type> roll22(0, 22);
+    std::uniform_int_distribution<std::mt19937::result_type> roll38(0, 38);
+
     std::uniform_int_distribution<std::mt19937::result_type> randomDirection(0, 1);
  
-    mag.mage.offset = { (randomDirection(rng)?randomOffset(rng): 0.0f-randomOffset(rng)),(randomDirection(rng) ? randomOffset(rng) : 0.0f-randomOffset(rng)) };
+    // 22 is an important value because it represents the border at which character can move while still being on the path
+    // 22 = 38 - 16( half of the width/height of the path - half of the character widht/height ); edge of the character sprite is alligned with the edge of the path
+    // Only exception to this is when offset.y is positive at which point character can go up much higher while still appearing to walk along the path
+    mag.mage.offset = { (randomDirection(rng)?roll22(rng): 0.0f-roll22(rng)),(randomDirection(rng) ? roll38(rng) : 0.0f-roll22(rng)) };
 
     auto start = WalkingPath::path.front();
 
     // Z axis is calculated this way to make bottom most character appear closest to the screen
-    // offset + 22 value will range between 0 and 44 devided by 50 gives values from 0 to aproximately 0.9
-    mag.coordinates.position = { start.x + mag.mage.offset.x, start.y + mag.mage.offset.y, 1.0f + (mag.mage.offset.y + 22.0f)/50.0f }; // Setting z over 1.9 makes character invisible
+    mag.coordinates.position = { start.x + mag.mage.offset.x, start.y + mag.mage.offset.y, std::abs(mag.mage.offset.y + 22.0f) };
 
     mag.hitbox.size = mag.sprite.size;
     mag.range.range = mag.hitbox.size.x;

@@ -44,8 +44,6 @@ void ancient_defenders::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
-    float zPos = 1.0f;
-
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
@@ -54,7 +52,7 @@ void ancient_defenders::SetupWorld(Engine &engine_)
         sprite.size = { 800 , 600  };
 
         auto& transform = reg.emplace<Transform>(entity);
-        transform.position = { 0, 0, zPos };
+        transform.position = { 0, 0, 100 };
     }
 }
 
