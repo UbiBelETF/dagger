@@ -15,8 +15,6 @@ void AimingSystem::Run()
     Engine::Registry().view<InputReceiver, Sprite, Crosshair>().each(
         [](InputReceiver input_, Sprite& sprite_, Crosshair& crosshair_) //The sprite component with the same entity as this crosshair component is of a sprite that is used for center of rotation (like character for example)
         {
-            crosshair_.currentTimer += Engine::DeltaTime();
-            if (crosshair_.currentTimer >= crosshair_.rotationTimer) {
                 /*
                  Example setup of for "rotate" command in input-context :
 
@@ -24,11 +22,11 @@ void AimingSystem::Run()
                                "actions" : [
                              {
                                "trigger": "KeyA",
-                               "value" : 0.05
+                               "value" : 1
                              },
                              {
                               "trigger": "KeyD",
-                              "value" : -0.05
+                              "value" : -1
                              }
                             ]
                */
@@ -36,7 +34,7 @@ void AimingSystem::Run()
 
 
                 if (rotate) {
-                    crosshair_.angle += rotate;   //Change the angle of the crosshair
+                    crosshair_.angle += rotate * crosshair_.rotationSpeed * Engine::DeltaTime();   //Change the angle of the crosshair
 
                     if (crosshair_.angle >= 2 * M_PI) {                                 //keep the angle in the first revolution
                         crosshair_.angle -= 2 * M_PI;
@@ -64,9 +62,6 @@ void AimingSystem::Run()
 
 
                 }
-                crosshair_.currentTimer = 0.f;
-            }
-
 
         });
 }
