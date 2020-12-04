@@ -28,7 +28,15 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TeamGameControllerSystem>();
     
 }
-
+void SetCameraTeam()
+{
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    camera->mode = ECameraMode::FixedResolution;
+    camera->size = { 1920, 1080 };
+    camera->zoom = 1.2;
+    camera->position = { 300,300, 0 };
+    camera->Update();
+}
 struct MainCharacter
 {
     Entity entity;
@@ -77,6 +85,7 @@ struct MainCharacter
 void TeamGame::WorldSetup(Engine &engine_)
 {
     //TODO: Setup world
+    SetCameraTeam();
     auto mainChar = MainCharacter::Create("ASDW", { 1, 1, 1 }, { 0, 0 });
     auto& reg = Engine::Registry();
 

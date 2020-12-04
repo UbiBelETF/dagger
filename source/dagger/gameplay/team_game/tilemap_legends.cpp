@@ -12,6 +12,9 @@
 #include "core/graphics/animations.h"
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
+const int scale = 3;
+const int x_step = 16 *scale;
+const int y_step = 16 * scale;
 using namespace team_game;
 Tilemap_legends::Tilemap_legends() {
 	TilemapLegend floors;
@@ -24,13 +27,13 @@ Tilemap_legends::Tilemap_legends() {
 	floors['2'] = &CreateWall;
 	floors['3'] = &CreateWall;
 	floors['4'] = &CreateWall;
-	floors['~'] = &CreateDoorHorizontal;
-	floors['/'] = &CreateDoorVertical;
 	creatures['S'] = &CreateSlime;
 	creatures['H'] = &CreateHero;
 	objects['c'] = &CreateChest;
 	objects['p'] = &CreatePot;
 	objects['t'] = &CreateCrate;
+	objects['~'] = &CreateDoorHorizontal;
+	objects['/'] = &CreateDoorVertical;
 	wall_type['='] = "wall_2";
 	wall_type['|'] = "wall_11";
 	wall_type['1'] = "wall_7";
@@ -45,7 +48,8 @@ Tilemap_legends::Tilemap_legends() {
 Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 1000 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 1000 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:floor_1");
 	return entity;
 }
@@ -53,14 +57,16 @@ Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Map<Char, String>walls;
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 10 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 10 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:"+wall_type.at(type));
 	return entity;
 }
 Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 30 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 30 };
 	AssignSprite(sprite, "spritesheets:chara_slime:slime_idle_anim:1");
 	auto& anim = reg_.emplace<Animator>(entity);
 	AnimatorPlay(anim, "chara_slime:slime_idle");
@@ -68,44 +74,48 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 }
 Entity CreateHero(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	auto view = Engine::Registry().view<TeamGameCharacter,Sprite>();
-
 	auto it = view.begin();
 	auto& sprite = view.get<Sprite>(*it);
-	sprite.position = { x_ * 16,y_ * 16,sprite.position.z };
+	sprite.position = { x_ * x_step,y_ * y_step,sprite.position.z };
 	return *it;
 }
 Entity CreateDoorHorizontal(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 90 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 40 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:door_horizontal");
 	return entity;
 }
 Entity CreateDoorVertical(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 90 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 40 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:door_vertical");
 	return entity;
 }
 Entity CreateChest(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 90 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 90 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:chest");
 	return entity;
 }
 Entity CreatePot(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 90 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 90 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:pot");
 	return entity;
 }
 Entity CreateCrate(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.position = { x_ * 16, y_ * 16, 90 };
+	sprite.scale = { scale,scale };
+	sprite.position = { x_ * x_step, y_ * y_step, 90 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:crate");
 	return entity;
 }
