@@ -15,6 +15,7 @@
 #include "tools/diagnostics.h"
 
 #include "gameplay/platformer/platformer_controller.h"
+#include "gameplay/platformer/platformer_collision.h"
 #include "gameplay/platformer/parallax.h"
 #include "gameplay/platformer/camera_focus.h"
 
@@ -24,6 +25,7 @@ using namespace platformer;
 void Platformer::GameplaySystemsSetup(Engine& engine_)
 {
 	engine_.AddSystem<PlatformerControllerSystem>();
+    engine_.AddSystem<PlatformerCollisionSystem>();
     engine_.AddSystem<ParallaxSystem>();
     engine_.AddSystem<CameraFollowSystem>();
 }
@@ -45,6 +47,8 @@ struct Character
     Animator& animator;
     InputReceiver& input;
     PlatformerCharacter& character;
+    PlatformerCollision& collision;
+    int id;
 
     static Character Get(Entity entity)
     {
@@ -53,23 +57,32 @@ struct Character
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
-        return Character{ entity, sprite, anim, input, character };
+        auto& collision = reg.get_or_emplace<PlatformerCollision>(entity);
+        return Character{ entity, sprite, anim, input, character, collision};
     }
 
     static Character Create(
         String input_ = "", 
         ColorRGB color_ = { 1, 1, 1 }, 
-        Vector2 position_ = { 0, 0 })
+        Vector2 position_ = { 0, 0 }, int id=1)
     {
+        Float32 playerWidth{ 20.0f };
+        Float32 playerHeight{ 40.0f };
+
         auto& reg = Engine::Registry();
         auto entity = reg.create();
+
+        ATTACH_TO_FSM(CharacterControllerFSM, entity);
+
         auto chr = Character::Get(entity);
 
         chr.sprite.scale = { 1, 1 };
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
+        chr.collision.size = { playerWidth, playerHeight };
+        chr.character.id = id;
 
-        AssignSpriteTexture(chr.sprite, "souls_like_knight_character:IDLE:idle1");
+        AssignSprite(chr.sprite, "souls_like_knight_character:IDLE:idle1");
         AnimatorPlay(chr.animator, "souls_like_knight_character:IDLE");
 
         if(input_ != "")
@@ -90,7 +103,7 @@ void CreateBackdrop()
         auto back = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(back);
         
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.color = { 0, 0, 0, 1 };
         sprite.size = { 200, 200 };
         sprite.scale = { 10, 1 };
@@ -101,7 +114,7 @@ void CreateBackdrop()
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Background");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Background");
         sprite.position.z = 10;
     }
 
@@ -112,7 +125,7 @@ void CreateBackdrop()
         parallax.lastCameraPosition = camera->position;
         parallax.strength = 0.5f;
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Grass");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Grass");
         sprite.position = { 0, -25, 5 };
     }
 
@@ -123,7 +136,7 @@ void CreateBackdrop()
         parallax.lastCameraPosition = camera->position;
         parallax.strength = 0.25f;
 
-        AssignSpriteTexture(sprite, "souls_like_knight_character:BACKGROUND:Tree");
+        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Tree");
         sprite.position = { 0, 30, 7 };
     }
 }
@@ -133,10 +146,10 @@ void Platformer::WorldSetup(Engine& engine_)
     SetCamera();
     CreateBackdrop();
 
-    auto mainChar = Character::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = Character::Create("ASDW", { 1, 1, 1 }, { -100, 0 }, 0);
     Engine::Registry().emplace<CameraFollowFocus>(mainChar.entity);
 
-    auto sndChar = Character::Create("Arrows", { 1, 0, 0 }, { 100, 0 });
+    auto sndChar = Character::Create("Arrows", { 1, 0, 0 }, { 100, 0 }, 1);
     Engine::Registry().emplace<CameraFollowFocus>(sndChar.entity);
 }
 

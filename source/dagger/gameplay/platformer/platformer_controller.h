@@ -3,6 +3,7 @@
 #include "core/core.h"
 #include "core/system.h"
 #include "core/graphics/sprite.h"
+#include "gameplay/platformer/character_controller_fsm.h"
 
 using namespace dagger;
 
@@ -10,11 +11,20 @@ namespace platformer
 {
 	struct PlatformerCharacter
 	{
-		bool isRolling{ false };
-		bool isJumping{ false };
-		bool reachedMax{ false };
-		bool turningDuringJump{ false };
-		bool runningJump{ false };
+		UInt8 id{ 0 };
+
+		Bool isRolling{ false };
+		Bool isJumping{ false };
+		Bool reachedMax{ false };
+		Bool turningDuringJump{ false };
+		Bool runningJump{ false };
+
+		Bool canGoRight{ true };
+		Bool canGoLeft{ true };
+		Bool canGoUp{ true };
+		Bool canGoDown{ true };
+
+		Float32 currentElevation{ 0.0f };
 
 		Float32 rollingSpeed{ 25.0f };
 		Float32 rollingTime{ 0.75f };
@@ -29,16 +39,14 @@ namespace platformer
 	class PlatformerControllerSystem
 		: public System
 	{
-		void OnInitialize(Registry& registry_, Entity entity_);
+		CharacterControllerFSM characterFSM;
 
 	public:
 		String SystemName() override {
 			return "Character Controller System";
 		}
 
-		void SpinUp() override;
 		void Run() override;
-		void WindDown() override;
 	};
 
 	Float32 CalculateVerticalSpeed(Float32 speed_, Float32 acceleration_, Float32 time_);
