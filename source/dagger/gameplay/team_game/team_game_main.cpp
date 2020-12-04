@@ -131,7 +131,7 @@ void lab::SetupWorld(Engine &engine_)
 
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
    
-    auto view = Engine::Registry().view<Tilemap>();
+    auto& view = Engine::Res<Tilemap>()["tilemaps/lab/lab.map"]->tiles;
     Engine::Registry().destroy(view.begin(),view.end());
 
 
