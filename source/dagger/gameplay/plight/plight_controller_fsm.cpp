@@ -74,8 +74,6 @@ void PlightCharacterControllerFSM::Running::Enter(PlightCharacterControllerFSM::
     Float32 dx = character.speed * cos(crosshair.angle) * Engine::DeltaTime() * character.firstMoveInput;
     Float32 dy = character.speed * sin(crosshair.angle) * Engine::DeltaTime() * character.firstMoveInput;
 
-    sprite.position.x += dx;
-    sprite.position.y += dy;
     transform.position.x += dx;
     transform.position.y += dy;
 
@@ -115,8 +113,6 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
         Float32 dx = character.speed * cos(crosshair.angle) * Engine::DeltaTime() * move;
         Float32 dy = character.speed * sin(crosshair.angle) * Engine::DeltaTime() * move;
 
-        sprite.position.x += dx;
-        sprite.position.y += dy;
         transform.position.x += dx;
         transform.position.y += dy;
 
