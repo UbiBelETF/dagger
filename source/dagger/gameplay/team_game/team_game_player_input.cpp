@@ -20,7 +20,7 @@ void TeamGamePlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     if (kEvent_.key == nextLevelKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
     {
-        if (GameManagerSystem::currentLevel < GameManagerSystem::playerPositionsPerLevel.size())
+        if (GameManagerSystem::GetCurrentLevel() < GameManagerSystem::GetPlayerPositionsPerLevel().size())
         {
             triggeredTransition = true;
         }
@@ -31,7 +31,7 @@ void TeamGamePlayerInputSystem::Run()
 {
     if (triggeredTransition)
     {
-        GameManagerSystem::completedObjective = true;
+        GameManagerSystem::IsObjectiveCompleted() = true;
         triggeredTransition = false;
     }
 }

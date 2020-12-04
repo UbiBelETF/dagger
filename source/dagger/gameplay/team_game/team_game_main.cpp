@@ -44,7 +44,7 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
 
     while (fin >> playerPos.x >> playerPos.y >> playerPos.z)
     {
-        GameManagerSystem::playerPositionsPerLevel.push_back(playerPos);
+        GameManagerSystem::GetPlayerPositionsPerLevel().push_back(playerPos);
     }
 }
 
@@ -55,7 +55,7 @@ void team_game::SetupWorld(Engine& engine_)
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
-        sprite.position = GameManagerSystem::playerPositionsPerLevel[GameManagerSystem::currentLevel-1];
+        sprite.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
 
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
