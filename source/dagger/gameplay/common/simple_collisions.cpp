@@ -31,6 +31,14 @@ void SimpleCollisionsSystem::Run()
                 col.colided = true;
                 col.colidedWith = *it;
             }
+            else
+            {
+                collision.colided = false;
+                collision.colidedWith = entt::null;
+
+                col.colided = false;
+                col.colidedWith = entt::null;
+            }
             it2++;
         }
         it++;

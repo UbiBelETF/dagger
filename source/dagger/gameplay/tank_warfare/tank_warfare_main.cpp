@@ -11,6 +11,7 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/tank_warfare/tank_controller.h"
+#include "gameplay/tank_warfare/tank_collision.h"
 
 using namespace dagger;
 using namespace tank_warfare;
@@ -19,6 +20,7 @@ void TankWarfare::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<TankControllerSystem>();
+    engine_.AddSystem<TankCollisionSystem>();
 }
 
 void TankWarfare::WorldSetup(Engine &engine_)
@@ -66,19 +68,32 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSprite(sprite, fmt::format("jovanovici:tile_map:tile_grass{}", 1 + (rand() % 3)));
-            sprite.position = { i * 48, j * 48, 2 };
+            sprite.position = { i * 48, j * 48, 5 };
         }
     }
+
+    //building
+    auto entity1 = reg.create();
+    auto& sprite1 = reg.emplace<Sprite>(entity1);
+    auto& transform1 = reg.emplace<Transform>(entity1);
+    auto& col1 = reg.emplace<SimpleCollision>(entity1);
+    AssignSprite(sprite1, "jovanovici:building:building3c");
+    transform1.position = { 100, 0, 2 };
+    col1.size = sprite1.size;
+    col1.size.x -= 10;
+    col1.size.y -= 20;
     
     //tank1
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
     auto& anim = reg.emplace<Animator>(entity);
     auto& transform = reg.emplace<Transform>(entity);
+    auto& collision = reg.emplace<SimpleCollision>(entity);
     auto& input = reg.emplace<InputReceiver>(entity);
     auto& tank = reg.emplace<TankCharacter>(entity);
-    sprite.scale = { 1, 1 };
-    sprite.position = { 0, 0, 1 };
+    sprite.scale = { -1, 1 };
+    transform.position = { 35, 0, 1 };
+    collision.size = sprite.size;
     input.contexts.push_back("tank1");
     AssignSprite(sprite, "jovanovici:tank:tank3_side");
 
