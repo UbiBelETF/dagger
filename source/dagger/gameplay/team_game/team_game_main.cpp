@@ -31,9 +31,9 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 void SetCameraTeam()
 {
     auto* camera = Engine::GetDefaultResource<Camera>();
-    camera->mode = ECameraMode::FixedResolution;
+    camera->mode = ECameraMode::ShowAsMuchAsPossible;
     camera->size = { 1920, 1080 };
-    camera->zoom = 1.2;
+    camera->zoom = 1.2f;
     camera->position = { 300,300, 0 };
     camera->Update();
 }

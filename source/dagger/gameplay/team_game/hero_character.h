@@ -13,6 +13,8 @@
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
 
+using namespace team_game;
+
 struct MainCharacter
 {
     Entity entity;

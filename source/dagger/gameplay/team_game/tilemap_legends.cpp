@@ -12,15 +12,42 @@
 #include "core/graphics/animations.h"
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
+
 const int scale = 3;
 const int x_step = 16 *scale;
 const int y_step = 16 * scale;
 using namespace team_game;
+
+
+// You need to learn a lot about abstraction. You have so much repetition in this one file that it's basically
+// sure to get rejected in any serious project. So let's learn.
+
+// Here we make a function that returns a function. You basically look at all the CreateFloor, CreateDoor etc.
+// functions below and think "what is DIFFERENT about all of these SAME functions?" and pull that out.
+// Here, we can see that it's sprite kind and depth, mostly, so we do that.
+std::function<Entity(Registry&, UInt32, UInt32, char)> MakeSpriteEntity(String spriteKind_, UInt32 depth_)
+{
+	return [spriteKind_, depth_](Registry& reg_, UInt32 x_, UInt32 y_, char type_)
+	{
+		Entity entity = reg_.create();
+		auto& sprite = reg_.emplace<Sprite>(entity);
+		sprite.scale = { scale,scale };
+		sprite.position = { x_ * x_step, y_ * y_step, depth_ };
+		AssignSprite(sprite, spriteKind_);
+		return entity;
+	};
+}
+
 Tilemap_legends::Tilemap_legends() {
 	TilemapLegend floors;
 	TilemapLegend creatures;
 	TilemapLegend objects;
-	floors['.'] = &CreateFloor;
+
+	// Now we use that instead of writing 50 functions...
+	floors['.'] = MakeSpriteEntity("spritesheets:tiles_dungeon:floor_1", 1000);
+	objects['~'] = MakeSpriteEntity("spritesheets:tiles_dungeon:door_horizontal", 40);
+	objects['/'] = MakeSpriteEntity("spritesheets:tiles_dungeon:door_vertical", 40);
+
 	floors['='] = &CreateWall;
 	floors['|'] = &CreateWall;
 	floors['1'] = &CreateWall;
@@ -32,8 +59,6 @@ Tilemap_legends::Tilemap_legends() {
 	objects['c'] = &CreateChest;
 	objects['p'] = &CreatePot;
 	objects['t'] = &CreateCrate;
-	objects['~'] = &CreateDoorHorizontal;
-	objects['/'] = &CreateDoorVertical;
 	wall_type['='] = "wall_2";
 	wall_type['|'] = "wall_11";
 	wall_type['1'] = "wall_7";
@@ -45,14 +70,9 @@ Tilemap_legends::Tilemap_legends() {
 	legends["objects"] = objects;
 }
 
-Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
-	Entity entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 1000 };
-	AssignSprite(sprite, "spritesheets:tiles_dungeon:floor_1");
-	return entity;
-}
+// We don't need 70% of these, and even those we do need can be made shorter 
+// because you return the entity, so you can just do some extra steps.
+
 Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Map<Char, String>walls;
 	Entity entity = reg_.create();
@@ -62,6 +82,7 @@ Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:"+wall_type.at(type));
 	return entity;
 }
+
 Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
