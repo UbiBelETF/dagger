@@ -23,7 +23,7 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<GameManagerSystem>();
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
-    engine_.AddSystem<TeamGamePlayerInputSystem>();
+    //engine_.AddSystem<TeamGamePlayerInputSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
