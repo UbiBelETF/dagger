@@ -20,7 +20,10 @@ void TeamGamePlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 {
     if (kEvent_.key == nextLevelKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
     {
-        triggeredTransition = true;
+        if (GameManagerSystem::currentLevel < GameManagerSystem::playerPositionsPerLevel.size())
+        {
+            triggeredTransition = true;
+        }
     }
 }
 

@@ -71,10 +71,9 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
             {
                 auto block = reg.create();
                 auto& spriteBlock = reg.get_or_emplace<Sprite>(block);
-                auto& componentOfLevel = reg.get_or_emplace<ComponentOfLevel>(block);
 
                 String rootDir = "TeamGame:";
-                AssignSpriteTexture(spriteBlock, rootDir + baseDir + ":" + textureName);
+                AssignSprite(spriteBlock, rootDir + baseDir + ":" + textureName);
                 spriteBlock.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
                                          j * spriteSize.y + spriteSize.y / 2 + pos.y,
                                          zPos };
@@ -98,8 +97,8 @@ void GameManagerSystem::OnEndOfFrame()
     if (completedObjective)
     {
         Engine::Registry().clear();
-        team_game::SetupWorld(Engine::Instance());
 
         LoadNextLevel();
+        team_game::SetupWorld(Engine::Instance());
     }
 }

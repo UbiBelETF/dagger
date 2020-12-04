@@ -11,25 +11,19 @@
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
 
-<<<<<<< HEAD
 #include "gameplay/team_game/game_manager.h"
-#include "gameplay/team_game/team_game_player_input.h"
-=======
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/character_controller.h"
->>>>>>> team/delta_snakes/main
+#include "gameplay/team_game/team_game_player_input.h"
 
 using namespace dagger;
 
 void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-<<<<<<< HEAD
     engine_.AddSystem<GameManagerSystem>();
-    engine_.AddSystem<TeamGamePlayerInputSystem>();
-=======
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
->>>>>>> team/delta_snakes/main
+    engine_.AddSystem<TeamGamePlayerInputSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
@@ -43,20 +37,25 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    team_game::SetupWorld(engine_);
+    String filePath = "levels/player_positions.txt";
+    FilePath path{ filePath };
+    std::ifstream fin(Files::absolute(path).string().c_str());
+    Vector3 playerPos;
+
+    while (fin >> playerPos.x >> playerPos.y >> playerPos.z)
+    {
+        GameManagerSystem::playerPositionsPerLevel.push_back(playerPos);
+    }
 }
 
 void team_game::SetupWorld(Engine& engine_)
 {
     auto& reg = engine_.Registry();
-
     {
-
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "logos:dagger");
-        float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 100 / ratio, 100  };
+        AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
+        sprite.position = GameManagerSystem::playerPositionsPerLevel[GameManagerSystem::currentLevel-1];
 
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
