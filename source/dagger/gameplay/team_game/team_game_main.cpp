@@ -55,6 +55,7 @@ struct Player
     Animator& animator;
     InputReceiver& input;
     Transform& transform;
+    NextLvl& currentLvl;
     PlayerCharacter& character;
 
     static Player Get(Entity entity)
@@ -64,8 +65,9 @@ struct Player
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& transform = reg.get_or_emplace<Transform>(entity);
+        auto& currentLvl = reg.get_or_emplace<NextLvl>(entity);
         auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
-        return Player{ entity, sprite, anim, input,transform, character };
+        return Player{ entity, sprite, anim, input,transform,currentLvl, character };
     }
 
     static Player Create(
@@ -92,6 +94,7 @@ struct Player
             chr.input.contexts.push_back(input_);
 
         chr.character.speed = 50;
+        chr.currentLvl.id=0;
 
         return chr;
     }
@@ -103,16 +106,6 @@ void lab::SetupWorld(Engine &engine_)
     auto& reg = engine_.Registry();
        Vector2 scale(1, 1);
 
-
-    // field
-    constexpr int screenWidth = 800;
-    constexpr int screenHeight = 600;
-
-    constexpr int height = 20;
-    constexpr int width = 26;
-    constexpr float tileSize = 20.f;
-
-    float zPos = 1.f;
 
     TilemapLegend legend;
     legend['#'] = &CreateWallTop;
@@ -129,14 +122,10 @@ void lab::SetupWorld(Engine &engine_)
     legend['W'] = &CreateWallBottom6;
     legend['8'] = &Hall; //next room
 
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
-   
-    auto& view = Engine::Res<Tilemap>()["tilemaps/lab/lab.map"]->tiles;
-    Engine::Registry().destroy(view.begin(),view.end());
-
-
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
-    //Engine::Registry().destroy(mainChar.entity);
+     //Engine::Registry().destroy(mainChar.entity);
+
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
 
 }
 

@@ -2,6 +2,7 @@
 
 #include "core/core.h"
 #include "core/system.h"
+#include "tile.h"
 
 
 

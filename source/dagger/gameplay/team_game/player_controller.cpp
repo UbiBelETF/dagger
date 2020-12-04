@@ -1,5 +1,6 @@
 #include "player_controller.h"
 #include "shoot.h"
+#include "tilemap_entities.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -94,22 +95,22 @@ void PlayerControllerSystem::Run()
 
 
         });
-            auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
-            auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
-            for (auto entity : view)
+        auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
+        auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
+        for (auto entity : view)
+        {
+            auto &t = view.get<Transform>(entity);
+            auto &player = view.get<PlayerCharacter>(entity);
+            auto &col = view.get<SimpleCollision>(entity);
+
+            if (col.colided)
             {
-                auto &t = view.get<Transform>(entity);
-                auto &player = view.get<PlayerCharacter>(entity);
-                auto &col = view.get<SimpleCollision>(entity);
-
-                if (col.colided)
+                if (Engine::Registry().valid(col.colidedWith))
                 {
-                    if (Engine::Registry().valid(col.colidedWith))
-                    {
-                        SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
-                        Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
+                    SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
+                    Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
 
-                        Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
+                    Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
 
                     do
                     {
@@ -139,10 +140,32 @@ void PlayerControllerSystem::Run()
                         if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
                         {
                             lab::NextLvl& lvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
+
                             
                             if(lvl.id==1)
                             {
-                                printf("its working");//Placeholder for future level transition
+                                auto& view = Engine::Res<Tilemap>()["tilemaps/lab/lab.map"]->tiles;
+                                Engine::Registry().destroy(view.begin(),view.end());
+                                t.position = {  -100, 0 , 0.0f };
+                                
+                                
+                                TilemapLegend first;
+                                first['#'] = &CreateWallTop;
+                                first['='] = &CreateWallUpPart;
+                                first['-'] = &CreateWallDownPart;
+                                first['.'] = &CreateFloor;
+                                first['|'] = &CreateSideWallRight;  
+                                first[':'] = &CreateSideWallLeft;
+                                first['1'] = &CreateWall1;
+                                first['3'] = &CreateWall3;
+                                first['0'] = &Empty;
+                                first['F'] = &Door;
+                                first['Q'] = &CreateWallBottom1;
+                                first['W'] = &CreateWallBottom6;
+                                first['8'] = &Hall;
+                                first['Z'] = &CreateBlankWall;
+                                
+                                Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/hallway.map", &first});
                             }
                 
                         }

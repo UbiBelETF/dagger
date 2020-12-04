@@ -68,7 +68,7 @@ sources = [
 'source/dagger/tools/toolmenu.cpp',
 'source/dagger/tools/console.cpp',
 'source/dagger/gameplay/team_game/shoot.cpp',
-
+'source/dagger/gameplay/team_game/tilemap_entities.cpp',
 
 
 
