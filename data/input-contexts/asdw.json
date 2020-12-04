@@ -1,10 +1,15 @@
 {
 	"context-name": "ASDW",
 	"commands": [
-		{ "command-name": "run", 
+		{ "command-name": "run-left-right", 
 		  "actions": [
 			{ "trigger": "KeyA", "value": -1 },
 			{ "trigger": "KeyD", "value": 1 } 
+		] }, 
+		{ "command-name": "run-up-down", 
+		  "actions": [
+			{ "trigger": "KeyS", "value": -1 },
+			{ "trigger": "KeyW", "value": 1 } 
 		] }, 
 		{ "command-name": "jump", "trigger": "KeyW" },
 		{ "command-name": "down", "trigger": "KeyS" },
