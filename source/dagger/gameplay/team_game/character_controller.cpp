@@ -2,11 +2,14 @@
 
 #include "core/engine.h"
 #include "core/input/inputs.h"
-#include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animations.h"
 
+#include "gameplay/team_game/movement.h"
+
 #include <glm/gtc/epsilon.hpp>
+
+using namespace team_game;
 
 void CharacterControllerSystem::Run()
 {
@@ -46,7 +49,7 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 	auto& ctrl = Engine::Registry().get<CharacterController>(state_.entity);
 	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
 	auto& sprite = Engine::Registry().get<Sprite>(state_.entity);
-	auto& transform = Engine::Registry().get<Transform>(state_.entity);
+	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
 
 	float runX = input.Get("horizontalRun");
 	float runY = input.Get("verticalRun");
@@ -67,9 +70,7 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 		sprite.scale.x = -3;
 	}
 
-	Vector2 xy = glm::normalize(Vector2{ runX, runY }) * ctrl.speed * Engine::DeltaTime();
-	transform.position.x += xy.x;
-	transform.position.y += xy.y;
+	body.movement = glm::normalize(Vector2{ runX, runY }) * ctrl.speed * Engine::DeltaTime();
 }
 
 DEFAULT_EXIT(CharacterFSM, Running);

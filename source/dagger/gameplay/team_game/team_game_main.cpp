@@ -14,6 +14,7 @@
 
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/camera.h"
+#include "gameplay/team_game/movement.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -23,6 +24,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<CameraSystem>();
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<MovementSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -77,7 +79,9 @@ void SetupWorldJovica(Engine& engine_)
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThemInput");
 
-        auto& playerController = reg.emplace<CharacterController>(player);
+        reg.emplace<CharacterController>(player);
+
+        reg.emplace<MovableBody>(player);
     }
 }
 
