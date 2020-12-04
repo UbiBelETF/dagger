@@ -3,3 +3,6 @@ Platforms PlatformSmallWhole 4.0 96.0 30.0 -150.0 -75.0 1 1
 Platforms PlatformSmallWhole 4.0 128.0 30.0 -304.0 25.0 1 1
 Platforms PlatformSmallLeft 4.0 96.0 30.0 -400.0 100 1 1
 Platforms PlatformLarge 4.0 190.5 30.0 209.5 100 1 1
+
+TERRAIN BricksLower 4.0 380.0 150.8 -400.0 -300.0 4 1
+TERRAIN BricksTop 4.0 285.0 150.8 -400.0 225.0 5 1
