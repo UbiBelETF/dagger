@@ -52,7 +52,7 @@ void BigLaserSystem::Run()
 			laser.remainingCooldown = 2;
 
 			auto& sprite = view.get<Sprite>(entity);
-			AssignSpriteTexture(sprite, "Racing:laser-long");
+			AssignSprite(sprite, "Racing:laser-long");
 			float ratio = sprite.size.y / sprite.size.x;
 			sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
 
@@ -65,7 +65,7 @@ void BigLaserSystem::Run()
 			laser.remainingCooldown -= Engine::DeltaTime();
 
 			auto& sprite = view.get<Sprite>(entity);
-			AssignSpriteTexture(sprite, "Racing:laser-long-off");
+			AssignSprite(sprite, "Racing:laser-long-off");
 			float ratio = sprite.size.y / sprite.size.x;
 			sprite.size = { 2 * TileSize, 5 * TileSize * ratio };
 
@@ -86,7 +86,7 @@ void BigLaserSystem::Run()
 			col.colided = false;
 			Engine::Registry().remove<RacingSimpleCollision>(col.colidedWith);
 			auto& sprite = Engine::Registry().get<Sprite>(col.colidedWith);
-			AssignSpriteTexture(sprite, "Racing:police-car-bmw-z4-exploded");
+			AssignSprite(sprite, "Racing:police-car-bmw-z4-exploded");
 			float ratio = sprite.size.y / sprite.size.x;
 			sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
 			sprite.scale.y = -1;

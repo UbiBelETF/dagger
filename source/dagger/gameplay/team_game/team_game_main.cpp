@@ -15,18 +15,17 @@
 #include "tools/diagnostics.h"
 
 #include "gameplay/team_game/team_game_collisions.h"
-#include "gameplay/team_game/team_game_controller.h"
+#include "gameplay/team_game/character_controller.h"
 
 using namespace dagger;
-using namespace team_game;
 
-void TeamGame::GameplaySystemsSetup(Engine &engine_)
+void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<PlatformerControllerSystem>();
+    engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<PlatformerCollisionSystem>();
 }
 
-void TeamGame::WorldSetup(Engine &engine_)
+void team_game::TeamGame::WorldSetup(Engine &engine_)
 {
     ShaderSystem::Use("standard");
 
@@ -40,29 +39,27 @@ void TeamGame::WorldSetup(Engine &engine_)
     team_game::SetupWorld(engine_);
 }
 
-void team_game::SetupWorld(Engine &engine_)
+void team_game::SetupWorld(Engine& engine_)
 {
     auto& reg = engine_.Registry();
-
-    float zPos = 1.f;
 
     //Black Backdrop
     {
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.color = { 0, 0, 0, 1 };
         sprite.size = { 1000, 1000 };
         sprite.scale = { 10, 1 };
         sprite.position = { 0, -125, 10 };
     }
-    
+
     {//First Character
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.size = { 20, 40 };
-        sprite.position = { -100, 40, 5 };
+        sprite.position = { -100, 20, 5 };
 
         auto& transform = reg.get_or_emplace<Transform>(entity);
         transform.position = sprite.position;
@@ -75,17 +72,20 @@ void team_game::SetupWorld(Engine &engine_)
         auto& controller = reg.get_or_emplace<PlatformerCharacter>(entity);
         controller.speed = 50;
 
+        auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
+        character.speed = 50;
+
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        String inputContext = "ASDW";
-        input.contexts.push_back(inputContext);
+        input.contexts.push_back("Controls");
+        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
     }
 
     {//Second Character
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.size = { 20, 40 };
-        sprite.position = { 100, 40, 5 };
+        sprite.position = { 100, 20, 5 };
 
         auto& transform = reg.get_or_emplace<Transform>(entity);
         transform.position = sprite.position;
@@ -98,17 +98,20 @@ void team_game::SetupWorld(Engine &engine_)
         auto& controller = reg.get_or_emplace<PlatformerCharacter>(entity);
         controller.speed = 50;
 
+        auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
+        character.speed = 50;
+
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        String inputContext = "Arrows";
-        input.contexts.push_back(inputContext);
+        input.contexts.push_back("Controls");
+        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
     }
 
     {//Platform they stand on
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "EmptyWhitePixel");
+        AssignSprite(sprite, "EmptyWhitePixel");
         sprite.size = { 1000, 20 };
-        sprite.position = { 0, 0, 5 };
+        sprite.position = { 0, -10, 5 };
 
         auto& transform = reg.get_or_emplace<Transform>(entity);
         transform.position = sprite.position;
@@ -119,5 +122,21 @@ void team_game::SetupWorld(Engine &engine_)
         collision.state = MovementState::IMMOBILE;
 
         auto& controller = reg.get_or_emplace<PlatformerCharacter>(entity);
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "logos:dagger");
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 100 / ratio, 100  };
+        sprite.position = { 0, 50, 5 };
+
+        auto& input = reg.emplace<InputReceiver>(entity);
+        input.contexts.push_back("Controls");
+
+        auto& character = reg.emplace<PlayerCharacter>(entity);
+        character.speed = 50;
+        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
     }
 }
