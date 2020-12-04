@@ -10,16 +10,17 @@
 #include "core/game/transforms.h"
 
 #include "gameplay/common/simple_collisions.h"
+#include "gameplay/team_game/character_controller.h"
 
 using namespace dagger;
-using namespace team_game;
 
-void TeamGame::GameplaySystemsSetup(Engine &engine_)
+void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<CharacterControllerSystem>();
 }
 
-void TeamGame::WorldSetup(Engine &engine_)
+void team_game::TeamGame::WorldSetup(Engine &engine_)
 {
     ShaderSystem::Use("standard");
 
@@ -37,19 +38,19 @@ void team_game::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
-    float zPos = 1.f;
-
     {
+
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSpriteTexture(sprite, "logos:dagger");
+        AssignSprite(sprite, "logos:dagger");
         float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 500 / ratio, 500  };
+        sprite.size = { 100 / ratio, 100  };
 
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position = { 0, 0, zPos };
+        auto& input = reg.emplace<InputReceiver>(entity);
+        input.contexts.push_back("Controls");
 
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.size;
+        auto& character = reg.emplace<PlayerCharacter>(entity);
+        character.speed = 50;
+        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
     }
 }
