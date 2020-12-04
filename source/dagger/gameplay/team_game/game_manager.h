@@ -32,17 +32,17 @@ namespace team_game
         void LoadPlatforms();
         void LoadTraps();
 
-        static inline Sequence<Vector3>& GetPlayerPositionsPerLevel()
+        inline static Sequence<Vector3>& GetPlayerPositionsPerLevel()
         {
             return playerPositionsPerLevel;
         }
 
-        static inline UInt8 GetCurrentLevel()
+        inline static UInt8 GetCurrentLevel()
         {
             return currentLevel;
         }
 
-        static inline Bool& IsObjectiveCompleted()
+        inline static Bool& IsObjectiveCompleted()
         {
             return completedObjective;
         }
