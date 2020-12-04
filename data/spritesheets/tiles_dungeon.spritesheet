@@ -91,6 +91,10 @@ torch_anim 0 240 16 32 4
 torch_mounted_anim 0 272 16 32 4
 chest 224 256 16 16
 chest_opened 240 256 16 16
+pot 256 256 16 16
+pot_damaged 272 256 16 16
+crate 272 272 16 32
+crate_damaged 288 172 16 32
 door_horizontal 224 176 16 16
 door_vertical  240 160 16 32
 rubble_big 112 192 32 32
