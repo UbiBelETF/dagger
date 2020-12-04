@@ -1,6 +1,4 @@
-#include "gameplay/team_game/team_game_main.h"
-#include "gameplay/team_game/hero_controller.h"
-
+#pragma once
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
@@ -12,22 +10,8 @@
 #include "core/graphics/sprite_render.h"
 #include "core/graphics/textures.h"
 #include "core/graphics/animations.h"
-#include "core/graphics/gui.h"
-#include "tools/diagnostics.h"
-#include "core/graphics/text.h"
-#include "tilemap_system.h"
-#include "tilemap_legends.h"
-
-using namespace dagger;
-using namespace team_game;
-
-
-void TeamGame::GameplaySystemsSetup(Engine &engine_)
-{
-    engine_.AddSystem<TilemapSystem>();
-    engine_.AddSystem<TeamGameControllerSystem>();
-    
-}
+#include "gameplay/team_game/team_game_main.h"
+#include "gameplay/team_game/hero_controller.h"
 
 struct MainCharacter
 {
@@ -73,28 +57,3 @@ struct MainCharacter
         return chr;
     }
 };
-
-void TeamGame::WorldSetup(Engine &engine_)
-{
-    //TODO: Setup world
-    auto mainChar = MainCharacter::Create("ASDW", { 1, 1, 1 }, { 0, 0 });
-    auto& reg = Engine::Registry();
-
-
-    Tilemap_legends tilemap_legends;
-    
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/floor_level_1.map", &tilemap_legends.legends.at("floors") });
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/objects_level_1.map",&tilemap_legends.legends.at("objects") });
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/creatures_level_1.map", &tilemap_legends.legends.at("creatures") });
-    auto ui = reg.create();
-    auto& text = reg.emplace<Text>(ui);
-    text.spacing = 0.6f;
-    text.Set("pixel-font", "hello world");
-
-    team_game::SetupWorld(engine_);
-}
-
-void team_game::SetupWorld(Engine &engine_)
-{
-   
-}

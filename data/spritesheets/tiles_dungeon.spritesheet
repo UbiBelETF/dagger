@@ -65,7 +65,7 @@ floor_9_alt 0 96 16 16
 floor_10_alt 16 96 16 16
 floor_11_alt 32 96 16 16
 floor_12_alt 48 96 16 16
-wall_1 0 128 16 16
+wall_1 16 128 16 16
 wall_2 16 128 16 16
 wall_3 32 128 16 16
 wall_4 48 128 16 16

@@ -17,7 +17,6 @@ namespace team_game
         {
             return "teamgame.ini";
         };
-
         void GameplaySystemsSetup(Engine& engine_) override;
         void WorldSetup(Engine& engine_) override;
     };
