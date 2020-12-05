@@ -25,40 +25,6 @@ void team_game::CollisionSystem::Run()
         auto& t = view.get<Transform>(entity);
         auto& col = view.get<SimpleCollision>(entity);
         auto& physics = view.get<Physics>(entity);
-        UINT32 attempts = 0;
-        /*if (col.colided) {
-            if (Engine::Registry().valid(col.colidedWith))
-            {
-                SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
-                Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
-                Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
-
-                do
-                {
-                    // get back for 1 frame
-                    Float32 dt = Engine::DeltaTime();
-                    if (std::abs(collisionSides.x) > 0)
-                    {
-                        t.position.x -= (physics.velocity.x * dt);
-                    }
-
-                    if (std::abs(collisionSides.y) > 0)
-                    {
-                        t.position.y -= (physics.velocity.y * dt);
-                    }
-                } while (col.IsCollided(t.position, collision, transform.position));
-                if (std::abs(collisionSides.x) > 0)
-                {
-                    physics.velocity.x =0;
-                }
-
-                if (std::abs(collisionSides.y) > 0)
-                {
-                    physics.velocity.y = 0;
-                }
-            }
-            col.colided = false;
-        }*/
         for (auto entity2 : viewCollisions)
         {
             if (entity2 != entity)
