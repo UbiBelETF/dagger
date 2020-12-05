@@ -1,10 +1,13 @@
 #include "enemy.h"
 #include "shoot.h"
 
+#include "core/graphics/animation.h"
+#include "core/input/inputs.h"
 #include "core/engine.h"
 #include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
 #include "gameplay/common/simple_collisions.h"
+#include "gameplay/team_game/player_controller.h"
 
 
 void lab::EnemySystem::Run()
@@ -38,6 +41,23 @@ void lab::EnemySystem::Run()
 				}
 			}
 		}
+
+		if (bandit.cooldown <= 0)
+		{
+			auto view3 = reg.view<Sprite, Animator, InputReceiver, Transform, PlayerCharacter, SimpleCollision>();
+			Vector2 playerPosition;
+			for (auto entity : view3)
+			{
+				auto playerTransform = view3.get<Transform>(entity);
+				playerPosition = playerTransform.position;
+				playerPosition.y *= -1;
+			}
+			CreateBullet(t.position, playerPosition);
+
+			bandit.cooldown = bandit.maxCooldown;
+		}
+		else
+			bandit.cooldown--;
 
 	}
 }
