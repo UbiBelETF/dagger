@@ -86,7 +86,7 @@ struct Player
         AssignSprite(chr.sprite, "main_character:idle:idle1");
         AnimatorPlay(chr.animator, "main_character:idle");
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = {chr.sprite.size.x/2,chr.sprite.size.y/2};
+        col.size = {chr.sprite.size.x/2, chr.sprite.size.y/2};
 
         chr.transform.position = chr.sprite.position;
 

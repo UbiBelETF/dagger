@@ -34,10 +34,9 @@ void lab::EnemySystem::Run()
 				if (entity == col.colidedWith)
 				{
 					Bullet bullet = view2.get<Bullet>(entity);
-					damage = bullet.damage;
+					bandit.health -= bullet.damage;
 				}
 			}
-			bandit.health -= damage;
 		}
 
 	}

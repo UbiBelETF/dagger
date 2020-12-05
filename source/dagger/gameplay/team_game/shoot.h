@@ -23,5 +23,6 @@ namespace lab
 		}
 		void Run() override;
 	};
-	void CreateBullet(Vector2 position, Float32 ratio, Vector2 directions);
+	void CreateBullet(Vector2 position, Vector2 target);
+
 }

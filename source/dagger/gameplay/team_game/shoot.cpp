@@ -12,12 +12,29 @@ using namespace dagger;
 
 using namespace lab;
 
-void lab::CreateBullet(Vector2 position, Float32 ratio, Vector2 directions)
+void lab::CreateBullet(Vector2 position, Vector2 target)
 {
 	auto& reg = Engine::Instance().Registry();
 
 	auto entity = reg.create();
 	auto& bullet = reg.emplace<Bullet>(entity);
+
+	Vector2 directions = { 1, 1 };
+	if (target.x < position.x)
+		directions.x = -1;
+	else if (target.x == position.x)
+		directions.x = 0;
+
+	if ((-1 * target.y) < position.y)
+		directions.y = -1;
+	else if ((-1 * target.y) == position.y)
+		directions.y = 0;
+
+	Float32 distanceX = target.x - position.x;
+	Float32 distanceY = (target.y * -1) - position.y;
+	Float32 ratio = distanceY / distanceX;
+	ratio *= (ratio > 0) ? 1 : -1;
+
 	Float32 speedXIntensity = sqrt((bullet.speed * bullet.speed) / (1 + ratio * ratio));
 	bullet.speedX = speedXIntensity * directions.x;
 	bullet.speedY = speedXIntensity * ratio * directions.y;
@@ -33,7 +50,8 @@ void lab::CreateBullet(Vector2 position, Float32 ratio, Vector2 directions)
 	transform.position.z = 0.0f;
 
 	auto& collision = reg.emplace<SimpleCollision>(entity);
-	collision.size = sprite.size;
+	collision.size.x = sprite.size.x / 2;
+	collision.size.y = sprite.size.y / 2;
 }
 
 void lab::ShootingSystem::Run()
