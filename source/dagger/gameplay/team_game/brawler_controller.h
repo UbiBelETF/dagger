@@ -1,14 +1,15 @@
 #pragma once
 #include "core/core.h"
 #include "core/system.h"
-
+#include "gameplay/team_game/controller_fsm.h"
+#include "gameplay/team_game/animations_fsm.h"
 using namespace dagger;
 
 namespace team_game
 {
 	struct BrawlerCharacter
 	{
-		int speed{ 1 };
+		Vector2 speed{ 1,50 };
 		bool double_jump{ false };
 		bool jump{ false };
 		bool attack{ false };
@@ -19,18 +20,14 @@ namespace team_game
 		Float32 fall_time{ 0 };
 	};
 
-	class BrawlerControllerSystem
-		: public System
+	class BrawlerControllerSystem : public System
 	{
-		void OnInitialize(Registry& registry_, Entity entity_);
-
+		ControllerFSM FSMcontroller;
+		AnimationsFSM FSManimator;
 	public:
 		String SystemName() override {
 			return "Controller System";
 		}
-
-		void SpinUp() override;
 		void Run() override;
-		void WindDown() override;
 	};
 }

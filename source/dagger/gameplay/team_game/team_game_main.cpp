@@ -21,12 +21,12 @@ using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<CameraFollowSystem>();
-    engine_.AddSystem<PhysicsSystem>();
-    engine_.AddSystem<BrawlerControllerSystem>();
-    engine_.AddSystem<SimpleCollisionsSystem>();
-    engine_.AddSystem<CollisionSystem>();
-    engine_.AddSystem<TransformSystem>();
+    engine_.AddPausableSystem<CameraFollowSystem>();
+    engine_.AddPausableSystem<PhysicsSystem>();
+    engine_.AddPausableSystem<BrawlerControllerSystem>();
+    engine_.AddPausableSystem<SimpleCollisionsSystem>();
+    engine_.AddPausableSystem<CollisionSystem>();
+    engine_.AddPausableSystem<TransformSystem>();
 }
 
 
@@ -67,6 +67,8 @@ struct Player
         auto& transform = reg.get_or_emplace<Transform>(entity);
         auto& physics = reg.get_or_emplace<Physics>(entity);
         auto& col=reg.get_or_emplace<SimpleCollision>(entity);
+        ATTACH_TO_FSM(ControllerFSM, entity);
+        ATTACH_TO_FSM(AnimationsFSM, entity);
         col.size.x = 5;
         col.size.y = 15;
         physics.Static = false;
@@ -95,7 +97,8 @@ struct Player
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
-        chr.character.speed = 50;
+        chr.character.speed.x = 100;
+        chr.character.speed.y = 250;
 
         return chr;
     }
@@ -118,7 +121,7 @@ void CreateBackground()
        
     }
 
-    // down
+    // down(ground) platfrom
     {
         auto entity = reg.create();
         auto& col = reg.emplace<SimpleCollision>(entity);
@@ -131,12 +134,12 @@ void CreateBackground()
         transform.position.z = 1;
     }
 
-    // left
+    // left wall
     {
         auto entity = reg.create();
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size.x = 100;
-        col.size.y = 200;
+        col.size.y = 500;
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position.x =-200;

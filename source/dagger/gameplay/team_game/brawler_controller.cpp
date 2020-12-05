@@ -13,51 +13,30 @@
 #include "gameplay/team_game/physics.h"
 using namespace team_game;
 
-void BrawlerControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
-{
-    InputReceiver& receiver = registry_.get<InputReceiver>(entity_);
-    for (auto command : { "run", "jump", "down", "heavy", "light", "use" })
-    {
-        receiver.values[command] = 0;
-    }
-}
-
-void BrawlerControllerSystem::SpinUp()
-{
-    Engine::Registry().on_construct<InputReceiver>().connect<&BrawlerControllerSystem::OnInitialize>(this);
-}
 
 void BrawlerControllerSystem::Run()
 {
+    Engine::Registry().view<ControllerFSM::StateComponent>()
+        .each([&](ControllerFSM::StateComponent& state_)
+            {
+                FSMcontroller.Run(state_);
+                auto& [astate_, physics_] = Engine::Registry().get<AnimationsFSM::StateComponent, Physics>(state_.entity);
+                switch (state_.currentState)
+                {
+                case CharacterStates::Idle: FSManimator.GoTo(AnimationsState::Idle, astate_); break;
+                case CharacterStates::Running: FSManimator.GoTo(AnimationsState::Running, astate_); break;
+                case CharacterStates::InAir: {
+                    if (physics_.velocity.y > 0) FSManimator.GoTo(AnimationsState::Jumping, astate_);
+                    else  FSManimator.GoTo(AnimationsState::Falling, astate_);
+                    break;
+                }
 
-    Engine::Registry().view<Physics,InputReceiver, Sprite, Animator, BrawlerCharacter>().each(
-        [](Physics& physics_,const InputReceiver input_, Sprite& sprite_, Animator& animator_, BrawlerCharacter& char_)
-        {
-
-            Float32 run = input_.values.at("run");
-            Float32 jump = input_.values.at("jump");
-           // Float32 attack = input_.values.at("light");
-
-            if (run != 0) {
-                sprite_.scale.x = run;
-                physics_.velocity.x += sprite_.scale.x* char_.speed;
-                char_.run = true;
-            }
-            if (char_.attack) AnimatorPlay(animator_, "character:ATTACK");
-            else if (char_.jump) AnimatorPlay(animator_, "character:JUMP");
-            else if (char_.fall) AnimatorPlay(animator_, "character:FALL");
-            else if (char_.run) AnimatorPlay(animator_, "character:RUN");
-            else AnimatorPlay(animator_, "character:IDLE");
-
-
-
-
-
-
-        });
-}
-
-void BrawlerControllerSystem::WindDown()
-{
-    Engine::Registry().on_construct<InputReceiver>().disconnect<&BrawlerControllerSystem::OnInitialize>(this);
+                }
+            });
+    //THIS IS LEFT FOR THE SOLUTION IF WE HAVE SOMETHING IN RUN FUNCTIONS OF THE STATES
+    /*Engine::Registry().view<AnimationsFSM::StateComponent>()
+        .each([&](AnimationsFSM::StateComponent& state_)
+            {
+                FSManimator.Run(state_);
+            });*/ 
 }

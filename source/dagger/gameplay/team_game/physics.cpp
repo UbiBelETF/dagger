@@ -12,7 +12,6 @@
 
 
 
-
 void team_game::PhysicsSystem::SpinUp()
 {
     Engine::Dispatcher().sink<NextFrame>().connect<&PhysicsSystem::OnEndOfFrame>(this);
@@ -25,7 +24,7 @@ void team_game::PhysicsSystem::Run()
     Engine::Registry().view< Physics>().each(
         [](Physics& physics_)
         {
-            if (!physics_.Static) physics_.velocity.y += -10 * Engine::DeltaTime();
+            if (!physics_.Static) physics_.velocity.y += team_game::gravity_acceleration*Engine::DeltaTime();
         });
 }
 

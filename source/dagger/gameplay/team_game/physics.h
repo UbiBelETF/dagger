@@ -9,8 +9,7 @@ namespace team_game {
         Vector2 velocity = { 0,0 };
         bool Static = false;
     };
-
-
+    static Float32 gravity_acceleration = -500;
     class PhysicsSystem : public System
     {
     public:
