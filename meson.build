@@ -69,6 +69,7 @@ sources = [
 'source/dagger/tools/console.cpp',
 'source/dagger/gameplay/team_game/shoot.cpp',
 'source/dagger/gameplay/platformer/character_controller_fsm.cpp',
+'source/dagger/gameplay/team_game/enemy.cpp',
 
 
 

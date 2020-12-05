@@ -134,25 +134,6 @@ void lab::SetupWorld(Engine &engine_)
     
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
 
-    float zPos = 1.f;
-
-    /*
-    {
-        
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "logos:dagger");
-        float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 500 / ratio, 500  };
-
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position = { 0, 0, zPos };
-
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = sprite.size;
-    } 
-
-    */
     
     for (int i = 0; i < 3; i++)
     {
