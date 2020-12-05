@@ -22,6 +22,7 @@
 
 #include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
+#include "gameplay/team_game/enemy.h"
 
 
 using namespace dagger;
@@ -31,6 +32,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PlayerControllerSystem>();
+    engine_.AddSystem<EnemySystem>();
     engine_.AddSystem<ShootingSystem>();
     engine_.AddPausableSystem<TransformSystem>();
 }
@@ -131,7 +133,49 @@ void lab::SetupWorld(Engine &engine_)
 
     
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
+
+    float zPos = 1.f;
+
+    /*
+    {
+        
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "logos:dagger");
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 500 / ratio, 500  };
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { 0, 0, zPos };
+
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size = sprite.size;
+    } 
+
+    */
     
+    for (int i = 0; i < 3; i++)
+    {
+        auto entity = reg.create();
+        auto& bandit = reg.emplace<Bandit>(entity);
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "Bandit");
+        sprite.scale = { 1, 1 };
+        if (i == 0)
+        sprite.position = { 100, 0, 0.0f };
+
+        if (i == 1)
+        sprite.position = { 100, 50, 0.0f };
+
+        if (i == 2)
+            sprite.position = { 100, -50, 0.0f };
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = sprite.position;
+
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size = { 0.5f, 10 };
+    }
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
 
