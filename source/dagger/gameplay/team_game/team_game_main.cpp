@@ -15,6 +15,7 @@
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
+#include "core/game/transforms.h"
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/player_controller.h"
@@ -33,6 +34,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlayerControllerSystem>();
     engine_.AddSystem<EnemySystem>();
     engine_.AddSystem<ShootingSystem>();
+    engine_.AddPausableSystem<TransformSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -54,6 +56,7 @@ struct Player
     Sprite& sprite;
     Animator& animator;
     InputReceiver& input;
+    Transform& transform;
     PlayerCharacter& character;
 
     static Player Get(Entity entity)
@@ -62,8 +65,9 @@ struct Player
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
+        auto& transform = reg.get_or_emplace<Transform>(entity);
         auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
-        return Player{ entity, sprite, anim, input, character };
+        return Player{ entity, sprite, anim, input,transform, character };
     }
 
     static Player Create(
@@ -82,7 +86,9 @@ struct Player
         AssignSprite(chr.sprite, "main_character:idle:idle1");
         AnimatorPlay(chr.animator, "main_character:idle");
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = chr.sprite.size;
+        col.size = {chr.sprite.size.x/2,chr.sprite.size.y/2};
+
+        chr.transform.position = chr.sprite.position;
 
         if(input_ != "")
             chr.input.contexts.push_back(input_);
@@ -97,6 +103,18 @@ struct Player
 void lab::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
+       Vector2 scale(1, 1);
+
+
+    // field
+    constexpr int screenWidth = 800;
+    constexpr int screenHeight = 600;
+
+    constexpr int height = 20;
+    constexpr int width = 26;
+    constexpr float tileSize = 20.f;
+
+    float zPos = 1.f;
 
     TilemapLegend legend;
     legend['#'] = &CreateWallTop;
@@ -107,6 +125,12 @@ void lab::SetupWorld(Engine &engine_)
     legend[':'] = &CreateSideWallLeft;
     legend['1'] = &CreateWall1;
     legend['3'] = &CreateWall3;
+    legend['0'] = &Empty;
+    legend['F'] = &Door;
+    legend['Q'] = &CreateWallBottom1;
+    legend['W'] = &CreateWallBottom6;
+    legend['8'] = &Hall; //next room
+
     
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend }); 
 
