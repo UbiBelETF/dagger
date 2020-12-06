@@ -23,6 +23,7 @@ enum class ECharacterState
 struct CharacterController : public FiniteStateComponent<ECharacterState>
 {
 	Vector2 userInput;
+	Vector4 shapeshiftInput;
 	ViewPtr<Transform> transform;
 	ViewPtr<Sprite> sprite;
 	ViewPtr<Animator> animator;
