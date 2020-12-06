@@ -122,7 +122,7 @@ namespace kosta {
         auto& sprite = reg_.emplace<Sprite>(entity);
         sprite.position = { x_ * 16, y_ * 16, 30 };
         AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_2");
-
+        auto& collision = reg_.emplace<SimpleCollision>(entity);
         return entity;
     }
 
@@ -210,21 +210,25 @@ void SetupWorldKosta(Engine& enigne_) {
        // legend['>'] = &kosta::CreateDoor;
         Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/kostaLevel.map", &legend });
         // PLAYER
-        auto player = reg.create();
+        {
+            auto player = reg.create();
 
-        auto& playerSprite = reg.emplace<Sprite>(player);
-        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+            auto& playerSprite = reg.emplace<Sprite>(player);
+            AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
 
-        auto& playerAnimator = reg.emplace<Animator>(player);
-        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
+            auto& playerAnimator = reg.emplace<Animator>(player);
+            AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
-        auto& playerTransform = reg.emplace<Transform>(player);
-        playerTransform.position = { 0, 0, zPos };
+            auto& playerTransform = reg.emplace<Transform>(player);
+            playerTransform.position = { 0, 0, zPos };
 
-        auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
-        playerInput.contexts.push_back("AmongThemInput");
+            auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
+            playerInput.contexts.push_back("AmongThemInput");
 
-        auto& playerController = reg.emplace<CharacterController>(player);
+            auto& playerController = reg.emplace<CharacterController>(player);
+
+            auto& collision = reg.emplace<SimpleCollision>(player);
+        }
     }
 }
 void team_game::SetupWorld(Engine &engine_)
