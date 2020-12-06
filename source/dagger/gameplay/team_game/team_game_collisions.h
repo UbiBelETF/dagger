@@ -22,12 +22,20 @@ namespace team_game
         CollisionSide collisionSide = CollisionSide::NONE, collisionSideOther = CollisionSide::NONE;
     };
 
-    struct PlatformerCollision
+    struct Collider
     {
         PlatformerCollisionID entityType = PlatformerCollisionID::PLAYER;//this is a placeholder and should be changed to not be automatically player
         MovementState state = MovementState::MOVEABLE;
+
         Vector2 size;
         Vector2 pivot{ -0.5f, -0.5f };
+
+        Bool hasGravity{ false };
+
+        Bool canGoRight{ true };
+        Bool canGoLeft{ true };
+        Bool canGoUp{ true };
+        Bool canGoDown{ true };
 
         std::vector<entt::entity> listOfEntities;//holds list of entities that this object collided with during this frame
         std::vector<CollisionSide> listOfCollisionSides;//holds the corresponding list of sides of collisions
@@ -36,7 +44,7 @@ namespace team_game
         // For player it would be: false, true, true, true, ???, false
         StaticArray<Bool, 6> collidesWith{ true, true, true, true, true, false };
 
-        CollisionInfo GetCollisionInfo(Vector3& pos_, const PlatformerCollision& other_, Vector3& posOther_);
+        CollisionInfo GetCollisionInfo(Vector3& pos_, const Collider& other_, Vector3& posOther_);
 
     };
 
@@ -48,6 +56,6 @@ namespace team_game
 
         void Run() override;
 
-        void LimitPlayerMovement(PlatformerCharacter& character_, PlatformerCollision collision_);
+        void LimitPlayerMovement(Collider collision_);
     };
 }

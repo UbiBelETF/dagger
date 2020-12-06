@@ -10,20 +10,19 @@ using namespace team_game;
 
 void PlatformerCollisionSystem::Run()
 {
-    auto view = Engine::Registry().view<PlatformerCollision, PlatformerCharacter, Transform>();
+    auto view = Engine::Registry().view<Collider, Transform>();
     auto iterator = view.begin();
 
     while (iterator != view.end())//this for loop clears all previous collision data
     {
-        auto& collision = view.get<PlatformerCollision>(*iterator);
-        auto& character = view.get<PlatformerCharacter>(*iterator);
+        auto& collision = view.get<Collider>(*iterator);
 
         collision.listOfEntities.clear();
         collision.listOfCollisionSides.clear();
-        character.canGoLeft = true;
-        character.canGoRight = true;
-        character.canGoUp = true;
-        character.canGoDown = true;
+        collision.canGoLeft = true;
+        collision.canGoRight = true;
+        collision.canGoUp = true;
+        collision.canGoDown = true;
         iterator++;
     }
 
@@ -31,8 +30,7 @@ void PlatformerCollisionSystem::Run()
 
     while (it != view.end())
     {
-        auto& collision = view.get<PlatformerCollision>(*it);
-        auto& character = view.get<PlatformerCharacter>(*it);
+        auto& collision = view.get<Collider>(*it);
         auto& transform = view.get<Transform>(*it);
 
         Vector2 p{};
@@ -41,8 +39,7 @@ void PlatformerCollisionSystem::Run()
         it2++;
         while (it2 != view.end())
         {
-            auto& col = view.get<PlatformerCollision>(*it2);
-            auto& ch = view.get<PlatformerCharacter>(*it2);
+            auto& col = view.get<Collider>(*it2);
             auto& tr = view.get<Transform>(*it2);
 
             if (collision.collidesWith[(int)col.entityType])
@@ -69,13 +66,13 @@ void PlatformerCollisionSystem::Run()
             }
             it2++;
         }
-        LimitPlayerMovement(character, collision);//goes through all the collisions and limits the movement of the player depending on said collisions
+        LimitPlayerMovement(collision);//goes through all the collisions and limits the movement of the player depending on said collisions
         it++;
     }
 
 }
 
-CollisionInfo PlatformerCollision::GetCollisionInfo(Vector3& pos_, const PlatformerCollision& other_, Vector3& posOther_)
+CollisionInfo Collider::GetCollisionInfo(Vector3& pos_, const Collider& other_, Vector3& posOther_)
 {
     CollisionInfo collisionInfo;
 
@@ -152,16 +149,20 @@ CollisionInfo PlatformerCollision::GetCollisionInfo(Vector3& pos_, const Platfor
     return collisionInfo;
 }
 
-void PlatformerCollisionSystem::LimitPlayerMovement(PlatformerCharacter& character_, PlatformerCollision collision_)
+void PlatformerCollisionSystem::LimitPlayerMovement(Collider collision_)
 {
     if (!collision_.listOfEntities.empty())
     {
         for (int i = 0; i < collision_.listOfEntities.size(); i++)
         {
-            character_.canGoRight = (collision_.listOfCollisionSides[i] == CollisionSide::RIGHT) ? false : character_.canGoRight;//character_.canGoRight;
-            character_.canGoLeft = (collision_.listOfCollisionSides[i] == CollisionSide::LEFT) ? false : character_.canGoLeft; //character_.canGoLeft;
-            character_.canGoUp = (collision_.listOfCollisionSides[i] == CollisionSide::TOP) ? false : character_.canGoUp; //character_.canGoUp;
-            character_.canGoDown = (collision_.listOfCollisionSides[i] == CollisionSide::BOTTOM) ? false : character_.canGoDown; //character_.canGoDown;
+            collision_.canGoRight = (collision_.listOfCollisionSides[i] == CollisionSide::RIGHT) ? false : collision_.canGoRight;//character_.canGoRight;
+            collision_.canGoLeft = (collision_.listOfCollisionSides[i] == CollisionSide::LEFT) ? false : collision_.canGoLeft; //character_.canGoLeft;
+            collision_.canGoUp = (collision_.listOfCollisionSides[i] == CollisionSide::TOP) ? false : collision_.canGoUp; //character_.canGoUp;
+            collision_.canGoDown = (collision_.listOfCollisionSides[i] == CollisionSide::BOTTOM) ? false : collision_.canGoDown; //character_.canGoDown;
+            if (!collision_.canGoDown)
+            {
+                Logger::trace("{}:Cant go down!", i);
+            }
         }
     }
 }
