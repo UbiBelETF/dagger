@@ -12,6 +12,7 @@
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/tank_warfare/tank_controller.h"
 #include "gameplay/tank_warfare/camera_center.h"
+#include "gameplay/tank_warfare/collectibles.h"
 
 using namespace dagger;
 using namespace tank_warfare;
@@ -21,6 +22,7 @@ void TankWarfare::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<TankControllerSystem>();
     engine_.AddSystem<CameraCenterSystem>();
+    engine_.AddSystem<CollectibleSystem>();
 }
 
 void TankWarfare::WorldSetup(Engine &engine_)
@@ -78,7 +80,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
             AssignSprite(sprite, fmt::format("jovanovici:tile_map:tile_grass{}", 1 + (rand() % 3)));
-            sprite.position = { i * 48, j * 48, 2 };
+            sprite.position = { i * 48, j * 48, 5 };
         }
     }
     
@@ -94,6 +96,8 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     sprite.position = { 0, 0, 1 };
     input.contexts.push_back("tank1");
     AssignSprite(sprite, "jovanovici:tank:tank3_side");
+    auto& collision = reg.emplace<SimpleCollision>(entity);
+    collision.size = sprite.size;
 
     //tank1
     auto entity1 = reg.create();
@@ -107,5 +111,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     sprite1.position = { 0, 0, 1 };
     input1.contexts.push_back("tank2");
     AssignSprite(sprite1, "jovanovici:tank:tank3_side");
+    auto& collision1 = reg.emplace<SimpleCollision>(entity1);
+    collision1.size = sprite1.size;
 
 }
