@@ -122,11 +122,9 @@ void team_game::SetupWorld(Engine& engine_)
         collision.size = { 1000, 20 };
         collision.entityType = PlatformerCollisionID::TERRAIN;
         collision.state = MovementState::IMMOBILE;
-
-        auto& controller = reg.get_or_emplace<PlatformerCharacter>(entity);
     }
 
-    {
+    /*{
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "logos:dagger");
@@ -143,5 +141,5 @@ void team_game::SetupWorld(Engine& engine_)
         auto& character = reg.emplace<PlayerCharacter>(entity);
         character.speed = 50;
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
-    }
+    }*/
 }

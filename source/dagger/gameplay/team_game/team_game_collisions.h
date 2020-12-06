@@ -3,8 +3,6 @@
 #include "core/core.h"
 #include <array>
 
-#include "gameplay/team_game/team_game_controller.h"
-
 using namespace dagger;
 
 namespace team_game
@@ -56,6 +54,6 @@ namespace team_game
 
         void Run() override;
 
-        void LimitPlayerMovement(Collider collision_);
+        void LimitPlayerMovement(Collider& collision_);
     };
 }

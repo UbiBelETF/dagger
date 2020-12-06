@@ -3,8 +3,6 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
-#include "gameplay/team_game/team_game_controller.h"
-
 using namespace dagger;
 using namespace team_game;
 
@@ -149,7 +147,7 @@ CollisionInfo Collider::GetCollisionInfo(Vector3& pos_, const Collider& other_, 
     return collisionInfo;
 }
 
-void PlatformerCollisionSystem::LimitPlayerMovement(Collider collision_)
+void PlatformerCollisionSystem::LimitPlayerMovement(Collider& collision_)
 {
     if (!collision_.listOfEntities.empty())
     {
@@ -159,10 +157,6 @@ void PlatformerCollisionSystem::LimitPlayerMovement(Collider collision_)
             collision_.canGoLeft = (collision_.listOfCollisionSides[i] == CollisionSide::LEFT) ? false : collision_.canGoLeft; //character_.canGoLeft;
             collision_.canGoUp = (collision_.listOfCollisionSides[i] == CollisionSide::TOP) ? false : collision_.canGoUp; //character_.canGoUp;
             collision_.canGoDown = (collision_.listOfCollisionSides[i] == CollisionSide::BOTTOM) ? false : collision_.canGoDown; //character_.canGoDown;
-            if (!collision_.canGoDown)
-            {
-                Logger::trace("{}:Cant go down!", i);
-            }
         }
     }
 }

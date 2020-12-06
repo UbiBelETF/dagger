@@ -23,7 +23,6 @@ void team_game::GravitySystem::Run()
                     transform_.position.y -= m_GravityStrength * gravity_.airTime;
                 }
                 gravity_.airTime += Engine::DeltaTime();
-                Logger::trace("My G speed is:{}", m_GravityStrength * gravity_.airTime);
             }
             else
             {

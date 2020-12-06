@@ -89,7 +89,7 @@ void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::St
 
 void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter>(state_.entity);
+	auto&& [sprite, transform, input, character, collider] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider>(state_.entity);
 
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");
@@ -102,10 +102,10 @@ void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::Sta
 		transform.position.x += character.speed * sprite.scale.x * Engine::DeltaTime();
 	}
 
-	/*if (!collider.canGoDown)
+	if (!collider.canGoDown)
 	{
 		GoTo(ECharacterStates::Idle, state_);
-	}*/
+	}
 }
 
 
