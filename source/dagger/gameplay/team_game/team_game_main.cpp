@@ -44,50 +44,6 @@ void TeamGame::WorldSetup(Engine &engine_)
     team_game::SetupWorld(engine_);
 }
 
-namespace jovica
-{
-    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
-    {
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 30 };
-        int type = rand() % 10;
-        switch (type)
-        {
-        default:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
-            break;
-        case 0:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_2");
-            break;
-        case 1:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_3");
-            break;
-        case 2:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_4");
-            break;
-        case 3:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_5");
-            break;
-        case 4:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_6");
-            break;
-        case 5:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_7");
-            break;
-        case 6:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_8");
-            break;
-        case 7:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_9");
-            break;
-        case 8:
-            AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_10");
-            break;
-        }
-        return entity;
-    }
-}
 namespace smiljana {
     
     Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
@@ -113,38 +69,6 @@ namespace smiljana {
 }
     
 
-
-void SetupWorldJovica(Engine& engine_)
-{
-    auto& reg = engine_.Registry();
-
-    float zPos = 1.f;
-   
-
-    {
-        TilemapLegend legend;
-        legend['.'] = &jovica::CreateFloor;
-
-        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test.map", &legend });
-
-        // PLAYER
-        auto player = reg.create();
-
-        auto& playerSprite = reg.emplace<Sprite>(player);
-        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-
-        auto& playerAnimator = reg.emplace<Animator>(player);
-        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
-
-        auto& playerTransform = reg.emplace<Transform>(player);
-        playerTransform.position = { 0, 0, zPos };
-
-        auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
-        playerInput.contexts.push_back("AmongThemInput");
-
-        auto& playerController = reg.emplace<CharacterController>(player);
-    }
-}
 void SetupWorldSmiljana(Engine& engine_) {
   
         auto& reg = engine_.Registry();
@@ -180,6 +104,6 @@ void SetupWorldSmiljana(Engine& engine_) {
 void team_game::SetupWorld(Engine &engine_)
 {
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-   // SetupWorldJovica(engine_);
+   
     SetupWorldSmiljana(engine_);
 }
