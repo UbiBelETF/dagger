@@ -17,6 +17,7 @@
 #include "gameplay/team_game/tilemap.h"
 
 #include "gameplay/team_game/camera.h"
+#include "gameplay/team_game/movement.h"
 
 
 using namespace dagger;
@@ -24,10 +25,11 @@ using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CameraSystem>();
+    engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<MovementSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -85,8 +87,12 @@ void SetupWorldSmiljana(Engine& engine_) {
             // PLAYER
             auto player = reg.create();
 
-            auto& playerSprite = reg.emplace<Sprite>(player);
-            AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+        auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+        playerState.currentState = ECharacterState::Idle;
+
+        auto& playerSprite = reg.emplace<Sprite>(player);
+        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+        playerSprite.scale = { 3, 3 };
 
             auto& playerAnimator = reg.emplace<Animator>(player);
             AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
@@ -97,8 +103,9 @@ void SetupWorldSmiljana(Engine& engine_) {
             auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
             playerInput.contexts.push_back("AmongThemInput");
 
-            auto& playerController = reg.emplace<CharacterController>(player);
-        
+        reg.emplace<CharacterController>(player);
+
+        reg.emplace<MovableBody>(player);
     }
 }
 void team_game::SetupWorld(Engine &engine_)
