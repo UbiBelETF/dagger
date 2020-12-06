@@ -87,12 +87,12 @@ void SetupWorldSmiljana(Engine& engine_) {
             // PLAYER
             auto player = reg.create();
 
-        auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
-        playerState.currentState = ECharacterState::Idle;
+            auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+            playerState.currentState = ECharacterState::Idle;
 
-        auto& playerSprite = reg.emplace<Sprite>(player);
-        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-        playerSprite.scale = { 3, 3 };
+            auto& playerSprite = reg.emplace<Sprite>(player);
+            AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+            playerSprite.scale = { 1, 1 };
 
             auto& playerAnimator = reg.emplace<Animator>(player);
             AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
