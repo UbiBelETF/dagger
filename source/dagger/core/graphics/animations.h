@@ -22,7 +22,6 @@ class AnimationSystem
     , public Publisher<ToolMenuRender>
 #endif //!defined(NDEBUG)
 {
-    AnimationFSM animationFSM;
 public:
     inline String SystemName() { return "Animation System"; }
 

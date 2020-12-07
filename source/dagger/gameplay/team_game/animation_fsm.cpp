@@ -20,3 +20,18 @@ void team_game::AnimationFSM::Idle::Enter(AnimationFSM::StateComponent& state_)
 void team_game::AnimationFSM::Idle::Exit(AnimationFSM::StateComponent& state_)
 {
 }
+
+
+void team_game::AnimationFSM::Running::Run(AnimationFSM::StateComponent& state_)
+{
+	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+	AnimatorPlay(animator, "TeamGame:Player-Bomb_Guy:RUN");
+}
+
+void team_game::AnimationFSM::Running::Enter(AnimationFSM::StateComponent& state_)
+{
+}
+
+void team_game::AnimationFSM::Running::Exit(AnimationFSM::StateComponent& state_)
+{
+}

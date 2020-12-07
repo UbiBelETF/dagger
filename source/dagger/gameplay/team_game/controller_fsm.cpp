@@ -10,11 +10,19 @@
 
 using namespace dagger;
 
+void team_game::CharacterControllerFSM::Run(StateComponent& component_)
+{
+	FSM<ECharacterStates>::Run(component_);
+	auto& anim = Engine::Registry().get<AnimationFSM::StateComponent>(component_.entity);
+	animationFSM.Run(anim);
+}
+
 // Idle
 
 void team_game::CharacterControllerFSM::Idle::Enter(CharacterControllerFSM::StateComponent& state_)
 {
-	//idle animation
+	auto& anim = Engine::Registry().get<AnimationFSM::StateComponent>(state_.entity);
+	((CharacterControllerFSM*)this->GetFSM())->animationFSM.GoTo(EAnimationStates::Idle, anim);
 }
 
 DEFAULT_EXIT(team_game::CharacterControllerFSM, Idle);
@@ -34,8 +42,8 @@ void team_game::CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateC
 
 void team_game::CharacterControllerFSM::Running::Enter(CharacterControllerFSM::StateComponent& state_)
 {
-//	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-//	run animation
+	auto& anim = Engine::Registry().get<AnimationFSM::StateComponent>(state_.entity);
+	((CharacterControllerFSM*)this->GetFSM())->animationFSM.GoTo(EAnimationStates::Running, anim);
 }
 
 // same as: DEFAULT_EXIT(CharacterControllerFSM, Running);

@@ -13,12 +13,12 @@ namespace team_game
 	struct AnimationFSM : public FSM<EAnimationStates>
 	{
 		DEFINE_STATE(AnimationFSM, EAnimationStates, Idle);
-//		DEFINE_STATE(AnimationFSM, EAnimationStates, Running);
+		DEFINE_STATE(AnimationFSM, EAnimationStates, Running);
 
 		AnimationFSM()
 		{
 			CONNECT_STATE(EAnimationStates, Idle);
-//			CONNECT_STATE(EAnimationStates, Running);
+			CONNECT_STATE(EAnimationStates, Running);
 		}
 	};
 }

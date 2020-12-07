@@ -2,7 +2,6 @@
 #include "core/graphics/animation.h"
 #include "core/engine.h"
 #include "core/graphics/sprite.h"
-#include "gameplay/team_game/animation_fsm.h"
 
 using namespace team_game;
 
@@ -25,10 +24,9 @@ void AnimationSystem::SpinUp()
 
 void AnimationSystem::Run()
 {
-    const auto& entities = Engine::Registry().view<Animator, Sprite, AnimationFSM::StateComponent>();
-    entities.each([&](Animator& animator_, Sprite& sprite_, AnimationFSM::StateComponent& state_)
+    const auto& entities = Engine::Registry().view<Animator, Sprite>();
+    entities.each([&](Animator& animator_, Sprite& sprite_)
         {
-            animationFSM.Run(state_);
             if (animator_.animationPlaying)
             {
                 const auto currentAnimation = AnimationSystem::Get(animator_.currentAnimation);
