@@ -4,6 +4,7 @@
 #include "core/graphics/shaders.h"
 #include "core/system.h"
 #include "core/core.h"
+#include "gameplay/team_game/animation_fsm.h"
 
 #if !defined(NDEBUG)
 #include "tools/toolmenu.h"
@@ -12,6 +13,7 @@
 #include <glad/glad.h>
 
 using namespace dagger;
+using namespace team_game;
 
 class AnimationSystem
     : public System
@@ -20,7 +22,7 @@ class AnimationSystem
     , public Publisher<ToolMenuRender>
 #endif //!defined(NDEBUG)
 {
-
+    AnimationFSM animationFSM;
 public:
     inline String SystemName() { return "Animation System"; }
 

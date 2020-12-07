@@ -5,6 +5,8 @@
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "gameplay/team_game/character_controller.h"
+#include "animation_fsm.h"
+#include "core/graphics/animations.h"
 
 using namespace dagger;
 
@@ -12,8 +14,7 @@ using namespace dagger;
 
 void team_game::CharacterControllerFSM::Idle::Enter(CharacterControllerFSM::StateComponent& state_)
 {
-//	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-//	idle animation
+	//idle animation
 }
 
 DEFAULT_EXIT(team_game::CharacterControllerFSM, Idle);
