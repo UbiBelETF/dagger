@@ -1,0 +1,11 @@
+{
+	"animation-name": "ancient_defenders:golem:WALK_SIDE",
+	"animation-length-ms": 1250,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_walk_side:1" },
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_walk_side:2" },
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_walk_side:3" },
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_walk_side:4" }
+	]
+}
