@@ -28,8 +28,10 @@ namespace tank_warfare
         : public System
     {
     public:
-        static int s_NumCoins;
-        static int s_NumPowers;
+        int m_NumCoins = 0;
+        int m_NumPowers = 0;
+        int m_MaxCoins = 20;
+        int m_MaxPowers = 3;
 
         inline String SystemName() override {
             return "Collectible System";

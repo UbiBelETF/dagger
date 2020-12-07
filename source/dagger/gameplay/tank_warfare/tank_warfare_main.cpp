@@ -99,7 +99,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     auto& collision = reg.emplace<SimpleCollision>(entity);
     collision.size = sprite.size;
 
-    //tank1
+    //tank2
     auto entity1 = reg.create();
     auto& sprite1 = reg.emplace<Sprite>(entity1);
     auto& anim1 = reg.emplace<Animator>(entity1);

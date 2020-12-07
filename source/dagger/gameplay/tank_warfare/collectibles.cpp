@@ -14,9 +14,6 @@
 
 using namespace tank_warfare;
 
-int CollectibleSystem::s_NumCoins = 0;
-int CollectibleSystem::s_NumPowers = 0;
-
 void CollectibleSystem::Run()
 {
 	auto view = Engine::Registry().view<Transform, SimpleCollision, Collectible>();
@@ -34,7 +31,7 @@ void CollectibleSystem::Run()
 				if (collectible.collType == ECollectibleType::Coin)
 				{
 					tank.coins++;
-					s_NumCoins--;
+					m_NumCoins--;
 				}
 				else
 				{
@@ -55,7 +52,7 @@ void CollectibleSystem::Run()
 					{
 						tank.shield = 100;
 					}
-					s_NumPowers--;
+					m_NumPowers--;
 				}
 				collectible.toBeDestroyed = true;
 			}
@@ -63,16 +60,16 @@ void CollectibleSystem::Run()
 		}
 	}
 
-	while (s_NumPowers < 3)
+	while (m_NumPowers < m_MaxPowers)
 	{
 		AddCollectible(true);
-		s_NumPowers++;
+		m_NumPowers++;
 	}
 
-	while (s_NumCoins < 20)
+	while (m_NumCoins < m_MaxCoins)
 	{
 		AddCollectible(false);
-		s_NumCoins++;
+		m_NumCoins++;
 	}
 
 }
