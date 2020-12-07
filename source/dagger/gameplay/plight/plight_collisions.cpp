@@ -4,6 +4,7 @@
 #include "core/game/transforms.h"
 
 using namespace dagger;
+using namespace plight;
 
 void PlightCollisionsSystem::Run()
 {
