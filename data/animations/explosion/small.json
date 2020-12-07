@@ -1,0 +1,15 @@
+{
+	"animation-name": "explosion:small",
+	"animation-length-ms": 800,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:explosion:small:explosionS1", "relative-length": 1 },
+		{ "texture-name": "jovanovici:explosion:small:explosionS2", "relative-length": 1 },
+		{ "texture-name": "jovanovici:explosion:small:explosionS3", "relative-length": 1 },
+		{ "texture-name": "jovanovici:explosion:small:explosionS4", "relative-length": 1 },
+		{ "texture-name": "jovanovici:explosion:small:explosionS5", "relative-length": 1 },
+		{ "texture-name": "jovanovici:explosion:small:explosionS6", "relative-length": 1 },
+		{ "texture-name": "jovanovici:explosion:small:explosionS7", "relative-length": 1 },
+		{ "texture-name": "jovanovici:explosion:small:explosionS8", "relative-length": 1 }
+	]
+}

@@ -7,10 +7,21 @@ using namespace dagger;
 
 namespace tank_warfare
 {
+	enum struct ETankOrientation
+	{
+		TankLeft,
+		TankRight,
+		TankUp,
+		TankDown
+	};
+
 	struct TankCharacter
 	{
 		int speed{ 50 };
-		int lastOrientation{ 0 };
+		ETankOrientation lastOrientation{ ETankOrientation::TankLeft };
+		int health{ 100 };
+		Float32 reloadTime{ 1 };
+		int id{ rand() };
 	};
 
 	class TankControllerSystem

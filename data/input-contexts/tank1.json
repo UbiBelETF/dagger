@@ -11,6 +11,9 @@
 			{ "trigger": "KeyW", "value": 1 },
 			{ "trigger": "KeyS", "value": -1 }		
 		] }, 
-		{ "command-name": "fire", "trigger": "KeySpace" }
+		{ "command-name": "fire", 
+		  "actions": [
+			{ "trigger": "KeySpace", "value": 1 }
+		] }
 	]
 }

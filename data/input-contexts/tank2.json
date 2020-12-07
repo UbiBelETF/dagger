@@ -11,6 +11,9 @@
 			{ "trigger": "KeyUp", "value": 1 },
 			{ "trigger": "KeyDown", "value": -1 }		
 		] }, 
-		{ "command-name": "fire", "trigger": "KeyRightControl" }
+		{ "command-name": "fire", 
+		  "actions": [
+			{ "trigger": "KeyRightControl", "value": 1 }
+		] }
 	]
 }
