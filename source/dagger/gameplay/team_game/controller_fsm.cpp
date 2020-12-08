@@ -6,6 +6,7 @@
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "core/game/transforms.h"
+#include "gravity.h"
 
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_collisions.h"
@@ -79,7 +80,8 @@ void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::Sta
 
 void team_game::CharacterControllerFSM::Jumping::Enter(CharacterControllerFSM::StateComponent& state_)
 {
-
+	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
+	gravity.verticalCurrentSpeed = gravity.verticalInitialSpeed;
 }
 
 void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::StateComponent& state_)
@@ -89,12 +91,12 @@ void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::St
 
 void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character, collider] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider>(state_.entity);
+	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
 
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");
 
-	transform.position.y += character.jumpSpeed * Engine::DeltaTime();
+	transform.position.y += gravity.verticalInitialSpeed * Engine::DeltaTime();
 
 	if (EPSILON_NOT_ZERO(run))
 	{	
