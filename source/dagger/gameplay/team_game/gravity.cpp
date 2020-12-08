@@ -14,10 +14,10 @@ void team_game::GravitySystem::Run()
         {
             if (collider_.canGoDown)
             {       
-//                if (gravity_.verticalCurrentSpeed > gravity_.terminalVelocity)
-//                {
-//                    gravity_.verticalCurrentSpeed = - gravity_.terminalVelocity;
-//                }
+                if (abs(gravity_.verticalCurrentSpeed) > gravity_.terminalVelocity)
+                {
+                    gravity_.verticalCurrentSpeed = - gravity_.terminalVelocity;
+                }
                 
                 transform_.position.y += gravity_.verticalCurrentSpeed * Engine::DeltaTime();
                 

@@ -11,7 +11,6 @@ namespace team_game
 	struct PlayerCharacter
 	{
 		float speed{ 1.f };
-		float airTime{ 0.f };
 	};
 
 	class CharacterControllerSystem
