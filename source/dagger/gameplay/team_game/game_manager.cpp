@@ -2,8 +2,11 @@
 
 #include <core/engine.h>
 #include <core/graphics/sprite.h>
+#include <core/game/transforms.h>
 
 #include <gameplay/team_game/team_game_main.h>
+#include "gameplay/team_game/team_game_collisions.h"
+
 
 using namespace dagger;
 using namespace team_game;
@@ -33,7 +36,7 @@ void GameManagerSystem::LoadNextLevel()
 void GameManagerSystem::LoadBackDrop()
 {
     String filePath = fmt::format("levels/backdrop/backdrop_{}.txt", currentLevel);
-    LoadTextures(filePath, true);
+    LoadTextures(filePath, false);
 }
 
 void GameManagerSystem::LoadPlatforms()
@@ -85,7 +88,15 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
 
                 if (addCollision_)
                 {
-                    // TODO: add collision and make sure that the collider size aligns with the spriteSize
+                    auto& transform = reg.get_or_emplace<Transform>(block);
+                    transform.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
+                                         j * spriteSize.y + spriteSize.y / 2 + pos.y,
+                                         zPos };                    
+
+                    auto& collider = reg.get_or_emplace<Collider>(block);
+                    collider.entityType = CollisionID::TERRAIN;
+                    collider.state = MovementState::IMMOBILE;
+                    collider.size = spriteBlock.size * spriteBlock.scale;
                 }
             }
         }
