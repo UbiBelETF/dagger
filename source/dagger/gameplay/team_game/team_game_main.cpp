@@ -1,5 +1,7 @@
 #include "team_game_main.h"
 
+#include <fstream>
+
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
@@ -15,16 +17,21 @@
 #include "tools/diagnostics.h"
 
 #include "gameplay/team_game/team_game_collisions.h"
-#include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/gravity.h"
+#include "gameplay/team_game/game_manager.h"
+#include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/team_game_player_input.h"
 
 using namespace dagger;
 
 void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<CharacterControllerSystem>();
-    engine_.AddSystem<CollisionSystem>();
+    engine_.AddSystem<GameManagerSystem>();
+    engine_.AddSystem<CharacterControllerSystem>();
+    //engine_.AddSystem<TeamGamePlayerInputSystem>();    
     engine_.AddSystem<GravitySystem>();
+    engine_.AddSystem<CollisionSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
@@ -38,103 +45,26 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    team_game::SetupWorld(engine_);
+    String filePath = "levels/player_positions.txt";
+    FilePath path{ filePath };
+    std::ifstream fin(Files::absolute(path).string().c_str());
+    Vector3 playerPos;
+
+    while (fin >> playerPos.x >> playerPos.y >> playerPos.z)
+    {
+        GameManagerSystem::GetPlayerPositionsPerLevel().push_back(playerPos);
+    }
 }
 
 void team_game::SetupWorld(Engine& engine_)
 {
     auto& reg = engine_.Registry();
-
-    //Black Backdrop
     {
         auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSprite(sprite, "EmptyWhitePixel");
-        sprite.color = { 0, 0, 0, 1 };
-        sprite.size = { 1000, 1000 };
-        sprite.scale = { 10, 1 };
-        sprite.position = { 0, -125, 10 };
-    }
-
-    {//First Character
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSprite(sprite, "EmptyWhitePixel");
-        sprite.size = { 20, 40 };
-        sprite.position = { -100, 20, 5 };
-
-        auto& transform = reg.get_or_emplace<Transform>(entity);
-        transform.position = sprite.position;
-
-        auto& collision = reg.get_or_emplace<Collider>(entity);
-        collision.size = { 20, 40 };
-        collision.entityType = CollisionID::PLAYER;
-        collision.state = MovementState::MOVEABLE;
-        collision.hasGravity = true;
-
-        auto& gravity = reg.get_or_emplace<Gravity>(entity);
-
-        auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
-        character.speed = 50;
-
-        auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        input.contexts.push_back("ASDW");
-        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
-    }
-
-    {//Second Character
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSprite(sprite, "EmptyWhitePixel");
-        sprite.size = { 20, 40 };
-        sprite.position = { 100, 20, 5 };
-
-        auto& transform = reg.get_or_emplace<Transform>(entity);
-        transform.position = sprite.position;
-
-        auto& collision = reg.get_or_emplace<Collider>(entity);
-        collision.size = { 20, 40 };
-        collision.entityType = CollisionID::PLAYER;
-        collision.state = MovementState::MOVEABLE;
-        collision.hasGravity = true;
-
-        auto& gravity = reg.get_or_emplace<Gravity>(entity);
-
-        auto& character = reg.get_or_emplace<PlayerCharacter>(entity);
-        character.speed = 50;
-
-        auto& input = reg.get_or_emplace<InputReceiver>(entity);
-        input.contexts.push_back("Arrows");
-        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
-    }
-
-    {//Platform they stand on
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-        AssignSprite(sprite, "EmptyWhitePixel");
-        sprite.size = { 1000, 20 };
-        sprite.position = { 0, -10, 5 };
-
-        auto& transform = reg.get_or_emplace<Transform>(entity);
-        transform.position = sprite.position;
-
-        auto& collision = reg.get_or_emplace<Collider>(entity);
-        collision.size = { 1000, 20 };
-        collision.entityType = CollisionID::TERRAIN;
-        collision.state = MovementState::IMMOBILE;
-    }
-
-    /*{
-        auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "logos:dagger");
-        float ratio = sprite.size.y / sprite.size.x;
-        sprite.size = { 100 / ratio, 100  };
-        sprite.position = { 0, 50, 5 };
-
-        auto& transform = reg.get_or_emplace<Transform>(entity);
-        transform.position = sprite.position;
-
+        AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
+        sprite.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
+      
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
 

@@ -1,0 +1,12 @@
+BACKGROUND SkyAndOcean 5.0 768.0 506.0 -400.0 -170.0 2 1
+BACKGROUND SmallCloud_1 5.0 142.0 48.0 -125.0 0.0 1 1
+BACKGROUND SmallCloud_3 5.0 210.0 57.0 -350.0 0.0 1 1
+BACKGROUND SmallCloud_2 5.0 199.5 52.5 200.0 100.0 1 1
+BACKGROUND PalmTreeRegular 4.0 128.0 128.0 -325.0 -115.0 1 1
+BACKGROUND PalmTreeRegular 4.0 128.0 128.0 -285.0 -115.0 1 1
+
+Other ShipHelm 4.0 48.0 48.0 -360.0 183.0 1 1
+Other Flag 5.0 34.0 75.0 315.0 190.0 1 1
+Other Spikes 4.0 64.0 64.0 175.0 -108.0 1 1
+Other Cannon 4.0 62.0 46.0 -40.0 -61.0 1 1
+Other DiamondRed 4.0 36.0 36.0 236.0 132.0 1 1
