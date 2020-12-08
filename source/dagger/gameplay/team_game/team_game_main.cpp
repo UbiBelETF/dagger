@@ -16,14 +16,14 @@
 #include "tools/diagnostics.h"
 #include "core/graphics/text.h"
 
-#include "gameplay/team_game/character_collision.h"
+#include "gameplay/team_game/collision.h"
 
 using namespace dagger;
 using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<CharacterCollisionSystem>();
+    engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<TeamGameControllerSystem>();
 }
 
@@ -34,7 +34,7 @@ struct MainCharacter
     Animator& animator;
     InputReceiver& input;
     TeamGameCharacter& character;
-    CharacterCollision& col;
+    Collision& col;
     Transform& tm;
 
 
@@ -45,7 +45,7 @@ struct MainCharacter
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& character = reg.get_or_emplace<TeamGameCharacter>(entity);
-        auto& col = reg.get_or_emplace<CharacterCollision>(entity);
+        auto& col = reg.get_or_emplace<Collision>(entity);
         auto& tm = reg.get_or_emplace<Transform>(entity);
         return MainCharacter{ entity, sprite, anim, input, character, col, tm };
     }
@@ -76,7 +76,7 @@ struct MainCharacter
         //Collision setup:        
         chr.col.size = { 25, 28 };
         chr.tm.position = { position_ , 0.0f };
-        CharacterCollisionSystem::MainCharacterEntity = entity;
+        reg.emplace<CollisionType::Character>(entity);
 
         return chr;
     }
@@ -125,10 +125,11 @@ void team_game::SetupWorld(Engine &engine_)
         sprite.position = { i * 48, -5 * 48, 99 };
         sprite.scale = { 3, 3 };
 
-        auto& col = reg.emplace<CharacterCollision>(entity);
+        auto& col = reg.emplace<Collision>(entity);
         auto& tm = reg.emplace<Transform>(entity);
         col.size = { 48, 48 };
         tm.position = sprite.position;
+        reg.emplace<CollisionType::Wall>(entity);
     }
     for (int i = -5; i < 5; i++) {
         if (i == 0) continue;
@@ -138,10 +139,11 @@ void team_game::SetupWorld(Engine &engine_)
         sprite.position = { i * 48, 4 * 48, 99 };
         sprite.scale = { 3, 3 };
 
-        auto& col = reg.emplace<CharacterCollision>(entity);
+        auto& col = reg.emplace<Collision>(entity);
         auto& tm = reg.emplace<Transform>(entity);
         col.size = { 48, 48 };
         tm.position = sprite.position;
+        reg.emplace<CollisionType::Wall>(entity);
     }
     for (int i = -4; i < 4; i++) {
         if (i == 0) continue;
@@ -151,10 +153,11 @@ void team_game::SetupWorld(Engine &engine_)
         sprite.position = { -5 * 48, i * 48, 99 };
         sprite.scale = { 3, 3 };
 
-        auto& col = reg.emplace<CharacterCollision>(entity);
+        auto& col = reg.emplace<Collision>(entity);
         auto& tm = reg.emplace<Transform>(entity);
         col.size = { 48, 48 };
         tm.position = sprite.position;
+        reg.emplace<CollisionType::Wall>(entity);
     }
 
     for (int i = -4; i < 4; i++) {
@@ -165,9 +168,10 @@ void team_game::SetupWorld(Engine &engine_)
         sprite.position = { 4 * 48, i * 48, 99 };
         sprite.scale = { 3, 3 };
 
-        auto& col = reg.emplace<CharacterCollision>(entity);
+        auto& col = reg.emplace<Collision>(entity);
         auto& tm = reg.emplace<Transform>(entity);
         col.size = { 48, 48 };
         tm.position = sprite.position;
+        reg.emplace<CollisionType::Wall>(entity);
     }
 }
