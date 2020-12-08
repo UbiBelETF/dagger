@@ -26,7 +26,8 @@ namespace lab
 	struct PlayerCharacter
 	{
 		int speed{ 1 };
-		int cooldown = 5;
+		int maxCooldown = 20;
+		int cooldown = 20;
 	};
 
 

@@ -99,25 +99,10 @@ void PlayerControllerSystem::Run()
                 if (char_.cooldown <= 0)
                 {
                     auto cursorInWindow = dagger::Input::CursorPositionInWorld();
-                    Vector2 directions = { 1, 1 };
-                    if (cursorInWindow.x < sprite_.position.x)
-                        directions.x = -1;
-                    else if (cursorInWindow.x == sprite_.position.x)
-                        directions.x = 0;
-
-                    if ((-1 * cursorInWindow.y) < sprite_.position.y)
-                        directions.y = -1;
-                    else if ((-1 * cursorInWindow.y) == sprite_.position.y)
-                        directions.y = 0;
-
-                    Float32 distanceX = cursorInWindow.x - sprite_.position.x;
-                    Float32 distanceY = (cursorInWindow.y * -1) - sprite_.position.y;
-                    Float32 ratio = distanceY / distanceX;
-                    ratio *= (ratio > 0) ? 1 : -1;
-
                     Vector2 position = { sprite_.position.x, sprite_.position.y };
-                    CreateBullet(position, ratio, directions);
-                    char_.cooldown = 100;
+                    Vector2 cursor = { cursorInWindow.x, cursorInWindow.y };
+                    CreateBullet(position, cursor);
+                    char_.cooldown = char_.maxCooldown;
                 }
             }
             char_.cooldown--;

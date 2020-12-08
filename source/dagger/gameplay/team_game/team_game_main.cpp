@@ -22,6 +22,7 @@
 
 #include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
+#include "gameplay/team_game/enemy.h"
 
 
 using namespace dagger;
@@ -31,6 +32,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PlayerControllerSystem>();
+    engine_.AddSystem<EnemySystem>();
     engine_.AddSystem<ShootingSystem>();
     engine_.AddPausableSystem<TransformSystem>();
 }
@@ -87,7 +89,7 @@ struct Player
         AssignSprite(chr.sprite, "main_character:idle:idle1");
         AnimatorPlay(chr.animator, "main_character:idle");
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = {chr.sprite.size.x/2,chr.sprite.size.y/2};
+        col.size = {chr.sprite.size.x/2, chr.sprite.size.y/2};
 
         chr.transform.position = chr.sprite.position;
 
@@ -127,19 +129,35 @@ struct Player
 void lab::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
-       Vector2 scale(1, 1);
-
-
-
-   
-                
-
-              
+       Vector2 scale(1, 1);              
 
      auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
      //Engine::Registry().destroy(mainChar.entity);
 
+    
+    for (int i = 0; i < 3; i++)
+    {
+        auto entity = reg.create();
+        auto& bandit = reg.emplace<Bandit>(entity);
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "Bandit");
+        sprite.scale = { 1, 1 };
+        if (i == 0)
+        sprite.position = { 100, 0, 0.0f };
 
-    //lab::GenerateLevel(0);
+        if (i == 1)
+        sprite.position = { 100, 50, 0.0f };
+
+        if (i == 2)
+            sprite.position = { 100, -50, 0.0f };
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = sprite.position;
+
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size = { 0.5f, 10 };
+    }
+
+
 }
 
