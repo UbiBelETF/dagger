@@ -72,7 +72,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
         }
     }
 
-    //building
+    //building1
     auto entity1 = reg.create();
     auto& sprite1 = reg.emplace<Sprite>(entity1);
     auto& transform1 = reg.emplace<Transform>(entity1);
@@ -80,8 +80,19 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     AssignSprite(sprite1, "jovanovici:building:building3c");
     transform1.position = { 100, 0, 2 };
     col1.size = sprite1.size;
-    col1.size.x -= 10;
-    col1.size.y -= 20;
+    col1.size.x -= 15;
+    col1.size.y -= 35;
+
+    //building2
+    auto entity3 = reg.create();
+    auto& sprite3 = reg.emplace<Sprite>(entity3);
+    auto& transform3 = reg.emplace<Transform>(entity3);
+    auto& col3 = reg.emplace<SimpleCollision>(entity3);
+    AssignSprite(sprite3, "jovanovici:building:building3c");
+    transform3.position = { 75, 75, 4 };
+    col3.size = sprite3.size;
+    col3.size.x -= 15;
+    col3.size.y -= 35;
     
     //tank1
     auto entity = reg.create();
@@ -96,5 +107,19 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     collision.size = sprite.size;
     input.contexts.push_back("tank1");
     AssignSprite(sprite, "jovanovici:tank:tank3_side");
+
+    //tank2
+    auto entity2 = reg.create();
+    auto& sprite2 = reg.emplace<Sprite>(entity2);
+    auto& anim2 = reg.emplace<Animator>(entity2);
+    auto& transform2 = reg.emplace<Transform>(entity2);
+    auto& collision2 = reg.emplace<SimpleCollision>(entity2);
+    auto& input2 = reg.emplace<InputReceiver>(entity2);
+    auto& tank2 = reg.emplace<TankCharacter>(entity2);
+    sprite2.scale = { -1, 1 };
+    transform2.position = { -35, 0, 1 };
+    collision2.size = sprite2.size;
+    input2.contexts.push_back("tank2");
+    AssignSprite(sprite2, "jovanovici:tank:tank3_side");
 
 }

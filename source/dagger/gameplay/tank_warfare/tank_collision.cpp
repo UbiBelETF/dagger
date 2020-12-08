@@ -57,5 +57,6 @@ void TankCollisionSystem::Run()
 				} while (col.IsCollided(t.position, collision, transform.position));
 			}
 		}
+		col.colided = false;
 	}
 }
