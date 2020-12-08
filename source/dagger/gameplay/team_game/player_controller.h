@@ -3,6 +3,7 @@
 #include "core/core.h"
 #include "core/system.h"
 #include "tile.h"
+#include "core/game/transforms.h"
 
 
 
@@ -13,10 +14,13 @@ namespace lab
 	struct NextLvl
     {
         int id=0;
+		TilemapLegend legend;
     };
+	void GenerateRoom(int idNext_,lab::NextLvl& currentLvl_,Transform &tr_);
 
 	struct CollideW{
-		int id; //id=0->wall id=1->enemy id=2->chect
+		int id=0; //id=0->wall id=1->enemy id=2->chect
+
 	};
 
 	struct PlayerCharacter
@@ -24,6 +28,7 @@ namespace lab
 		int speed{ 1 };
 		int cooldown = 5;
 	};
+
 
 	class PlayerControllerSystem
 		: public System

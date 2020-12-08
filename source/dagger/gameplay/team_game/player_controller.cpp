@@ -11,10 +11,39 @@
 #include "core/graphics/window.h"
 #include "gameplay/common/simple_collisions.h"
 
-#include "core/game/transforms.h"
+
 
 using namespace dagger;
 using namespace lab;
+
+void lab::GenerateRoom(int idNext_,lab::NextLvl& currentLvl_, Transform &tr_)
+{
+    if(currentLvl_.id==0)
+    {
+        auto& view = Engine::Res<Tilemap>()["tilemaps/lab/lab.map"]->tiles;
+        Engine::Registry().destroy(view.begin(),view.end());
+    }
+    else if(currentLvl_.id==1)
+    {
+        auto& view = Engine::Res<Tilemap>()["tilemaps/lab/hallway.map"]->tiles;
+        Engine::Registry().destroy(view.begin(),view.end());
+    }
+        
+  
+    tr_.position = { -(tr_.position.x- tr_.position.x/3), tr_.position.y , tr_.position.z };
+    TilemapLegend legend=currentLvl_.legend;       
+    if(idNext_==0)
+    {
+        Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });   
+    }
+    else if(idNext_==1)
+    {
+         Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/hallway.map", &legend});
+    }  
+
+    currentLvl_.id=idNext_;
+
+}
 
 
 void PlayerControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
@@ -36,27 +65,27 @@ void PlayerControllerSystem::SpinUp()
 void PlayerControllerSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Animator, PlayerCharacter, Transform>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, PlayerCharacter& char_, Transform& transform_)
+    [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, PlayerCharacter& char_, Transform& transform_)
+    {
+        
+        Float32 rl = input_.values.at("rightleft");
+        Float32 ud = input_.values.at("updown");
+        Float32 shoot = input_.values.at("shoot");
+        
+        if(rl || ud)
         {
-        
-            Float32 rl = input_.values.at("rightleft");
-            Float32 ud = input_.values.at("updown");
-            Float32 shoot = input_.values.at("shoot");
-        
-            if(rl || ud)
-            {
-                AnimatorPlay(animator_, "main_character:run");
+            AnimatorPlay(animator_, "main_character:run");
             if (rl != 0)
             { 
                 sprite_.scale.x = rl;
                 transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
-                
+                    
             } 
             if (ud != 0)
             { 
                 sprite_.scale.y = 1;
                 transform_.position.y += char_.speed * ud * Engine::DeltaTime();
-                
+                    
             } 
             }
                 
@@ -94,93 +123,63 @@ void PlayerControllerSystem::Run()
             char_.cooldown--;
 
 
-        });
-        auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
-        auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
-        for (auto entity : view)
+    });
+
+    auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
+    auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
+    for (auto entity : view)
+    {
+        auto &t = view.get<Transform>(entity);
+        auto &player = view.get<PlayerCharacter>(entity);
+        auto &col = view.get<SimpleCollision>(entity);
+
+        if (col.colided)
         {
-            auto &t = view.get<Transform>(entity);
-            auto &player = view.get<PlayerCharacter>(entity);
-            auto &col = view.get<SimpleCollision>(entity);
-
-            if (col.colided)
+            if (Engine::Registry().valid(col.colidedWith))
             {
-                if (Engine::Registry().valid(col.colidedWith))
+                SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
+                Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
+
+                Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
+
+                do
                 {
-                    SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
-                    Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
-
-                    Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
-
-                    do
+                    Float32 dt = Engine::DeltaTime();
+                    if (collisionSides.x > 0)
                     {
-                        Float32 dt = Engine::DeltaTime();
-                        if (collisionSides.x > 0)
-                        {
-                            t.position.x -= (player.speed * dt);
-                        }
-
-                        if (collisionSides.y > 0)
-                        {
-                            t.position.y -= (player.speed* dt);
-                        }
-                        if (collisionSides.x < 0)
-                        {
-                            t.position.x += (player.speed * dt);
-                        }
-
-                        if (collisionSides.y < 0)
-                        {
-                            t.position.y += (player.speed* dt);
-                        }
-                        
-                    } while (col.IsCollided(t.position, collision, transform.position));
-            
-            
-                        if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
-                        {
-                            lab::NextLvl& lvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
-
-                            
-                            if(lvl.id==1)
-                            {
-                                auto& view = Engine::Res<Tilemap>()["tilemaps/lab/lab.map"]->tiles;
-                                Engine::Registry().destroy(view.begin(),view.end());
-                                t.position = {  -100, 0 , 0.0f };
-                                
-                                
-                                TilemapLegend first;
-                                first['#'] = &CreateWallTop;
-                                first['='] = &CreateWallUpPart;
-                                first['-'] = &CreateWallDownPart;
-                                first['.'] = &CreateFloor;
-                                first['|'] = &CreateSideWallRight;  
-                                first[':'] = &CreateSideWallLeft;
-                                first['1'] = &CreateWall1;
-                                first['3'] = &CreateWall3;
-                                first['0'] = &Empty;
-                                first['F'] = &Door;
-                                first['Q'] = &CreateWallBottom1;
-                                first['W'] = &CreateWallBottom6;
-                                first['8'] = &Hall;
-                                first['Z'] = &CreateBlankWall;
-                                
-                                Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/hallway.map", &first});
-                            }
-                
-                        }
+                        t.position.x -= (player.speed * dt);
                     }
 
-                col.colided = false;
+                    if (collisionSides.y > 0)
+                    {
+                        t.position.y -= (player.speed* dt);
+                    }
+                    if (collisionSides.x < 0)
+                    {
+                        t.position.x += (player.speed * dt);
+                    }
+
+                    if (collisionSides.y < 0)
+                    {
+                        t.position.y += (player.speed* dt);
+                    }
+                        
+                } while (col.IsCollided(t.position, collision, transform.position));
+            
+            
+                if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
+                {
+                    lab::NextLvl& nextLvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
+                    lab::NextLvl& currentLvl = Engine::Registry().get<lab::NextLvl>(entity);
+
+                    GenerateRoom(nextLvl.id,currentLvl,t);
                 }
             }
-            
-        
 
-
-
-
-
+            col.colided = false;
+        }
+    }   
+ 
 }
 
 void PlayerControllerSystem::WindDown()
