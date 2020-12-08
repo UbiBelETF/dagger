@@ -10,9 +10,15 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
+#include "core/graphics/sprite_render.h"
+#include "core/graphics/textures.h"
+#include "core/graphics/animations.h"
+#include "core/graphics/gui.h"
+#include "tools/diagnostics.h"
 
+#include "gameplay/team_game/team_game_collisions.h"
+#include "gameplay/team_game/gravity.h"
 #include "gameplay/team_game/game_manager.h"
-#include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_player_input.h"
 
@@ -20,10 +26,12 @@ using namespace dagger;
 
 void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
-    engine_.AddSystem<GameManagerSystem>();
-    engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
-    //engine_.AddSystem<TeamGamePlayerInputSystem>();
+    engine_.AddSystem<GameManagerSystem>();
+    engine_.AddSystem<CharacterControllerSystem>();
+    //engine_.AddSystem<TeamGamePlayerInputSystem>();    
+    engine_.AddSystem<GravitySystem>();
+    engine_.AddSystem<CollisionSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
@@ -33,7 +41,7 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 2;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -57,6 +65,16 @@ void team_game::SetupWorld(Engine& engine_)
         AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
         sprite.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
 
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        transform.position = sprite.position;
+
+        auto& collider = reg.get_or_emplace<Collider>(entity);
+        collider.size = sprite.size;
+        collider.entityType = CollisionID::PLAYER;
+        collider.hasGravity = true;
+
+        auto& gravity = reg.get_or_emplace<Gravity>(entity);
+      
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
 

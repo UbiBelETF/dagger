@@ -30,7 +30,7 @@ namespace platformer
 		Float32 rollingTime{ 0.75f };
 		Float32 timeRolling{ 0.0f };
 		Float32 timeJumping{ 0.0f };
-		Float32 verticalInitialSpeed{ 100.0f };
+		Float32 verticalInitialSpeed{ 120.0f };
 		Float32 verticalSpeed{ 0.0f };
 		Float32 gravity{ 150.0f };
 		Float32 speed{ 0.0f };

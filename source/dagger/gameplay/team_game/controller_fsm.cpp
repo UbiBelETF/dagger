@@ -1,10 +1,15 @@
 #include "controller_fsm.h"
+
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
+#include "core/game/transforms.h"
+#include "gravity.h"
+
 #include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/team_game_collisions.h"
 
 using namespace dagger;
 
@@ -26,6 +31,10 @@ void team_game::CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateC
 	{
 		GoTo(ECharacterStates::Running, state_);
 	}
+	if (EPSILON_NOT_ZERO(input.Get("jump")))
+	{
+		GoTo(ECharacterStates::Jumping, state_);
+	}
 }
 
 
@@ -43,17 +52,62 @@ void team_game::CharacterControllerFSM::Running::Exit(CharacterControllerFSM::St
 
 void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, input, character] = Engine::Registry().get<Sprite, InputReceiver, team_game::PlayerCharacter>(state_.entity);
+	auto&& [sprite, transform, input, character] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter>(state_.entity);
 
 	Float32 run = input.Get("run");
+	Float32 jump = input.Get("jump");
 
-	if (EPSILON_ZERO(run))
+	if (EPSILON_ZERO(jump))
 	{
-		GoTo(ECharacterStates::Idle, state_);
+		if (EPSILON_ZERO(run))
+		{
+			GoTo(ECharacterStates::Idle, state_);
+		}
+		else
+		{
+			sprite.scale.x = run;
+			transform.position.x += character.speed * sprite.scale.x * Engine::DeltaTime();
+		}
 	}
 	else
 	{
+		GoTo(ECharacterStates::Jumping, state_);
+	}
+	
+}
+
+//BASIC Jumping
+
+void team_game::CharacterControllerFSM::Jumping::Enter(CharacterControllerFSM::StateComponent& state_)
+{
+	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
+	gravity.verticalCurrentSpeed = gravity.verticalInitialSpeed;
+}
+
+void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::StateComponent& state_)
+{
+
+}
+
+void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::StateComponent& state_)
+{
+	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
+
+	Float32 run = input.Get("run");
+	Float32 jump = input.Get("jump");
+
+	transform.position.y += gravity.verticalInitialSpeed * Engine::DeltaTime();
+
+	if (EPSILON_NOT_ZERO(run))
+	{	
 		sprite.scale.x = run;
-		sprite.position.x += character.speed * sprite.scale.x * Engine::DeltaTime();
+		transform.position.x += character.speed * sprite.scale.x * Engine::DeltaTime();
+	}
+
+	if (!collider.canGoDown)
+	{
+		GoTo(ECharacterStates::Idle, state_);
 	}
 }
+
+
