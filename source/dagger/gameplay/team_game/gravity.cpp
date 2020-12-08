@@ -12,6 +12,10 @@ void team_game::GravitySystem::Run()
 {
     Engine::Registry().view<Collider, Gravity, Transform>().each([&](Collider& collider_, Gravity& gravity_, Transform& transform_) 
         {
+            if (!collider_.canGoUp)
+            {
+                gravity_.verticalCurrentSpeed = -100.f;
+            }
             if (collider_.canGoDown)
             {       
                 if (abs(gravity_.verticalCurrentSpeed) > gravity_.terminalVelocity)

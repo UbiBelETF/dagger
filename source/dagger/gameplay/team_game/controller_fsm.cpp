@@ -96,8 +96,6 @@ void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::Sta
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");
 
-	transform.position.y += gravity.verticalInitialSpeed * Engine::DeltaTime();
-
 	if (EPSILON_NOT_ZERO(run))
 	{	
 		sprite.scale.x = run;

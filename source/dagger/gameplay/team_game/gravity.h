@@ -10,14 +10,14 @@ namespace team_game {
     {
         Float32 airTime = 0.f;
         Float32 terminalVelocity = 1000.f;
-        Float32 verticalInitialSpeed{ 150.f };
+        Float32 verticalInitialSpeed{ 300.f };
         Float32 verticalCurrentSpeed{ 0.f };
     };
 
     class GravitySystem : public System
     {
     private:
-        float m_GravityAcceleration = 45.f;
+        float m_GravityAcceleration = 4.f;
     public:
         inline String SystemName() { return "Platformer Collisions System"; }
 
