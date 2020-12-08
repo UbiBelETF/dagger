@@ -41,7 +41,7 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 2;
+    camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -63,10 +63,9 @@ void team_game::SetupWorld(Engine& engine_)
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
-        sprite.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
 
         auto& transform = reg.get_or_emplace<Transform>(entity);
-        transform.position = sprite.position;
+        transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel() - 1];
 
         auto& collider = reg.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;

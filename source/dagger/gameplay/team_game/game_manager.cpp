@@ -33,7 +33,7 @@ void GameManagerSystem::LoadNextLevel()
 void GameManagerSystem::LoadBackDrop()
 {
     String filePath = fmt::format("levels/backdrop/backdrop_{}.txt", currentLevel);
-    LoadTextures(filePath, true);
+    LoadTextures(filePath, false);
 }
 
 void GameManagerSystem::LoadPlatforms()
