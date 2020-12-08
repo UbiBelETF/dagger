@@ -9,7 +9,8 @@ namespace lab
 {
 	struct Bandit {
 		Float32 speed = 20.f;
-		int cooldown = 10;
+		int cooldown = 200;
+		int maxCooldown = 200;
 		int health = 100;
 		Float32 timeWounded = 100;
 	};

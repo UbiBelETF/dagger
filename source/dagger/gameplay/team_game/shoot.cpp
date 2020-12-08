@@ -69,7 +69,9 @@ void lab::ShootingSystem::Run()
 		if (col.colided)
 		{
 			col.colided = false;
-			Engine::Registry().remove_all(entity);
+			auto& reg = Engine::Instance().Registry();
+			if (!reg.has<Bullet>(col.colidedWith))
+				Engine::Registry().remove_all(entity);
 		}
 	}
 }
