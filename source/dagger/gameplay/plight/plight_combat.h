@@ -19,9 +19,16 @@ namespace plight {
 
         Entity backgroundHealthBar;
         Entity currentHealthBar;
+        Float32 healthBarOffset{0.f};
 
         Entity backgroundStaminaBar;
         Entity currentStaminaBar;
+        Float32 staminaBarOffset{0.f};
+
+        Float32 playerDistance{ 40.f };
+        
+        Float32 updateTimer{ 0.01f };
+        Float32 currentTimer{ 0.f };
     };
 
     class PlightCombatSystem : public System
