@@ -77,9 +77,14 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
 
                 String rootDir = "TeamGame:";
                 AssignSprite(spriteBlock, rootDir + baseDir + ":" + textureName);
+                /*
                 spriteBlock.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
                                          j * spriteSize.y + spriteSize.y / 2 + pos.y,
-                                         zPos };
+                                         zPos };*/
+                auto& transform = reg.get_or_emplace<Transform>(block);
+                transform.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
+                                     j * spriteSize.y + spriteSize.y / 2 + pos.y,
+                                     zPos };
 
                 scale.x = spriteSize.x / spriteBlock.size.x;
                 scale.y = spriteSize.y / spriteBlock.size.y;
@@ -87,12 +92,7 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
                 spriteBlock.scale = scale;
 
                 if (addCollision_)
-                {
-                    auto& transform = reg.get_or_emplace<Transform>(block);
-                    transform.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
-                                         j * spriteSize.y + spriteSize.y / 2 + pos.y,
-                                         zPos };                    
-
+                {                  
                     auto& collider = reg.get_or_emplace<Collider>(block);
                     collider.entityType = CollisionID::TERRAIN;
                     collider.state = MovementState::IMMOBILE;

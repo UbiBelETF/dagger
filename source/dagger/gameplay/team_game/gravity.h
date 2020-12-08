@@ -17,7 +17,7 @@ namespace team_game {
     class GravitySystem : public System
     {
     private:
-        float m_GravityAcceleration = 2.f;
+        float m_GravityAcceleration = 45.f;
     public:
         inline String SystemName() { return "Platformer Collisions System"; }
 
