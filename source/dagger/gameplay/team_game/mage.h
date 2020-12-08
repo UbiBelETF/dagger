@@ -29,6 +29,7 @@ namespace ancient_defenders {
 
         SInt32 postition = 0;
         Vector2 direction = { -1, 0 };
+        Vector2 offset = { 0,0 };
 
         EAction currentAction = EAction::Moving;
     };
@@ -54,7 +55,7 @@ namespace ancient_defenders {
 
     struct WalkingPath {
         static UInt32 numberOfPoints;
-        static std::list<Vector2> path;
+        static Sequence<Vector2> path;
     };
 
 
