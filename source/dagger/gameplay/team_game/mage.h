@@ -48,10 +48,6 @@ namespace ancient_defenders {
         
     };
 
-    struct Enemy { // Until proper system is done
-        Float32 health = 100.0f;
-    };
-
     struct WalkingPath {
         static UInt32 numberOfPoints;
         static std::list<Vector2> path;

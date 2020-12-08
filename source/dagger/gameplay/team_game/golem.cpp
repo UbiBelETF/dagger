@@ -28,8 +28,8 @@ void ancient_defenders::GolemBehaviorSystem::WindDown()
 
 void ancient_defenders::GolemBehaviorSystem::Run()
 {
-	Engine::Registry().view<GolemStats, Sprite, Transform, Animator, RangeOfAttack>().each(
-		[](GolemStats& golem_, Sprite& sprite_, Transform& transform_, Animator& animation_, RangeOfAttack& range_)
+	Engine::Registry().view<Enemy, Sprite, Transform, Animator, RangeOfAttack>().each(
+		[](Enemy& golem_, Sprite& sprite_, Transform& transform_, Animator& animation_, RangeOfAttack& range_)
 		{
 			if (range_.targetFound) golem_.currentAction = EAction::Attacking;
 
@@ -67,16 +67,7 @@ void ancient_defenders::GolemBehaviorSystem::Run()
 				}
 				else golem_.direction.y = 0;
 
-				if (golem_.direction.x != 0) {
-					sprite_.scale.x = (-golem_.direction.x) * abs(sprite_.scale.x);
-					AnimatorPlay(animation_, "ancient_defenders:golem:WALK_SIDE");
-				}
-				else if (golem_.direction.y == 1) {
-					AnimatorPlay(animation_, "ancient_defenders:golem:WALK_SIDE");
-				}
-				else {
-					AnimatorPlay(animation_, "ancient_defenders:golem:WALK_SIDE");
-				}
+				AnimatorPlay(animation_, "ancient_defenders:golem:WALK_SIDE");
 
 				transform_.position.x += golem_.direction.x * golem_.speed * Engine::DeltaTime();
 				transform_.position.y += golem_.direction.y * golem_.speed * Engine::DeltaTime();
@@ -101,24 +92,9 @@ void ancient_defenders::GolemBehaviorSystem::Run()
 
 			}
 			else if (golem_.currentAction == EAction::Attacking) {
-				if (golem_.direction.x != 0) {
-					sprite_.scale.x = (-golem_.direction.x) * abs(sprite_.scale.x);
-					AnimatorPlay(animation_, "ancient_defenders:golem:ATTACK_FRONT");
-				}
-				else if (golem_.direction.y == 1) {
-					AnimatorPlay(animation_, "ancient_defenders:golem:ATTACK_FRONT");
-				}
-				else {
-					AnimatorPlay(animation_, "ancient_defenders:golem:ATTACK_FRONT");
-				}
+				AnimatorPlay(animation_, "ancient_defenders:golem:ATTACK_FRONT");
 				Engine::Registry().get<MageStats>(range_.target).health -= golem_.meleeDmg;
 				golem_.currentAction = EAction::Moving; // Go back to moving after attacking
-			}
-			else if (golem_.currentAction == EAction::Chanting) {
-				// Increase tower building progres
-			}
-			else if (golem_.currentAction == EAction::Defending) {
-				// Cast spells
 			}
 		});
 
@@ -126,11 +102,12 @@ void ancient_defenders::GolemBehaviorSystem::Run()
 
 void ancient_defenders::GolemBehaviorSystem::OnEndOfFrame()
 {
-	auto view = Engine::Registry().view<Enemy>();
+
+	auto view = Engine::Registry().view<MageStats>();
 
 	auto it = view.begin();
 	while (it != view.end()) {
-		auto& en = view.get<Enemy>(*it);
+		auto& en = view.get<MageStats>(*it);
 		if (en.health <= 0.0f) {
 			Engine::Registry().destroy(*it);
 		}
@@ -144,7 +121,7 @@ Golem ancient_defenders::Golem::Get(Entity entity_)
 	auto& sprite = reg.get_or_emplace<Sprite>(entity_);
 	auto& pos = reg.get_or_emplace<Transform>(entity_);
 	auto& anim = reg.get_or_emplace<Animator>(entity_);
-	auto& gol = reg.get_or_emplace<GolemStats>(entity_);
+	auto& gol = reg.get_or_emplace<Enemy>(entity_);
 	auto& col = reg.get_or_emplace<SimpleCollision>(entity_);
 	auto& roa = reg.get_or_emplace<RangeOfAttack>(entity_);
 
@@ -157,7 +134,7 @@ Golem ancient_defenders::Golem::Create()
 	auto entity = reg.create();
 	auto gol = Golem::Get(entity);
 
-	AssignSprite(gol.sprite, "spritesheets:golem_little_sheet:golem_stand_side:1");
+	AssignSprite(gol.sprite, "spritesheets:golem-little-sheet:golem_stand_side:1");
 	float ratio = gol.sprite.size.y / gol.sprite.size.x;
 	gol.sprite.scale = { 4,4 };
 
@@ -165,7 +142,8 @@ Golem ancient_defenders::Golem::Create()
 
 	gol.coordinates.position = { start.x, start.y, 1.0f };
 
-	gol.golem.meleeDmg = 1.0f;
+	gol.golem.health = 100.0f;
+	gol.golem.meleeDmg = 0.2f;
 
 	gol.golem.speed = 150.0f;
 	gol.golem.direction = { -1,0 };
@@ -174,7 +152,7 @@ Golem ancient_defenders::Golem::Create()
 	gol.range.range = gol.hitbox.size.x;
 
 	gol.range.unitType = ETarget::Golem;
-	gol.range.targetType = ETarget::Golem;
+	gol.range.targetType = ETarget::Mage;
 
 	return gol;
 }

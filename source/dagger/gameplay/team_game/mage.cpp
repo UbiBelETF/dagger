@@ -1,4 +1,5 @@
 #include "mage.h"
+#include "golem.h"
 #include "range_of_attack.h"
 
 #include "core/engine.h"
@@ -165,8 +166,9 @@ Mage ancient_defenders::Mage::Create()
     auto start = WalkingPath::path.front();
     
     mag.coordinates.position = { start.x, start.y, 1.0f };
-
-    mag.mage.meleeDmg = 1.0f;
+	
+	mag.mage.health = 100.0f;
+    mag.mage.meleeDmg = 0.1f;
 
     mag.mage.speed = 150.0f;
     mag.mage.direction = { -1,0 };
