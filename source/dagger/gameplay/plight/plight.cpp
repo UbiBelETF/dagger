@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include "plight.h"
 
 #include "core/core.h"
@@ -13,12 +14,15 @@
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
+#include <time.h>
+#include <math.h>
 
-
+#include "gameplay/plight/plight_tilemaps_initialization.h"
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/tilemaps.h"
 
 
 
@@ -69,15 +73,15 @@ struct PlightCharacter
 
 
         chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { position_, 0.0f };
+        chr.sprite.position = { position_, 2.f };
         chr.sprite.color = { color_, 1.0f };
 
         chr.col.size.x = 16;
         chr.col.size.y = 16;
 
-        chr.transform.position = { position_, 0.0f };
+        chr.transform.position = { position_, 2.0f };
 
-        AssignSprite(chr.sprite, "Plight:big_deamon:IDLE:big_demon_idle_anim_f0");
+        AssignSprite(chr.sprite, "spritesheets:dungeon:big_demon_idle_anim:1");
         AnimatorPlay(chr.animator, "Plight:big_deamon:IDLE");
 
         if (input_ != "")
@@ -92,6 +96,7 @@ struct PlightCharacter
         AssignSprite(crosshairSprite, "Plight:crosshair:crosshair");
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
+        crosshairSprite.position.z = chr.sprite.position.z;
 
 
         return chr;
@@ -105,8 +110,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightCollisionsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
-
-
+    engine_.AddSystem<TilemapSystem>();
 }
 
 void Plight::WorldSetup(Engine &engine_)
@@ -120,7 +124,8 @@ void Plight::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-
+    srand(time(NULL));
+    plight::SetupTilemaps();
     plight::SetupWorld_AimingSystem(engine_);
 
 }
@@ -137,7 +142,7 @@ void setUpBackground(Engine& engine_) {
         {
             auto entity = reg.create();
             auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSprite(sprite, fmt::format("Plight:floor:floor_{}", 1 + (rand() % 8)));
+            AssignSprite(sprite, fmt::format("spritesheets:dungeon:floor_{}", 1 + (rand() % 8)));
             sprite.position = { i * 16, j * 16, 10 };
         }
     }
@@ -155,7 +160,7 @@ void plight::SetupWorld_test1(Engine& engine_) {
 void plight::SetupWorld_CombatSystem(Engine& engine_){
     setUpBackground(engine_);
 
-    auto mainChar = PlightCharacter::Create("ASDW_topdown", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = PlightCharacter::Create("ASDW_topdown", { 1, 1, 1 }, { -356,32 });
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -202,7 +207,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
 
 
-    auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 100, 0 });
+    auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 356,32 });
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
@@ -250,9 +255,9 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
 void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
-    setUpBackground(engine_);
+    //setUpBackground(engine_);
 
-    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -100, 0 });
+    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -297,7 +302,10 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite.scale = { 1, 1 };
     frontStaminaSprite.position = { -100, 115, 1 };
 
-    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 100, 0 });
+    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 });
+    sndChar.crosshair.angle = M_PI;
+    auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
+    crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
@@ -340,6 +348,47 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite2.size = { 50, 5 };
     frontStaminaSprite2.scale = { 1, 1 };
     frontStaminaSprite2.position = { 100, 115, 1 };
+}
+
+void plight::SetupTilemaps()
+{
+    TilemapLegend floorLegend;
+    floorLegend['.'] = &CreateFloor;
+    floorLegend[','] = &CreateBlackBackground;
+    floorLegend['S'] = &CreateFloorSpikes;
+    floorLegend['R'] = &CreateWallMid;
+    floorLegend['C'] = &CreateRoof;
+    floorLegend['P'] = &CreateWallColumn;
+
+    TilemapLegend wallLegend;
+    wallLegend['.'] = &CreateEmpty;
+    wallLegend['1'] = &CreateWallSideTopLeft;
+    wallLegend['2'] = &CreateWallSideTopRight;
+    wallLegend['3'] = &CreateWallCornerBottomLeft;
+    wallLegend['4'] = &CreateWallCornerBottomRight;
+    wallLegend['J'] = &CreateWallCornerMidRight;
+    wallLegend['|'] = &CreateWallSideMidLeft;
+    wallLegend['}'] = &CreateSideWallMidRight;
+    wallLegend['#'] = &CreateWallMid;
+    wallLegend['L'] = &CreateWallSideFrontLeft;
+    wallLegend['_'] = &CreateFrontWall;
+    wallLegend['-'] = &CreateWallCornerRight;
+    wallLegend['R'] = &CreateWallSideFrontRight;
+    wallLegend['Z'] = &CreateWallBannerBlue;
+    wallLegend['X'] = &CreateWallBannerRed;
+    wallLegend['K'] = &CreateWallCornerLeft;
+    wallLegend['G'] = &CreateWallGoo;
+    wallLegend['U'] = &CreateBlueFountain;
+    wallLegend['V'] = &CreateRedFountain;
+
+
+    TilemapLegend featuresLegend;
+    featuresLegend[','] = &CreateEmpty;
+    featuresLegend['.'] = &CreateEmpty;
+
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_floor.map", &floorLegend });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_walls.map", &wallLegend });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_features.map", &featuresLegend });
 }
 
 

@@ -6,11 +6,11 @@
       "actions": [
         {
           "trigger": "KeyRight",
-          "value": -0.05
+          "value": -1
         },
         {
           "trigger": "KeyLeft",
-          "value": 0.05
+          "value": 1
         }
       ]
     },
