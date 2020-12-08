@@ -64,6 +64,16 @@ void team_game::SetupWorld(Engine& engine_)
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
         sprite.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
+
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        transform.position = sprite.position;
+
+        auto& collider = reg.get_or_emplace<Collider>(entity);
+        collider.size = sprite.size;
+        collider.entityType = CollisionID::PLAYER;
+        collider.hasGravity = true;
+
+        auto& gravity = reg.get_or_emplace<Gravity>(entity);
       
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
@@ -71,5 +81,5 @@ void team_game::SetupWorld(Engine& engine_)
         auto& character = reg.emplace<PlayerCharacter>(entity);
         character.speed = 50;
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
-    }*/
+    }
 }
