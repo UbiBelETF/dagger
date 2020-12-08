@@ -16,3 +16,9 @@ void dagger::AnimatorStop(Animator& animator_)
 {
 	animator_.animationPlaying = false;
 }
+
+UInt32 dagger::AnimatorNumberOfFrames(Animator& animator_)
+{
+	const auto currentAnimation = AnimationSystem::Get(animator_.currentAnimation);
+	return currentAnimation->frames.size() - 1;
+}

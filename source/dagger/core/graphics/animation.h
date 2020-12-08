@@ -34,4 +34,5 @@ namespace dagger
 
 	void AnimatorPlay(Animator& animator_, String animationName_);
 	void AnimatorStop(Animator& animator_);
+	UInt32 AnimatorNumberOfFrames(Animator& animator_);
 }

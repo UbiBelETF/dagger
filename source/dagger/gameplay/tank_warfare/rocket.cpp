@@ -30,11 +30,7 @@ void RocketSystem::Run()
 			if (Engine::Registry().has<Rocket>(col.colidedWith))
 			{
 				AnimatorPlay(anim, "explosion:small");
-				if (anim.currentFrame == 7)
-				{
-					AnimatorStop(anim);
-				}
-				if (!anim.animationPlaying)
+				if (anim.currentFrame == AnimatorNumberOfFrames(anim))
 				{
 					rocket.toBeDestroyed = true;
 				}
@@ -53,11 +49,7 @@ void RocketSystem::Run()
 					tank.health -= rocket.damage;
 					rocket.damage = 0;
 					AnimatorPlay(anim, "explosion:small");
-					if (anim.currentFrame == 7)
-					{
-						AnimatorStop(anim);
-					}
-					if (!anim.animationPlaying)
+					if (anim.currentFrame == AnimatorNumberOfFrames(anim))
 					{
 						rocket.toBeDestroyed = true;
 					}
