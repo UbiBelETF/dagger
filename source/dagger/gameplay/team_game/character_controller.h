@@ -12,7 +12,7 @@ namespace team_game
 	{
 		float speed{ 1.f };
 		float airTime{ 0.f };
-		float jumpSpeed{ 400.f };
+		float jumpSpeed{ 50.f };
 	};
 
 	class CharacterControllerSystem
