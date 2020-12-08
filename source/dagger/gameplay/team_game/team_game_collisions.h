@@ -9,7 +9,7 @@ namespace team_game
 {
     enum class CollisionSide { NONE, RIGHT, LEFT, TOP, BOTTOM };
 
-    enum class PlatformerCollisionID { PLAYER, TERRAIN, ENEMY };
+    enum class CollisionID { PLAYER, TERRAIN, ENEMY };
 
     enum class MovementState { IMMOBILE, UNSTOPPABLE, MOVEABLE };
 
@@ -22,7 +22,7 @@ namespace team_game
 
     struct Collider
     {
-        PlatformerCollisionID entityType = PlatformerCollisionID::PLAYER;//this is a placeholder and should be changed to not be automatically player
+        CollisionID entityType = CollisionID::PLAYER;//this is a placeholder and should be changed to not be automatically player
         MovementState state = MovementState::MOVEABLE;
 
         Vector2 size;
@@ -46,7 +46,7 @@ namespace team_game
 
     };
 
-    class PlatformerCollisionSystem : public System
+    class CollisionSystem : public System
     {
     public:
 

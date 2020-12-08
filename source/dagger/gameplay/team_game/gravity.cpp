@@ -14,13 +14,13 @@ void team_game::GravitySystem::Run()
         {
             if (collider_.canGoDown)
             {                
-                if (gravity_.terminalVelocity < m_GravityStrength * gravity_.airTime)
+                if (gravity_.terminalVelocity < m_GravityAcceleration * gravity_.airTime)
                 {
                     transform_.position.y -= gravity_.terminalVelocity;
                 }
                 else
                 {
-                    transform_.position.y -= m_GravityStrength * gravity_.airTime;
+                    transform_.position.y -= m_GravityAcceleration * gravity_.airTime;
                 }
                 gravity_.airTime += Engine::DeltaTime();
             }

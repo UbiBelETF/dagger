@@ -6,7 +6,7 @@
 using namespace dagger;
 using namespace team_game;
 
-void PlatformerCollisionSystem::Run()
+void CollisionSystem::Run()
 {
     auto view = Engine::Registry().view<Collider, Transform>();
     auto iterator = view.begin();
@@ -141,16 +141,20 @@ CollisionInfo Collider::GetCollisionInfo(Vector3& pos_, const Collider& other_, 
     return collisionInfo;
 }
 
-void PlatformerCollisionSystem::LimitPlayerMovement(Collider& collision_)
+void CollisionSystem::LimitPlayerMovement(Collider& collision_)
 {
     if (!collision_.listOfEntities.empty())
     {
         for (int i = 0; i < collision_.listOfEntities.size(); i++)
         {
-            collision_.canGoRight = (collision_.listOfCollisionSides[i] == CollisionSide::RIGHT) ? false : collision_.canGoRight;//character_.canGoRight;
-            collision_.canGoLeft = (collision_.listOfCollisionSides[i] == CollisionSide::LEFT) ? false : collision_.canGoLeft; //character_.canGoLeft;
-            collision_.canGoUp = (collision_.listOfCollisionSides[i] == CollisionSide::TOP) ? false : collision_.canGoUp; //character_.canGoUp;
-            collision_.canGoDown = (collision_.listOfCollisionSides[i] == CollisionSide::BOTTOM) ? false : collision_.canGoDown; //character_.canGoDown;
+            //character_.canGoRight;
+            collision_.canGoRight = (collision_.listOfCollisionSides[i] == CollisionSide::RIGHT) ? false : collision_.canGoRight;
+            //character_.canGoLeft;
+            collision_.canGoLeft = (collision_.listOfCollisionSides[i] == CollisionSide::LEFT) ? false : collision_.canGoLeft; 
+            //character_.canGoUp;
+            collision_.canGoUp = (collision_.listOfCollisionSides[i] == CollisionSide::TOP) ? false : collision_.canGoUp; 
+            //character_.canGoDown;
+            collision_.canGoDown = (collision_.listOfCollisionSides[i] == CollisionSide::BOTTOM) ? false : collision_.canGoDown;
         }
     }
 }

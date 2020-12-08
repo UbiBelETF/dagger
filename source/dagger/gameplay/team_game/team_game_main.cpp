@@ -23,7 +23,7 @@ using namespace dagger;
 void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<CharacterControllerSystem>();
-    engine_.AddSystem<PlatformerCollisionSystem>();
+    engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<GravitySystem>();
 }
 
@@ -68,7 +68,7 @@ void team_game::SetupWorld(Engine& engine_)
 
         auto& collision = reg.get_or_emplace<Collider>(entity);
         collision.size = { 20, 40 };
-        collision.entityType = PlatformerCollisionID::PLAYER;
+        collision.entityType = CollisionID::PLAYER;
         collision.state = MovementState::MOVEABLE;
         collision.hasGravity = true;
 
@@ -94,7 +94,7 @@ void team_game::SetupWorld(Engine& engine_)
 
         auto& collision = reg.get_or_emplace<Collider>(entity);
         collision.size = { 20, 40 };
-        collision.entityType = PlatformerCollisionID::PLAYER;
+        collision.entityType = CollisionID::PLAYER;
         collision.state = MovementState::MOVEABLE;
         collision.hasGravity = true;
 
@@ -120,7 +120,7 @@ void team_game::SetupWorld(Engine& engine_)
 
         auto& collision = reg.get_or_emplace<Collider>(entity);
         collision.size = { 1000, 20 };
-        collision.entityType = PlatformerCollisionID::TERRAIN;
+        collision.entityType = CollisionID::TERRAIN;
         collision.state = MovementState::IMMOBILE;
     }
 
