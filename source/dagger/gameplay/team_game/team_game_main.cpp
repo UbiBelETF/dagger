@@ -66,7 +66,7 @@ void team_game::SetupWorld(Engine& engine_)
         sprite.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
 
         auto& transform = reg.get_or_emplace<Transform>(entity);
-        transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel() - 1];;
+        transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel() - 1];
 
         auto& collider = reg.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;
@@ -79,7 +79,6 @@ void team_game::SetupWorld(Engine& engine_)
         input.contexts.push_back("Controls");
 
         auto& character = reg.emplace<PlayerCharacter>(entity);
-        character.speed = 50;
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
     }
 }

@@ -8,9 +8,8 @@ namespace team_game {
 
     struct Gravity
     {
-        Float32 airTime = 0.f;
         Float32 terminalVelocity = 1000.f;
-        Float32 verticalInitialSpeed{ 400.f };
+        Float32 verticalInitialSpeed{ 500.f };
         Float32 verticalCurrentSpeed{ 0.f };
     };
 

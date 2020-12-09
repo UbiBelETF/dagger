@@ -29,7 +29,6 @@ void team_game::GravitySystem::Run()
             }
             else
             {
-                gravity_.airTime = 0.f;
                 gravity_.verticalCurrentSpeed = 0.f;
             } 
         });
