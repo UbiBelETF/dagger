@@ -1,6 +1,7 @@
 #pragma once
 
 #include "range_of_attack.h"
+#include "hp_system.h"
 
 #include "core/core.h"
 #include "core/system.h"
@@ -23,7 +24,6 @@ namespace ancient_defenders {
     };
 
     struct MageStats {
-        Float32 health;
         Float32 speed;
         Float32 meleeDmg;
 
@@ -42,6 +42,7 @@ namespace ancient_defenders {
         MageStats & mage;
         SimpleCollision & hitbox;
         RangeOfAttack & range;
+        Health & health;
 
         static Mage Get(Entity entity_);
 
@@ -64,7 +65,7 @@ namespace ancient_defenders {
     {
 
     public:
-        inline String SystemName() { return "Racing Tools System"; }
+        inline String SystemName() { return "Mage Behaviour System"; }
 
         void SpinUp() override;
         void WindDown() override;

@@ -1,6 +1,7 @@
 #include "team_game_main.h"
 #include "mage.h"
 #include "range_of_attack.h"
+#include "hp_system.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -22,6 +23,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
       engine_.AddSystem<SimpleCollisionsSystem>();
       engine_.AddSystem<RangedTargetingSystem>();
       engine_.AddSystem<MageBehaviorSystem>();
+      engine_.AddSystem<HealthManagementSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -71,15 +73,17 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
 
-        AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
         sprite.scale = { -2,2 };
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
         coordinates.position = { 38, -178 , 1.0f };
 
-        auto & en = reg.emplace<Enemy>(entity);
-        en.health = 100.0f;
+
+        auto & en = reg.emplace<Health>(entity);
+        en.currentHealth = 10.0f;
+        en.maxHealth = 10.0f;
 
         auto & sc = reg.emplace<SimpleCollision>(entity);
         sc.size = sprite.size;
@@ -94,15 +98,17 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
 
-        AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
         sprite.scale = { 2,2 };
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
         coordinates.position = { 292, 8 , 1.0f };
 
-        auto & en = reg.emplace<Enemy>(entity);
-        en.health = 30.0f;
+
+        auto & en = reg.emplace<Health>(entity);
+        en.currentHealth = 30.0f;
+        en.maxHealth = 30.0f;
 
         auto & sc = reg.emplace<SimpleCollision>(entity);
         sc.size = sprite.size;
@@ -123,8 +129,9 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         auto & coordinates = reg.emplace<Transform>(entity);
         coordinates.position = { -312, -100 , 1.0f };
 
-        auto & en = reg.emplace<Enemy>(entity);
-        en.health = 10.0f;
+        auto & en = reg.emplace<Health>(entity);
+        en.currentHealth = 10.0f;
+        en.maxHealth = 10.0f;
 
         auto & sc = reg.emplace<SimpleCollision>(entity);
         sc.size = sprite.size;
@@ -134,6 +141,7 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         roa.unitType = ETarget::Golem;
         roa.targetType = ETarget::Mage;
     }
+
 }
 
 void ancient_defenders::LoadPath() {
