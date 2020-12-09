@@ -81,11 +81,18 @@ void PlayerControllerSystem::Run()
         });
             auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
             auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
+            auto viewDamage = Engine::Registry().view<Bullet, Transform, SimpleCollision,PlayerCharacter>();
             for (auto entity : view)
             {
                 auto &t = view.get<Transform>(entity);
                 auto &player = view.get<PlayerCharacter>(entity);
                 auto &col = view.get<SimpleCollision>(entity);
+
+                if (player.health <= 0)
+                {
+                    Engine::Registry().destroy(entity);
+                }
+
 
                 if (col.colided)
                 {
@@ -130,6 +137,13 @@ void PlayerControllerSystem::Run()
                                 printf("its working");//Placeholder for future level transition
                             }
                 
+                        }
+
+                        if (Engine::Registry().has<Bullet>(col.colidedWith))
+                        {
+                            Bullet &bullet = Engine::Registry().get<Bullet>(col.colidedWith);
+					        player.health -= bullet.damage;
+                            printf("radi");
                         }
                     }
 
