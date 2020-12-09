@@ -25,8 +25,7 @@ void team_game::GravitySystem::Run()
                 
                 transform_.position.y += gravity_.verticalCurrentSpeed * Engine::DeltaTime();
                 
-                gravity_.airTime += Engine::DeltaTime();
-                gravity_.verticalCurrentSpeed -= m_GravityAcceleration * gravity_.airTime;
+                gravity_.verticalCurrentSpeed -= m_GravityAcceleration * Engine::DeltaTime();
             }
             else
             {
