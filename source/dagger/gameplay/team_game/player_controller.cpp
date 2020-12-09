@@ -97,7 +97,7 @@ void PlayerControllerSystem::Run()
                 if (player.health <= 0)
                 {
                     tex.alignment={ TextAlignment::CENTER };
-                    tex.Set("pixel-font", "GAME OVER");
+                    tex.Set("pixel-font", "GAME OVER",{30,30});
                     Engine::Registry().destroy(entity);              
                                    
                 }
@@ -155,7 +155,7 @@ void PlayerControllerSystem::Run()
                             if(player.health<0){
                                 player.health=0;
                             } 
-                            tex.Set("pixel-font", std::to_string(player.health)+"/100",{20,-80,0});
+                            tex.Set("pixel-font", std::to_string(player.health)+"/100",{10,-95,0},{10,10});
                             
                         }
                         
