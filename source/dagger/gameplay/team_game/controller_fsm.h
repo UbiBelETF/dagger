@@ -26,11 +26,13 @@ namespace team_game
 
 		DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Idle);
 		DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Running);
+		DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Jumping);
 
 		CharacterControllerFSM()
 		{
 			CONNECT_STATE(ECharacterStates, Idle);
 			CONNECT_STATE(ECharacterStates, Running);
+			CONNECT_STATE(ECharacterStates, Jumping);
 		}
 
 		void Run(StateComponent& component_) override;
