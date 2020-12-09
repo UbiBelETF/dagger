@@ -86,12 +86,14 @@ void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::Sta
 	
 }
 
-//BASIC Jumping
+//BASIC Jumping, InputReceiver to differentiate player character from other characters. Will likely get removed based on the implementation
 
 void team_game::CharacterControllerFSM::Jumping::Enter(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
+	auto&& [input, character, gravity, anim] = Engine::Registry().get<InputReceiver, team_game::PlayerCharacter, Gravity, AnimationFSM::StateComponent>(state_.entity);
 	gravity.verticalCurrentSpeed = gravity.verticalInitialSpeed;
+	((CharacterControllerFSM*)this->GetFSM())->animationFSM.GoTo(EAnimationStates::Jumping, anim);
+	
 }
 
 void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::StateComponent& state_)

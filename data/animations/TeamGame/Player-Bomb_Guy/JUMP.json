@@ -1,0 +1,11 @@
+{
+	"animation-name": "TeamGame:Player-Bomb_Guy:JUMP",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Jump:1" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Jump:2" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Jump:3" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Jump:4" }
+	]
+}
