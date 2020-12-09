@@ -2,8 +2,11 @@
 
 #include <core/engine.h>
 #include <core/graphics/sprite.h>
+#include <core/game/transforms.h>
 
 #include <gameplay/team_game/team_game_main.h>
+#include "gameplay/team_game/team_game_collisions.h"
+
 
 using namespace dagger;
 using namespace team_game;
@@ -74,9 +77,14 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
 
                 String rootDir = "TeamGame:";
                 AssignSprite(spriteBlock, rootDir + baseDir + ":" + textureName);
+                /*
                 spriteBlock.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
                                          j * spriteSize.y + spriteSize.y / 2 + pos.y,
-                                         zPos };
+                                         zPos };*/
+                auto& transform = reg.get_or_emplace<Transform>(block);
+                transform.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
+                                     j * spriteSize.y + spriteSize.y / 2 + pos.y,
+                                     zPos };
 
                 scale.x = spriteSize.x / spriteBlock.size.x;
                 scale.y = spriteSize.y / spriteBlock.size.y;
@@ -84,8 +92,11 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
                 spriteBlock.scale = scale;
 
                 if (addCollision_)
-                {
-                    // TODO: add collision and make sure that the collider size aligns with the spriteSize
+                {                  
+                    auto& collider = reg.get_or_emplace<Collider>(block);
+                    collider.entityType = CollisionID::TERRAIN;
+                    collider.state = MovementState::IMMOBILE;
+                    collider.size = spriteBlock.size * spriteBlock.scale;
                 }
             }
         }

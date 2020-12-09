@@ -78,7 +78,6 @@ void team_game::SetupWorld(Engine& engine_)
         input.contexts.push_back("Controls");
 
         auto& character = reg.emplace<PlayerCharacter>(entity);
-        character.speed = 50;
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
     }
 }
