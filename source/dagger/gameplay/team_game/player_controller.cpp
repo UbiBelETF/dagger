@@ -11,6 +11,7 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include "core/game/transforms.h"
+#include "core/graphics/text.h"
 
 using namespace dagger;
 using namespace lab;
@@ -79,18 +80,26 @@ void PlayerControllerSystem::Run()
 
 
         });
+
+        
+
             auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
-            auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
+            auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter,Text>();
             auto viewDamage = Engine::Registry().view<Bullet, Transform, SimpleCollision,PlayerCharacter>();
             for (auto entity : view)
             {
                 auto &t = view.get<Transform>(entity);
                 auto &player = view.get<PlayerCharacter>(entity);
                 auto &col = view.get<SimpleCollision>(entity);
+                auto &tex = view.get<Text>(entity);
 
                 if (player.health <= 0)
                 {
                     Engine::Registry().destroy(entity);
+                    
+                    tex.Set("pixel-font", "GAME OVER");
+                    tex.alignment={ TextAlignment::CENTER };
+                    
                 }
 
 
@@ -143,7 +152,9 @@ void PlayerControllerSystem::Run()
                         {
                             Bullet &bullet = Engine::Registry().get<Bullet>(col.colidedWith);
 					        player.health -= bullet.damage;
-                            printf("radi");
+
+                            tex.Set("pixel-font", std::to_string(player.health)+"/100");
+                            
                         }
                     }
 

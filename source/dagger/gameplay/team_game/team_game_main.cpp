@@ -23,6 +23,8 @@
 #include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/enemy.h"
+#include "core/graphics/text.h"
+
 
 
 using namespace dagger;
@@ -94,6 +96,12 @@ struct Player
             chr.input.contexts.push_back(input_);
 
         chr.character.speed = 50;
+
+        auto& hl = Engine::Registry().emplace<Text>(entity);
+        hl.alignment={ TextAlignment::RIGHT };
+        hl.spacing = 0.5f;
+        hl.Set("pixel-font", "100/100",Vector3{-100,0,0});
+       // hl.Set("pixel-font", "50/100",Vector3{-100,0,0});
 
         return chr;
     }

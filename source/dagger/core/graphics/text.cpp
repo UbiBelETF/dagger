@@ -19,6 +19,9 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 	{
 		registry.remove(entities.begin(), entities.end());
 		entities.clear();
+		/*auto vc=registry.view<Text>();
+        registry.destroy(vc.begin(),vc.end());
+		Engine::Res<Text>().clear();*/
 	}
 
 	UInt32 positionX = position.x;
@@ -48,6 +51,7 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 		AssignSprite(sprite, spritesheet);
 
 		positionX += (int)(spritesheet->frame.size.x * spacing);
+		entities.push_back(entity);
 	}
 }
 
