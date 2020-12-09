@@ -85,21 +85,21 @@ void PlayerControllerSystem::Run()
 
             auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
             auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter,Text>();
+            auto viewText = Engine::Registry().view<PlayerCharacter,Text>();
             auto viewDamage = Engine::Registry().view<Bullet, Transform, SimpleCollision,PlayerCharacter>();
             for (auto entity : view)
             {
                 auto &t = view.get<Transform>(entity);
                 auto &player = view.get<PlayerCharacter>(entity);
                 auto &col = view.get<SimpleCollision>(entity);
-                auto &tex = view.get<Text>(entity);
+                auto &tex = viewText.get<Text>(entity);
 
                 if (player.health <= 0)
                 {
-                    Engine::Registry().destroy(entity);
-                    
-                    tex.Set("pixel-font", "GAME OVER");
                     tex.alignment={ TextAlignment::CENTER };
-                    
+                    tex.Set("pixel-font", "GAME OVER");
+                    Engine::Registry().destroy(entity);              
+                                   
                 }
 
 
@@ -152,10 +152,14 @@ void PlayerControllerSystem::Run()
                         {
                             Bullet &bullet = Engine::Registry().get<Bullet>(col.colidedWith);
 					        player.health -= bullet.damage;
-
-                            tex.Set("pixel-font", std::to_string(player.health)+"/100");
+                            if(player.health<0){
+                                player.health=0;
+                            } 
+                            tex.Set("pixel-font", std::to_string(player.health)+"/100",{20,-80,0});
                             
                         }
+                        
+                        
                     }
 
                 col.colided = false;
