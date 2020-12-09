@@ -43,7 +43,7 @@ void team_game::CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateC
 	}
 	if (EPSILON_NOT_ZERO(input.Get("jump")))
 	{
-		GoTo(ECharacterStates::Jumping, state_);
+		GoTo(ECharacterStates::InAir, state_);
 	}
 }
 
@@ -81,14 +81,14 @@ void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::Sta
 	}
 	else
 	{
-		GoTo(ECharacterStates::Jumping, state_);
+		GoTo(ECharacterStates::InAir, state_);
 	}
 	
 }
 
 //BASIC Jumping, InputReceiver to differentiate player character from other characters. Will likely get removed based on the implementation
 
-void team_game::CharacterControllerFSM::Jumping::Enter(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::InAir::Enter(CharacterControllerFSM::StateComponent& state_)
 {
 	auto&& [input, character, gravity, anim] = Engine::Registry().get<InputReceiver, team_game::PlayerCharacter, Gravity, AnimationFSM::StateComponent>(state_.entity);
 	gravity.verticalCurrentSpeed = gravity.verticalInitialSpeed;
@@ -96,12 +96,12 @@ void team_game::CharacterControllerFSM::Jumping::Enter(CharacterControllerFSM::S
 	
 }
 
-void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::InAir::Exit(CharacterControllerFSM::StateComponent& state_)
 {
 
 }
 
-void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::StateComponent& state_)
+void team_game::CharacterControllerFSM::InAir::Run(CharacterControllerFSM::StateComponent& state_)
 {
 	auto&& [sprite, transform, input, character, collider] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider>(state_.entity);
 
