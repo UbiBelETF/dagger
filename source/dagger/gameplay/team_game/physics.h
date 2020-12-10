@@ -7,9 +7,9 @@ using namespace dagger;
 namespace team_game {
     struct Physics {
         Vector2 velocity = { 0,0 };
-        bool Static = false;
+        bool nonStatic = true;
     };
-    static Float32 gravity_acceleration = -500;
+    static Float32 GetGravity() { return -500; }
     class PhysicsSystem : public System
     {
     public:

@@ -24,7 +24,7 @@ void team_game::PhysicsSystem::Run()
     Engine::Registry().view< Physics>().each(
         [](Physics& physics_)
         {
-            if (!physics_.Static) physics_.velocity.y += team_game::gravity_acceleration*Engine::DeltaTime();
+            if (physics_.nonStatic) physics_.velocity.y += team_game::GetGravity()*Engine::DeltaTime();
         });
 }
 

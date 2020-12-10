@@ -49,8 +49,7 @@ void team_game::CollisionSystem::Run()
                         {
                             temp_t.x -= (physics.velocity.x * dt);
                         }
-
-                        if (std::abs(collisionSides.y) > 0)
+                        else 
                         {
                             temp_t.y -= (physics.velocity.y * dt);
                         }

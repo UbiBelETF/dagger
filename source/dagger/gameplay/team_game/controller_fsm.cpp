@@ -11,16 +11,26 @@
 using namespace dagger;
 using namespace team_game;
 
+void team_game::ControllerFSM::Run(StateComponent& component_) 
+{
+    FSM<ECharacterStates>::Run(component_);
+    auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(component_.entity);
+    animationsFSM.Run(anim);
+}
 //idle
-DEFAULT_ENTER(ControllerFSM, Idle);
+void ControllerFSM::Idle::Enter(ControllerFSM::StateComponent& state_) 
+{
+    auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
+    ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Idle, anim);
+}
 
 void ControllerFSM::Idle::Run(ControllerFSM::StateComponent& state_) 
 {
     auto&& [input,physics_] = Engine::Registry().get<InputReceiver,Physics>(state_.entity);
     if (EPSILON_NOT_ZERO(input.Get("run")) && EPSILON_ZERO(input.Get("jump")))
-        GoTo(CharacterStates::Running, state_);
-    else if (EPSILON_NOT_ZERO(input.Get("jump"))|| physics_.velocity.y!=gravity_acceleration*Engine::DeltaTime() )
-        GoTo(CharacterStates::InAir, state_);
+        GoTo(ECharacterStates::Running, state_);
+    else if (EPSILON_NOT_ZERO(input.Get("jump"))|| physics_.velocity.y!=GetGravity()*Engine::DeltaTime() )
+        GoTo(ECharacterStates::InAir, state_);
 }
 
 DEFAULT_EXIT(ControllerFSM, Idle);
@@ -28,14 +38,18 @@ DEFAULT_EXIT(ControllerFSM, Idle);
 
 
 //run
-DEFAULT_ENTER(ControllerFSM, Running);
+void ControllerFSM::Running::Enter(ControllerFSM::StateComponent& state_)
+{
+    auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
+    ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Running, anim);
+}
 void ControllerFSM::Running::Run(ControllerFSM::StateComponent& state_) {
     auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics>(state_.entity);
     if (EPSILON_ZERO(input.Get("run")) && EPSILON_ZERO(input.Get("jump")))
-        GoTo(CharacterStates::Idle, state_);
-    else if (EPSILON_NOT_ZERO(input.Get("jump"))|| physics_.velocity.y != gravity_acceleration * Engine::DeltaTime()) {
-        GoTo(CharacterStates::InAir,state_);
+        GoTo(ECharacterStates::Idle, state_);
+    else if (EPSILON_NOT_ZERO(input.Get("jump"))|| physics_.velocity.y != GetGravity() * Engine::DeltaTime()) {
+        GoTo(ECharacterStates::InAir,state_);
     }
     else
     {
@@ -47,12 +61,24 @@ void ControllerFSM::Running::Run(ControllerFSM::StateComponent& state_) {
 DEFAULT_EXIT(ControllerFSM, Running);
 
 //in_air
-DEFAULT_ENTER(ControllerFSM, InAir);
+void ControllerFSM::InAir::Enter(ControllerFSM::StateComponent& state_)
+{
+    auto& physics = Engine::Registry().get<Physics>(state_.entity);
+    if (physics.velocity.y > 0) {
+        auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
+        ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Jumping, anim);
+    }
+    else if (physics.velocity.y < 0)
+    {
+        auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
+        ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Falling, anim);
+    }
+}
 void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_) 
 {
     auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_,transform_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics,Transform>(state_.entity);
-    if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y == gravity_acceleration * Engine::DeltaTime())
+    if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
     {
         physics_.velocity.y += char_.speed.y ;
     }
@@ -60,8 +86,8 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
         sprite_.scale.x = input_.Get("run");
         physics_.velocity.x += char_.speed.x * sprite_.scale.x;
     }
-    if (EPSILON_NOT_ZERO(input_.Get("run")) && physics_.velocity.y == gravity_acceleration * Engine::DeltaTime()) GoTo(CharacterStates::Running, state_);
-    else if (physics_.velocity.y == gravity_acceleration * Engine::DeltaTime()) GoTo(CharacterStates::Idle, state_);
+    if (EPSILON_NOT_ZERO(input_.Get("run")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime()) GoTo(ECharacterStates::Running, state_);
+    else if (physics_.velocity.y == GetGravity() * Engine::DeltaTime()) GoTo(ECharacterStates::Idle, state_);
     
    
 }

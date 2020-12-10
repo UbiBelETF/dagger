@@ -71,7 +71,7 @@ struct Player
         ATTACH_TO_FSM(AnimationsFSM, entity);
         col.size.x = 5;
         col.size.y = 15;
-        physics.Static = false;
+        physics.nonStatic = true;
         return Player{ entity, sprite, anim, input, character,transform,physics,col };
     }
 
@@ -136,6 +136,13 @@ void CreateBackground()
 
     // left wall
     {
+        auto back = reg.create();
+        auto& sprite = reg.get_or_emplace<Sprite>(back);
+        AssignSprite(sprite, "EmptyWhitePixel");
+        sprite.color = { 0, 0, 0, 1 };
+        sprite.size = { 100, 500 };
+        sprite.scale = { 1, 1 };
+        sprite.position = { -200, -75, 1 };
         auto entity = reg.create();
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size.x = 100;

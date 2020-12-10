@@ -14,7 +14,10 @@ void AnimationsFSM::Idle::Enter(AnimationsFSM::StateComponent& state_) {
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
     AnimatorPlay(animator_, "character:IDLE");
 }
-DEFAULT_RUN(AnimationsFSM, Idle);
+void AnimationsFSM::Idle::Run(AnimationsFSM::StateComponent& state_) {
+    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator_, "character:IDLE");
+}
 DEFAULT_EXIT(AnimationsFSM, Idle);
 
 void AnimationsFSM::Running::Enter(AnimationsFSM::StateComponent& state_) {
@@ -22,7 +25,10 @@ void AnimationsFSM::Running::Enter(AnimationsFSM::StateComponent& state_) {
     AnimatorPlay(animator_, "character:RUN");
 }
 
-DEFAULT_RUN(AnimationsFSM, Running);
+void AnimationsFSM::Running::Run(AnimationsFSM::StateComponent& state_) {
+    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator_, "character:RUN");
+}
 DEFAULT_EXIT(AnimationsFSM, Running);
 
 void AnimationsFSM::Jumping::Enter(AnimationsFSM::StateComponent& state_) 
@@ -30,8 +36,11 @@ void AnimationsFSM::Jumping::Enter(AnimationsFSM::StateComponent& state_)
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
     AnimatorPlay(animator_, "character:JUMP");
 }
-DEFAULT_RUN(AnimationsFSM, Jumping);
-
+void AnimationsFSM::Jumping::Run(AnimationsFSM::StateComponent& state_)
+{
+    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator_, "character:JUMP");
+}
 DEFAULT_EXIT(AnimationsFSM, Jumping);
 
 void AnimationsFSM::Falling::Enter(AnimationsFSM::StateComponent& state_) 
@@ -39,5 +48,9 @@ void AnimationsFSM::Falling::Enter(AnimationsFSM::StateComponent& state_)
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
     AnimatorPlay(animator_, "character:FALL");
 }
-DEFAULT_RUN(AnimationsFSM, Falling);
+void AnimationsFSM::Falling::Run(AnimationsFSM::StateComponent& state_)
+{
+    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator_, "character:FALL");
+}
 DEFAULT_EXIT(AnimationsFSM, Falling);

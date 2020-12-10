@@ -19,19 +19,19 @@ void BrawlerControllerSystem::Run()
     Engine::Registry().view<ControllerFSM::StateComponent>()
         .each([&](ControllerFSM::StateComponent& state_)
             {
-                FSMcontroller.Run(state_);
+                m_ControllerFSM.Run(state_);
                 auto& [astate_, physics_] = Engine::Registry().get<AnimationsFSM::StateComponent, Physics>(state_.entity);
-                switch (state_.currentState)
+                /*switch (state_.currentState)
                 {
-                case CharacterStates::Idle: FSManimator.GoTo(AnimationsState::Idle, astate_); break;
-                case CharacterStates::Running: FSManimator.GoTo(AnimationsState::Running, astate_); break;
-                case CharacterStates::InAir: {
-                    if (physics_.velocity.y > 0) FSManimator.GoTo(AnimationsState::Jumping, astate_);
-                    else  FSManimator.GoTo(AnimationsState::Falling, astate_);
+                case ECharacterStates::Idle:m_AnimatorFSM.GoTo(EAnimationsState::Idle, astate_); break;
+                case ECharacterStates::Running: m_AnimatorFSM.GoTo(EAnimationsState::Running, astate_); break;
+                case ECharacterStates::InAir: {
+                    if (physics_.velocity.y > 0) m_AnimatorFSM.GoTo(EAnimationsState::Jumping, astate_);
+                    else  m_AnimatorFSM.GoTo(EAnimationsState::Falling, astate_);
                     break;
                 }
 
-                }
+                }*/
             });
     //THIS IS LEFT FOR THE SOLUTION IF WE HAVE SOMETHING IN RUN FUNCTIONS OF THE STATES
     /*Engine::Registry().view<AnimationsFSM::StateComponent>()

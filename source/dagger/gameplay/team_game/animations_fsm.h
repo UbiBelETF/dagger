@@ -2,7 +2,7 @@
 #include "core/core.h"
 #include "core/game/finite_state_machine.h"
 
-enum struct AnimationsState
+enum struct EAnimationsState
 {
     Idle,
     Running,
@@ -11,18 +11,18 @@ enum struct AnimationsState
 };
 
 
-struct AnimationsFSM :public FSM<AnimationsState>
+struct AnimationsFSM :public FSM<EAnimationsState>
 {
-    DEFINE_STATE(AnimationsFSM,AnimationsState, Idle);
-    DEFINE_STATE(AnimationsFSM,AnimationsState, Running);
-    DEFINE_STATE(AnimationsFSM,AnimationsState, Jumping);
-    DEFINE_STATE(AnimationsFSM,AnimationsState, Falling);
+    DEFINE_STATE(AnimationsFSM,EAnimationsState, Idle);
+    DEFINE_STATE(AnimationsFSM,EAnimationsState, Running);
+    DEFINE_STATE(AnimationsFSM,EAnimationsState, Jumping);
+    DEFINE_STATE(AnimationsFSM,EAnimationsState, Falling);
 
     AnimationsFSM() {
-        CONNECT_STATE(AnimationsState, Idle);
-        CONNECT_STATE(AnimationsState, Running);
-        CONNECT_STATE(AnimationsState, Jumping);
-        CONNECT_STATE(AnimationsState, Falling);
+        CONNECT_STATE(EAnimationsState, Idle);
+        CONNECT_STATE(EAnimationsState, Running);
+        CONNECT_STATE(EAnimationsState, Jumping);
+        CONNECT_STATE(EAnimationsState, Falling);
     }
     
 
