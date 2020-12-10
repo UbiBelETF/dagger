@@ -17,6 +17,7 @@
 #include "tools/diagnostics.h"
 
 #include "gameplay/team_game/team_game_collisions.h"
+#include "gameplay/team_game/camera_follow.h"
 #include "gameplay/team_game/gravity.h"
 #include "gameplay/team_game/game_manager.h"
 #include "gameplay/team_game/character_controller.h"
@@ -32,6 +33,7 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
     //engine_.AddSystem<TeamGamePlayerInputSystem>();    
     engine_.AddSystem<GravitySystem>();
     engine_.AddSystem<CollisionSystem>();
+    engine_.AddSystem<CameraFollowSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
@@ -66,6 +68,8 @@ void team_game::SetupWorld(Engine& engine_)
 
         auto& transform = reg.get_or_emplace<Transform>(entity);
         transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel() - 1];
+
+        reg.get_or_emplace<CameraFollowFocus>(entity);
 
         auto& collider = reg.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;
