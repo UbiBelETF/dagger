@@ -1,0 +1,11 @@
+golem_stand_side 0 0 32 32 6
+
+golem_walk_side 0 32 32 32 4
+
+golem_swing_front 0 64 32 32 5
+
+golem_death 0 96 32 32 4
+
+golem_raise_staff 0 128 32 32 7
+
+golem_magic_circle 0 160 32 32 6

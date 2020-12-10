@@ -1,5 +1,6 @@
 #include "team_game_main.h"
 #include "mage.h"
+#include "golem.h"
 #include "range_of_attack.h"
 
 #include "core/core.h"
@@ -22,6 +23,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
       engine_.AddSystem<SimpleCollisionsSystem>();
       engine_.AddSystem<RangedTargetingSystem>();
       engine_.AddSystem<MageBehaviorSystem>();
+	  engine_.AddSystem<GolemBehaviorSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -63,6 +65,11 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
 
     float zPos = 1.f;
 
+
+  	auto demoGolem = Golem::Create();
+    auto demoMage = Mage::Create();
+	/*
+
     auto demoMage1 = Mage::Create();
     auto demoMage2 = Mage::Create();
     auto demoMage3 = Mage::Create();
@@ -89,7 +96,8 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         roa.unitType = ETarget::Golem;
         roa.targetType = ETarget::Mage;
     }
-
+	*/
+	/*
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
@@ -112,6 +120,8 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         roa.unitType = ETarget::Golem;
         roa.targetType = ETarget::Mage;
     }
+	*/
+	/*
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
@@ -133,7 +143,7 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
 
         roa.unitType = ETarget::Golem;
         roa.targetType = ETarget::Mage;
-    }
+    }*/
 }
 
 void ancient_defenders::LoadPath() {

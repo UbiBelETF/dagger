@@ -1,4 +1,5 @@
 #include "mage.h"
+#include "golem.h"
 #include "range_of_attack.h"
 
 #include "core/engine.h"
@@ -151,6 +152,7 @@ Mage ancient_defenders::Mage::Create()
 
     AssignSprite(mag.sprite, "spritesheets:mage:mage_stand_side:1");
     float ratio = mag.sprite.size.y / mag.sprite.size.x;
+
     mag.sprite.scale = { 2,2 };
 
     mag.mage.meleeDmg = 1.0f;
