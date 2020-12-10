@@ -9,6 +9,7 @@ namespace ancient_defenders
     enum class ETarget {
         Mage = 1,
         Golem = 2,
+        Tower = 3,
     };
 
     struct RangeOfAttack {

@@ -45,7 +45,7 @@ namespace ancient_defenders {
 
         static Mage Get(Entity entity_);
 
-        static Mage Create();
+        static Mage Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true);
         
     };
 
@@ -64,7 +64,7 @@ namespace ancient_defenders {
     {
 
     public:
-        inline String SystemName() { return "Racing Tools System"; }
+        inline String SystemName() { return "Mage Behavior System"; }
 
         void SpinUp() override;
         void WindDown() override;

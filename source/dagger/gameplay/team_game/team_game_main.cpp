@@ -1,6 +1,7 @@
 #include "team_game_main.h"
 #include "mage.h"
 #include "range_of_attack.h"
+#include "towers.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -22,6 +23,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
       engine_.AddSystem<SimpleCollisionsSystem>();
       engine_.AddSystem<RangedTargetingSystem>();
       engine_.AddSystem<MageBehaviorSystem>();
+      engine_.AddSystem<TowerBehaviorSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -37,6 +39,7 @@ void TeamGame::WorldSetup(Engine &engine_)
 
     ancient_defenders::SetupWorld(engine_);
     ancient_defenders::LoadPath();
+    ancient_defenders::LoadTowerSpots();
     ancient_defenders::SetupDemoCharacter(engine_);
 }
 
@@ -62,11 +65,14 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
     auto& reg = engine_.Registry();
 
     float zPos = 1.f;
-
-    auto demoMage1 = Mage::Create();
-    auto demoMage2 = Mage::Create();
-    auto demoMage3 = Mage::Create();
-
+    /*
+    auto demoMage1 = Mage::Create(WalkingPath::path[0], EAction::Moving);
+    auto demoMage2 = Mage::Create(WalkingPath::path[0], EAction::Moving);
+    auto demoMage3 = Mage::Create(WalkingPath::path[0], EAction::Moving);
+    */
+    auto demoMage4 = Mage::Create(TowerPlacementInfo::spotCoordinates[0], EAction::Chanting);
+    auto demoTower = Tower::Create("STORM");
+    auto demoMage5 = Mage::Create(TowerPlacementInfo::spotCoordinates[5]);
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
@@ -121,7 +127,7 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
         sprite.color = { 0.5f,0.5f,0.5f,0.5f };
 
         auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { -312, -100 , 1.0f };
+        coordinates.position = { 292, -218 , 1.0f }; // -312 -100
 
         auto & en = reg.emplace<Enemy>(entity);
         en.health = 10.0f;
@@ -147,4 +153,15 @@ void ancient_defenders::LoadPath() {
     }
 
     WalkingPath::numberOfPoints = WalkingPath::path.size();
+}
+
+void ancient_defenders::LoadTowerSpots() {
+
+    FileInputStream inFile{ "spots.txt" };
+
+    Vector2 point;
+
+    while (inFile >> point.x >> point.y) {
+        TowerPlacementInfo::spotCoordinates.emplace_back(point);
+    }
 }

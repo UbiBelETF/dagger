@@ -1,0 +1,13 @@
+{
+	"animation-name": "ancient_defenders:towers:STORM",
+	"animation-length-ms": 1200,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:StormTower:storm_tower:1" },
+		{ "texture-name": "spritesheets:StormTower:storm_tower:2" },
+		{ "texture-name": "spritesheets:StormTower:storm_tower:3" },
+		{ "texture-name": "spritesheets:StormTower:storm_tower:4" },
+		{ "texture-name": "spritesheets:StormTower:storm_tower:5" },
+		{ "texture-name": "spritesheets:StormTower:storm_tower:6" }
+	]
+}

@@ -1,0 +1,15 @@
+{
+	"animation-name": "ancient_defenders:mage:CHANT",
+	"animation-length-ms": 1250,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:1" },
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:2" },
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:3" },
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:4" },
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:5" },
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:6" },
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:7" },
+		{ "texture-name": "spritesheets:mage:mage_magic_circle:8" }
+	]
+}
