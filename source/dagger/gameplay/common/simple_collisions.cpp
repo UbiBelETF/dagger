@@ -13,7 +13,7 @@ void SimpleCollisionsSystem::Run()
     auto view = Engine::Registry().view<SimpleCollision, Transform>();
 
     auto it = view.begin();
-    while (it != view.end())
+    while (it != view.end()) // Reset previous collision info
     {
         auto &coll = view.get<SimpleCollision>(*it);
         coll.colided = false;
