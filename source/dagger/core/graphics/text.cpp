@@ -48,7 +48,7 @@ void Text::Set(String font_, String message_, Vector3 pos_,Vector2 size_)
 		sprite.position = { positionX - xOffsetDueToAlign, position.y, position.z };
 		
 		AssignSprite(sprite, spritesheet);
-		sprite.size={10,10};
+		sprite.size=size_;
 		positionX += (int)(spritesheet->frame.size.x * spacing);
 		entities.push_back(entity);
 	}
