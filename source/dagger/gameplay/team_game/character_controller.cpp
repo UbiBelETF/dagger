@@ -25,20 +25,16 @@ void CharacterControllerSystem::Run()
 		[&](CharacterFSM::StateComponent& state_)
 		{   
 		auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
-		if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; }
-		if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; }
-		if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; }
-		if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; } 
+		if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; SetShape(ECharacterShape::Goblin); }
+		if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; SetShape(ECharacterShape::Slime);		}
+		if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; SetShape(ECharacterShape::Bat); }
+		if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; SetShape(ECharacterShape::Hero);	}
 			m_CharStateMachine.Run(state_);
 		});
 	
 }
 
-void CharacterFSM::Idle::Enter(CharacterFSM::StateComponent& state_)
-{
-//	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-//	AnimatorPlay(animator, idle);
-}
+DEFAULT_ENTER(CharacterFSM, Idle);
 
 void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 {
@@ -54,11 +50,7 @@ void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 
 DEFAULT_EXIT(CharacterFSM, Idle);
 
-void CharacterFSM::Running::Enter(CharacterFSM::StateComponent& state_)
-{
-//	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-//	AnimatorPlay(animator, running);
-}
+DEFAULT_ENTER(CharacterFSM, Running);
 
 void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 {
