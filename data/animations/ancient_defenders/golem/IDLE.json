@@ -1,0 +1,13 @@
+{
+	"animation-name": "ancient_defenders:golem:IDLE",
+	"animation-length-ms": 3000,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_stand_side:1"},
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_stand_side:2"},
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_stand_side:3"},
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_stand_side:4"},
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_stand_side:5"},
+		{ "texture-name": "spritesheets:golem-little-sheet:golem_stand_side:6"}
+	]
+}

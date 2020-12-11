@@ -1,6 +1,7 @@
 #pragma once
 
 #include "range_of_attack.h"
+#include "hp_system.h"
 
 #include "core/core.h"
 #include "core/system.h"
@@ -23,7 +24,6 @@ namespace ancient_defenders {
     };
 
     struct MageStats {
-        Float32 health;
         Float32 speed;
         Float32 meleeDmg;
 
@@ -42,15 +42,12 @@ namespace ancient_defenders {
         MageStats & mage;
         SimpleCollision & hitbox;
         RangeOfAttack & range;
+        Health & health;
 
         static Mage Get(Entity entity_);
 
         static Mage Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true);
         
-    };
-
-    struct Enemy { // Until proper system is done
-        Float32 health = 100.0f;
     };
 
     struct WalkingPath {

@@ -1,6 +1,8 @@
 #include "mage.h"
+#include "golem.h"
 #include "range_of_attack.h"
 #include "towers.h"
+#include "hp_system.h"
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
@@ -11,6 +13,7 @@
 
 #include <random>
 
+using namespace dagger;
 using namespace ancient_defenders;
 
 // Initialize static members
@@ -104,7 +107,7 @@ void ancient_defenders::MageBehaviorSystem::Run()
             else {
                 AnimatorPlay(animation_, "ancient_defenders:mage:ATTACK_FRONT");
             }
-            Engine::Registry().get<Enemy>(range_.target).health -= mage_.meleeDmg;
+            Engine::Registry().get<Health>(range_.target).currentHealth -= mage_.meleeDmg * Engine::DeltaTime();
             mage_.currentAction = EAction::Moving; // Go back to moving after attacking
         }
         else if (mage_.currentAction == EAction::Chanting) {
@@ -137,16 +140,6 @@ void ancient_defenders::MageBehaviorSystem::Run()
 
 void ancient_defenders::MageBehaviorSystem::OnEndOfFrame()
 {
-    auto view = Engine::Registry().view<Enemy>();
-
-    auto it = view.begin();
-    while (it != view.end()) {
-        auto & en = view.get<Enemy>(*it);
-        if (en.health <= 0.0f) {
-            Engine::Registry().destroy(*it);
-        }
-        it++;
-    }
 }
 
 Mage ancient_defenders::Mage::Get(Entity entity_)
@@ -158,8 +151,9 @@ Mage ancient_defenders::Mage::Get(Entity entity_)
     auto& mag = reg.get_or_emplace<MageStats>(entity_);
     auto& col = reg.get_or_emplace<SimpleCollision>(entity_);
     auto& roa = reg.get_or_emplace<RangeOfAttack>(entity_);
+    auto& hp = reg.get_or_emplace<Health>(entity_);
 
-    return Mage{ entity_, sprite, pos, anim, mag, col, roa };
+    return Mage{ entity_, sprite, pos, anim, mag, col, roa, hp };
 }
 
 Mage ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool offset_)
@@ -170,6 +164,7 @@ Mage ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool off
 
     AssignSprite(mag.sprite, "spritesheets:mage:mage_stand_side:1");
     float ratio = mag.sprite.size.y / mag.sprite.size.x;
+
     mag.sprite.scale = { 2,2 };
 
     mag.mage.meleeDmg = 1.0f;
@@ -206,6 +201,10 @@ Mage ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool off
 
     mag.range.unitType = ETarget::Mage;
     mag.range.targetType = ETarget::Golem;
+
+    mag.health.currentHealth = Health::standardHP;
+    mag.health.maxHealth = Health::standardHP;
+
 
     return mag;
 }

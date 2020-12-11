@@ -1,0 +1,11 @@
+{
+	"animation-name": "ancient_defenders:golem:DEATH",
+	"animation-length-ms": 1250,
+	"animation-frames": 
+	[
+    { "texture-name": "spritesheets:golem-little-sheet:golem_death:1" },
+    { "texture-name": "spritesheets:golem-little-sheet:golem_death:2" },
+    { "texture-name": "spritesheets:golem-little-sheet:golem_death:3" },
+    { "texture-name": "spritesheets:golem-little-sheet:golem_death:4" }
+	]
+}
