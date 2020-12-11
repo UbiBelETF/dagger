@@ -11,7 +11,6 @@ namespace ancient_defenders {
 
     struct Health {
         Entity hpBar = Engine::Registry().create();
-        //Sprite & sprite = Engine::Registry().emplace<Sprite>(hpBar);
         
         Float32 currentHealth;
         Float32 maxHealth;

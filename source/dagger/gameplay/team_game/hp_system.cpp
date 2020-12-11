@@ -4,7 +4,6 @@
 #include "core/graphics/sprite.h"
 #include "core/game/transforms.h"
 
-#include <iostream>
 
 using namespace dagger;
 using namespace ancient_defenders;

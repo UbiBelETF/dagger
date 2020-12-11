@@ -79,7 +79,7 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
     auto demoMage5 = Mage::Create(TowerPlacementInfo::spotCoordinates[5]);
 
   	auto demoGolem = Golem::Create();
-    auto demoMage = Mage::Create();
+    auto demoMage = Mage::Create(WalkingPath::path[0]);
 	/*
 
     auto demoMage1 = Mage::Create();
