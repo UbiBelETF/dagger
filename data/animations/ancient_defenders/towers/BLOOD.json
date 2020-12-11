@@ -1,0 +1,11 @@
+{
+	"animation-name": "ancient_defenders:towers:BLOOD",
+	"animation-length-ms": 800,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:BloodTower:blood_tower:1" },
+		{ "texture-name": "spritesheets:BloodTower:blood_tower:2" },
+		{ "texture-name": "spritesheets:BloodTower:blood_tower:3" },
+		{ "texture-name": "spritesheets:BloodTower:blood_tower:4" }
+	]
+}

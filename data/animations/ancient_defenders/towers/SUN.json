@@ -1,0 +1,12 @@
+{
+	"animation-name": "ancient_defenders:towers:SUN",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:SunTower:sun_tower:1" },
+		{ "texture-name": "spritesheets:SunTower:sun_tower:2" },
+		{ "texture-name": "spritesheets:SunTower:sun_tower:3" },
+		{ "texture-name": "spritesheets:SunTower:sun_tower:4" },
+		{ "texture-name": "spritesheets:SunTower:sun_tower:5" }
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"animation-name": "ancient_defenders:towers:POISON",
+	"animation-length-ms": 1200,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:PoisonTower:poison_tower:1" },
+		{ "texture-name": "spritesheets:PoisonTower:poison_tower:2" },
+		{ "texture-name": "spritesheets:PoisonTower:poison_tower:3" },
+		{ "texture-name": "spritesheets:PoisonTower:poison_tower:4" },
+		{ "texture-name": "spritesheets:PoisonTower:poison_tower:5" },
+		{ "texture-name": "spritesheets:PoisonTower:poison_tower:6" }
+
+	]
+}
