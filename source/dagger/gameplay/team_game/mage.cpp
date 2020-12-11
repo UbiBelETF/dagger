@@ -123,7 +123,11 @@ void ancient_defenders::MageBehaviorSystem::Run()
                 }
                 else if (tower.constructed) {
                     sprite_.color = { 0,0,0,0 }; // Make Mage appear to be inside of the tower by making him invisible
+                    Engine::Registry().get<Sprite>(Engine::Registry().get<Health>(entt::to_entity(Engine::Registry(), mage_)).hpBar).color = { 0,0,0,0 };
+                    // Make the mages HP bar also dissapear
+
                     mage_.currentAction = EAction::Idling;
+
 
                     TowerPlacementInfo::spotLocked = false;
                     

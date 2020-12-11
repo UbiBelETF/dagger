@@ -31,8 +31,10 @@ void ancient_defenders::HealthManagementSystem::Run() {
 
         auto val = closestNeighbour(100.0f * health_.currentHealth / health_.maxHealth);
 
-        if (EPSILON_ZERO(val)) return; // Since there is no sprite for 0 hp, skip adding it
-        
+        if (EPSILON_ZERO(val)) {
+            sprite.color = { 0,0,0,0 }; // Make the previous sprite invisible; solves previous sprite staying still after character drops to low HP
+            return; // Since there is no sprite for 0 hp, skip adding it
+        }
         AssignSprite(sprite, "spritesheets:hp-bar:hp_"+ std::to_string((UInt32) val));
         auto en = entt::to_entity(reg, health_);
         auto sp = reg.get<Sprite>(en);
