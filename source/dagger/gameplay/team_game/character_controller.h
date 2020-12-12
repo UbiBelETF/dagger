@@ -13,7 +13,7 @@ enum struct ECharacterState
 
 struct CharacterController
 {
-	Float32 speed{ 100 };
+	Float32 speed{ 70 };
 };
 
 struct CharacterFSM : public FSM<ECharacterState>

@@ -15,6 +15,7 @@
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/camera.h"
 #include "gameplay/team_game/movement.h"
+#include "gameplay/team_game/physics.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -24,6 +25,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<CameraSystem>();
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<PhysicsSystem>();
     engine_.AddSystem<MovementSystem>();
 }
 
@@ -34,7 +36,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 3;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -68,20 +70,34 @@ void SetupWorldJovica(Engine& engine_)
 
         auto& playerSprite = reg.emplace<Sprite>(player);
         AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-        playerSprite.scale = { 3, 3 };
 
         auto& playerAnimator = reg.emplace<Animator>(player);
         AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
         auto& playerTransform = reg.emplace<Transform>(player);
-        playerTransform.position = { 0, 0, 0 };
+        playerTransform.position = { 50, 50, 0 };
 
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThemInput");
 
         reg.emplace<CharacterController>(player);
 
-        reg.emplace<MovableBody>(player);
+        auto& movable = reg.emplace<MovableBody>(player);
+        movable.size = playerSprite.size;
+
+        // Wall
+        auto wall = reg.create();
+
+        auto& wallTransform = reg.emplace<Transform>(wall);
+        wallTransform.position = { 0, 0, 0 };
+
+        auto& wallSprite = reg.emplace<Sprite>(wall);
+        AssignSprite(wallSprite, "EmptyWhitePixel");
+        wallSprite.color = { 0.0f, 0.0f, 0.0f, 1.0f };
+        wallSprite.size = { 30, 30 };
+
+        auto& st = reg.emplace<StaticBody>(wall);
+        st.size = wallSprite.size;
     }
 }
 

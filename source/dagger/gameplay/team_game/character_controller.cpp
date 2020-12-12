@@ -63,11 +63,11 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 	// Character orientation
 	if (runX > 0.0f)
 	{
-		sprite.scale.x = 3;
+		sprite.scale.x = 1;
 	}
 	else if (runX < 0.0f)
 	{
-		sprite.scale.x = -3;
+		sprite.scale.x = -1;
 	}
 
 	body.movement = glm::normalize(Vector2{ runX, runY }) * ctrl.speed * Engine::DeltaTime();
