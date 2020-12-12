@@ -8,6 +8,7 @@ using namespace dagger;
 namespace lab
 {
 	struct Bullet {
+		String ownership;
 		int damage = 15;
 		Float32 speed = 100.f;
 		Float32 speedX = 100.f;
@@ -23,6 +24,6 @@ namespace lab
 		}
 		void Run() override;
 	};
-	void CreateBullet(Vector2 position, Vector2 target);
+	void CreateBullet(Vector2 position, Vector2 target, String ownership);
 
 }

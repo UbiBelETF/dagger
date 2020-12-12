@@ -24,6 +24,8 @@
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/enemy.h"
 
+#include <iostream>
+
 
 using namespace dagger;
 using namespace lab;
@@ -86,7 +88,8 @@ struct Player
         AssignSprite(chr.sprite, "main_character:idle:idle1");
         AnimatorPlay(chr.animator, "main_character:idle");
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = {chr.sprite.size.x/2, chr.sprite.size.y/2};
+        //col.size = {chr.sprite.size.x/2, chr.sprite.size.y/2};
+        col.size = { 12, 20 };
 
         chr.transform.position = chr.sprite.position;
 
@@ -139,25 +142,25 @@ void lab::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& bandit = reg.emplace<Bandit>(entity);
-        bandit.ID = i;
-        bandit.alive++;
+        bandit.ID = i + 1;
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "Bandit");
         sprite.scale = { 1, 1 };
         if (i == 0)
-        sprite.position = { 100, 0, 0.0f };
+        sprite.position = { 50, 0, 0.0f };
 
         if (i == 1)
-        sprite.position = { 100, 50, 0.0f };
+        sprite.position = { 100, 30, 0.0f };
 
         if (i == 2)
-            sprite.position = { 100, -50, 0.0f };
+            sprite.position = { 100, -30, 0.0f };
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = sprite.position;
 
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = { 0.5f, 10 };
+        col.size = {sprite.size.x / 5, sprite.size.y /2 };
+        std::cout << col.size.x;
     }
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });

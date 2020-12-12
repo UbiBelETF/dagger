@@ -12,12 +12,13 @@ using namespace dagger;
 
 using namespace lab;
 
-void lab::CreateBullet(Vector2 position, Vector2 target)
+void lab::CreateBullet(Vector2 position, Vector2 target, String ownership)
 {
 	auto& reg = Engine::Instance().Registry();
 
 	auto entity = reg.create();
 	auto& bullet = reg.emplace<Bullet>(entity);
+	bullet.ownership = ownership;
 
 	Vector2 directions = { 1, 1 };
 	if (target.x < position.x)
@@ -41,7 +42,7 @@ void lab::CreateBullet(Vector2 position, Vector2 target)
 
 	auto& sprite = reg.emplace<Sprite>(entity);
 	AssignSprite(sprite, "Blob");
-	sprite.size = { 10, 10 };
+	sprite.size = { 10.f, 10.f };
 
 	auto& transform = reg.emplace<Transform>(entity);
 	Float32 distance = sqrt((20 * 20) / (1 + ratio * ratio));
@@ -50,8 +51,8 @@ void lab::CreateBullet(Vector2 position, Vector2 target)
 	transform.position.z = 0.0f;
 
 	auto& collision = reg.emplace<SimpleCollision>(entity);
-	collision.size.x = sprite.size.x / 2;
-	collision.size.y = sprite.size.y / 2;
+	collision.size.x = sprite.size.x / 10;
+	collision.size.y = sprite.size.y / 10;
 }
 
 void lab::ShootingSystem::Run()
@@ -71,7 +72,9 @@ void lab::ShootingSystem::Run()
 			col.colided = false;
 			auto& reg = Engine::Instance().Registry();
 			if (!reg.has<Bullet>(col.colidedWith))
+			{
 				Engine::Registry().remove_all(entity);
+			}
 		}
 	}
 }
