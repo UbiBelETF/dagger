@@ -139,6 +139,8 @@ void lab::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& bandit = reg.emplace<Bandit>(entity);
+        bandit.ID = i;
+        bandit.alive++;
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "Bandit");
         sprite.scale = { 1, 1 };

@@ -24,6 +24,7 @@ void lab::EnemySystem::Run()
 
 		if (bandit.health <= 0)
 		{
+			bandit.alive--;
 			reg.remove_all(entity);
 		}
 
