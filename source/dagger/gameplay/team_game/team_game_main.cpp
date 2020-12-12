@@ -24,8 +24,6 @@
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/enemy.h"
 
-#include <iostream>
-
 
 using namespace dagger;
 using namespace lab;
@@ -160,7 +158,6 @@ void lab::SetupWorld(Engine &engine_)
 
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = {sprite.size.x / 5, sprite.size.y /2 };
-        std::cout << col.size.x;
     }
 
     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
