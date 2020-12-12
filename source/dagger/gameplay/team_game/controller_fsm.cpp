@@ -53,7 +53,7 @@ void team_game::CharacterControllerFSM::Running::Exit(CharacterControllerFSM::St
 
 void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character] = Engine::Registry().get<Sprite, Transform, InputReceiver, Character>(state_.entity);
+	auto&& [sprite, transform, input, character] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::Character>(state_.entity);
 
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");
@@ -81,7 +81,7 @@ void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::Sta
 
 void team_game::CharacterControllerFSM::Jumping::Enter(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, Character, Collider, Gravity>(state_.entity);
+	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::Character, team_game::Collider, Gravity>(state_.entity);
 	gravity.verticalCurrentSpeed = gravity.verticalInitialSpeed;
 }
 
@@ -92,7 +92,7 @@ void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::St
 
 void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character, collider] = Engine::Registry().get<Sprite, Transform, InputReceiver, Character, Collider>(state_.entity);
+	auto&& [sprite, transform, input, character, collider] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::Character, Collider>(state_.entity);
 
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");

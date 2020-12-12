@@ -49,18 +49,6 @@ void CollisionSystem::Run()
 
                 if (collisionInfo.hasCollided)
                 {
-                    if (collision.entityType == CollisionID::PLAYER)
-                    {
-                        if (col.entityType == CollisionID::ENEMY)
-                        {
-                            auto& enemyCharacter = Engine::Registry().get<Character>(*it);
-                            auto& playerCharacter = Engine::Registry().get<Character>(*it2);
-
-                            playerCharacter.health -= enemyCharacter.damage * Engine::DeltaTime();
-                            printf("Lost health. Current HEALTH: %.2f \n", playerCharacter.health);
-                        }
-                    }
-
                     collision.listOfEntities.push_back(*it2);
                     collision.listOfCollisionSides.push_back(collisionInfo.collisionSide);
 

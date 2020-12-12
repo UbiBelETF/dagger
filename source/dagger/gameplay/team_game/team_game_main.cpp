@@ -23,6 +23,7 @@
 #include "gameplay/team_game/character.h"
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_player_input.h"
+#include "gameplay/team_game/health_management.h"
 
 using namespace dagger;
 
@@ -35,6 +36,7 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<GravitySystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<CameraFollowSystem>();
+    engine_.AddSystem<HealthManagementSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
