@@ -98,6 +98,32 @@ void SetupWorldJovica(Engine& engine_)
 
         auto& st = reg.emplace<StaticBody>(wall);
         st.size = wallSprite.size;
+
+        auto wall1 = reg.create();
+
+        auto& wallTransform1 = reg.emplace<Transform>(wall1);
+        wallTransform1.position = { 30, 0, 0 };
+
+        auto& wallSprite1 = reg.emplace<Sprite>(wall1);
+        AssignSprite(wallSprite1, "EmptyWhitePixel");
+        wallSprite1.color = { 0.0f, 0.0f, 0.0f, 1.0f };
+        wallSprite1.size = { 30, 30 };
+
+        auto& st1 = reg.emplace<StaticBody>(wall1);
+        st1.size = wallSprite1.size;
+
+        auto wall2 = reg.create();
+
+        auto& wallTransform2 = reg.emplace<Transform>(wall2);
+        wallTransform2.position = { 0, 30, 0 };
+
+        auto& wallSprite2 = reg.emplace<Sprite>(wall2);
+        AssignSprite(wallSprite2, "EmptyWhitePixel");
+        wallSprite2.color = { 0.0f, 0.0f, 0.0f, 1.0f };
+        wallSprite2.size = { 30, 30 };
+
+        auto& st2 = reg.emplace<StaticBody>(wall2);
+        st2.size = wallSprite2.size;
     }
 }
 
