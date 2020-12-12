@@ -8,11 +8,6 @@ using namespace dagger;
 
 namespace team_game
 {
-	struct PlayerCharacter
-	{
-		float speed{ 70.f };
-	};
-
 	class CharacterControllerSystem
 		: public System
 	{

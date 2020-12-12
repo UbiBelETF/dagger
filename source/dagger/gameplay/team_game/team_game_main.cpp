@@ -20,6 +20,7 @@
 #include "gameplay/team_game/camera_follow.h"
 #include "gameplay/team_game/gravity.h"
 #include "gameplay/team_game/game_manager.h"
+#include "gameplay/team_game/character.h"
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_player_input.h"
 
@@ -62,6 +63,7 @@ void team_game::SetupWorld(Engine& engine_)
 {
     auto& reg = engine_.Registry();
     {
+        // Add player
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
@@ -81,7 +83,32 @@ void team_game::SetupWorld(Engine& engine_)
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
 
-        auto& character = reg.emplace<PlayerCharacter>(entity);
+        auto& character = reg.emplace<Character>(entity);
+        reg.emplace<PlayerCharacter>(entity);
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
+        
+
+        // Add enemy
+        auto entity1 = reg.create();
+        auto& sprite1 = reg.emplace<Sprite>(entity1);
+        AssignSprite(sprite1, "TeamGame:Characters:Enemy-Bald_Pirate:1-Idle:1");
+
+        auto& transform1 = reg.get_or_emplace<Transform>(entity1);
+        transform1.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
+        transform1.position.x += 100;
+
+        auto& collider1 = reg.get_or_emplace<Collider>(entity1);
+        collider1.size = sprite1.size;
+        collider1.entityType = CollisionID::ENEMY;
+        collider1.hasGravity = true;
+
+        auto& gravity1 = reg.get_or_emplace<Gravity>(entity1);
+
+        auto& input1 = reg.emplace<InputReceiver>(entity1);
+        input1.contexts.push_back("ASDW");
+
+        auto& character1 = reg.emplace<Character>(entity1);
+        reg.emplace<EnemyCharacter>(entity1);
+        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity1);
     }
 }
