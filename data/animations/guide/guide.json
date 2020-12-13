@@ -1,0 +1,12 @@
+{
+	"animation-name": "guide:idle",
+	"animation-length-ms": 1000,
+	"animation-frames": [
+		{ "texture-name": "team_game:Guide:Animation0" },
+		{ "texture-name": "team_game:Guide:Animation1" },
+		{ "texture-name": "team_game:Guide:Animation2" },
+		{ "texture-name": "team_game:Guide:Animation3" },
+		{ "texture-name": "team_game:Guide:Animation4" },
+		{ "texture-name": "team_game:Guide:Animation5" }
+	]
+}

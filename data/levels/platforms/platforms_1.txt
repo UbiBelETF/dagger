@@ -1,0 +1,9 @@
+Platforms:Platform_Big Side_Left 0.0 39.0 39.0 -125.0 -26.0 1 1
+Platforms:Platform_Big Middle 0.0 42.0 39.0 -100.0 -26.0 8 1
+Platforms:Platform_Big Side_Right 0.0 40.0 39.0 236.0 -26.0 1 1
+
+Platforms:Platform_Big Side_Left 0.0 39.0 39.0 346.0 -26.0 1 1
+Platforms:Platform_Big Side_Right 0.0 40.0 39.0 385.0 -26.0 1 1
+
+Platforms:Platform_Big Side_Left 0.0 39.0 39.0 506.0 -26.0 1 1
+Platforms:Platform_Big Side_Right 0.0 40.0 39.0 545.0 -26.0 1 1

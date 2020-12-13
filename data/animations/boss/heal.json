@@ -1,0 +1,15 @@
+{
+	"animation-name": "boss:boss_heal",
+	"animation-length-ms": 1100,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:1" },
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:2" },
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:3" },
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:4" },
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:5" },
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:6" },
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:7" },
+		{ "texture-name": "spritesheets:team_game:boss:heal:boss_heal:8" }
+	]
+}

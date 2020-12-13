@@ -1,0 +1,13 @@
+{
+	"animation-name": "boss:boss_walk",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:team_game:boss:walk:boss_walk:1" },
+		{ "texture-name": "spritesheets:team_game:boss:walk:boss_walk:2" },
+		{ "texture-name": "spritesheets:team_game:boss:walk:boss_walk:3" },
+		{ "texture-name": "spritesheets:team_game:boss:walk:boss_walk:4" },
+		{ "texture-name": "spritesheets:team_game:boss:walk:boss_walk:5" },
+		{ "texture-name": "spritesheets:team_game:boss:walk:boss_walk:6" }
+	]
+}

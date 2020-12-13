@@ -1,0 +1,12 @@
+Background Bridge 1 214.0 163.0 -400.0 -26.0 60 1
+Background Background_Fog1 2 600.0 220.0 -400.0 -26.0 6 1
+Background Background_Color1 3 296.0 440.0 -400.0 -26.0 5 2
+Background Background_Color1 3 296.0 440.0 -400.0 -246.0 5 1
+Background Background_Shadow1 3 400.0 220.0 -400.0 -246.0 9 1
+
+Props Pillar 0.0 47.0 146.0 -60.0 -172.0 1 1
+Props Pillar 0.0 47.0 146.0 166.0 -172.0 1 1
+
+Props Pillar 0.0 47.0 146.0 361.0 -172.0 1 1
+
+Props Pillar 0.0 47.0 146.0 521.0 -172.0 1 1

@@ -1,0 +1,9 @@
+{
+	"animation-name": "lives:heart_down",
+	"animation-length-ms": 300,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:team_game:lives:heart_down:heart_down:1" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_down:heart_down:2" }
+	]
+}

@@ -11,6 +11,7 @@
 
 
 #include "gameplay/team_game/brawler_controller.h"
+#include "gameplay/team_game/game_manager.h"
 #include "gameplay/team_game/player_camera_focus.h"
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/physics.h"
@@ -23,6 +24,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddPausableSystem<CameraFollowSystem>();
     engine_.AddPausableSystem<PhysicsSystem>();
+    engine_.AddPausableSystem<GameManagerSystem>();
     engine_.AddPausableSystem<BrawlerControllerSystem>();
     engine_.AddPausableSystem<SimpleCollisionsSystem>();
     engine_.AddPausableSystem<CollisionSystem>();
@@ -153,6 +155,7 @@ void CreateBackground()
         transform.position.y = -75;
         transform.position.z = 1;
     }
+
     /* Put background image */ {
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
@@ -185,12 +188,15 @@ void team_game::SetupWorld(Engine& engine_)
 
     auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, 0 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);
+
+
+
 }
 
 void team_game::SetupWorld_Demo(Engine& engine_)
 {
     SetupCamera();
-    CreateBackground();
+    //CreateBackground();
 
     auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, 100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);

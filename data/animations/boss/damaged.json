@@ -1,0 +1,9 @@
+{
+	"animation-name": "boss:boss_damaged",
+	"animation-length-ms": 200,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:team_game:boss:damaged:boss_damaged:1" },
+		{ "texture-name": "spritesheets:team_game:boss:damaged:boss_damaged:2" }
+	]
+}

@@ -1,5 +1,5 @@
 {
-	"animation-name": "dungeon:goblin_idle",
+	"animation-name": "boss:boss_attack",
 	"animation-length-ms": 1100,
 	"animation-frames": 
 	[
