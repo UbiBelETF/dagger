@@ -103,7 +103,7 @@ void PlightCombatSystem::Run()
 
 		characterCurrentHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
 		characterCurrentHealthSprite.position.x = characterSprite.position.x;
-		characterCurrentHealthSprite.position.x += cstats.healthBarOffset;
+		characterCurrentHealthSprite.position.x -= cstats.healthBarOffset;
 
 		characterBackgroundStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
 		characterBackgroundStaminaSprite.position.x = characterSprite.position.x;
