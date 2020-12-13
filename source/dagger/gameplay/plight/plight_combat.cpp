@@ -92,19 +92,25 @@ void PlightCombatSystem::Run()
 			cstats.currentTimer = 0.f;
 		}
 
-		auto& characterSprite = Engine::Registry().get<Sprite>(entity);
+		auto& characterSprite = Engine::Registry().get<Transform>(entity);
 		auto& characterBackgroundHealthSprite = Engine::Registry().get<Sprite>(cstats.backgroundHealthBar);
 		auto& characterCurrentHealthSprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
 		auto& characterBackgroundStaminaSprite = Engine::Registry().get<Sprite>(cstats.backgroundStaminaBar);
 		auto& characterCurrentStaminaSprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
 
-		characterBackgroundHealthSprite.position = characterSprite.position + Vector3(0.f, cstats.playerDistance + 10.f, 0.f);
-		characterCurrentHealthSprite.position = characterSprite.position + Vector3(0.f , cstats.playerDistance + 10.f, 0.f);
-		characterCurrentHealthSprite.position.x -= cstats.healthBarOffset;
-		characterBackgroundStaminaSprite.position = characterSprite.position + Vector3(0.f, cstats.playerDistance, 0.f);
-		characterCurrentStaminaSprite.position = characterSprite.position + Vector3(0.f, cstats.playerDistance, 0.f);
-		characterCurrentStaminaSprite.position.x += cstats.staminaBarOffset;
+		characterBackgroundHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
+		characterBackgroundHealthSprite.position.x = characterSprite.position.x;
 
+		characterCurrentHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
+		characterCurrentHealthSprite.position.x = characterSprite.position.x;
+		characterCurrentHealthSprite.position.x += cstats.healthBarOffset;
+
+		characterBackgroundStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
+		characterBackgroundStaminaSprite.position.x = characterSprite.position.x;
+
+		characterCurrentStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
+		characterCurrentStaminaSprite.position.x = characterSprite.position.x;
+		characterCurrentStaminaSprite.position.x += cstats.staminaBarOffset;
 	}
 
 }
