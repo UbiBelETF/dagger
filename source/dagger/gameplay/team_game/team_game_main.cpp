@@ -15,18 +15,31 @@
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
 #include "core/graphics/text.h"
+#include "tilemap_system.h"
+#include "tilemap_legends.h"
 
 #include "gameplay/team_game/collision.h"
 
 using namespace dagger;
 using namespace team_game;
 
+
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
+    engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<TeamGameControllerSystem>();
+    
 }
-
+void SetCameraTeam()
+{
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    camera->mode = ECameraMode::FixedResolution;
+    camera->size = { 1920, 1080 };
+    camera->zoom = 1.2;
+    camera->position = { 300,300, 0 };
+    camera->Update();
+}
 struct MainCharacter
 {
     Entity entity;
@@ -84,94 +97,40 @@ struct MainCharacter
 
 void TeamGame::WorldSetup(Engine &engine_)
 {
-    ShaderSystem::Use("standard");
-
+    //TODO: Setup world
+    SetCameraTeam();
     auto mainChar = MainCharacter::Create("ASDW", { 1, 1, 1 }, { 0, 0 });
+    auto& reg = Engine::Registry();
 
 
-    auto* camera = Engine::GetDefaultResource<Camera>();
-    camera->mode = ECameraMode::FixedResolution;
-    camera->size = { 800, 600 };
-    camera->zoom = 1;
-    camera->position = { 0, 0, 0 };
-    camera->Update();
+    Tilemap_legends tilemap_legends;
+    
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/floor_level_1.map", &tilemap_legends.legends.at("floors") });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/objects_level_1.map",&tilemap_legends.legends.at("objects") });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/creatures_level_1.map", &tilemap_legends.legends.at("creatures") });
+    auto ui = reg.create();
+    auto& text = reg.emplace<Text>(ui);
+    text.spacing = 0.6f;
+    text.Set("pixel-font", "hello world");
 
     team_game::SetupWorld(engine_);
 }
 
 void team_game::SetupWorld(Engine &engine_)
 {
-    //TODO: Setup world
+   
 
-    //generate collision test world:
-    auto& reg = Engine::Registry();
-    for (int i = -4; i < 4; i++)
-    {
-        for (int j = -4; j < 4; j++)
-        {
-            auto entity = reg.create();
-            auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:floor_{}", 1));
-            sprite.position = { i * 48, j * 48, 99 };
-            sprite.scale = { 3, 3 };
+  
 
-        }
-    }
-    for (int i = -5; i < 5; i++) {
-        if (i == 0) continue;
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == -5 ? 12 : i == 4 ? 13 : i == 1 ? 2 : i == -1 ? 4 : 3));
-        sprite.position = { i * 48, -5 * 48, 99 };
-        sprite.scale = { 3, 3 };
+   
 
-        auto& col = reg.emplace<Collision>(entity);
-        auto& tm = reg.emplace<Transform>(entity);
-        col.size = { 48, 48 };
-        tm.position = sprite.position;
-        reg.emplace<CollisionType::Wall>(entity);
-    }
-    for (int i = -5; i < 5; i++) {
-        if (i == 0) continue;
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == -5 ? 7 : i == 4 ? 8 : i == 1 ? 2 : i == -1 ? 4 : 3));
-        sprite.position = { i * 48, 4 * 48, 99 };
-        sprite.scale = { 3, 3 };
 
-        auto& col = reg.emplace<Collision>(entity);
-        auto& tm = reg.emplace<Transform>(entity);
-        col.size = { 48, 48 };
-        tm.position = sprite.position;
-        reg.emplace<CollisionType::Wall>(entity);
-    }
-    for (int i = -4; i < 4; i++) {
-        if (i == 0) continue;
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == 1 ? 16 : i == -1 ? 6 : 11));
-        sprite.position = { -5 * 48, i * 48, 99 };
-        sprite.scale = { 3, 3 };
-
-        auto& col = reg.emplace<Collision>(entity);
-        auto& tm = reg.emplace<Transform>(entity);
-        col.size = { 48, 48 };
-        tm.position = sprite.position;
-        reg.emplace<CollisionType::Wall>(entity);
-    }
-
-    for (int i = -4; i < 4; i++) {
-        if (i == 0) continue;
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, fmt::format("spritesheets:tiles_dungeon:wall_{}", i == 1 ? 16 : i == -1 ? 6 : 11));
-        sprite.position = { 4 * 48, i * 48, 99 };
-        sprite.scale = { 3, 3 };
-
-        auto& col = reg.emplace<Collision>(entity);
-        auto& tm = reg.emplace<Transform>(entity);
-        col.size = { 48, 48 };
-        tm.position = sprite.position;
-        reg.emplace<CollisionType::Wall>(entity);
-    }
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    camera->mode = ECameraMode::FixedResolution;
+    camera->size = { 800, 600 };
+    camera->zoom = 0.5;
+    camera->position = { 0, 0, 0 };
+    camera->Update();
 }
+
+
