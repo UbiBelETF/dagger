@@ -11,6 +11,8 @@ using namespace dagger;
 
 // Idle
 
+bool HeroControllerFSM::stopAttackOnNextRepeat = false;
+FacingPostion HeroControllerFSM::facingPosition = side;
 
 void HeroControllerFSM::Idle::Enter(HeroControllerFSM::StateComponent& state_)
 {
@@ -18,27 +20,24 @@ void HeroControllerFSM::Idle::Enter(HeroControllerFSM::StateComponent& state_)
 	AnimatorPlay(animator, "chara_hero:hero_idle");
 }
 
-DEFAULT_EXIT(HeroControllerFSM, Idle);
-
 void HeroControllerFSM::Idle::Run(HeroControllerFSM::StateComponent& state_)
 {
 	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
 
-	if (EPSILON_NOT_ZERO(input.Get("run-left-right")) || EPSILON_NOT_ZERO(input.Get("run-up-down")))
+	if (EPSILON_NOT_ZERO(input.Get("run-left-right")) || EPSILON_NOT_ZERO(input.Get("run-up-down")) && !EPSILON_NOT_ZERO(input.Get("attack")))
 	{
 		GoTo(EHeroStates::Running, state_);
 	}
+
+	if (EPSILON_NOT_ZERO(input.Get("attack")))
+	{
+		GoTo(EHeroStates::Attacking, state_);
+	}
 }
 
-
-// Running
+DEFAULT_EXIT(HeroControllerFSM, Idle);
 
 void HeroControllerFSM::Running::Enter(HeroControllerFSM::StateComponent& state_)
-{
-}
-
-// same as: DEFAULT_EXIT(CharacterControllerFSM, Running);
-void HeroControllerFSM::Running::Exit(HeroControllerFSM::StateComponent& state_)
 {}
 
 void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
@@ -51,12 +50,14 @@ void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 
 	if (EPSILON_ZERO(run_left_right) && EPSILON_ZERO(run_up_down))
 	{
-		GoTo(EHeroStates::Idle, state_);
+		if(!EPSILON_NOT_ZERO(input.Get("attack")))
+			GoTo(EHeroStates::Idle, state_);
 	}
 	else
 	{
 		if (!EPSILON_ZERO(run_up_down) && !EPSILON_ZERO(run_left_right))
 		{
+			HeroControllerFSM::facingPosition = side;
 			sprite.scale.x = run_left_right * abs(sprite.scale.x);
 			Vector3 normalized_vector = glm::normalize(Vector3(run_left_right, run_up_down, 0));
 			sprite.position += Vector3(normalized_vector.x * character.speed, normalized_vector.y * character.speed, 0)  * Engine::DeltaTime();
@@ -64,16 +65,23 @@ void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 
 		else if (!EPSILON_ZERO(run_left_right))
 		{
+			HeroControllerFSM::facingPosition = side;
 			sprite.scale.x = run_left_right * abs(sprite.scale.x);;
 			sprite.position.x += character.speed * run_left_right * Engine::DeltaTime();
 		}
 		
 		else if (!EPSILON_ZERO(run_up_down))
 		{
+			if(run_up_down > 0)
+				HeroControllerFSM::facingPosition = up;
+			else
+				HeroControllerFSM::facingPosition = down;
+
 			sprite.position.y += character.speed * run_up_down * Engine::DeltaTime();
 		}
 		
 	}
+
 	if (run_up_down > 0)
 		AnimatorPlay(animator, "chara_hero:hero_move_up");
 
@@ -82,4 +90,41 @@ void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 
 	else if(run_left_right != 0)
 		AnimatorPlay(animator, "chara_hero:hero_move_side");
+
+	if (EPSILON_NOT_ZERO(input.Get("attack")))
+	{
+		GoTo(EHeroStates::Attacking, state_);
+	}
 }
+
+void HeroControllerFSM::Running::Exit(HeroControllerFSM::StateComponent& state_)
+{}
+
+void HeroControllerFSM::Attacking::Enter(HeroControllerFSM::StateComponent& state_)
+{
+	HeroControllerFSM::stopAttackOnNextRepeat = false;
+
+	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+
+	if(HeroControllerFSM::facingPosition == side)
+		AnimatorPlay(animator, "chara_hero:hero_attack_side");
+
+	if (HeroControllerFSM::facingPosition == up)
+		AnimatorPlay(animator, "chara_hero:hero_attack_up");
+
+	if (HeroControllerFSM::facingPosition == down)
+		AnimatorPlay(animator, "chara_hero:hero_attack_down");
+}
+
+void HeroControllerFSM::Attacking::Run(HeroControllerFSM::StateComponent& state_)
+{
+	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+
+	if (animator.currentFrame > 0)
+		HeroControllerFSM::stopAttackOnNextRepeat = true;
+
+	else if (HeroControllerFSM::stopAttackOnNextRepeat && animator.currentFrame == 0)
+		GoTo(EHeroStates::Idle, state_);
+}
+
+DEFAULT_EXIT(HeroControllerFSM, Attacking);
