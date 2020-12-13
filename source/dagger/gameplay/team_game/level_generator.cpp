@@ -4,7 +4,7 @@
 
 using namespace dagger;
 
-std::vector<Entity> level_generator::jovica::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -16,12 +16,12 @@ std::vector<Entity> level_generator::jovica::CreateFloor(Registry& reg_, SInt32 
     return { entity };
 }
 
-std::vector<Entity> level_generator::jovica::Nothing(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::Nothing(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     return {};
 }
 
-std::vector<Entity> level_generator::jovica::CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -39,7 +39,7 @@ std::vector<Entity> level_generator::jovica::CreateTopWall(Registry& reg_, SInt3
     return { entity, top };
 }
 
-std::vector<Entity> level_generator::jovica::CreateBottomWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateBottomWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -50,7 +50,7 @@ std::vector<Entity> level_generator::jovica::CreateBottomWall(Registry& reg_, SI
     return { entity };
 }
 
-std::vector<Entity> level_generator::jovica::CreateLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -61,7 +61,7 @@ std::vector<Entity> level_generator::jovica::CreateLeftWall(Registry& reg_, SInt
     return { entity };
 }
 
-std::vector<Entity> level_generator::jovica::CreateRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -72,7 +72,7 @@ std::vector<Entity> level_generator::jovica::CreateRightWall(Registry& reg_, SIn
     return { entity };
 }
 
-std::vector<Entity> level_generator::jovica::CreateTopLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateTopLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -95,7 +95,7 @@ std::vector<Entity> level_generator::jovica::CreateTopLeftWall(Registry& reg_, S
     return { entity, top, peak };
 }
 
-std::vector<Entity> level_generator::jovica::CreateTopRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateTopRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -118,7 +118,7 @@ std::vector<Entity> level_generator::jovica::CreateTopRightWall(Registry& reg_, 
     return { entity, top, peak };
 }
 
-std::vector<Entity> level_generator::jovica::CreateBottomLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateBottomLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -129,7 +129,7 @@ std::vector<Entity> level_generator::jovica::CreateBottomLeftWall(Registry& reg_
     return { entity };
 }
 
-std::vector<Entity> level_generator::jovica::CreateBottomRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateBottomRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -140,7 +140,7 @@ std::vector<Entity> level_generator::jovica::CreateBottomRightWall(Registry& reg
     return { entity };
 }
 
-std::vector<Entity> level_generator::jovica::CreateBottomLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateBottomLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity right = reg_.create();
     auto& rSprite = reg_.emplace<Sprite>(right);
@@ -157,7 +157,7 @@ std::vector<Entity> level_generator::jovica::CreateBottomLeftConcWall(Registry& 
     return { right, top };
 }
 
-std::vector<Entity> level_generator::jovica::CreateBottomRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateBottomRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity left = reg_.create();
     auto& lSprite = reg_.emplace<Sprite>(left);
@@ -174,7 +174,7 @@ std::vector<Entity> level_generator::jovica::CreateBottomRightConcWall(Registry&
     return { left, top };
 }
 
-std::vector<Entity> level_generator::jovica::CreateTopLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateTopLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -192,7 +192,7 @@ std::vector<Entity> level_generator::jovica::CreateTopLeftConcWall(Registry& reg
     return { entity, top };
 }
 
-std::vector<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
@@ -210,7 +210,7 @@ std::vector<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& re
     return { entity, top };
 }
 
-    std::vector<Entity> level_generator::jovica::CreateBottomLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+    Sequence<Entity> level_generator::jovica::CreateBottomLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
     {
         Entity right = reg_.create();
         auto& rSprite = reg_.emplace<Sprite>(right);
@@ -227,7 +227,7 @@ std::vector<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& re
         return { right, top };
     }
 
-    std::vector<Entity> level_generator::jovica::CreateBottomRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+    Sequence<Entity> level_generator::jovica::CreateBottomRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
     {
         Entity left = reg_.create();
         auto& lSprite = reg_.emplace<Sprite>(left);
@@ -244,7 +244,7 @@ std::vector<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& re
         return { left, top };
     }
 
-    std::vector<Entity> level_generator::jovica::CreateTopLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+    Sequence<Entity> level_generator::jovica::CreateTopLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
@@ -268,7 +268,7 @@ std::vector<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& re
         return { entity, top, peak };
     }
 
-    std::vector<Entity> level_generator::jovica::CreateTopRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+    Sequence<Entity> level_generator::jovica::CreateTopRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
     {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);

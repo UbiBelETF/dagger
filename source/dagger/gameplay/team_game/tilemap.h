@@ -4,12 +4,12 @@
 
 using namespace dagger;
 
-using TileProcessor = std::function<std::vector<Entity>(Registry&, SInt32, SInt32)>;
+using TileProcessor = std::function<Sequence<Entity>(Registry&, SInt32, SInt32)>;
 using TilemapLegend = Map<Char, TileProcessor>;
 
 struct Tilemap
 {
-	std::vector<Entity> tiles;
+	Sequence<Entity> tiles;
 };
 
 struct TilemapLoadRequest : public AssetLoadRequest<Tilemap>
