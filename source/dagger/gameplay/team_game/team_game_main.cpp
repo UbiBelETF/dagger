@@ -24,6 +24,8 @@
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_player_input.h"
 #include "gameplay/team_game/health_management.h"
+#include "gameplay/team_game/ui/player_stats.h"
+#include "core/graphics/text.h"
 
 using namespace dagger;
 
@@ -37,6 +39,7 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<CameraFollowSystem>();
     engine_.AddSystem<HealthManagementSystem>();
+    engine_.AddSystem<PlayerStatsUISystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
@@ -87,6 +90,8 @@ void team_game::SetupWorld(Engine& engine_)
 
         auto& character = reg.emplace<Character>(entity);
         reg.emplace<PlayerCharacter>(entity);
+
+        reg.emplace<Text>(entity);
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
         
 

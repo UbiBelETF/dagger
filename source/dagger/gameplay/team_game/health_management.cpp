@@ -23,7 +23,6 @@ void HealthManagementSystem::Run()
             {
                 auto& enemyCharacter = Engine::Registry().get<team_game::Character>(other);
                 character.health -= enemyCharacter.damage * Engine::DeltaTime();
-                printf("Lost health. Current HEALTH: %.2f \n", character.health);
             }
         }
     }
