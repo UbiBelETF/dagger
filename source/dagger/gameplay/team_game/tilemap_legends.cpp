@@ -12,9 +12,11 @@
 #include "core/graphics/animations.h"
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
-const int scale = 3;
-const int x_step = 16 *scale;
-const int y_step = 16 * scale;
+#include "collision.h"
+ int scale = 1;
+ int x_step = 16 *scale;
+ int y_step = 16 * scale;
+ float size = 16 * scale;
 using namespace team_game;
 Tilemap_legends::Tilemap_legends() {
 	TilemapLegend floors;
@@ -50,6 +52,7 @@ Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	sprite.scale = { scale,scale };
 	sprite.position = { x_ * x_step, y_ * y_step, 1000 };
+	sprite.size = Vector2(1, 1) * size;
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:floor_1");
 	return entity;
 }
@@ -57,65 +60,100 @@ Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Map<Char, String>walls;
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+	sprite.subOrigin = Vector2(-0.5, -0.5) * size;
+	reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Wall>(entity);
+	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 10 };
+	transform.position = { x_ * x_step, y_ * y_step, 10 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:"+wall_type.at(type));
 	return entity;
 }
 Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+	reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Character>(entity);
+	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 30 };
+	transform.position = { x_ * x_step, y_ * y_step, 30 };
 	AssignSprite(sprite, "spritesheets:chara_slime:slime_idle_anim:1");
 	auto& anim = reg_.emplace<Animator>(entity);
 	AnimatorPlay(anim, "chara_slime:slime_idle");
 	return entity;
 }
 Entity CreateHero(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
-	auto view = Engine::Registry().view<TeamGameCharacter,Sprite>();
+	auto view = Engine::Registry().view<TeamGameCharacter,Transform,Sprite>();
 	auto it = view.begin();
+	auto& transform = view.get<Transform>(*it);
 	auto& sprite = view.get<Sprite>(*it);
-	sprite.position = { x_ * x_step,y_ * y_step,sprite.position.z };
+	sprite.size=Vector2(1, 1) * size;
+	sprite.subOrigin = Vector2(-10, -0.5) * size;
+	sprite.scale = Vector2(scale, scale);
+	auto const gameCharacter = view.get<TeamGameCharacter>(*it);
+	auto entity = entt::to_entity<Entity,TeamGameCharacter>(reg_, gameCharacter);
+	transform.position = { x_ * x_step,y_ * y_step,0 };
 	return *it;
 }
 Entity CreateDoorHorizontal(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+	reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Wall>(entity);
+	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 40 };
+	transform.position = { x_ * x_step, y_ * y_step, 40 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:door_horizontal");
 	return entity;
 }
 Entity CreateDoorVertical(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+	reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Wall>(entity);
+	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 40 };
+	transform.position = { x_ * x_step, y_ * y_step, 40 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:door_vertical");
 	return entity;
 }
 Entity CreateChest(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+	reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Wall>(entity);
+	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 90 };
+	transform.position = { x_ * x_step, y_ * y_step, 90 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:chest");
 	return entity;
 }
 Entity CreatePot(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+	reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Wall>(entity);
+	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 90 };
+	transform.position = { x_ * x_step, y_ * y_step, 90 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:pot");
 	return entity;
 }
 Entity CreateCrate(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+	reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Wall>(entity);
+	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
-	sprite.position = { x_ * x_step, y_ * y_step, 90 };
+	transform.position = { x_ * x_step, y_ * y_step, 90 };
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:crate");
 	return entity;
 }

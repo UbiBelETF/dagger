@@ -18,6 +18,8 @@
 #include "tilemap_system.h"
 #include "tilemap_legends.h"
 
+#include "gameplay/team_game/collision.h"
+
 using namespace dagger;
 using namespace team_game;
 
@@ -25,6 +27,7 @@ using namespace team_game;
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<TilemapSystem>();
+    engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<TeamGameControllerSystem>();
     
 }
@@ -44,6 +47,9 @@ struct MainCharacter
     Animator& animator;
     InputReceiver& input;
     TeamGameCharacter& character;
+    Collision& col;
+    Transform& tm;
+
 
     static MainCharacter Get(Entity entity)
     {
@@ -52,7 +58,9 @@ struct MainCharacter
         auto& anim = reg.get_or_emplace<Animator>(entity);
         auto& input = reg.get_or_emplace<InputReceiver>(entity);
         auto& character = reg.get_or_emplace<TeamGameCharacter>(entity);
-        return MainCharacter{ entity, sprite, anim, input, character };
+        auto& col = reg.get_or_emplace<Collision>(entity);
+        auto& tm = reg.get_or_emplace<Transform>(entity);
+        return MainCharacter{ entity, sprite, anim, input, character, col, tm };
     }
 
     static MainCharacter Create(
@@ -77,6 +85,11 @@ struct MainCharacter
             chr.input.contexts.push_back(input_);
 
         chr.character.speed = 100;
+
+        //Collision setup:        
+        chr.col.size = { 25, 28 };
+        chr.tm.position = { position_ , 0.0f };
+        reg.emplace<CollisionType::Character>(entity);
 
         return chr;
     }
@@ -106,4 +119,18 @@ void TeamGame::WorldSetup(Engine &engine_)
 void team_game::SetupWorld(Engine &engine_)
 {
    
+
+  
+
+   
+
+
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    camera->mode = ECameraMode::FixedResolution;
+    camera->size = { 800, 600 };
+    camera->zoom = 0.5;
+    camera->position = { 0, 0, 0 };
+    camera->Update();
 }
+
+
