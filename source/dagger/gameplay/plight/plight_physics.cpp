@@ -4,9 +4,10 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
+#include <algorithm>    
+
 using namespace plight;
 using namespace dagger;
-
 
 void plight::PhysicsSystem::Run()
 {
@@ -24,9 +25,19 @@ void plight::PhysicsSystem::Run()
             while (it2 != collision.colidedWith.end())
             {
                 if (Engine::Registry().has<PhysicsObject>(*it2)) {
-                    auto& other_transform = view.get<Transform>(*it2);
-                    auto& other_collision = view.get<PlightCollision>(*it2);
-                    ResolveCollision(transform.position, collision, other_transform.position, other_collision);
+                    auto& other_physics = view.get<PhysicsObject>(*it2);
+                    bool has = false;
+                    for (int group : other_physics.collision_groups) {
+                        if (std::find(physics.my_groups.begin(), physics.my_groups.end(), group) != physics.my_groups.end()) {
+                            has = true;
+                            break;
+                        }
+                    }
+                    if (has) {
+                        auto& other_transform = view.get<Transform>(*it2);
+                        auto& other_collision = view.get<PlightCollision>(*it2);
+                        ResolveCollision(transform.position, collision, other_transform.position, other_collision);
+                    }
                 }
                 it2++;
             }

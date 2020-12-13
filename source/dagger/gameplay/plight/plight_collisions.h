@@ -17,6 +17,8 @@ namespace plight {
 
         bool IsCollided(const Vector3& pos_, const PlightCollision& other_, const Vector3& posOther_);
 
+        bool IsCollidedSAT(const Vector3& pos_, const PlightCollision& other_, const Vector3& posOther_);
+
         // return (0,1) if collision happen by y, (1,0) if collision happen by x
         Vector2 GetCollisionSides(const Vector3& pos_, const PlightCollision& other_, const Vector3& posOther_);
 

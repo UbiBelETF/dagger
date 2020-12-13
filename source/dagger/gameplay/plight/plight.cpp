@@ -50,6 +50,8 @@ struct PlightCharacter
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
+        physics.my_groups.push_back(1);
+        physics.collision_groups.push_back(0);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
 
@@ -118,7 +120,7 @@ void Plight::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 2;
+    camera->zoom = 1.5;
     camera->position = { 0, 0, 0 };
     camera->Update();
 

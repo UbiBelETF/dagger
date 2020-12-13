@@ -7,6 +7,8 @@ namespace plight {
     struct PhysicsObject
     {
         bool is_static = false;
+        std::vector<UINT16> my_groups;
+        std::vector<UINT16> collision_groups;
     };
 
     class PhysicsSystem : public System
