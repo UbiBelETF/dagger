@@ -39,33 +39,35 @@ void team_game::CollisionSystem::Run()
                 {
 
                     Vector2 collisionSides = col.GetCollisionSides(temp_t, collision, transform.position);
-
                     do
                     {
-
                         // get back for 1 frame 
-                        Float32 dt = Engine::DeltaTime();
+                       Float32 dt = Engine::DeltaTime();
                         if (std::abs(collisionSides.x) > 0)
                         {
                             temp_t.x -= (physics.velocity.x * dt);
                         }
-                        else 
+                        if (collisionSides.y != 0)
                         {
-                            temp_t.y -= (physics.velocity.y * dt);
+                            if (physics.velocity.x != 0 && physics.velocity.y != GetGravity() * dt) {
+                                temp_t.x -= physics.velocity.x * dt; physics.velocity.x = 0;
+                            }
+                            else
+                            temp_t.y -= physics.velocity.y * dt;
+
                         }
-
-
+                    
                     } while (col.IsCollided(temp_t, collision, transform.position));
                     if (std::abs(collisionSides.x) > 0)
                     {
                         physics.velocity.x = (temp_t.x - t.position.x) / Engine::DeltaTime();
                     }
 
-                    if (std::abs(collisionSides.y) > 0)
+                    if (std::abs(collisionSides.y)>0)
                     {
                         physics.velocity.y = (temp_t.y - t.position.y) / Engine::DeltaTime();
                     }
-                    
+
                 }
             }
         }

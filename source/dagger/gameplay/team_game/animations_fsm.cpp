@@ -9,21 +9,16 @@
 
 using namespace dagger;
 using namespace team_game;
+DEFAULT_ENTER(AnimationsFSM, Idle);
 
-void AnimationsFSM::Idle::Enter(AnimationsFSM::StateComponent& state_) {
-    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
-    AnimatorPlay(animator_, "character:IDLE");
-}
 void AnimationsFSM::Idle::Run(AnimationsFSM::StateComponent& state_) {
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
     AnimatorPlay(animator_, "character:IDLE");
 }
 DEFAULT_EXIT(AnimationsFSM, Idle);
 
-void AnimationsFSM::Running::Enter(AnimationsFSM::StateComponent& state_) {
-    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
-    AnimatorPlay(animator_, "character:RUN");
-}
+
+DEFAULT_ENTER(AnimationsFSM, Running);
 
 void AnimationsFSM::Running::Run(AnimationsFSM::StateComponent& state_) {
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
@@ -31,11 +26,8 @@ void AnimationsFSM::Running::Run(AnimationsFSM::StateComponent& state_) {
 }
 DEFAULT_EXIT(AnimationsFSM, Running);
 
-void AnimationsFSM::Jumping::Enter(AnimationsFSM::StateComponent& state_) 
-{
-    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
-    AnimatorPlay(animator_, "character:JUMP");
-}
+
+DEFAULT_ENTER(AnimationsFSM, Jumping);
 void AnimationsFSM::Jumping::Run(AnimationsFSM::StateComponent& state_)
 {
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
@@ -43,11 +35,9 @@ void AnimationsFSM::Jumping::Run(AnimationsFSM::StateComponent& state_)
 }
 DEFAULT_EXIT(AnimationsFSM, Jumping);
 
-void AnimationsFSM::Falling::Enter(AnimationsFSM::StateComponent& state_) 
-{
-    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
-    AnimatorPlay(animator_, "character:FALL");
-}
+
+
+DEFAULT_ENTER(AnimationsFSM, Falling);
 void AnimationsFSM::Falling::Run(AnimationsFSM::StateComponent& state_)
 {
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
