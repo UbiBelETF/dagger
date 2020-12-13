@@ -10,6 +10,22 @@
 		  "actions": [
 			{ "trigger": "KeyW", "value": 1 },
 			{ "trigger": "KeyS", "value": -1 } 
+		] },
+		{ "command-name": "goblinTransform", 
+		  "actions": [
+			{ "trigger": "KeyI", "value": 1 }
+		] },
+		{ "command-name": "slimeTransform", 
+		  "actions": [
+			{ "trigger": "KeyO", "value": 1 }
+		] },
+		{ "command-name": "batTransform", 
+		  "actions": [
+			{ "trigger": "KeyP", "value": 1 }
+		] },
+		{ "command-name": "knightTransform", 
+		  "actions": [
+			{ "trigger": "KeyL", "value": 1 }
 		] }
 	]
 }
