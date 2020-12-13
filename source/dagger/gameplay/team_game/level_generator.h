@@ -6,6 +6,8 @@ namespace level_generator
 {
 	namespace jovica
 	{
+        Entity CreateTile(Registry& reg_, SInt32 x_, SInt32 y_, SInt32 z_, String name_);
+
         Sequence<Entity> CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> Nothing(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_);
