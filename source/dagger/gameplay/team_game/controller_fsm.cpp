@@ -63,12 +63,13 @@ DEFAULT_EXIT(ControllerFSM, Running);
 //in_air
 void ControllerFSM::InAir::Enter(ControllerFSM::StateComponent& state_)
 {
-    auto& physics = Engine::Registry().get<Physics>(state_.entity);
-    if (physics.velocity.y > 0) {
+    auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
+    if(EPSILON_NOT_ZERO(input_.Get("jump")))
+    {
         auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
-        ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Jumping, anim);
+            ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Jumping, anim);
     }
-    else if (physics.velocity.y < 0)
+    else
     {
         auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
         ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Falling, anim);
@@ -89,6 +90,5 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
     if (EPSILON_NOT_ZERO(input_.Get("run")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime()) GoTo(ECharacterStates::Running, state_);
     else if (physics_.velocity.y == GetGravity() * Engine::DeltaTime()) GoTo(ECharacterStates::Idle, state_);
     
-   
 }
 DEFAULT_EXIT(ControllerFSM, InAir);
