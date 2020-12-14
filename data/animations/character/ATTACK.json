@@ -1,6 +1,6 @@
 {
 	"animation-name": "character:ATTACK",
-	"animation-length-ms": 1000,
+	"animation-length-ms": 400,
 	"animation-frames": [
 		{ "texture-name": "Light:attack1:attack1_0" },
 		{ "texture-name": "Light:attack1:attack1_1" },

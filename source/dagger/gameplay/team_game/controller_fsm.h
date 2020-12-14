@@ -7,7 +7,8 @@ namespace team_game {
 	{
 		Idle,
 		Running,
-		InAir
+		InAir,
+		Attacking,
 	};
 
 	struct ControllerFSM : public FSM<ECharacterStates>
@@ -16,12 +17,15 @@ namespace team_game {
 		DEFINE_STATE(ControllerFSM, ECharacterStates, Idle);
 		DEFINE_STATE(ControllerFSM, ECharacterStates, Running);
 		DEFINE_STATE(ControllerFSM, ECharacterStates, InAir);
+		DEFINE_STATE(ControllerFSM, ECharacterStates, Attacking);
+
 
 		ControllerFSM()
 		{
 			CONNECT_STATE(ECharacterStates, Idle);
 			CONNECT_STATE(ECharacterStates, Running);
 			CONNECT_STATE(ECharacterStates, InAir);
+			CONNECT_STATE(ECharacterStates, Attacking);
 		}
 		void Run(StateComponent& component_) override;
 

@@ -49,3 +49,11 @@ void AnimationsFSM::Falling::Run(AnimationsFSM::StateComponent& state_)
     }
 }
 DEFAULT_EXIT(AnimationsFSM, Falling);
+
+DEFAULT_ENTER(AnimationsFSM, Attacking);
+void AnimationsFSM::Attacking::Run(AnimationsFSM::StateComponent& state_)
+{
+    auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator_, "character:ATTACK");
+}
+DEFAULT_EXIT(AnimationsFSM, Attacking);

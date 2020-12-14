@@ -1,11 +1,9 @@
 {
 	"animation-name": "character:IDLE",
-	"animation-length-ms": 600,
-	"animation-frames": 
-	[
+	"animation-length-ms": 500,
+	"animation-frames": [
 		{ "texture-name": "Light:idle_blink:idle_blink0" },
 		{ "texture-name": "Light:idle_blink:idle_blink1" },
-		{ "texture-name": "Light:idle_blink:idle_blink2" },
-		{ "texture-name": "Light:idle_blink:idle_blink0" }
+		{ "texture-name": "Light:idle_blink:idle_blink2" }
 	]
 }

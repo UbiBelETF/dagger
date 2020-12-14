@@ -1,6 +1,6 @@
 {
 	"animation-name": "character:JUMP",
-	"animation-length-ms": 250,
+	"animation-length-ms": 200,
 	"animation-frames": [
 		{ "texture-name": "Light:jump:jump0" },
 		{ "texture-name": "Light:jump:jump1" },

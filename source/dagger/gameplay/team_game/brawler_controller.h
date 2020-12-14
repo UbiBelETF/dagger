@@ -11,6 +11,9 @@ namespace team_game
 	{
 		Vector2 speed{ 1,50 };
 		Bool run = false;
+		Bool attack = false;
+		Float32 attacking = 0.0f;
+		Bool doubleJump = false;
 	};
 
 	class BrawlerControllerSystem : public System
