@@ -43,6 +43,7 @@ void RocketSystem::Run()
 				{
 					t.position.x += rocket.speed.x * Engine::DeltaTime();
 					t.position.y += rocket.speed.y * Engine::DeltaTime();
+					t.position.z = 4;
 				}
 				else
 				{
@@ -61,6 +62,7 @@ void RocketSystem::Run()
 		{
 			t.position.x += rocket.speed.x * Engine::DeltaTime();
 			t.position.y += rocket.speed.y * Engine::DeltaTime();
+			t.position.z = 2;
 		}
 	}
 }
