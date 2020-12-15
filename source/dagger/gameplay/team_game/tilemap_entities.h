@@ -14,7 +14,7 @@
 using namespace dagger;
 
 
-TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollision_,int roomID_,float b_ ,String anim );
+TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollision_,int roomID_,float b_ ,String anim_ );
 
 
 

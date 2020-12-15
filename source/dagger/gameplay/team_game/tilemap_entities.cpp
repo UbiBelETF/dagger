@@ -26,9 +26,8 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
             auto& col=reg_.emplace<SimpleCollision>(entity);
             col.size={sprite.size.x/2,sprite.size.y/2};  
         }
-        sprite.position={ x_ * 16-125.0f, y_ * 16-b_, depth_ };
         auto& trn=reg_.emplace<Transform>(entity);
-        trn.position=sprite.position;
+        trn.position={ x_ * 16-125.0f, y_ * 16-b_, depth_ };
 
         if(roomID_>=0)
         {

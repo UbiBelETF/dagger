@@ -18,28 +18,16 @@ using namespace lab;
 
 void lab::GenerateRoom(int idNext_,lab::NextLvl& currentLvl_, Transform &tr_)
 {
-    if(currentLvl_.id==0)
-    {
-        auto& view = Engine::Res<Tilemap>()["tilemaps/lab/lab.map"]->tiles;
-        Engine::Registry().destroy(view.begin(),view.end());
-    }
-    else if(currentLvl_.id==1)
-    {
-        auto& view = Engine::Res<Tilemap>()["tilemaps/lab/hallway.map"]->tiles;
-        Engine::Registry().destroy(view.begin(),view.end());
-    }
-        
-  
+
+    auto& view = Engine::Res<Tilemap>()[currentLvl_.room[currentLvl_.id]]->tiles;
+    Engine::Registry().destroy(view.begin(),view.end());
+    
+
     tr_.position = { -(tr_.position.x- tr_.position.x/3), tr_.position.y , tr_.position.z };
     TilemapLegend legend=currentLvl_.legend;       
-    if(idNext_==0)
-    {
-        Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });   
-    }
-    else if(idNext_==1)
-    {
-         Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/hallway.map", &legend});
-    }  
+
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ currentLvl_.room[idNext_], &legend });   
+    
 
     currentLvl_.id=idNext_;
 

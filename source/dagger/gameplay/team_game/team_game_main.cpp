@@ -101,6 +101,9 @@ struct Player
 
         chr.character.speed = 50;
         chr.currentLvl.id=0;
+        chr.currentLvl.room[0]="tilemaps/lab/lab.map";
+        chr.currentLvl.room[1]="tilemaps/lab/hallway.map";
+        chr.currentLvl.room[2]="tilemaps/lab/room2.map";
 
         chr.currentLvl.legend['#'] = CreateObjectFunction("spritesheets:lab:wall_2",30,true,-1,100.0f,"");//CreateWallTop
         chr.currentLvl.legend['='] = CreateObjectFunction("spritesheets:lab:wall_5",30,true,-1,100.0f,"");//CreateWallUpPart;
@@ -111,7 +114,7 @@ struct Player
         chr.currentLvl.legend['1'] = CreateObjectFunction("spritesheets:lab:wall_1",30,true,-1,100.0f,"");//CreateWall1;
         chr.currentLvl.legend['3'] = CreateObjectFunction("spritesheets:lab:wall_3",30,true,-1,100.0f,"");//CreateWall3;
         chr.currentLvl.legend['0'] = CreateObjectFunction("",30,false,-1,100.0f,"");//Empty;
-        chr.currentLvl.legend['F'] = CreateObjectFunction("lab:door:lab anims_Animation 5_00",30,true,-1,107.1f,"lab:door");//Door;
+        chr.currentLvl.legend['F'] = CreateObjectFunction("lab:door:lab anims_Animation 5_00",30,true,2,107.1f,"lab:door");//Door;
         chr.currentLvl.legend['Q'] = CreateObjectFunction("spritesheets:lab:wall_bottom_1",30,true,-1,100.0f,"");//CreateWallBottom1;
         chr.currentLvl.legend['W'] = CreateObjectFunction("spritesheets:lab:wall_bottom_6",30,true,-1,100.0f,"");//CreateWallBottom6;
         chr.currentLvl.legend['8'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,1,100.0f,"");//Hall
@@ -134,7 +137,7 @@ void lab::SetupWorld(Engine &engine_)
      auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
      //Engine::Registry().destroy(mainChar.entity);
 
-    
+      
     for (int i = 0; i < 3; i++)
     {
         auto entity = reg.create();
