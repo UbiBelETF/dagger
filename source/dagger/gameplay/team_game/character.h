@@ -17,9 +17,11 @@ namespace team_game
 
 	struct PlayerCharacter 
 	{
+		UInt8 id;
 	};
 
 	struct EnemyCharacter
 	{
+		UInt8 id;
 	};
 }
