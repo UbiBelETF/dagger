@@ -16,7 +16,6 @@ using namespace dagger;
 namespace ancient_defenders {
 
 	struct Enemy {
-		Float32 health;
 		Float32 speed;
 		Float32 meleeDmg;
 
@@ -34,6 +33,7 @@ namespace ancient_defenders {
 		Enemy& golem;
 		SimpleCollision& hitbox;
 		RangeOfAttack& range;
+        Health & health;
 
 		static Golem Get(Entity entity_);
 

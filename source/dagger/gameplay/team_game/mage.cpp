@@ -166,9 +166,11 @@ Mage ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool off
     auto entity = reg.create();
     auto mag = Mage::Get(entity);
 
+    
     AssignSprite(mag.sprite, "spritesheets:mage:mage_stand_side:1");
     float ratio = mag.sprite.size.y / mag.sprite.size.x;
 
+    
     mag.sprite.scale = { 2,2 };
 
     mag.mage.meleeDmg = 1.0f;
@@ -209,6 +211,6 @@ Mage ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool off
     mag.health.currentHealth = Health::standardHP;
     mag.health.maxHealth = Health::standardHP;
 
-
+    Logger::info("Created mage");
     return mag;
 }

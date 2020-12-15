@@ -4,6 +4,7 @@
 #include "range_of_attack.h"
 #include "towers.h"
 #include "hp_system.h"
+#include "controls.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -28,6 +29,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
       engine_.AddSystem<TowerBehaviorSystem>();
 	    engine_.AddSystem<GolemBehaviorSystem>();
       engine_.AddSystem<HealthManagementSystem>();
+      engine_.AddSystem<PlayerControlsSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -74,12 +76,13 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
     auto demoMage2 = Mage::Create(WalkingPath::path[0], EAction::Moving);
     auto demoMage3 = Mage::Create(WalkingPath::path[0], EAction::Moving);
     */
-    auto demoMage4 = Mage::Create(TowerPlacementInfo::spotCoordinates[0], EAction::Chanting);
-    auto demoTower = Tower::Create("STORM");
-    auto demoMage5 = Mage::Create(TowerPlacementInfo::spotCoordinates[5]);
+   // auto demoMage4 = Mage::Create(TowerPlacementInfo::spotCoordinates[0], EAction::Chanting);
+   // auto demoTower = Tower::Create("STORM");
+   // auto demoMage5 = Mage::Create(TowerPlacementInfo::spotCoordinates[5]);
 
-  	auto demoGolem = Golem::Create();
-    auto demoMage = Mage::Create(WalkingPath::path[0]);
+  	//auto demoGolem = Golem::Create();
+    //auto demoMage = Mage::Create(WalkingPath::path[0], EAction::Moving);
+    //auto demoMage1 = Mage::Create(WalkingPath::path[0], EAction::Moving);
 	/*
 
     auto demoMage1 = Mage::Create();
