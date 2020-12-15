@@ -28,6 +28,7 @@ namespace lab
 		int speed{ 1 };
 		int maxCooldown = 20;
 		int cooldown = 20;
+		int health = 100;
 	};
 
 

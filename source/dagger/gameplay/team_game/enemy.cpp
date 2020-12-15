@@ -51,8 +51,9 @@ void lab::EnemySystem::Run()
 				auto playerTransform = view3.get<Transform>(entity);
 				playerPosition = playerTransform.position;
 				playerPosition.y *= -1;
+				CreateBullet(t.position, playerPosition);
 			}
-			CreateBullet(t.position, playerPosition);
+			
 
 			bandit.cooldown = bandit.maxCooldown;
 		}

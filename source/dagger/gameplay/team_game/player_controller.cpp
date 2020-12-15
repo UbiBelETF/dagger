@@ -10,7 +10,8 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "gameplay/common/simple_collisions.h"
-
+#include "core/game/transforms.h"
+#include "core/graphics/text.h"
 
 
 using namespace dagger;
@@ -95,16 +96,30 @@ void PlayerControllerSystem::Run()
             }
             char_.cooldown--;
 
+        });
 
-    });
+        
 
-    auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
-    auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter>();
-    for (auto entity : view)
-    {
-        auto &t = view.get<Transform>(entity);
-        auto &player = view.get<PlayerCharacter>(entity);
-        auto &col = view.get<SimpleCollision>(entity);
+            auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
+            auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter,Text>();
+            auto viewText = Engine::Registry().view<PlayerCharacter,Text>();
+            auto viewDamage = Engine::Registry().view<Bullet, Transform, SimpleCollision,PlayerCharacter>();
+            for (auto entity : view)
+            {
+                auto &t = view.get<Transform>(entity);
+                auto &player = view.get<PlayerCharacter>(entity);
+                auto &col = view.get<SimpleCollision>(entity);
+                auto &tex = viewText.get<Text>(entity);
+
+                if (player.health <= 0)
+                {
+                    tex.alignment={ TextAlignment::CENTER };
+                    tex.Set("pixel-font", "GAME OVER",{30,30});
+                    Engine::Registry().destroy(entity);              
+                                   
+                }
+
+
 
         if (col.colided)
         {
@@ -114,6 +129,7 @@ void PlayerControllerSystem::Run()
                 Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
 
                 Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
+
 
                 do
                 {
@@ -140,6 +156,22 @@ void PlayerControllerSystem::Run()
                 } while (col.IsCollided(t.position, collision, transform.position));
             
             
+                       
+
+                        if (Engine::Registry().has<Bullet>(col.colidedWith))
+                        {
+                            Bullet &bullet = Engine::Registry().get<Bullet>(col.colidedWith);
+					        player.health -= bullet.damage;
+                            if(player.health<0){
+                                player.health=0;
+                            } 
+                            tex.Set("pixel-font", std::to_string(player.health)+"/100",{10,-95,0},{10,10});
+                            
+                        }
+                        
+                        
+                    
+
                 if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
                 {
                     lab::NextLvl& nextLvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);

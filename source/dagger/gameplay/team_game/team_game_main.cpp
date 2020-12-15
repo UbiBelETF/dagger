@@ -23,6 +23,8 @@
 #include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/enemy.h"
+#include "core/graphics/text.h"
+
 
 
 using namespace dagger;
@@ -123,6 +125,11 @@ struct Player
 
         TilemapLegend legend=chr.currentLvl.legend;
         Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
+
+        auto& hl = Engine::Registry().emplace<Text>(entity);
+        hl.alignment={ TextAlignment::RIGHT };
+        hl.spacing = 0.5f;
+        hl.Set("pixel-font", "100/100",{10,-95,0},{10,10});
 
         return chr;
     }
