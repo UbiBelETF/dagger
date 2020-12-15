@@ -1,5 +1,6 @@
 #include "player_controller.h"
 #include "shoot.h"
+#include "tilemap_entities.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -9,12 +10,29 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "gameplay/common/simple_collisions.h"
-
 #include "core/game/transforms.h"
 #include "core/graphics/text.h"
 
+
 using namespace dagger;
 using namespace lab;
+
+void lab::GenerateRoom(int idNext_,lab::NextLvl& currentLvl_, Transform &tr_)
+{
+
+    auto& view = Engine::Res<Tilemap>()[currentLvl_.room[currentLvl_.id]]->tiles;
+    Engine::Registry().destroy(view.begin(),view.end());
+    
+
+    tr_.position = { -(tr_.position.x- tr_.position.x/3), tr_.position.y , tr_.position.z };
+    TilemapLegend legend=currentLvl_.legend;       
+
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ currentLvl_.room[idNext_], &legend });   
+    
+
+    currentLvl_.id=idNext_;
+
+}
 
 
 void PlayerControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
@@ -36,27 +54,27 @@ void PlayerControllerSystem::SpinUp()
 void PlayerControllerSystem::Run()
 {
     Engine::Registry().view<InputReceiver, Sprite, Animator, PlayerCharacter, Transform>().each(
-        [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, PlayerCharacter& char_, Transform& transform_)
+    [](const InputReceiver input_, Sprite& sprite_, Animator& animator_, PlayerCharacter& char_, Transform& transform_)
+    {
+        
+        Float32 rl = input_.values.at("rightleft");
+        Float32 ud = input_.values.at("updown");
+        Float32 shoot = input_.values.at("shoot");
+        
+        if(rl || ud)
         {
-        
-            Float32 rl = input_.values.at("rightleft");
-            Float32 ud = input_.values.at("updown");
-            Float32 shoot = input_.values.at("shoot");
-        
-            if(rl || ud)
-            {
-                AnimatorPlay(animator_, "main_character:run");
+            AnimatorPlay(animator_, "main_character:run");
             if (rl != 0)
             { 
                 sprite_.scale.x = rl;
                 transform_.position.x += char_.speed * sprite_.scale.x * Engine::DeltaTime();
-                
+                    
             } 
             if (ud != 0)
             { 
                 sprite_.scale.y = 1;
                 transform_.position.y += char_.speed * ud * Engine::DeltaTime();
-                
+                    
             } 
             }
                 
@@ -77,7 +95,6 @@ void PlayerControllerSystem::Run()
                 }
             }
             char_.cooldown--;
-
 
         });
 
@@ -103,50 +120,43 @@ void PlayerControllerSystem::Run()
                 }
 
 
-                if (col.colided)
+
+        if (col.colided)
+        {
+            if (Engine::Registry().valid(col.colidedWith))
+            {
+                SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
+                Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
+
+                Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
+
+
+                do
                 {
-                    if (Engine::Registry().valid(col.colidedWith))
+                    Float32 dt = Engine::DeltaTime();
+                    if (collisionSides.x > 0)
                     {
-                        SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
-                        Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
+                        t.position.x -= (player.speed * dt);
+                    }
 
-                        Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
-
-                    do
+                    if (collisionSides.y > 0)
                     {
-                        Float32 dt = Engine::DeltaTime();
-                        if (collisionSides.x > 0)
-                        {
-                            t.position.x -= (player.speed * dt);
-                        }
+                        t.position.y -= (player.speed* dt);
+                    }
+                    if (collisionSides.x < 0)
+                    {
+                        t.position.x += (player.speed * dt);
+                    }
 
-                        if (collisionSides.y > 0)
-                        {
-                            t.position.y -= (player.speed* dt);
-                        }
-                        if (collisionSides.x < 0)
-                        {
-                            t.position.x += (player.speed * dt);
-                        }
-
-                        if (collisionSides.y < 0)
-                        {
-                            t.position.y += (player.speed* dt);
-                        }
+                    if (collisionSides.y < 0)
+                    {
+                        t.position.y += (player.speed* dt);
+                    }
                         
-                    } while (col.IsCollided(t.position, collision, transform.position));
+                } while (col.IsCollided(t.position, collision, transform.position));
             
             
-                        if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
-                        {
-                            lab::NextLvl& lvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
-                            
-                            if(lvl.id==1)
-                            {
-                                printf("its working");//Placeholder for future level transition
-                            }
-                
-                        }
+                       
 
                         if (Engine::Registry().has<Bullet>(col.colidedWith))
                         {
@@ -160,18 +170,21 @@ void PlayerControllerSystem::Run()
                         }
                         
                         
-                    }
+                    
 
-                col.colided = false;
+                if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
+                {
+                    lab::NextLvl& nextLvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
+                    lab::NextLvl& currentLvl = Engine::Registry().get<lab::NextLvl>(entity);
+
+                    GenerateRoom(nextLvl.id,currentLvl,t);
                 }
             }
-            
-        
 
-
-
-
-
+            col.colided = false;
+        }
+    }   
+ 
 }
 
 void PlayerControllerSystem::WindDown()
