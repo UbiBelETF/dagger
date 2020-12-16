@@ -31,7 +31,7 @@ void lab::EnemySystem::Run()
 			playerPosition.y *= -1;
 		}
 
-		if (bandit.ID == 1)
+		if (bandit.ID == horizontal)
 		{
 			if (col.colided && reg.has<CollideW>(col.colidedWith))
 			{
@@ -41,7 +41,7 @@ void lab::EnemySystem::Run()
 			t.position.x -= bandit.speed * Engine::DeltaTime();
 		}
 
-		if (bandit.ID == 2)
+		if (bandit.ID == vertical)
 		{
 			if (col.colided && reg.has<CollideW>(col.colidedWith))
 			{
@@ -51,7 +51,7 @@ void lab::EnemySystem::Run()
 			t.position.y -= bandit.speed * Engine::DeltaTime();
 		}
 
-		if (bandit.ID == 3)
+		if (bandit.ID == follower)
 		{
 			Vector2 directions = { 1, 1 };
 			if (playerPosition.x < t.position.x)

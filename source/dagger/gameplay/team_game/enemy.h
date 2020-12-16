@@ -7,8 +7,10 @@ using namespace dagger;
 
 namespace lab
 {
+	enum Type {follower, vertical, horizontal};
+
 	struct Bandit {
-		int ID;
+		Type ID;
 		Float32 speed = 10.f;
 		Float32 speedX = 10.f;
 		Float32 speedY = 10.f;

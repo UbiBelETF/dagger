@@ -140,18 +140,26 @@ void lab::SetupWorld(Engine &engine_)
     {
         auto entity = reg.create();
         auto& bandit = reg.emplace<Bandit>(entity);
-        bandit.ID = i + 1;
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "Bandit");
         sprite.scale = { 1, 1 };
         if (i == 0)
-        sprite.position = { 50, 0, 0.0f };
+        {
+            bandit.ID = horizontal;
+            sprite.position = { 50, 0, 0.0f };
+        }
 
         if (i == 1)
-        sprite.position = { 100, 30, 0.0f };
+        {
+            bandit.ID = vertical;
+            sprite.position = { 100, 30, 0.0f };
+        }
 
         if (i == 2)
+        {
+            bandit.ID = follower;
             sprite.position = { 100, -30, 0.0f };
+        }
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = sprite.position;
