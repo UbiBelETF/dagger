@@ -1,0 +1,11 @@
+{
+	"animation-name": "powerup:power3",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:powerup:health:health1", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:health:health2", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:health:health3", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:health:health4", "relative-length": 2 }
+	]
+}

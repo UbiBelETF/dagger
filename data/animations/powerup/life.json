@@ -1,0 +1,11 @@
+{
+	"animation-name": "powerup:power1",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:powerup:life:life1", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:life:life2", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:life:life3", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:life:life4", "relative-length": 2 }
+	]
+}
