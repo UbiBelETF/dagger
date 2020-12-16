@@ -91,7 +91,8 @@ struct Player
         AssignSprite(chr.sprite, "main_character:idle:idle1");
         AnimatorPlay(chr.animator, "main_character:idle");
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = {chr.sprite.size.x/2, chr.sprite.size.y/2};
+        //col.size = {chr.sprite.size.x/2, chr.sprite.size.y/2};
+        col.size = { 12, 20 };
 
         chr.transform.position = chr.sprite.position;
 
@@ -153,19 +154,28 @@ void lab::SetupWorld(Engine &engine_)
         AssignSprite(sprite, "Bandit");
         sprite.scale = { 1, 1 };
         if (i == 0)
-        sprite.position = { 100, 0, 0.0f };
+        {
+            bandit.ID = horizontal;
+            sprite.position = { 50, 0, 0.0f };
+        }
 
         if (i == 1)
-        sprite.position = { 100, 50, 0.0f };
+        {
+            bandit.ID = vertical;
+            sprite.position = { 100, 30, 0.0f };
+        }
 
         if (i == 2)
-            sprite.position = { 100, -50, 0.0f };
+        {
+            bandit.ID = follower;
+            sprite.position = { 100, -30, 0.0f };
+        }
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = sprite.position;
 
         auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = { 0.5f, 10 };
+        col.size = {sprite.size.x / 5, sprite.size.y /2 };
     }
 
 
