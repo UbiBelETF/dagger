@@ -4,6 +4,7 @@
 #include "core/system.h"
 #include "tile.h"
 #include "core/game/transforms.h"
+#include "gameplay/team_game/character_controller_fsm.h"
 
 
 using namespace dagger;
@@ -35,15 +36,12 @@ namespace lab
 	class PlayerControllerSystem
 		: public System
 	{
-		void OnInitialize(Registry& registry_, Entity entity_);
+        CharacterFSM characterFSM;
 
 	public:
 		String SystemName() override {
 			return "Character Controller System";
-		}
-
-		void SpinUp() override;
+		}		
 		void Run() override;
-		void WindDown() override;
 	};
 }

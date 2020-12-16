@@ -7,7 +7,7 @@
 #include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
 #include "gameplay/common/simple_collisions.h"
-#include "gameplay/team_game/player_controller.h"
+#include "gameplay/team_game/player_controller_fsm.h"
 
 
 void lab::EnemySystem::Run()
