@@ -108,6 +108,9 @@ struct Player
         chr.currentLvl.room[0]="tilemaps/lab/lab.map";
         chr.currentLvl.room[1]="tilemaps/lab/hallway.map";
         chr.currentLvl.room[2]="tilemaps/lab/room2.map";
+        chr.currentLvl.addons[0]="tilemaps/lab/addons_lab.map";
+        chr.currentLvl.addons[1]="tilemaps/lab/addons_hallway.map";
+        chr.currentLvl.addons[2]="tilemaps/lab/addons_room2.map";
 
         chr.currentLvl.legend['#'] = CreateObjectFunction("spritesheets:lab:wall_2",30,true,-1,100.0f,"");//CreateWallTop
         chr.currentLvl.legend['='] = CreateObjectFunction("spritesheets:lab:wall_5",30,true,-1,100.0f,"");//CreateWallUpPart;
@@ -124,9 +127,11 @@ struct Player
         chr.currentLvl.legend['8'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,1,100.0f,"");//Hall
         chr.currentLvl.legend['Z'] = CreateObjectFunction("spritesheets:lab:wall_bottom_5_blank",30,false,-1,100.0f,""); //BlankWall
         chr.currentLvl.legend['9'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,0,100.0f,"");//MainRoom
+        chr.currentLvl.legend['T'] = CreateObjectFunction("spritesheets:lab:tank_classic",20,true,-1,100.0f,"");
 
         TilemapLegend legend=chr.currentLvl.legend;
         Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/lab.map", &legend });
+        Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/lab/addons_lab.map", &legend });
 
         auto& hl = Engine::Registry().emplace<Text>(entity);
         hl.alignment={ TextAlignment::RIGHT };

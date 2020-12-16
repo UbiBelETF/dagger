@@ -12,6 +12,7 @@
 #include "gameplay/common/simple_collisions.h"
 #include "core/game/transforms.h"
 #include "core/graphics/text.h"
+//#include <stdlib.h>
 
 
 using namespace dagger;
@@ -22,12 +23,22 @@ void lab::GenerateRoom(int idNext_,lab::NextLvl& currentLvl_, Transform &tr_)
 
     auto& view = Engine::Res<Tilemap>()[currentLvl_.room[currentLvl_.id]]->tiles;
     Engine::Registry().destroy(view.begin(),view.end());
+    auto& view2 = Engine::Res<Tilemap>()[currentLvl_.addons[currentLvl_.id]]->tiles;
+    Engine::Registry().destroy(view2.begin(),view2.end());
     
-
+    if(std::abs(tr_.position.x)>std::abs(tr_.position.y))
+    {
     tr_.position = { -(tr_.position.x- tr_.position.x/3), tr_.position.y , tr_.position.z };
+    }
+    else
+    {
+    tr_.position = { tr_.position.x, -(tr_.position.y- tr_.position.y/2) , tr_.position.z };
+    }
+
     TilemapLegend legend=currentLvl_.legend;       
 
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ currentLvl_.room[idNext_], &legend });   
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ currentLvl_.room[idNext_], &legend }); 
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ currentLvl_.addons[idNext_], &legend });   
     
 
     currentLvl_.id=idNext_;
