@@ -25,27 +25,25 @@ void ancient_defenders::HealthManagementSystem::Run() {
     auto& reg = Engine::Registry();
     auto entities = reg.view<Health>();
 
-    entities.each([&](Health& health_)
+    entities.each([&](Entity entity_, Health& health_)
         {
-            auto parentEntity = entt::to_entity(reg,health_);
-
             auto& healthBarSprite = reg.get_or_emplace<Sprite>(health_.hpBar);
             AssignSprite(healthBarSprite, "spritesheets:hp-bar:hp_100");
             
-            auto val = health_.currentHealth / health_.maxHealth;
-
-            if (EPSILON_ZERO(val)) {
+            auto health = health_.currentHealth / health_.maxHealth;
+            health = 0.5f;
+            if (EPSILON_ZERO(health)) {
                 healthBarSprite.color = { 0,0,0,0 }; // Make the previous sprite invisible; solves previous sprite staying still after character drops to low HP
-//                return; // Since there is no sprite for 0 hp, skip adding it
             }
             else
             {
-                const auto& parentSprite = reg.get<Sprite>(parentEntity);
+                const auto& parentSprite = reg.get<Sprite>(entity_);
 
-                healthBarSprite.size.x = val * parentSprite.size.x;
-                healthBarSprite.position = { parentSprite.position.x - ((1 - val) * (parentSprite.size.x / 2.0f)),
-                    parentSprite.position.y - parentSprite.size.y / 2.0f - healthBarSprite.size.y / 2.0f,
-                    99.0f };
+                healthBarSprite.scale.x = health * 0.5f;
+                healthBarSprite.position = parentSprite.position;
+                healthBarSprite.position.x -= (1.0f - health) * (parentSprite.size.x / 2.0f);
+                healthBarSprite.position.y -= parentSprite.size.y / 2.0f;
+                healthBarSprite.position.z = 0.0f;
             }
         });
 }
