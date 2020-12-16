@@ -7,13 +7,23 @@ using namespace dagger;
 
 namespace tank_warfare
 {
-	struct TankCharacter
+	enum struct ETankOrientation
 	{
-		int speed{ 150 };
-		int lastOrientation{ 0 };
+		TankLeft,
+		TankRight,
+		TankUp,
+		TankDown
+	};
+
+	struct TankCharacter
+	{	
+		int id{ rand() };
+		int speed{ 50 };
+		ETankOrientation lastOrientation{ ETankOrientation::TankLeft };
 		int coins{ 0 };
 		int fireRate{ 1 };
 		int maxFireRate{ 2 };
+    Float32 reloadTime{ 1 };
 		Float32 powerDuration{ 0 };
 		int lives{ 3 };
 		Float32 health{ 100 };

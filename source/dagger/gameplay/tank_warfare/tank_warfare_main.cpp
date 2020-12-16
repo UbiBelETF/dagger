@@ -13,6 +13,7 @@
 #include "gameplay/tank_warfare/tank_controller.h"
 #include "gameplay/tank_warfare/tank_collision.h"
 #include "gameplay/tank_warfare/camera_center.h"
+#include "gameplay/tank_warfare/rocket.h"
 #include "gameplay/tank_warfare/collectibles.h"
 
 using namespace dagger;
@@ -24,6 +25,7 @@ void TankWarfare::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TankControllerSystem>();
     engine_.AddSystem<TankCollisionSystem>();
     engine_.AddSystem<CameraCenterSystem>();
+    engine_.AddSystem<RocketSystem>();
     engine_.AddSystem<CollectibleSystem>();
 }
 
@@ -137,5 +139,5 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     collision2.size = sprite2.size;
     input2.contexts.push_back("tank2");
     AssignSprite(sprite2, "jovanovici:tank:tank3_side");
-  
+
 }
