@@ -60,7 +60,12 @@ void PhysicsSystem::Run()
 				}
 			}
 
-			// TODO - There is an edge case, unlikely to happen, but look into it
+			/*
+				TODO - There is an edge case, unlikely to happen, when movement on either axis causes collision.
+				I tried to cause it intentionally, but it is almost impossible. I have an idea how to fix it,
+				but I'm putting it off until i start optimizing this system, cause i might use data needed for
+				optimization to fix this problem.
+			*/
 		}
 	}
 }
