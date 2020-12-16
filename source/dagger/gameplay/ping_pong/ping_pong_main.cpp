@@ -184,7 +184,7 @@ void ping_pong::SetupWorld(Engine& engine_)
             transform.position.y = (0.5f + (height - 1) + (height - 1) * Space - static_cast<float>(height * (1 + Space)) / 2.f) * tileSize;
             transform.position.z = zPos;
         }
-
+        
         // down
         {
             auto entity = reg.create();
