@@ -4,14 +4,14 @@
 #include "core/core.h"
 #include "core/system.h"
 #include "player_controller_fsm.h"
-
+#include "gameplay/team_game/enemy.h"
 
 using namespace dagger;
 using namespace lab;
 
-TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollision_,int roomID_,float b_,String anim_ )
+TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollision_,int roomID_,float b_,String anim_ ,Bool enemy_)
 {
-    return[name_,depth_,includeCollision_ ,roomID_,b_,anim_](Registry& reg_, UInt32 x_, UInt32 y_)->Entity
+    return[name_,depth_,includeCollision_ ,roomID_,b_,anim_,enemy_](Registry& reg_, UInt32 x_, UInt32 y_)->Entity
     {
         Entity entity=reg_.create();
         if(name_=="")
@@ -38,6 +38,10 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         {
             auto& anim = reg_.get_or_emplace<Animator>(entity);
             AnimatorPlay(anim, anim_); 
+        }
+        if(enemy_)
+        {
+            auto& bandit = reg_.emplace<Bandit>(entity);
         }
 
         return entity;
