@@ -33,7 +33,6 @@ sources = [
 'source/dagger/gameplay/racing/racing_game_logic.cpp',
 'source/dagger/gameplay/racing/racing_car.cpp',
 'source/dagger/gameplay/racing/racing_main.cpp',
-'source/dagger/gameplay/team_game/player_controller.cpp',
 'source/dagger/gameplay/team_game/tiles.cpp',
 'source/dagger/gameplay/team_game/team_game_main.cpp',
 'source/dagger/gameplay/platformer/parallax.cpp',
@@ -71,6 +70,11 @@ sources = [
 'source/dagger/gameplay/team_game/tilemap_entities.cpp',
 'source/dagger/gameplay/platformer/character_controller_fsm.cpp',
 'source/dagger/gameplay/team_game/enemy.cpp',
+'source/dagger/gameplay/team_game/character_controller_fsm.cpp',
+'source/dagger/gameplay/team_game/player_controller_fsm.cpp',
+
+
+
 
 
 

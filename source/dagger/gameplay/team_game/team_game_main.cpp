@@ -18,12 +18,13 @@
 #include "core/game/transforms.h"
 
 #include "gameplay/common/simple_collisions.h"
-#include "gameplay/team_game/player_controller.h"
+#include "gameplay/team_game/player_controller_fsm.h"
 
 #include "tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/enemy.h"
 #include "core/graphics/text.h"
+#include "character_controller_fsm.h"
 
 
 
@@ -82,6 +83,7 @@ struct Player
     {
         auto& reg = Engine::Registry();
         auto entity = reg.create();
+        ATTACH_TO_FSM(CharacterFSM,entity);
         auto chr = Player::Get(entity);
 
         chr.sprite.scale = { 1, 1 };
