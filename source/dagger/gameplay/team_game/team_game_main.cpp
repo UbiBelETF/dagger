@@ -13,6 +13,8 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/enemy.h"
+
 
 #include "gameplay/team_game/tilemap.h"
 
@@ -105,6 +107,28 @@ void SetupWorldSmiljana(Engine& engine_) {
         reg.emplace<CharacterController>(player);
 
         reg.emplace<MovableBody>(player);
+
+        //ENEMY 
+        auto enemy = reg.create();
+
+        auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
+        enemyState.currentState = EEnemyState::Patrolling;
+
+        auto& enemySprite = reg.emplace<Sprite>(enemy);
+        AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+        enemySprite.scale = { 1, 1 };
+
+        auto& enemyAnimator = reg.emplace<Animator>(enemy);
+        AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
+
+        auto& enemyTransform = reg.emplace<Transform>(enemy);
+        enemyTransform.position = { 0, 0, zPos };
+
+        reg.emplace<EnemyController>(enemy);
+
+        reg.emplace<MovableBody>(enemy);
+
+
     }
 }
 void team_game::SetupWorld(Engine &engine_)
