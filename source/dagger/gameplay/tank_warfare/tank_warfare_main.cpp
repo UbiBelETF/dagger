@@ -12,6 +12,7 @@
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/tank_warfare/tank_controller.h"
 #include "gameplay/tank_warfare/tank_collision.h"
+#include "gameplay/tank_warfare/camera_center.h"
 
 using namespace dagger;
 using namespace tank_warfare;
@@ -21,9 +22,16 @@ void TankWarfare::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<TankControllerSystem>();
     engine_.AddSystem<TankCollisionSystem>();
+    engine_.AddSystem<CameraCenterSystem>();
 }
 
 void TankWarfare::WorldSetup(Engine &engine_)
+{
+    tank_warfare::SetupCamera(engine_);
+    tank_warfare::SetupTestWorld(engine_);
+}
+
+void tank_warfare::SetupCamera(Engine &engine_)
 {
     ShaderSystem::Use("standard");
 
@@ -34,7 +42,11 @@ void TankWarfare::WorldSetup(Engine &engine_)
     camera->position = { 0, 0, 0 };
     camera->Update();
 
-    tank_warfare::SetupTestWorld(engine_);
+    auto& reg = engine_.Registry();
+    auto entity = reg.create();
+    auto& camParams = reg.emplace<CameraParams>(entity);
+    camParams.camZoom = camera->zoom;
+    camParams.camXY = camera->size;
 }
 
 void tank_warfare::SetupWorld(Engine &engine_)
@@ -102,6 +114,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     auto& collision = reg.emplace<SimpleCollision>(entity);
     auto& input = reg.emplace<InputReceiver>(entity);
     auto& tank = reg.emplace<TankCharacter>(entity);
+    auto& cam = reg.emplace<CameraCenter>(entity)
     sprite.scale = { -1, 1 };
     transform.position = { 35, 0, 1 };
     collision.size = sprite.size;
@@ -116,6 +129,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     auto& collision2 = reg.emplace<SimpleCollision>(entity2);
     auto& input2 = reg.emplace<InputReceiver>(entity2);
     auto& tank2 = reg.emplace<TankCharacter>(entity2);
+    auto& cam2 = reg.emplace<CameraCenter>(entity1);
     sprite2.scale = { -1, 1 };
     transform2.position = { -35, 0, 1 };
     collision2.size = sprite2.size;
