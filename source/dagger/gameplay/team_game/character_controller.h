@@ -1,71 +1,53 @@
 #pragma once
 
 #include "core/system.h"
-#include "gameplay/common/fsm.h"
-#include "core/game/transforms.h"
-#include "core/graphics/sprite.h"
-#include "core/graphics/animations.h"
-
-#include <utility>
+#include "core/game/finite_state_machine.h"
 
 using namespace dagger;
 
-// so first we need to define an enum...
-enum class ECharacterState
+enum struct ECharacterState
 {
 	Idle,
 	Running
 };
 
-// ...and some data (we call it internal if we're using it with the FSM)
-// note: we actually never use this ourselves. we just pass it to the FSM, which
-// extends it and uses _that_ in all the methods (called StateComponent)
-struct CharacterController : public FiniteStateComponent<ECharacterState>
-{
-	Vector2 userInput;
-	ViewPtr<Transform> transform;
-	ViewPtr<Sprite> sprite;
-	ViewPtr<Animator> animator;
-	Vector2 direction{ 0, 0 };
-	Float32 speed{ 70 };
+enum struct ECharacterShape {
+	Hero,
+	Goblin,
+	Slime,
+	Bat
 };
 
-// we now create our FSM by extending the FiniteStateMachine class and passing in our enum and data!
-struct CharacterControllerFSM : public FiniteStateMachine<ECharacterState, CharacterController>
+struct CharacterController
 {
-	// we now define a state sub-class for every state. 
-	// it can have Enter(), Run() and Exit() functions, but here we need only Run()
-	struct IdleState : public State
+	Float32 speed{ 100 };
+	
+};
+
+struct CharacterFSM : public FSM<ECharacterState>
+{
+	DEFINE_STATE(CharacterFSM, ECharacterState, Idle);
+	DEFINE_STATE(CharacterFSM, ECharacterState, Running);
+
+	CharacterFSM()
 	{
-		IdleState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
-
-		void Run(CharacterController& ctrl_) override;
-	};
-
-	struct RunningState : public State
-	{
-		RunningState(CharacterControllerFSM* fsm_) : State{ fsm_ } {}
-
-		void Run(CharacterController& ctrl_) override;
-	};
-
-	// and very importantly, we add a constructor that maps every enum field to a class.
-	// if you don't do this, it WILL fail!
-	CharacterControllerFSM()
-	{
-		MAP_STATE_TO_CLASS(ECharacterState::Idle, IdleState);
-		MAP_STATE_TO_CLASS(ECharacterState::Running, RunningState);
+		CONNECT_STATE(ECharacterState, Idle);
+		CONNECT_STATE(ECharacterState, Running);
 	}
 };
 
-// now we create a system...
 class CharacterControllerSystem : public System
 {
-	// and add the fsm as a field
-	CharacterControllerFSM m_CharStateMachine;
+	CharacterFSM m_CharStateMachine;
+	ECharacterShape s_shape;
 
 public:
 	inline String SystemName() override { return "Character Controller System"; }
 
+	ECharacterShape GetShape() { return s_shape; }
+	void SetShape(ECharacterShape newShape_) { s_shape = newShape_; }
+
 	void Run() override;
+
+	
 };

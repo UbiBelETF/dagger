@@ -2,76 +2,86 @@
 
 #include "core/engine.h"
 #include "core/input/inputs.h"
-#include "core/game/transforms.h"
+#include "core/graphics/sprite.h"
+#include "core/graphics/animations.h"
 
 #include <glm/gtc/epsilon.hpp>
 
+//useful strings
+String idle = "among_them_animations:knight_idle";
+String running = "among_them_animations:knight_run";
+
 // ----------------------------------------------------------
 // shortcuts
+#include "gameplay/team_game/movement.h"
 
-// you can call the states the same as in the enum
-// it's a bother to write the whole thing out
-using Idle = CharacterControllerFSM::IdleState;
-using Running = CharacterControllerFSM::RunningState;
+#include <glm/gtc/epsilon.hpp>
 
-// ----------------------------------------------------------
-// system stuff
+using namespace team_game;
 
 void CharacterControllerSystem::Run()
 {
-	Engine::Registry().view<CharacterController, InputReceiver, Transform, Sprite, Animator>().each(
-		[&](CharacterController& controller_, InputReceiver input_, Transform& transform_, Sprite& sprite_,
-			Animator& animator_)
-		{
-			const Float32 horizontal = input_.Get("horizontalRun");
-			const Float32 vertical = input_.Get("verticalRun");
-
-			controller_.userInput = { horizontal, vertical };
-			controller_.transform = &transform_;
-			controller_.sprite = &sprite_;
-			controller_.animator = &animator_;
-
-			m_CharStateMachine.Run(controller_);
+	Engine::Registry().view<CharacterFSM::StateComponent>().each(
+		[&](CharacterFSM::StateComponent& state_)
+		{   
+		auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
+		if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; SetShape(ECharacterShape::Goblin); }
+		if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; SetShape(ECharacterShape::Slime);		}
+		if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; SetShape(ECharacterShape::Bat); }
+		if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; SetShape(ECharacterShape::Hero);	}
+			m_CharStateMachine.Run(state_);
 		});
+	
 }
 
-// ----------------------------------------------------------
-// fsm stuff
+DEFAULT_ENTER(CharacterFSM, Idle);
 
-// idle
-
-void Idle::Run(CharacterController& ctrl_)
+void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 {
-	if (EPSILON_NOT_EQUAL(glm::length(ctrl_.userInput), 0.0f))
+	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
+	
+	if (EPSILON_NOT_ZERO(input.Get("horizontalRun")) || EPSILON_NOT_ZERO(input.Get("verticalRun")))
 	{
-		GoTo(ECharacterState::Running, ctrl_);
+		GoTo(ECharacterState::Running, state_);
 	}
-
-	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_idle");
+	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+	AnimatorPlay(animator, idle);
 }
 
-// running
+DEFAULT_EXIT(CharacterFSM, Idle);
 
-void Running::Run(CharacterController& ctrl_)
+DEFAULT_ENTER(CharacterFSM, Running);
+
+void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 {
-	if (EPSILON_EQUAL(glm::length(ctrl_.userInput), 0.0f))
+	auto& ctrl = Engine::Registry().get<CharacterController>(state_.entity);
+	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
+	auto& sprite = Engine::Registry().get<Sprite>(state_.entity);
+	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
+
+	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+	AnimatorPlay(animator, running);
+
+	float runX = input.Get("horizontalRun");
+	float runY = input.Get("verticalRun");
+
+	if (EPSILON_ZERO(runX) && EPSILON_ZERO(runY))
 	{
-		GoTo(ECharacterState::Idle, ctrl_);
+		GoTo(ECharacterState::Idle, state_);
 		return;
 	}
 
 	// Character orientation
-	if (ctrl_.userInput.x > 0.0f)
+	if (runX > 0.0f)
 	{
-		ctrl_.sprite->scale.x = 1;
+		sprite.scale.x = 1;
 	}
-	else if (ctrl_.userInput.x < 0.0f)
+	else if (runX < 0.0f)
 	{
-		ctrl_.sprite->scale.x = -1;
+		sprite.scale.x = -1;
 	}
 
-	AnimatorPlay(*ctrl_.animator, "among_them_animations:knight_run");
-	Vector2 xy = glm::normalize(ctrl_.userInput) * ctrl_.speed * Engine::DeltaTime();
-	ctrl_.transform->position.x += xy.x;
-	ctrl_.transform->position.y += xy.y;
+	body.movement = glm::normalize(Vector2{ runX, runY }) * ctrl.speed * Engine::DeltaTime();
 }
+
+DEFAULT_EXIT(CharacterFSM, Running);
