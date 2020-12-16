@@ -1,0 +1,11 @@
+{
+	"animation-name": "powerup:power4",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:powerup:firerate:firerate1", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:firerate:firerate2", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:firerate:firerate3", "relative-length": 2 },
+		{ "texture-name": "jovanovici:powerup:firerate:firerate4", "relative-length": 2 }
+	]
+}

@@ -11,8 +11,10 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/tank_warfare/tank_controller.h"
+#include "gameplay/tank_warfare/tank_collision.h"
 #include "gameplay/tank_warfare/camera_center.h"
 #include "gameplay/tank_warfare/rocket.h"
+#include "gameplay/tank_warfare/collectibles.h"
 
 using namespace dagger;
 using namespace tank_warfare;
@@ -21,8 +23,10 @@ void TankWarfare::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<TankControllerSystem>();
+    engine_.AddSystem<TankCollisionSystem>();
     engine_.AddSystem<CameraCenterSystem>();
     engine_.AddSystem<RocketSystem>();
+    engine_.AddSystem<CollectibleSystem>();
 }
 
 void TankWarfare::WorldSetup(Engine &engine_)
@@ -83,34 +87,57 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
             sprite.position = { i * 48, j * 48, 5 };
         }
     }
+
+    //building1
+    auto entity1 = reg.create();
+    auto& sprite1 = reg.emplace<Sprite>(entity1);
+    auto& transform1 = reg.emplace<Transform>(entity1);
+    auto& col1 = reg.emplace<SimpleCollision>(entity1);
+    AssignSprite(sprite1, "jovanovici:building:building3c");
+    transform1.position = { 100, 0, 2 };
+    col1.size = sprite1.size;
+    col1.size.x -= 15;
+    col1.size.y -= 35;
+
+    //building2
+    auto entity3 = reg.create();
+    auto& sprite3 = reg.emplace<Sprite>(entity3);
+    auto& transform3 = reg.emplace<Transform>(entity3);
+    auto& col3 = reg.emplace<SimpleCollision>(entity3);
+    AssignSprite(sprite3, "jovanovici:building:building3c");
+    transform3.position = { 75, 75, 4 };
+    col3.size = sprite3.size;
+    col3.size.x -= 15;
+    col3.size.y -= 35;
     
     //tank1
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
     auto& anim = reg.emplace<Animator>(entity);
     auto& transform = reg.emplace<Transform>(entity);
+    auto& collision = reg.emplace<SimpleCollision>(entity);
     auto& input = reg.emplace<InputReceiver>(entity);
     auto& tank = reg.emplace<TankCharacter>(entity);
-    auto& cam = reg.emplace<CameraCenter>(entity);
-    sprite.scale = { 1, 1 };
-    transform.position = { 0, 0, 3 };
+    auto& cam = reg.emplace<CameraCenter>(entity)
+    sprite.scale = { -1, 1 };
+    transform.position = { 35, 0, 1 };
+    collision.size = sprite.size;
     input.contexts.push_back("tank1");
     AssignSprite(sprite, "jovanovici:tank:tank3_side");
-    auto& col = reg.emplace<SimpleCollision>(entity);
-    col.size = sprite.size;
 
-    //tank1
-    auto entity1 = reg.create();
-    auto& sprite1 = reg.emplace<Sprite>(entity1);
-    auto& anim1 = reg.emplace<Animator>(entity1);
-    auto& transform1 = reg.emplace<Transform>(entity1);
-    auto& input1 = reg.emplace<InputReceiver>(entity1);
-    auto& tank1 = reg.emplace<TankCharacter>(entity1);
-    auto& cam1 = reg.emplace<CameraCenter>(entity1);
-    sprite1.scale = { -1, 1 };
-    transform1.position = { 0, 0, 3 };
-    input1.contexts.push_back("tank2");
-    AssignSprite(sprite1, "jovanovici:tank:tank3_side");
-    auto& col1 = reg.emplace<SimpleCollision>(entity1);
-    col1.size = sprite1.size;
+    //tank2
+    auto entity2 = reg.create();
+    auto& sprite2 = reg.emplace<Sprite>(entity2);
+    auto& anim2 = reg.emplace<Animator>(entity2);
+    auto& transform2 = reg.emplace<Transform>(entity2);
+    auto& collision2 = reg.emplace<SimpleCollision>(entity2);
+    auto& input2 = reg.emplace<InputReceiver>(entity2);
+    auto& tank2 = reg.emplace<TankCharacter>(entity2);
+    auto& cam2 = reg.emplace<CameraCenter>(entity1);
+    sprite2.scale = { -1, 1 };
+    transform2.position = { -35, 0, 1 };
+    collision2.size = sprite2.size;
+    input2.contexts.push_back("tank2");
+    AssignSprite(sprite2, "jovanovici:tank:tank3_side");
+
 }
