@@ -9,6 +9,8 @@
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
 
+#include "gameplay/common/simple_collisions.h"
+
 using namespace tank_warfare;
 
 void TankControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
@@ -27,8 +29,8 @@ void TankControllerSystem::SpinUp()
 
 void TankControllerSystem::Run()
 {
-	Engine::Registry().view<InputReceiver, Sprite, Animator, Transform, TankCharacter>().each(
-		[](const InputReceiver input_, Sprite& sprite_, Animator& animator_, Transform& transform_, TankCharacter& tank_)
+	Engine::Registry().view<InputReceiver, Sprite, Animator, Transform, TankCharacter, SimpleCollision>().each(
+		[](const InputReceiver input_, Sprite& sprite_, Animator& animator_, Transform& transform_, TankCharacter& tank_, SimpleCollision& col_)
 		{
 			Float32 driveLR = input_.values.at("driveLeftRight");
 			Float32 driveUD = input_.values.at("driveUpDown");
@@ -45,6 +47,7 @@ void TankControllerSystem::Run()
 			if (driveLR != 0)
 			{
 				AnimatorPlay(animator_, "tank:driveLeftRight");
+				col_.size = sprite_.size;
 				tank_.lastOrientation = 0;
 				sprite_.scale.x = driveLR * (-1);
 				sprite_.position.x += tank_.speed * driveLR * Engine::DeltaTime();
@@ -55,11 +58,13 @@ void TankControllerSystem::Run()
 				if (driveUD == 1)
 				{
 					AnimatorPlay(animator_, "tank:driveUp");
+					col_.size = sprite_.size;
 					tank_.lastOrientation = 1;
 				}
 				else
 				{
 					AnimatorPlay(animator_, "tank:driveDown");
+					col_.size = sprite_.size;
 					tank_.lastOrientation = 2;
 				}
 				sprite_.position.y += tank_.speed * driveUD * Engine::DeltaTime();
