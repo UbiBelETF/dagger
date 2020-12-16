@@ -39,7 +39,7 @@ void ancient_defenders::MageBehaviorSystem::Run()
 
         if (mage_.currentAction == EAction::Idling) {
             AnimatorPlay(animation_, "ancient_defenders:mage:IDLE");
-        }
+        } 
         else if (mage_.currentAction == EAction::Moving) {
             auto nextPosition = mage_.postition + 1;
 
@@ -146,39 +146,37 @@ void ancient_defenders::MageBehaviorSystem::OnEndOfFrame()
 {
 }
 
-Mage ancient_defenders::Mage::Get(Entity entity_)
-{
-    auto& reg = Engine::Registry();
-    auto& sprite = reg.get_or_emplace<Sprite>(entity_);
-    auto& pos = reg.get_or_emplace<Transform>(entity_);
-    auto& anim = reg.get_or_emplace<Animator>(entity_);
-    auto& mag = reg.get_or_emplace<MageStats>(entity_);
-    auto& col = reg.get_or_emplace<SimpleCollision>(entity_);
-    auto& roa = reg.get_or_emplace<RangeOfAttack>(entity_);
-    auto& hp = reg.get_or_emplace<Health>(entity_);
-
-    return Mage{ entity_, sprite, pos, anim, mag, col, roa, hp };
-}
-
-Mage ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool offset_)
+Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool offset_)
 {
     auto& reg = Engine::Registry();
     auto entity = reg.create();
-    auto mag = Mage::Get(entity);
-
     
-    AssignSprite(mag.sprite, "spritesheets:mage:mage_stand_side:1");
-    float ratio = mag.sprite.size.y / mag.sprite.size.x;
+    auto& sprite = reg.emplace<Sprite>(entity);
+    auto& coordinates = reg.emplace<Transform>(entity);
+    auto& anim = reg.emplace<Animator>(entity);
+    auto& mage = reg.emplace<MageStats>(entity);
+    auto& hitbox = reg.emplace<SimpleCollision>(entity);
+    auto& range = reg.emplace<RangeOfAttack>(entity);
+    auto& health = reg.emplace<Health>(entity);
 
-    
-    mag.sprite.scale = { 2,2 };
+    health.hpBar = reg.create();
+    reg.emplace<HealthBar>(health.hpBar).parent = entity;
+    auto& hpBar = reg.emplace<Sprite>(health.hpBar);
 
-    mag.mage.meleeDmg = 1.0f;
+    auto& mageRef = reg.emplace<Mage>(entity);
+    mageRef.healthBar = health.hpBar;
 
-    mag.mage.currentAction = action_;
+    AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+    float ratio = sprite.size.y / sprite.size.x;
 
-    mag.mage.speed = 50.0f;
-    mag.mage.direction = { 0,1 };
+    sprite.scale = { 2, 2 };
+
+    mage.meleeDmg = 1.0f;
+
+    mage.currentAction = action_;
+
+    mage.speed = 50.0f;
+    mage.direction = { 0,1 };
 
     // Randomly create offset 
     std::random_device dev;
@@ -192,25 +190,25 @@ Mage ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool off
     // 22 is an important value because it represents the border at which character can move while still being on the path
     // 22 = 38 - 16( half of the width/height of the path - half of the character widht/height ); edge of the character sprite is alligned with the edge of the path
     // Only exception to this is when offset.y is positive at which point character can go up much higher while still appearing to walk along the path
-    mag.mage.offset = { (randomDirection(rng)?roll22(rng): 0.0f-roll22(rng)),(randomDirection(rng) ? roll38(rng) : 0.0f-roll22(rng)) };
+    mage.offset = { (randomDirection(rng)?roll22(rng): 0.0f-roll22(rng)),(randomDirection(rng) ? roll38(rng) : 0.0f-roll22(rng)) };
 
     auto start = position_;
     if (offset_) {
-        start.x += mag.mage.offset.x;
-        start.y += mag.mage.offset.y;
+        start.x += mage.offset.x;
+        start.y += mage.offset.y;
     }
     // Z axis is calculated this way to make bottom most character appear closest to the screen
-    mag.coordinates.position = { start.x, start.y, std::abs(mag.mage.offset.y + 22.0f) };
+    coordinates.position = { start.x, start.y, std::abs(mage.offset.y + 22.0f) };
 
-    mag.hitbox.size = mag.sprite.size;
-    mag.range.range = mag.hitbox.size.x;
+    hitbox.size = sprite.size;
+    range.range = hitbox.size.x;
 
-    mag.range.unitType = ETarget::Mage;
-    mag.range.targetType = ETarget::Golem;
+    range.unitType = ETarget::Mage;
+    range.targetType = ETarget::Golem;
 
-    mag.health.currentHealth = Health::standardHP;
-    mag.health.maxHealth = Health::standardHP;
+    health.currentHealth = Health::standardHP;
+    health.maxHealth = Health::standardHP;
 
     Logger::info("Created mage");
-    return mag;
+    return entity;
 }

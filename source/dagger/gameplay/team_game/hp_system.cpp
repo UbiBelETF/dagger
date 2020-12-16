@@ -22,43 +22,50 @@ void ancient_defenders::HealthManagementSystem::WindDown()
 
 void ancient_defenders::HealthManagementSystem::Run() {
 
-    Engine::Registry().view<Health>().each(
-        [](Health& health_) 
-    {
-        auto& reg = Engine::Registry();
+    auto& reg = Engine::Registry();
+    auto entities = reg.view<HealthBar, Sprite>();
 
-        auto & sprite = reg.get_or_emplace<Sprite>(health_.hpBar);
+    entities.each([&](Entity healthBarEntity, HealthBar& healthBar, Sprite& healthBarSprite)
+        {
+            auto parentEntity = healthBar.parent;
+            auto health = reg.get<Health>(parentEntity);
+            auto val = closestNeighbour(100.0f * health.currentHealth / health.maxHealth);
 
-        auto val = closestNeighbour(100.0f * health_.currentHealth / health_.maxHealth);
+            if (EPSILON_ZERO(val)) {
+                healthBarSprite.color = { 0,0,0,0 }; // Make the previous sprite invisible; solves previous sprite staying still after character drops to low HP
+//                return; // Since there is no sprite for 0 hp, skip adding it
+            }
+            else
+            {
+                AssignSprite(healthBarSprite, "spritesheets:hp-bar:hp_" + std::to_string((UInt32)val));
+                const auto& parentSprite = reg.get<Sprite>(parentEntity);
 
-        if (EPSILON_ZERO(val)) {
-            sprite.color = { 0,0,0,0 }; // Make the previous sprite invisible; solves previous sprite staying still after character drops to low HP
-            return; // Since there is no sprite for 0 hp, skip adding it
-        }
-        AssignSprite(sprite, "spritesheets:hp-bar:hp_"+ std::to_string((UInt32) val));
-        auto en = entt::to_entity(reg, health_);
-        auto sp = reg.get<Sprite>(en);
-
-        auto ratio = sprite.size.x / sprite.size.y;
-        sprite.size = { sp.size.x, sp.size.x / ratio };
-        sprite.position = { sp.position.x, sp.position.y - sp.size.y / 2.0f - sprite.size.y / 2.0f, sp.position.z };
-    });
+                auto ratio = healthBarSprite.size.x / healthBarSprite.size.y;
+                healthBarSprite.size = { parentSprite.size.x, parentSprite.size.x / ratio };
+                healthBarSprite.position = { parentSprite.position.x,
+                    parentSprite.position.y - parentSprite.size.y / 2.0f - parentSprite.size.y / 2.0f,
+                    parentSprite.position.z };
+            }
+        });
 }
 
 
 void ancient_defenders::HealthManagementSystem::OnEndOfFrame()
 {
     auto view = Engine::Registry().view<Health>();
-
+    
+    Sequence<Entity> toRemove{};
     auto it = view.begin();
     while (it != view.end()) {
         auto & en = view.get<Health>(*it);
         if (en.currentHealth <= 0.0f) {
-            Engine::Registry().destroy(en.hpBar);
-            Engine::Registry().destroy(*it);
+            toRemove.push_back(en.hpBar);
+            toRemove.push_back(*it);
         }
         it++;
     }
+
+    Engine::Registry().destroy(toRemove.begin(), toRemove.end());
 }
 
 Float32 ancient_defenders::closestNeighbour(Float32 number_)

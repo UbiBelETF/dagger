@@ -35,19 +35,9 @@ namespace ancient_defenders {
     };
 
     struct Mage {
-        Entity entity;
-        Sprite & sprite;
-        Transform & coordinates;
-        Animator & animator;
-        MageStats & mage;
-        SimpleCollision & hitbox;
-        RangeOfAttack & range;
-        Health & health;
+        Entity healthBar;
 
-        static Mage Get(Entity entity_);
-
-        static Mage Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true);
-        
+        static Entity Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true);        
     };
 
     struct WalkingPath {

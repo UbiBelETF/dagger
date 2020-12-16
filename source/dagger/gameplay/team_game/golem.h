@@ -33,12 +33,10 @@ namespace ancient_defenders {
 		Enemy& golem;
 		SimpleCollision& hitbox;
 		RangeOfAttack& range;
-        Health & health;
-
-		static Golem Get(Entity entity_);
+        Health& health;
+		Sprite& hpBar;
 
 		static Golem Create();
-
 	};
 
 	class GolemBehaviorSystem

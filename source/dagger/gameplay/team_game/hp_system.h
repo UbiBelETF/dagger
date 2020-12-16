@@ -9,8 +9,10 @@ using namespace dagger;
 
 namespace ancient_defenders {
 
+    struct HealthBar { Entity parent; };
+
     struct Health {
-        Entity hpBar = Engine::Registry().create();
+        Entity hpBar;
         
         Float32 currentHealth;
         Float32 maxHealth;

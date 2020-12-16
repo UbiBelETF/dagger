@@ -107,25 +107,20 @@ void ancient_defenders::GolemBehaviorSystem::OnEndOfFrame()
 {
 }
 
-Golem ancient_defenders::Golem::Get(Entity entity_)
-{
-	auto& reg = Engine::Registry();
-	auto& sprite = reg.get_or_emplace<Sprite>(entity_);
-	auto& pos = reg.get_or_emplace<Transform>(entity_);
-	auto& anim = reg.get_or_emplace<Animator>(entity_);
-	auto& gol = reg.get_or_emplace<Enemy>(entity_);
-	auto& col = reg.get_or_emplace<SimpleCollision>(entity_);
-	auto& roa = reg.get_or_emplace<RangeOfAttack>(entity_);
-    auto& hel = reg.get_or_emplace<Health>(entity_);
-
-	return Golem{ entity_, sprite, pos, anim, gol, col, roa, hel };
-}
-
 Golem ancient_defenders::Golem::Create()
 {
 	auto& reg = Engine::Registry();
 	auto entity = reg.create();
-	auto gol = Golem::Get(entity);
+	auto& sprite = reg.emplace<Sprite>(entity);
+	auto& pos = reg.emplace<Transform>(entity);
+	auto& anim = reg.emplace<Animator>(entity);
+	auto& enemy = reg.emplace<Enemy>(entity);
+	auto& col = reg.emplace<SimpleCollision>(entity);
+	auto& roa = reg.emplace<RangeOfAttack>(entity);
+	auto& hel = reg.emplace<Health>(entity);
+	auto& hpBar = reg.emplace<Sprite>(hel.hpBar);
+
+	auto& gol = Golem{ entity, sprite, pos, anim, enemy, col, roa, hel, hpBar };
 
 	AssignSprite(gol.sprite, "spritesheets:golem-little-sheet:golem_stand_side:1");
 	float ratio = gol.sprite.size.y / gol.sprite.size.x;

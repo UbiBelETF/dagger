@@ -201,9 +201,10 @@ void SpriteRenderSystem::OnRender()
             Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(prevShader));
         }
 
-        assert(ptr->image != nullptr);
         while (ptr != sprites.end() && ptr->image == nullptr) ptr++;
         if (ptr == sprites.end()) break;
+
+        assert(ptr->image != nullptr);
 
         prevTexture = ptr->image;
 
