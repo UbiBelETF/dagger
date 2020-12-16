@@ -90,7 +90,7 @@ void PlayerControllerSystem::Run()
                     auto cursorInWindow = dagger::Input::CursorPositionInWorld();
                     Vector2 position = { sprite_.position.x, sprite_.position.y };
                     Vector2 cursor = { cursorInWindow.x, cursorInWindow.y };
-                    CreateBullet(position, cursor, "player");
+                    CreateBullet(position, cursor);
                     char_.cooldown = char_.maxCooldown;
                 }
             }

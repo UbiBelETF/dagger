@@ -99,7 +99,7 @@ void lab::EnemySystem::Run()
 
 		if (bandit.cooldown <= 0)
 		{
-			CreateBullet(t.position, playerPosition, "bandit");
+			CreateBullet(t.position, playerPosition);
       
 			bandit.cooldown = bandit.maxCooldown;
 		}
