@@ -130,5 +130,4 @@ void tank_warfare::AddCollectible(bool isPower_)
 	transform.position = { 48 * i, 48 * j, 2 };
 	
 	auto& col = reg.emplace<SimpleCollision>(entity);
-	col.size = sprite.size;
 }

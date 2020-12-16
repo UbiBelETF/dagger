@@ -11,6 +11,7 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/tank_warfare/tank_controller.h"
+#include "gameplay/tank_warfare/collectibles.h"
 
 using namespace tank_warfare;
 
@@ -27,15 +28,6 @@ void RocketSystem::Run()
 
 		if (col.colided)
 		{
-			if (Engine::Registry().has<Rocket>(col.colidedWith))
-			{
-				AnimatorPlay(anim, "explosion:small");
-				if (anim.currentFrame == AnimatorNumberOfFrames(anim))
-				{
-					rocket.toBeDestroyed = true;
-				}
-			} 
-			else
 			if (Engine::Registry().has<TankCharacter>(col.colidedWith))
 			{
 				auto& tank = Engine::Registry().get<TankCharacter>(col.colidedWith);
@@ -54,6 +46,20 @@ void RocketSystem::Run()
 					{
 						rocket.toBeDestroyed = true;
 					}
+				}
+			}
+			else
+			if(Engine::Registry().has<Collectible>(col.colidedWith))
+			{
+				t.position.x += rocket.speed.x * Engine::DeltaTime();
+				t.position.y += rocket.speed.y * Engine::DeltaTime();
+			}
+			else
+			{
+				AnimatorPlay(anim, "explosion:small");
+				if (anim.currentFrame == AnimatorNumberOfFrames(anim))
+				{
+					rocket.toBeDestroyed = true;
 				}
 			}
 			col.colided = false;
