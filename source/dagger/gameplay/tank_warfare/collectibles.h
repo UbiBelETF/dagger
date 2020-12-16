@@ -30,8 +30,9 @@ namespace tank_warfare
     public:
         int m_NumCoins = 0;
         int m_NumPowers = 0;
-        int m_MaxCoins = 20;
-        int m_MaxPowers = 3;
+        const int m_MaxCoins = 20;
+        const int m_MaxPowers = 3;
+        const int m_PowerDuration = 4;
 
         inline String SystemName() override {
             return "Collectible System";

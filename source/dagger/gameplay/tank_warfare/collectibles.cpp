@@ -41,16 +41,16 @@ void CollectibleSystem::Run()
 					}
 					if (collectible.collType == ECollectibleType::FireRateUp)
 					{
-						tank.fireRate = 2;
-						tank.powerDuration += 4;
+						tank.fireRate = tank.maxFireRate;
+						tank.powerDuration += m_PowerDuration;
 					}
 					if (collectible.collType == ECollectibleType::Health)
 					{
-						tank.health = 100;
+						tank.health = tank.maxHealth;
 					}
-					if (collectible.collType == ECollectibleType::ExtraLife)
+					if (collectible.collType == ECollectibleType::Shield)
 					{
-						tank.shield = 100;
+						tank.shield = tank.maxShield;
 					}
 					m_NumPowers--;
 				}
