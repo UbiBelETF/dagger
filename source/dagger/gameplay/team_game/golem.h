@@ -27,16 +27,8 @@ namespace ancient_defenders {
 
 	struct Golem {
 		Entity entity;
-		Sprite& sprite;
-		Transform& coordinates;
-		Animator& animator;
-		Enemy& golem;
-		SimpleCollision& hitbox;
-		RangeOfAttack& range;
-        Health& health;
-		Sprite& hpBar;
 
-		static Golem Create();
+		static Entity Create();
 	};
 
 	class GolemBehaviorSystem

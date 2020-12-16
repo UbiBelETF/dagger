@@ -29,15 +29,8 @@ namespace ancient_defenders {
 
     struct Tower {
         Entity entity;
-        Transform & coordinates;
-        Animator & animator;
-        TowerStats & tower;
-        SimpleCollision & hitbox;
-        RangeOfAttack & range;
 
-        static Tower Get(Entity entity_);
-
-        static Tower Create(String type_);
+        static Entity Create(String type_);
 
     };
 

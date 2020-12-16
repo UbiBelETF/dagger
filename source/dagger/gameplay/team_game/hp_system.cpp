@@ -23,13 +23,16 @@ void ancient_defenders::HealthManagementSystem::WindDown()
 void ancient_defenders::HealthManagementSystem::Run() {
 
     auto& reg = Engine::Registry();
-    auto entities = reg.view<HealthBar, Sprite>();
+    auto entities = reg.view<Health>();
 
-    entities.each([&](Entity healthBarEntity, HealthBar& healthBar, Sprite& healthBarSprite)
+    entities.each([&](Health& health_)
         {
-            auto parentEntity = healthBar.parent;
-            auto health = reg.get<Health>(parentEntity);
-            auto val = closestNeighbour(100.0f * health.currentHealth / health.maxHealth);
+            auto parentEntity = entt::to_entity(reg,health_);
+
+            auto& healthBarSprite = reg.get_or_emplace<Sprite>(health_.hpBar);
+            AssignSprite(healthBarSprite, "spritesheets:hp-bar:hp_100");
+            
+            auto val = health_.currentHealth / health_.maxHealth;
 
             if (EPSILON_ZERO(val)) {
                 healthBarSprite.color = { 0,0,0,0 }; // Make the previous sprite invisible; solves previous sprite staying still after character drops to low HP
@@ -37,14 +40,12 @@ void ancient_defenders::HealthManagementSystem::Run() {
             }
             else
             {
-                AssignSprite(healthBarSprite, "spritesheets:hp-bar:hp_" + std::to_string((UInt32)val));
                 const auto& parentSprite = reg.get<Sprite>(parentEntity);
 
-                auto ratio = healthBarSprite.size.x / healthBarSprite.size.y;
-                healthBarSprite.size = { parentSprite.size.x, parentSprite.size.x / ratio };
-                healthBarSprite.position = { parentSprite.position.x,
-                    parentSprite.position.y - parentSprite.size.y / 2.0f - parentSprite.size.y / 2.0f,
-                    parentSprite.position.z };
+                healthBarSprite.size.x = val * parentSprite.size.x;
+                healthBarSprite.position = { parentSprite.position.x - ((1 - val) * (parentSprite.size.x / 2.0f)),
+                    parentSprite.position.y - parentSprite.size.y / 2.0f - healthBarSprite.size.y / 2.0f,
+                    99.0f };
             }
         });
 }

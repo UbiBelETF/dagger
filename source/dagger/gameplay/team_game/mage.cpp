@@ -157,20 +157,17 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
     auto& mage = reg.emplace<MageStats>(entity);
     auto& hitbox = reg.emplace<SimpleCollision>(entity);
     auto& range = reg.emplace<RangeOfAttack>(entity);
-    auto& health = reg.emplace<Health>(entity);
-
-    health.hpBar = reg.create();
-    reg.emplace<HealthBar>(health.hpBar).parent = entity;
-    auto& hpBar = reg.emplace<Sprite>(health.hpBar);
-
-    auto& mageRef = reg.emplace<Mage>(entity);
-    mageRef.healthBar = health.hpBar;
-
-    AssignSprite(sprite, "spritesheets:mage:mage_stand_side:1");
+  
+    //sprite.scale = { 2.0f,2.0f };
+    AssignSprite(sprite, "ancient_defenders:mage");
     float ratio = sprite.size.y / sprite.size.x;
 
-    sprite.scale = { 2, 2 };
-
+    auto& health = reg.emplace<Health>(entity);
+    
+    health.hpBar = reg.create();
+    /*auto& hpBarSprite = reg.emplace<Sprite>(health.hpBar);
+    AssignSprite(hpBarSprite, "spritesheets:hp-bar:hp_100");
+    */
     mage.meleeDmg = 1.0f;
 
     mage.currentAction = action_;

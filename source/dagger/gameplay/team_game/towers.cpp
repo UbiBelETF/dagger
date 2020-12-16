@@ -53,36 +53,30 @@ void ancient_defenders::TowerBehaviorSystem::OnEndOfFrame()
 {
 }
 
-Tower ancient_defenders::Tower::Get(Entity entity_)
-{
-    auto& reg = Engine::Registry();
-    auto& pos = reg.get_or_emplace<Transform>(entity_);
-    auto& anim = reg.get_or_emplace<Animator>(entity_);
-    auto& tow = reg.get_or_emplace<TowerStats>(entity_);
-    auto& col = reg.get_or_emplace<SimpleCollision>(entity_);
-    auto& roa = reg.get_or_emplace<RangeOfAttack>(entity_);
 
-    return Tower{ entity_, pos, anim, tow, col, roa };
-}
-
-Tower ancient_defenders::Tower::Create(String type_)
+Entity ancient_defenders::Tower::Create(String type_)
 {
     auto& reg = Engine::Registry();
     auto entity = reg.create();
-    auto tow = Tower::Get(entity);
 
-    tow.tower.type = type_;
+    auto& coordinates = reg.emplace<Transform>(entity);
+    auto& anim = reg.emplace<Animator>(entity);
+    auto& tower = reg.emplace<TowerStats>(entity);
+    auto& hitbox = reg.emplace<SimpleCollision>(entity);
+    auto& range = reg.emplace<RangeOfAttack>(entity);
 
-    tow.coordinates.position = { TowerPlacementInfo::spotCoordinates[tow.tower.address].x,
-            TowerPlacementInfo::spotCoordinates[tow.tower.address].y, 1.0f };
+    tower.type = type_;
 
-    tow.hitbox.size = { 250, 0 };
-    tow.hitbox.shape = EHitbox::Circular;
+    coordinates.position = { TowerPlacementInfo::spotCoordinates[tower.address].x,
+            TowerPlacementInfo::spotCoordinates[tower.address].y, 1.0f };
 
-    tow.range.range = tow.hitbox.size.x;
+    hitbox.size = { 250, 0 };
+    hitbox.shape = EHitbox::Circular;
 
-    tow.range.unitType = ETarget::Tower;
-    tow.range.targetType = ETarget::Golem;
+    range.range = hitbox.size.x;
 
-    return tow;
+    range.unitType = ETarget::Tower;
+    range.targetType = ETarget::Golem;
+
+    return entity;
 }

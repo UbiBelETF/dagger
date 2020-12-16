@@ -23,13 +23,13 @@ using namespace ancient_defenders;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
+    engine_.AddSystem<PlayerControlsSystem>();
       engine_.AddSystem<SimpleCollisionsSystem>();
       engine_.AddSystem<RangedTargetingSystem>();
       engine_.AddSystem<MageBehaviorSystem>();
       engine_.AddSystem<TowerBehaviorSystem>();
 	    engine_.AddSystem<GolemBehaviorSystem>();
       engine_.AddSystem<HealthManagementSystem>();
-      engine_.AddSystem<PlayerControlsSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -81,8 +81,8 @@ void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
    // auto demoMage5 = Mage::Create(TowerPlacementInfo::spotCoordinates[5]);
 
   	//auto demoGolem = Golem::Create();
-    //auto demoMage = Mage::Create(WalkingPath::path[0], EAction::Moving);
-    //auto demoMage1 = Mage::Create(WalkingPath::path[0], EAction::Moving);
+    auto demoMage = Mage::Create(WalkingPath::path[0], EAction::Moving);
+    auto demoMage1 = Mage::Create(WalkingPath::path[0], EAction::Moving);
 	/*
 
     auto demoMage1 = Mage::Create();

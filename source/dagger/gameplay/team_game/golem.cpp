@@ -107,41 +107,43 @@ void ancient_defenders::GolemBehaviorSystem::OnEndOfFrame()
 {
 }
 
-Golem ancient_defenders::Golem::Create()
+Entity ancient_defenders::Golem::Create()
 {
 	auto& reg = Engine::Registry();
 	auto entity = reg.create();
 	auto& sprite = reg.emplace<Sprite>(entity);
-	auto& pos = reg.emplace<Transform>(entity);
+	auto& coordinates = reg.emplace<Transform>(entity);
 	auto& anim = reg.emplace<Animator>(entity);
-	auto& enemy = reg.emplace<Enemy>(entity);
-	auto& col = reg.emplace<SimpleCollision>(entity);
-	auto& roa = reg.emplace<RangeOfAttack>(entity);
-	auto& hel = reg.emplace<Health>(entity);
-	auto& hpBar = reg.emplace<Sprite>(hel.hpBar);
+	auto& golem = reg.emplace<Enemy>(entity);
+	auto& hitbox = reg.emplace<SimpleCollision>(entity);
+	auto& range = reg.emplace<RangeOfAttack>(entity);
+	auto& health = reg.emplace<Health>(entity);
 
-	auto& gol = Golem{ entity, sprite, pos, anim, enemy, col, roa, hel, hpBar };
+    health.hpBar = reg.create();
+    /*auto& hpBar = reg.emplace<Sprite>(health.hpBar);
+    AssignSprite(hpBar, "spritesheets:hp-bar:hp_100");
+    */
 
-	AssignSprite(gol.sprite, "spritesheets:golem-little-sheet:golem_stand_side:1");
-	float ratio = gol.sprite.size.y / gol.sprite.size.x;
-	gol.sprite.scale = { 2,2 };
+	AssignSprite(sprite, "spritesheets:golem-little-sheet:golem_stand_side:1");
+	float ratio = sprite.size.y / sprite.size.x;
+	//sprite.scale = { 2,2 };
 
 	auto start = WalkingPath::path.back();
 
-	gol.coordinates.position = { start.x, start.y, 1.0f };
+	coordinates.position = { start.x, start.y, 1.0f };
 
-	gol.health.currentHealth = gol.health.maxHealth = 100.0f;
-	gol.golem.meleeDmg = 5.0f;
+	health.currentHealth = health.maxHealth = 100.0f;
+	golem.meleeDmg = 5.0f;
 
-	gol.golem.speed = 50.0f;
-	gol.golem.direction = { -1,0 };
+	golem.speed = 50.0f;
+	golem.direction = { -1,0 };
 
-	gol.hitbox.size = gol.sprite.size;
-    gol.hitbox.size.x += 10;
-	gol.range.range = gol.hitbox.size.x;
+	hitbox.size = sprite.size;
+    hitbox.size.x += 10;
+	range.range = hitbox.size.x;
 
-	gol.range.unitType = ETarget::Golem;
-	gol.range.targetType = ETarget::Mage;
+	range.unitType = ETarget::Golem;
+	range.targetType = ETarget::Mage;
 
-	return gol;
+	return entity;
 }
