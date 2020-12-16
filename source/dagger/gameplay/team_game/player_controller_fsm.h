@@ -16,6 +16,7 @@ namespace lab
         int id=0;
 		TilemapLegend legend;
 		Room room;
+		Room addons;
     };
 	void GenerateRoom(int idNext_,lab::NextLvl& currentLvl_,Transform &tr_);
 
