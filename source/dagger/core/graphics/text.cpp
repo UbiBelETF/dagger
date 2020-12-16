@@ -7,9 +7,10 @@
 using namespace dagger;
 
 
-void Text::Set(String font_, String message_, Vector3 pos_)
+void Text::Set(String font_, String message_, Vector3 pos_,Vector2 size_)
 {
 	font = font_;
+	position=pos_;
 
 	auto& registry = Engine::Registry();
 
@@ -18,6 +19,7 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 	if (entities.size() > 0)
 	{
 		registry.remove(entities.begin(), entities.end());
+		registry.destroy(entities.begin(), entities.end());
 		entities.clear();
 	}
 
@@ -29,7 +31,7 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 	for (char letter : message_)
 	{
 		cache[letter] = sheets[fmt::format("spritesheets:{}:{}", font, (int)letter)];
-		fullStringWidth += cache[letter]->frame.size.x * spacing;
+		fullStringWidth += (cache[letter]->frame.size.x * spacing);
 	}
 
 	Float32 xOffsetDueToAlign = 0.0f;
@@ -46,12 +48,18 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 		sprite.position = { positionX - xOffsetDueToAlign, position.y, position.z };
 		
 		AssignSprite(sprite, spritesheet);
-
+		sprite.size=size_;
 		positionX += (int)(spritesheet->frame.size.x * spacing);
+		entities.push_back(entity);
 	}
 }
 
 void Text::Set(String font_, String message_)
 	{
-		this->Set(font_, message_, { 0, 0, 0 });
+		this->Set(font_, message_, { 0, 0, 0 },{20,20});
+	}
+
+void Text::Set(String font_, String message_,Vector2 size_)
+	{
+		this->Set(font_, message_, { 0, 0, 0 },size_);
 	}
