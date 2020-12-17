@@ -15,6 +15,7 @@
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
 #include "tools/diagnostics.h"
+#include "core/graphics/text.h"
 
 #include "gameplay/team_game/team_game_collisions.h"
 #include "gameplay/team_game/camera_follow.h"
@@ -22,10 +23,11 @@
 #include "gameplay/team_game/game_manager.h"
 #include "gameplay/team_game/character.h"
 #include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/enemy_controller.h"
 #include "gameplay/team_game/team_game_player_input.h"
 #include "gameplay/team_game/health_management.h"
 #include "gameplay/team_game/ui/player_stats.h"
-#include "core/graphics/text.h"
+#include "gameplay/team_game/enemy_patrol.h"
 
 using namespace dagger;
 
@@ -39,7 +41,9 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<CameraFollowSystem>();
     engine_.AddSystem<HealthManagementSystem>();
-    engine_.AddSystem<PlayerStatsUISystem>();
+    //engine_.AddSystem<PlayerStatsUISystem>();
+    engine_.AddSystem<EnemyPatrolSystem>();
+    engine_.AddSystem<EnemyControllerSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
@@ -96,26 +100,25 @@ void team_game::SetupWorld(Engine& engine_)
         
 
         // Add enemy
-        auto entity1 = reg.create();
-        auto& sprite1 = reg.emplace<Sprite>(entity1);
-        AssignSprite(sprite1, "TeamGame:Characters:Enemy-Bald_Pirate:1-Idle:1");
+        auto entity2 = reg.create();
+        auto& sprite2 = reg.emplace<Sprite>(entity2);
+        AssignSprite(sprite2, "TeamGame:Characters:Enemy-Bald_Pirate:1-Idle:1");
 
-        auto& transform1 = reg.get_or_emplace<Transform>(entity1);
-        transform1.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
-        transform1.position.x += 100;
+        auto& transform2 = reg.get_or_emplace<Transform>(entity2);
+        transform2.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
+        transform2.position.x += 450;
 
-        auto& collider1 = reg.get_or_emplace<Collider>(entity1);
-        collider1.size = sprite1.size;
-        collider1.entityType = CollisionID::ENEMY;
-        collider1.hasGravity = true;
+        auto& collider2 = reg.get_or_emplace<Collider>(entity2);
+        collider2.size = sprite2.size;
+        collider2.entityType = CollisionID::ENEMY;
+        collider2.hasGravity = true;
 
-        auto& gravity1 = reg.get_or_emplace<Gravity>(entity1);
+        auto& gravity2 = reg.get_or_emplace<Gravity>(entity2);
 
-        auto& input1 = reg.emplace<InputReceiver>(entity1);
-        input1.contexts.push_back("ASDW");
+        auto& actions = reg.get_or_emplace<ActionManager>(entity2);
 
-        auto& character1 = reg.emplace<Character>(entity1);
-        reg.emplace<EnemyCharacter>(entity1);
-        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity1);
+        auto& character2 = reg.emplace<Character>(entity2);
+        reg.emplace<EnemyCharacter>(entity2);
+        ATTACH_TO_FSM(team_game::EnemyControllerFSM, entity2);
     }
 }
