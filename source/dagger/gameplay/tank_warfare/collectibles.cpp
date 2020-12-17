@@ -112,7 +112,7 @@ void tank_warfare::AddCollectible(bool isPower_)
 		AnimatorPlay(anim, fmt::format("powerup:power{}", collType));
 
 		auto& collectible = reg.emplace<Collectible>(entity);
-		collectible.collType = static_cast<ECollectibleType>(4);
+		collectible.collType = static_cast<ECollectibleType>(collType);
 	}
 	else
 	{
