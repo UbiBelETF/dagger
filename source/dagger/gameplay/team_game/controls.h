@@ -7,20 +7,17 @@ using namespace dagger;
 
 namespace ancient_defenders {
 
+    struct ControlData {
+        static Float32 timeout;
+        static Float32 maxTimeout;
+    };
+
     class PlayerControlsSystem
         : public System
     {
     public:
         inline String SystemName() { return "Player Controls System"; }
 
-        void SpinUp() override;
-        void WindDown() override;
         void Run() override;
-
-    private:
-        Sequence<EDaggerKeyboard> m_pressedKeys = {};
-
-        void OnKeyboardEvent(KeyboardEvent kEvent_);
-        void OnEndOfFrame();
     };
 }

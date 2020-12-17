@@ -9,8 +9,6 @@ using namespace dagger;
 
 namespace ancient_defenders {
 
-    struct HealthBar { Entity parent; };
-
     struct Health {
         Entity hpBar;
         
@@ -18,12 +16,7 @@ namespace ancient_defenders {
         Float32 maxHealth;
 
         static constexpr Float32 standardHP = 100.0f;
-
-        static Sequence<Float32> hpSteps;
-
     };
-
-    Float32 closestNeighbour(Float32 number_);
 
     class HealthManagementSystem
         : public System

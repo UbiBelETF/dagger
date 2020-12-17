@@ -10,23 +10,22 @@
 
 #include "gameplay/common/simple_collisions.h"
 
-#include <math.h>
-#include <list>
+#include <random>
 
 using namespace ancient_defenders;
 
 
-void ancient_defenders::GolemBehaviorSystem::SpinUp()
+void ancient_defenders::EnemyBehaviorSystem::SpinUp()
 {
-	Engine::Dispatcher().sink<NextFrame>().connect<&GolemBehaviorSystem::OnEndOfFrame>(this);
+	Engine::Dispatcher().sink<NextFrame>().connect<&EnemyBehaviorSystem::OnEndOfFrame>(this);
 }
 
-void ancient_defenders::GolemBehaviorSystem::WindDown()
+void ancient_defenders::EnemyBehaviorSystem::WindDown()
 {
-	Engine::Dispatcher().sink<NextFrame>().disconnect<&GolemBehaviorSystem::OnEndOfFrame>(this);
+	Engine::Dispatcher().sink<NextFrame>().disconnect<&EnemyBehaviorSystem::OnEndOfFrame>(this);
 }
 
-void ancient_defenders::GolemBehaviorSystem::Run()
+void ancient_defenders::EnemyBehaviorSystem::Run()
 {
 	Engine::Registry().view<Enemy, Sprite, Transform, Animator, RangeOfAttack>().each(
 		[](Enemy& golem_, Sprite& sprite_, Transform& transform_, Animator& animation_, RangeOfAttack& range_)
@@ -39,18 +38,11 @@ void ancient_defenders::GolemBehaviorSystem::Run()
 			else if (golem_.currentAction == EAction::Moving) {
 				auto nextPosition = golem_.postition - 1;
 
-				auto coords = WalkingPath::path.back();
-				int i = 0;
-				for (auto iter : WalkingPath::path) {
-					if (i == nextPosition) {
-						coords = iter;
-						break;
-					}
-					i++;
-				}
+				auto coords = WalkingPath::path[nextPosition];
+				
 
-				auto destinationX = coords.x; // Maybe add +/- a few percent to make paths bit more varied
-				auto destinationY = coords.y;
+				auto destinationX = coords.x + golem_.offset.x;
+				auto destinationY = coords.y + golem_.offset.y;
 
 				if (transform_.position.x < destinationX) {
 					golem_.direction.x = 1;
@@ -85,7 +77,7 @@ void ancient_defenders::GolemBehaviorSystem::Run()
 					transform_.position.y = destinationY;
 				}
 
-				if (transform_.position.x == coords.x && transform_.position.y == coords.y) {
+				if (transform_.position.x == destinationX && transform_.position.y == destinationY) {
 					golem_.postition--;
 					if ((golem_.postition - 1) < 0) {
 						golem_.currentAction = EAction::Idling;
@@ -103,7 +95,7 @@ void ancient_defenders::GolemBehaviorSystem::Run()
 
 }
 
-void ancient_defenders::GolemBehaviorSystem::OnEndOfFrame()
+void ancient_defenders::EnemyBehaviorSystem::OnEndOfFrame()
 {
 }
 
@@ -119,19 +111,31 @@ Entity ancient_defenders::Golem::Create()
 	auto& range = reg.emplace<RangeOfAttack>(entity);
 	auto& health = reg.emplace<Health>(entity);
 
-    health.hpBar = reg.create();
-    /*auto& hpBar = reg.emplace<Sprite>(health.hpBar);
-    AssignSprite(hpBar, "spritesheets:hp-bar:hp_100");
-    */
-
-	AssignSprite(sprite, "spritesheets:golem-little-sheet:golem_stand_side:1");
-	float ratio = sprite.size.y / sprite.size.x;
-	//sprite.scale = { 2,2 };
-
+	//AssignSprite(sprite, "spritesheets:golem-little-sheet:golem_stand_side:1"); // Skipped because it was creating issues with HP sprite, Animator will add the sprite
+	
 	auto start = WalkingPath::path.back();
 
-	coordinates.position = { start.x, start.y, 1.0f };
+    // Randomly create offset 
+    std::random_device dev;
+    std::mt19937 rng(dev());
 
+    std::uniform_int_distribution<std::mt19937::result_type> roll22(0, 22);
+    std::uniform_int_distribution<std::mt19937::result_type> roll38(0, 38);
+
+    std::uniform_int_distribution<std::mt19937::result_type> randomDirection(0, 1);
+
+    // 22 is an important value because it represents the border at which character can move while still being on the path
+    // 22 = 38 - 16( half of the width/height of the path - half of the character widht/height ); edge of the character sprite is alligned with the edge of the path
+    // Only exception to this is when offset.y is positive at which point character can go up much higher while still appearing to walk along the path
+    golem.offset = { (randomDirection(rng) ? roll22(rng) : 0.0f - roll22(rng)),(randomDirection(rng) ? roll38(rng) : 0.0f - roll22(rng)) };
+
+    start.x += golem.offset.x;
+    start.y += golem.offset.y;
+ 
+    // Z axis is calculated this way to make bottom most character appear closest to the screen
+    coordinates.position = { start.x, start.y, std::abs(golem.offset.y + 22.0f) };
+
+    health.hpBar = reg.create();
 	health.currentHealth = health.maxHealth = 100.0f;
 	golem.meleeDmg = 5.0f;
 
@@ -139,7 +143,6 @@ Entity ancient_defenders::Golem::Create()
 	golem.direction = { -1,0 };
 
 	hitbox.size = sprite.size;
-    hitbox.size.x += 10;
 	range.range = hitbox.size.x;
 
 	range.unitType = ETarget::Golem;

@@ -8,8 +8,6 @@
 using namespace dagger;
 using namespace ancient_defenders;
 
-Sequence<Float32> ancient_defenders::Health::hpSteps = {0, 11, 22, 33, 44, 55, 66, 77, 88, 100 };
-
 void ancient_defenders::HealthManagementSystem::SpinUp()
 {
     Engine::Dispatcher().sink<NextFrame>().connect<&HealthManagementSystem::OnEndOfFrame>(this);
@@ -25,10 +23,8 @@ void ancient_defenders::HealthManagementSystem::Run() {
     auto& reg = Engine::Registry();
     auto entities = reg.view<Health>();
 
-    entities.each([&](Health& health_)
+    entities.each([&](Entity entity_, Health& health_)
         {
-            auto parentEntity = entt::to_entity(reg,health_);
-
             auto& healthBarSprite = reg.get_or_emplace<Sprite>(health_.hpBar);
             AssignSprite(healthBarSprite, "spritesheets:hp-bar:hp_100");
             
@@ -36,15 +32,14 @@ void ancient_defenders::HealthManagementSystem::Run() {
 
             if (EPSILON_ZERO(val)) {
                 healthBarSprite.color = { 0,0,0,0 }; // Make the previous sprite invisible; solves previous sprite staying still after character drops to low HP
-//                return; // Since there is no sprite for 0 hp, skip adding it
             }
             else
             {
-                const auto& parentSprite = reg.get<Sprite>(parentEntity);
+                const auto& parentSprite = reg.get<Sprite>(entity_);
 
                 healthBarSprite.size.x = val * parentSprite.size.x;
                 healthBarSprite.position = { parentSprite.position.x - ((1 - val) * (parentSprite.size.x / 2.0f)),
-                    parentSprite.position.y - parentSprite.size.y / 2.0f - healthBarSprite.size.y / 2.0f,
+                    parentSprite.position.y - parentSprite.size.y / 2.0f,
                     99.0f };
             }
         });
@@ -67,24 +62,4 @@ void ancient_defenders::HealthManagementSystem::OnEndOfFrame()
     }
 
     Engine::Registry().destroy(toRemove.begin(), toRemove.end());
-}
-
-Float32 ancient_defenders::closestNeighbour(Float32 number_)
-{
-    SInt32 numOfSteps = Health::hpSteps.size()-1;
-    
-    SInt32 i = 0;
-    while (number_ > Health::hpSteps[i]) i++;
-
-    if (i == 0) {
-        return Health::hpSteps[0];
-    }
-    else {
-        if (std::abs(Health::hpSteps[i - 1] - number_) < std::abs(Health::hpSteps[i] - number_)) {
-            return Health::hpSteps[i - 1];
-        }
-        else {
-            return Health::hpSteps[i];
-        }
-    }
 }

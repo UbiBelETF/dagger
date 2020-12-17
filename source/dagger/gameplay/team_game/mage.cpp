@@ -33,7 +33,7 @@ void ancient_defenders::MageBehaviorSystem::WindDown()
 void ancient_defenders::MageBehaviorSystem::Run()
 {
     Engine::Registry().view<MageStats, Sprite, Transform, Animator, RangeOfAttack>().each(
-        [](MageStats& mage_, Sprite& sprite_, Transform& transform_, Animator& animation_, RangeOfAttack& range_)
+        [](Entity entity_, MageStats& mage_, Sprite& sprite_, Transform& transform_, Animator& animation_, RangeOfAttack& range_)
     {
         if (range_.targetFound) mage_.currentAction = EAction::Attacking;
 
@@ -118,25 +118,21 @@ void ancient_defenders::MageBehaviorSystem::Run()
             while (it != view.end()) {
                 auto& tower = view.get<TowerStats>(*it);
 
-                if (tower.address == TowerPlacementInfo::selectedSpot && !tower.constructed) {
-                    tower.constructionProgress += Engine::DeltaTime();
-                }
-                else if (tower.constructed) {
-                    sprite_.color = { 0,0,0,0 }; // Make Mage appear to be inside of the tower by making him invisible
-                    Engine::Registry().get<Sprite>(Engine::Registry().get<Health>(entt::to_entity(Engine::Registry(), mage_)).hpBar).color = { 0,0,0,0 };
-                    // Make the mages HP bar also dissapear
+                if (tower.address == mage_.chantingSpot) {
+                    if (!tower.constructed) {
+                        tower.constructionProgress += Engine::DeltaTime();
+                    }
+                    else if (tower.constructed) {
+                        sprite_.color = { 0,0,0,0 }; // Make Mage appear to be inside of the tower by making him invisible
+                        Engine::Registry().get<Sprite>(Engine::Registry().get<Health>(entity_).hpBar).color = { 0,0,0,0 };
+                        // Make the mages HP bar also dissapear
 
-                    mage_.currentAction = EAction::Idling;
-
-
-                    TowerPlacementInfo::spotLocked = false;
+                        mage_.currentAction = EAction::Idling;
                     
+                    }
                 }
                 it++;
             }
-        }
-        else if (mage_.currentAction == EAction::Defending) {
-            // Cast spells
         }
     });
   
@@ -157,18 +153,13 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
     auto& mage = reg.emplace<MageStats>(entity);
     auto& hitbox = reg.emplace<SimpleCollision>(entity);
     auto& range = reg.emplace<RangeOfAttack>(entity);
-  
-    //sprite.scale = { 2.0f,2.0f };
-    AssignSprite(sprite, "ancient_defenders:mage");
-    float ratio = sprite.size.y / sprite.size.x;
-
     auto& health = reg.emplace<Health>(entity);
+
+    //AssignSprite(sprite, "ancient_defenders:mage"); // Skipped because it was creating issues with HP sprite, Animator will add the sprite
     
-    health.hpBar = reg.create();
-    /*auto& hpBarSprite = reg.emplace<Sprite>(health.hpBar);
-    AssignSprite(hpBarSprite, "spritesheets:hp-bar:hp_100");
-    */
     mage.meleeDmg = 1.0f;
+
+    mage.chantingSpot = TowerPlacementInfo::selectedSpot; // Used for Chanting state
 
     mage.currentAction = action_;
 
@@ -203,6 +194,7 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
     range.unitType = ETarget::Mage;
     range.targetType = ETarget::Golem;
 
+    health.hpBar = reg.create();
     health.currentHealth = Health::standardHP;
     health.maxHealth = Health::standardHP;
 

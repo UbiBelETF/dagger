@@ -9,10 +9,20 @@ using namespace dagger;
 
 namespace ancient_defenders {
 
+    enum class SelectMode {
+        Spot = 1,
+        Tower = 2,
+    };
+
     struct TowerPlacementInfo {
         static UInt32 selectedSpot;
-        static Bool spotLocked;
+        static String selectedTower;
+
+        static SelectMode selectMode;
+
         static Sequence<Vector2> spotCoordinates;
+        static Sequence<Bool> availableSpot;
+        static Sequence<String> towerNames;
     };
 
     struct TowerStats {

@@ -12,7 +12,7 @@ using namespace dagger;
 namespace ancient_defenders
 {
     void SetupWorld(Engine& engine_);
-    void SetupDemoCharacter(Engine& engine_);
+    void SetupControls(Engine& engine_);
     void LoadPath();
     void LoadTowerSpots();
 

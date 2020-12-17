@@ -20,12 +20,13 @@ namespace ancient_defenders {
         Moving = 2,
         Attacking = 3,
         Chanting = 4,
-        Defending = 5,
     };
 
     struct MageStats {
         Float32 speed;
         Float32 meleeDmg;
+
+        UInt32 chantingSpot;
 
         SInt32 postition = 0;
         Vector2 direction = { -1, 0 };
@@ -35,7 +36,7 @@ namespace ancient_defenders {
     };
 
     struct Mage {
-        Entity healthBar;
+        Entity entity;
 
         static Entity Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true);        
     };

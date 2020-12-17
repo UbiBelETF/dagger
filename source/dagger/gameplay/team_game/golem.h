@@ -20,6 +20,7 @@ namespace ancient_defenders {
 		Float32 meleeDmg;
 
 		SInt32 postition = (SInt32) WalkingPath::numberOfPoints - 1;
+        Vector2 offset;
 		Vector2 direction = { -1, 0 };
 
 		EAction currentAction = EAction::Moving;
@@ -31,12 +32,12 @@ namespace ancient_defenders {
 		static Entity Create();
 	};
 
-	class GolemBehaviorSystem
+	class EnemyBehaviorSystem
 		: public System
 	{
 
 	public:
-		inline String SystemName() { return "Racing Tools System"; }
+		inline String SystemName() { return "Enemy Behavior System"; }
 
 		void SpinUp() override;
 		void WindDown() override;

@@ -6,8 +6,11 @@
 using namespace ancient_defenders;
 
 UInt32 ancient_defenders::TowerPlacementInfo::selectedSpot = 0;
-Bool ancient_defenders::TowerPlacementInfo::spotLocked = false;
+String ancient_defenders::TowerPlacementInfo::selectedTower = "STORM";
+SelectMode ancient_defenders::TowerPlacementInfo::selectMode = SelectMode::Spot;
 Sequence<Vector2> ancient_defenders::TowerPlacementInfo::spotCoordinates = {};
+Sequence<Bool> ancient_defenders::TowerPlacementInfo::availableSpot = { true, true, true, true, true, true, true, true };
+Sequence<String> ancient_defenders::TowerPlacementInfo::towerNames = {"BLOOD", "FIRE", "ICE", "POISON", "STORM", "SUN"};
 
 Float32 ancient_defenders::TowerStats::constructionGoal = 10.0f;
 
@@ -24,14 +27,13 @@ void ancient_defenders::TowerBehaviorSystem::WindDown()
 void ancient_defenders::TowerBehaviorSystem::Run()
 {
     Engine::Registry().view<TowerStats, RangeOfAttack, Animator>().each(
-        [](TowerStats & tower_, RangeOfAttack & range_, Animator & animator_)
+        [](Entity entity_, TowerStats & tower_, RangeOfAttack & range_, Animator & animator_)
     {
         if (tower_.constructionProgress < TowerStats::constructionGoal) return;
         else if (!tower_.constructed) {
             tower_.constructed = true;
-            TowerPlacementInfo::spotLocked = false;
 
-            auto & sprite = Engine::Registry().emplace<Sprite>(entt::to_entity(Engine::Registry(), tower_));
+            auto & sprite = Engine::Registry().emplace<Sprite>(entity_);
             AssignSprite(sprite, "ancient_defenders:" + tower_.type);
             sprite.position = { TowerPlacementInfo::spotCoordinates[tower_.address].x,TowerPlacementInfo::spotCoordinates[tower_.address].y, 1.0f };
             sprite.pivot = { 0,0.25f };
@@ -69,6 +71,8 @@ Entity ancient_defenders::Tower::Create(String type_)
 
     coordinates.position = { TowerPlacementInfo::spotCoordinates[tower.address].x,
             TowerPlacementInfo::spotCoordinates[tower.address].y, 1.0f };
+
+    TowerPlacementInfo::availableSpot[tower.address] = false;
 
     hitbox.size = { 250, 0 };
     hitbox.shape = EHitbox::Circular;
