@@ -206,17 +206,34 @@ void CreateBackground()
         auto& sprite = reg.get_or_emplace<Sprite>(back);
         AssignSprite(sprite, "EmptyWhitePixel");
         sprite.color = { 0, 0, 0, 1 };
-        sprite.size = { 100, 500 };
+        sprite.size = { 100, 200 };
         sprite.scale = { 1, 1 };
         sprite.position = { -200, -75, 1 };
-        auto entity = reg.create();
-        auto& col = reg.emplace<SimpleCollision>(entity);
+        auto& col = reg.emplace<SimpleCollision>(back);
         col.size.x = 100;
-        col.size.y = 500;
+        col.size.y = 200;
 
-        auto& transform = reg.emplace<Transform>(entity);
+        auto& transform = reg.emplace<Transform>(back);
         transform.position.x =-200;
         transform.position.y = -75;
+        transform.position.z = 1;
+    }
+
+    //platform
+    {
+        auto back = reg.create();
+        auto& sprite = reg.get_or_emplace<Sprite>(back);
+        AssignSprite(sprite, "EmptyWhitePixel");
+        sprite.color = { 0, 0, 0, 1 };
+        sprite.size = { 50, 20 };
+        sprite.scale = { 1, 1 };
+        sprite.position = { 200, 25, 1 };
+        auto& col = reg.emplace<SimpleCollision>(back);
+        col.size.x = 50;
+        col.size.y = 20;
+        auto& transform = reg.emplace<Transform>(back);
+        transform.position.x = 200;
+        transform.position.y = 25;
         transform.position.z = 1;
     }
 
