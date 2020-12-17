@@ -51,29 +51,38 @@ void lab::GenerateRoom(int idNext_,lab::NextLvl& currentLvl_, Transform &tr_)
 void PlayerControllerSystem::Run()
 {
     Engine::Registry().view<CharacterFSM::StateComponent>()
-        .each([&](CharacterFSM::StateComponent& state_)
-            {
-                characterFSM.Run(state_);
-            });
+    .each([&](CharacterFSM::StateComponent& state_)
+    {
+        characterFSM.Run(state_);
+    });
             
-            auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
-            auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter,Text>();
-            auto viewText = Engine::Registry().view<PlayerCharacter,Text>();
-            auto viewDamage = Engine::Registry().view<Bullet, Transform, SimpleCollision,PlayerCharacter>();
-            for (auto entity : view)
-            {
-                auto &t = view.get<Transform>(entity);
-                auto &player = view.get<PlayerCharacter>(entity);
-                auto &col = view.get<SimpleCollision>(entity);
-                auto &tex = viewText.get<Text>(entity);
+    auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
+    auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter,Text>();
+    auto viewText = Engine::Registry().view<PlayerCharacter,Text>();
+    auto viewDamage = Engine::Registry().view<Bullet, Transform, SimpleCollision,PlayerCharacter>();
+    for (auto entity : view)
+    {
+        auto &t = view.get<Transform>(entity);
+        auto &player = view.get<PlayerCharacter>(entity);
+        auto &col = view.get<SimpleCollision>(entity);
+        auto &tex = viewText.get<Text>(entity);
 
-                if (player.health <= 0)
-                {
-                    tex.alignment={ TextAlignment::CENTER };
-                    tex.Set("pixel-font", "GAME OVER",{30,30});
-                    Engine::Registry().destroy(entity);              
-                                   
-                }
+        if (player.health <= 0)
+        {
+            Engine::Registry().view<CharacterFSM::StateComponent>()
+            .each([&](CharacterFSM::StateComponent& state_)
+            {
+                characterFSM.GoTo(ECharacterState::Dying, state_);
+            });
+            player.deathCooldown--;
+            if(player.deathCooldown==0)
+            {
+                tex.alignment={ TextAlignment::CENTER };
+                tex.Set("pixel-font", "GAME OVER",{30,30});
+                Engine::Registry().destroy(entity); 
+            }                       
+                            
+        }
 
 
 
@@ -114,19 +123,29 @@ void PlayerControllerSystem::Run()
             
                        
 
-                        if (Engine::Registry().has<Bullet>(col.colidedWith))
+                if (Engine::Registry().has<Bullet>(col.colidedWith))
+                {
+                    Bullet &bullet = Engine::Registry().get<Bullet>(col.colidedWith);
+                    player.health -= bullet.damage;
+                    
+                    if(player.health<=0)
+                    {
+                        player.health=0;
+                    }
+                    else
+                    {
+                        Engine::Registry().view<CharacterFSM::StateComponent>()
+                        .each([&](CharacterFSM::StateComponent& state_)
                         {
-                            Bullet &bullet = Engine::Registry().get<Bullet>(col.colidedWith);
-					        player.health -= bullet.damage;
-                            if(player.health<0){
-                                player.health=0;
-                            } 
-                            tex.Set("pixel-font", std::to_string(player.health)+"/100",{10,-95,0},{10,10});
-                            
-                        }
-                        
+                            characterFSM.GoTo(ECharacterState::GetHit, state_);
+                        });
+                    }
                         
                     
+
+                    tex.Set("pixel-font", std::to_string(player.health)+"/100",{10,-95,0},{10,10});
+                    
+                } 
 
                 if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
                 {

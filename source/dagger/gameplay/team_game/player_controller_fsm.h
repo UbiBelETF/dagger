@@ -31,6 +31,8 @@ namespace lab
 		int maxCooldown = 20;
 		int cooldown = 20;
 		int health = 100;
+		int deathCooldown=200;
+		int hitCooldown=30;
 	};
 
 
