@@ -16,6 +16,7 @@
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/physics.h"
 #include "gameplay/team_game/collisions.h"
+#include "gameplay/team_game/boss_fsm.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -46,7 +47,7 @@ void SetupCamera()
 
 
 
-
+//Player
 struct Player
 {
     Entity entity;
@@ -106,6 +107,69 @@ struct Player
     }
 };
 
+
+
+//BOSS
+struct Boss
+{
+    Entity entity;
+    Sprite& sprite;
+    Animator& animator;
+    InputReceiver& input;
+    BrawlerCharacter& character;
+    Transform& transform;
+    Physics& physics;
+    SimpleCollision& col;
+
+
+    static Boss Get(Entity entity)
+    {
+        auto& reg = Engine::Registry();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        auto& anim = reg.get_or_emplace<Animator>(entity);
+        auto& input = reg.get_or_emplace<InputReceiver>(entity);
+        auto& character = reg.get_or_emplace<BrawlerCharacter>(entity);
+        auto& transform = reg.get_or_emplace<Transform>(entity);
+        auto& physics = reg.get_or_emplace<Physics>(entity);
+        auto& col = reg.get_or_emplace<SimpleCollision>(entity);
+        ATTACH_TO_FSM(BossFSM, entity);
+        
+        col.size.x = 10;
+        col.size.y = 60;
+        physics.nonStatic = true;
+        return Boss{ entity, sprite, anim, input, character,transform,physics,col };
+    }
+
+    static Boss Create(
+        String input_ = "",
+        ColorRGB color_ = { 1, 1, 1 },
+        Vector2 position_ = { 0, 0 })
+    {
+        auto& reg = Engine::Registry();
+        auto entity = reg.create();
+        auto chr = Boss::Get(entity);
+
+        chr.sprite.scale = { 1, 1 };
+        chr.sprite.position = { position_, 1.0f };
+        chr.sprite.color = { color_, 1.0f };
+
+        chr.transform.position = { position_,0.0f };
+
+        AssignSprite(chr.sprite, "spritesheets:team_game:boss:idle:boss_idle");
+        AnimatorPlay(chr.animator, "boss:boss_idle");
+
+
+        if (input_ != "")
+            chr.input.contexts.push_back(input_);
+
+        chr.character.speed.x = 100;
+        chr.character.speed.y = 250;
+
+        return chr;
+    }
+};
+
+//bacckground
 void CreateBackground()
 {
     auto& reg = Engine::Registry();
@@ -199,6 +263,7 @@ void team_game::SetupWorld_Demo(Engine& engine_)
     //CreateBackground();
 
     auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, 100 });
+    auto boss = Boss::Create("Arrows", { 1,1,1 }, { 50,100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);
 }
 void TeamGame::WorldSetup(Engine& engine_)

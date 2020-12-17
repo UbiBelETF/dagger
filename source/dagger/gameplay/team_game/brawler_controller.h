@@ -3,6 +3,7 @@
 #include "core/system.h"
 #include "gameplay/team_game/controller_fsm.h"
 #include "gameplay/team_game/animations_fsm.h"
+#include "gameplay/team_game/boss_fsm.h"
 using namespace dagger;
 
 namespace team_game
@@ -20,6 +21,7 @@ namespace team_game
 	{
 		ControllerFSM m_ControllerFSM;
 		AnimationsFSM m_AnimatorFSM;
+		BossFSM m_BossFSM;
 	public:
 		String SystemName() override {
 			return "Controller System";
