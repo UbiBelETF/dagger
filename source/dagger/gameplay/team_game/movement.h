@@ -9,6 +9,7 @@ namespace team_game
 	struct MovableBody
 	{
 		Vector2 movement{ 0, 0 };
+		Vector2 size;
 
 		void reset()
 		{
