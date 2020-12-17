@@ -1,0 +1,8 @@
+{
+	"animation-name": "Plight:big_deamon:DASH",
+	"animation-length-ms": 800,
+	"animation-frames": 
+	[
+		{ "texture-name": "Plight:big_deamon:IDLE:big_demon_idle_anim_f0" }
+	]
+}

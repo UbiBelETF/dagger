@@ -5,17 +5,20 @@
 enum struct PlightCharacterStates
 {
 	Idle,
-	Running
+	Running,
+	Dashing
 };
 
 struct PlightCharacterControllerFSM : public FSM<PlightCharacterStates>
 {
 	DEFINE_STATE(PlightCharacterControllerFSM, PlightCharacterStates, Idle);
 	DEFINE_STATE(PlightCharacterControllerFSM, PlightCharacterStates, Running);
+	DEFINE_STATE(PlightCharacterControllerFSM, PlightCharacterStates, Dashing);
 
 	PlightCharacterControllerFSM()
 	{
 		CONNECT_STATE(PlightCharacterStates, Idle);
 		CONNECT_STATE(PlightCharacterStates, Running);
+		CONNECT_STATE(PlightCharacterStates, Dashing);
 	}
 };
