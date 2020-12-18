@@ -67,7 +67,6 @@ void team_game::EnemyControllerFSM::Running::Run(EnemyControllerFSM::StateCompon
 	{
 		if (EPSILON_ZERO(run))
 		{
-			printf("GOING TO IDLE\n");
 			GoTo(EEnemyStates::Idle, state_);
 		}
 		else
