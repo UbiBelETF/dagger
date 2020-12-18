@@ -110,10 +110,10 @@ CollisionInfo Collider::GetCollisionInfo(Vector3& pos_, const Collider& other_, 
             {
                 // bumped into other_ from the bottom side
                 collisionInfo.collisionSide = CollisionSide::TOP;
-                if (state == MovementState::MOVEABLE) pos_.y -= p.y + size.y - p2.y + 0.1f;
+                if (state == MovementState::MOVEABLE) pos_.y -= p.y + size.y - p2.y - 0.1f;
 
                 collisionInfo.collisionSideOther = CollisionSide::BOTTOM;
-                if (other_.state == MovementState::MOVEABLE) posOther_.y -= p2.y - p.y - size.y - 0.1f;
+                if (other_.state == MovementState::MOVEABLE) posOther_.y -= p2.y - p.y - size.y + 0.1f;
             }
         }
 
@@ -123,10 +123,10 @@ CollisionInfo Collider::GetCollisionInfo(Vector3& pos_, const Collider& other_, 
             {
                 // bumped into other_ from the top side
                 collisionInfo.collisionSide = CollisionSide::BOTTOM;
-                if (state == MovementState::MOVEABLE) pos_.y -= p.y - p2.y - other_.size.y - 0.1f;
+                if (state == MovementState::MOVEABLE) pos_.y -= p.y - p2.y - other_.size.y;
 
                 collisionInfo.collisionSideOther = CollisionSide::TOP;
-                if (other_.state == MovementState::MOVEABLE) posOther_.y -= p2.y + other_.size.y - p.y + 0.1f;
+                if (other_.state == MovementState::MOVEABLE) posOther_.y -= p2.y + other_.size.y - p.y;
             }
         }
 

@@ -35,6 +35,8 @@ namespace team_game
         Bool canGoUp{ true };
         Bool canGoDown{ true };
 
+        Bool grounded = false;
+
         std::vector<entt::entity> listOfEntities;//holds list of entities that this object collided with during this frame
         std::vector<CollisionSide> listOfCollisionSides;//holds the corresponding list of sides of collisions
 

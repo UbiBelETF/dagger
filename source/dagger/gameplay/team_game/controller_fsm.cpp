@@ -35,6 +35,17 @@ void team_game::CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateC
 	{
 		GoTo(ECharacterStates::Jumping, state_);
 	}
+
+
+	auto& collider = Engine::Registry().get<Collider>(state_.entity);
+	if (collider.canGoDown)
+	{
+		Logger::trace("Can");
+	}
+	else
+	{
+		Logger::trace("Can not");
+	}
 }
 
 
@@ -86,12 +97,13 @@ void team_game::CharacterControllerFSM::Jumping::Enter(CharacterControllerFSM::S
 
 void team_game::CharacterControllerFSM::Jumping::Exit(CharacterControllerFSM::StateComponent& state_)
 {
-
+	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
+	gravity.verticalCurrentSpeed = 0.f;
 }
 
 void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character, collider] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider>(state_.entity);
+	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
 
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");
@@ -102,6 +114,14 @@ void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::Sta
 		transform.position.x += character.speed * sprite.scale.x * Engine::DeltaTime();
 	}
 
+	if (collider.canGoDown)
+	{
+		Logger::trace("Can");
+	}
+	else
+	{
+		Logger::trace("Can not");
+	}
 	if (!collider.canGoDown)
 	{
 		GoTo(ECharacterStates::Idle, state_);

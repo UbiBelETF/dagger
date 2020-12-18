@@ -11,6 +11,7 @@ namespace team_game {
         Float32 terminalVelocity = 1000.f;
         Float32 verticalInitialSpeed{ 500.f };
         Float32 verticalCurrentSpeed{ 0.f };
+        Float32 verticalGravitySpeed{ 0.f };
     };
 
     class GravitySystem : public System
