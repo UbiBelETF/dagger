@@ -12,7 +12,6 @@ using namespace lab;
 
 // Idle
 
-
 void CharacterFSM::Idle::Enter(CharacterFSM::StateComponent& state_)
 {
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
@@ -44,7 +43,6 @@ void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 
 }
 
-
 // Running
 
 void CharacterFSM::Running::Enter(CharacterFSM::StateComponent& state_) 
@@ -52,7 +50,6 @@ void CharacterFSM::Running::Enter(CharacterFSM::StateComponent& state_)
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 	AnimatorPlay(animator, "main_character:run");
 }
-
 
 void CharacterFSM::Running::Exit(CharacterFSM::StateComponent& state_) 
 {}

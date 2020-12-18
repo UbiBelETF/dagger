@@ -12,8 +12,8 @@ using namespace platformer;
 
 void PlatformerControllerSystem::Run()
 {
-    Engine::Registry().view<CharacterControllerFSM::StateComponent>()
-        .each([&](CharacterControllerFSM::StateComponent& state_)
+    Engine::Registry().view<PlatformerCharacterControllerFSM::StateComponent>()
+        .each([&](PlatformerCharacterControllerFSM::StateComponent& state_)
             {
                 characterFSM.Run(state_);
             });

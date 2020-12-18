@@ -2,20 +2,23 @@
 #include "core/core.h"
 #include "core/game/finite_state_machine.h"
 
-enum struct ECharacterStates
+namespace platformer
 {
-	Idle,
-	Running
-};
-
-struct CharacterControllerFSM : public FSM<ECharacterStates>
-{
-	DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Idle);
-	DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Running);
-
-	CharacterControllerFSM()
+	enum struct EPlatformerCharacterStates
 	{
-		CONNECT_STATE(ECharacterStates, Idle);
-		CONNECT_STATE(ECharacterStates, Running);
-	}
-};
+		Idle,
+		Running
+	};
+
+	struct PlatformerCharacterControllerFSM : public FSM<EPlatformerCharacterStates>
+	{
+		DEFINE_STATE(PlatformerCharacterControllerFSM, EPlatformerCharacterStates, Idle);
+		DEFINE_STATE(PlatformerCharacterControllerFSM, EPlatformerCharacterStates, Running);
+
+		PlatformerCharacterControllerFSM()
+		{
+			CONNECT_STATE(EPlatformerCharacterStates, Idle);
+			CONNECT_STATE(EPlatformerCharacterStates, Running);
+		}
+	};
+}
