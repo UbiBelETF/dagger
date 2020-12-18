@@ -9,7 +9,7 @@ namespace lab
 {
 	struct Bullet {
 		String ownership;
-		int damage = 15;
+		int damage = 10;
 		Float32 speed = 100.f;
 		Float32 speedX = 100.f;
 		Float32 speedY = 100.f;
