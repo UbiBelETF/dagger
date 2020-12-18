@@ -14,10 +14,8 @@
 
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/camera.h"
-
 #include "gameplay/team_game/tilemap.h"
-
-#include "gameplay/team_game/camera.h"
+#include "gameplay/team_game/level_generator.h"
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
 
@@ -48,27 +46,57 @@ void TeamGame::WorldSetup(Engine &engine_)
     team_game::SetupWorld(engine_);
 }
 
-namespace smiljana {
-    
-    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
-    {
-       
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
-        AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
-        
+void SetupWorldJovica(Engine& engine_)
+{
+    auto& reg = engine_.Registry();
 
-        return entity;
-    }
-    Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_)
-    {
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
-        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
+    float zPos = 1.f;
 
-        return entity;
+    {
+        TilemapLegend legend;
+        legend[' '] = &level_generator::jovica::Nothing;
+        legend['.'] = &level_generator::jovica::CreateFloor;
+        legend['_'] = &level_generator::jovica::CreateTopWall;
+        legend['-'] = &level_generator::jovica::CreateBottomWall;
+        legend['/'] = &level_generator::jovica::CreateLeftWall;
+        legend['\\'] = &level_generator::jovica::CreateRightWall;
+        legend['T'] = &level_generator::jovica::CreateTopLeftWall;
+        legend['Y'] = &level_generator::jovica::CreateTopRightWall;
+        legend['L'] = &level_generator::jovica::CreateBottomLeftWall;
+        legend['J'] = &level_generator::jovica::CreateBottomRightWall;
+        legend['q'] = &level_generator::jovica::CreateBottomLeftConcWall;
+        legend['p'] = &level_generator::jovica::CreateBottomRightConcWall;
+        legend['d'] = &level_generator::jovica::CreateTopLeftConcWall;
+        legend['b'] = &level_generator::jovica::CreateTopRightConcWall;
+        legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
+        legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
+        legend['t'] = &level_generator::jovica::CreateTopLeftConcWallS;
+        legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
+
+        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
+
+        // PLAYER
+        auto player = reg.create();
+
+        auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+        playerState.currentState = ECharacterState::Idle;
+
+        auto& playerSprite = reg.emplace<Sprite>(player);
+        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+        playerSprite.scale = { 1, 1 };
+
+        auto& playerAnimator = reg.emplace<Animator>(player);
+        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
+
+        auto& playerTransform = reg.emplace<Transform>(player);
+        playerTransform.position = { 0, 0, zPos };
+
+        auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
+        playerInput.contexts.push_back("AmongThemInput");
+
+        reg.emplace<CharacterController>(player);
+
+        reg.emplace<MovableBody>(player);
     }
 }
 namespace kosta {
@@ -98,7 +126,7 @@ namespace kosta {
 
         return entity;
     }
- }
+ }   
 
 void SetupWorldSmiljana(Engine& engine_) {
   
@@ -108,8 +136,8 @@ void SetupWorldSmiljana(Engine& engine_) {
 
         {
             TilemapLegend legend;
-            legend['.'] = &smiljana::CreateFloor;
-            legend['#'] = &smiljana::CreateWall;
+            legend['.'] = &level_generator::smiljana::CreateFloor;
+            legend['#'] = &level_generator::smiljana::CreateWall;
 
             Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
 
@@ -209,11 +237,11 @@ void SetupWorldKosta(Engine& enigne_) {
         }
     }
 }
+
 void team_game::SetupWorld(Engine &engine_)
 {
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-   // SetupWorldJovica(engine_);
-    //SetupWorldKosta(engine_);
-   
     SetupWorldSmiljana(engine_);
+    //SetupWorldKosta(engine_);
+    //SetupWorldJovica(engine_);
 }

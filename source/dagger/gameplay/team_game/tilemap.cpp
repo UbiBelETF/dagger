@@ -20,7 +20,7 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_)
 	Tilemap* tilemap = new Tilemap();
 
 	Char ch;
-	UInt32 x = 0, y = 0;
+	SInt32 x = 0, y = 0;
 
 	FileInputStream input{ request_.path };
 
@@ -29,12 +29,16 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_)
 		if (ch == '\n')
 		{
 			x = 0;
-			y++;
+			y--;
 		}
 		else
 		{
 			assert(request_.legend->contains(ch));
-			tilemap->tiles.push_back((request_.legend->at(ch))(Engine::Registry(), x, y));
+			auto entities = (request_.legend->at(ch))(Engine::Registry(), x, y);
+			for (auto entity : entities)
+			{
+				tilemap->tiles.push_back(entity);
+			}
 			x++;
 		}
 	}

@@ -21,6 +21,7 @@ enum struct ECharacterShape {
 struct CharacterController
 {
 	Float32 speed{ 70 };
+	
 };
 
 struct CharacterFSM : public FSM<ECharacterState>
