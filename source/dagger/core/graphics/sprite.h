@@ -29,6 +29,7 @@ namespace dagger
 		Vector2 pivot{ 0, 0 };							// 2
 		ColorRGBA color{ 1.0f, 1.0f, 1.0f, 1.0f };		// 4
 		Vector2 scale{ 1.0f, 1.0f };					// 2
+		Float32 rotation{ 0.0f };						// 1
 	};
 
 	struct Sprite : public SpriteData
