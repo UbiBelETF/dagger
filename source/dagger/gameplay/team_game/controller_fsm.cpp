@@ -6,8 +6,8 @@
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "core/game/transforms.h"
-#include "gravity.h"
 
+#include "gameplay/team_game/gravity.h"
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_collisions.h"
 #include "gameplay/team_game/character.h"
