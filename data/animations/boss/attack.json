@@ -24,6 +24,7 @@
 		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:19" },
 		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:20" },
 		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:21" },
-		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:22" }
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:22" },
+		{"texture-name": "spritesheets:team_game:boss:idle:boss_idle"}
 	]
 }
