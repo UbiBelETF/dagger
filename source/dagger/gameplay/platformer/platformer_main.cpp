@@ -15,6 +15,7 @@
 #include "tools/diagnostics.h"
 
 #include "gameplay/platformer/platformer_controller.h"
+#include "gameplay/platformer/character_controller_fsm.h"
 #include "gameplay/platformer/parallax.h"
 #include "gameplay/platformer/camera_focus.h"
 
@@ -65,7 +66,7 @@ struct Character
         auto& reg = Engine::Registry();
         auto entity = reg.create();
 
-        ATTACH_TO_FSM(CharacterControllerFSM, entity);
+        ATTACH_TO_FSM(PlatformerCharacterControllerFSM, entity);
 
         auto chr = Character::Get(entity);
 

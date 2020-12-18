@@ -2,21 +2,24 @@
 #include "core/core.h"
 #include "core/game/finite_state_machine.h"
 
-enum struct ECharacterState
+namespace lab
 {
-	Idle,
-	Running,
-	Shooting
-};
-
-struct CharacterFSM : public FSM<ECharacterState>
-{
-	DEFINE_STATE(CharacterFSM, ECharacterState, Idle);
-	DEFINE_STATE(CharacterFSM, ECharacterState, Running);
-
-	CharacterFSM()
+	enum struct ECharacterState
 	{
-		CONNECT_STATE(ECharacterState, Idle);
-		CONNECT_STATE(ECharacterState, Running);
-	}
-};
+		Idle,
+		Running,
+		Shooting
+	};
+
+	struct CharacterFSM : public FSM<ECharacterState>
+	{
+		DEFINE_STATE(CharacterFSM, ECharacterState, Idle);
+		DEFINE_STATE(CharacterFSM, ECharacterState, Running);
+
+		CharacterFSM()
+		{
+			CONNECT_STATE(ECharacterState, Idle);
+			CONNECT_STATE(ECharacterState, Running);
+		}
+	};
+}

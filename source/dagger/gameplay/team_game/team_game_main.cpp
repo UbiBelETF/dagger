@@ -24,9 +24,7 @@
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/enemy.h"
 #include "core/graphics/text.h"
-#include "character_controller_fsm.h"
-
-
+#include "gameplay/team_game/character_controller_fsm.h"
 
 using namespace dagger;
 using namespace lab;
