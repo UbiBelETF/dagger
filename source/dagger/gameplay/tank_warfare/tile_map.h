@@ -12,8 +12,11 @@ namespace tank_warfare
 
 	Entity CreateGrass(Registry&, SInt32, SInt32);
 	Entity CreateDirt(Registry&, SInt32, SInt32);
-	Entity CreateBuilding(Registry&, SInt32, SInt32);
+	Entity CreateBiggestBuilding(Registry&, SInt32, SInt32);
+	Entity CreateBankBuilding(Registry&, SInt32, SInt32);
 	Entity CreateSmallestBuilding(Registry& reg_, SInt32 x_, SInt32 y_);
+	Entity CreateShopBuilding(Registry& reg, SInt32 x_, SInt32 y_);
+	Entity CreateBuilding(Registry& reg, SInt32 x_, SInt32 y_);
 	Entity CreateGroupTrees(Registry& reg_, SInt32 x_, SInt32 y_);
 	Entity CreateTree(Registry& reg_, SInt32 x_, SInt32 y_);
 	Entity CreateMediumBuilding(Registry& reg_, SInt32 x_, SInt32 y_);

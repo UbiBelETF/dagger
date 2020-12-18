@@ -23,7 +23,7 @@ using namespace tank_warfare;
 void TankWarfare::GameplaySystemsSetup(Engine &engine_)
 {
 	engine_.AddSystem<TilemapSystem>();
- //   engine_.AddSystem<SimpleCollisionsSystem>();
+  //  engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<TankControllerSystem>();
   //  engine_.AddSystem<TankCollisionSystem>();
     engine_.AddSystem<CameraCenterSystem>();
@@ -81,10 +81,14 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     auto& reg = Engine::Registry();
 	Tilemap::legend['#'] = &CreateDirt;
 	Tilemap::legend['.'] = &CreateGrass;
+	Tilemap::legend['-'] = &CreateBuilding;
+	Tilemap::legend['$'] = &CreateBankBuilding;
+	Tilemap::legend['B'] = &CreateBiggestBuilding;
+	Tilemap::legend['S'] = &CreateShopBuilding;
 	Tilemap::legend['@'] = &CreateSmallestBuilding;
+	Tilemap::legend['m'] = &CreateMediumBuilding;
 	Tilemap::legend['t'] = &CreateTree;
 	Tilemap::legend['T'] = &CreateGroupTrees;
-	Tilemap::legend['m'] = &CreateMediumBuilding;
 	Tilemap::legend['w'] = &CreateHorizontalWall;
 	Tilemap::legend['W'] = &CreateVerticallWall;
 	Tilemap::legend['s'] = &CreateStorage;
@@ -108,41 +112,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
 			Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ entry.path().string(), &Tilemap::legend });
 		}
 	}
-  /*for (int i = -10; i < 10; i++)
-    {
-        for (int j = -10; j < 10; j++)
-        {
-            auto entity = reg.create();
-            auto& sprite = reg.emplace<Sprite>(entity);
-            AssignSprite(sprite, fmt::format("jovanovici:tile_map:tile_grass{}", 1 + (rand() % 3)));
-            sprite.position = { i * 48, j * 48, 5 };
-        }
-    }
-	*/
-	/*
-    //building1
-    auto entity1 = reg.create();
-    auto& sprite1 = reg.emplace<Sprite>(entity1);
-    auto& transform1 = reg.emplace<Transform>(entity1);
-    auto& col1 = reg.emplace<SimpleCollision>(entity1);
-    AssignSprite(sprite1, "jovanovici:building:building3c");
-    transform1.position = { 100, 0, 2 };
-    col1.size = sprite1.size;
-    col1.size.x -= 15;
-    col1.size.y -= 35;
-
-    //building2
-    auto entity3 = reg.create();
-    auto& sprite3 = reg.emplace<Sprite>(entity3);
-    auto& transform3 = reg.emplace<Transform>(entity3);
-    auto& col3 = reg.emplace<SimpleCollision>(entity3);
-    AssignSprite(sprite3, "jovanovici:building:building3c");
-    transform3.position = { 75, 75, 4 };
-    col3.size = sprite3.size;
-    col3.size.x -= 15;
-    col3.size.y -= 35;
-    */
-    //tank1
+	//tank1
     auto entity = reg.create();
     auto& sprite = reg.emplace<Sprite>(entity);
     auto& anim = reg.emplace<Animator>(entity);
@@ -152,7 +122,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     auto& tank = reg.emplace<TankCharacter>(entity);
 	auto& cam = reg.emplace<CameraCenter>(entity);
     sprite.scale = { -1, 1 };
-    transform.position = { 35, 0, 1 };
+    transform.position = { 160, 0, 1 };
     collision.size = sprite.size;
     input.contexts.push_back("tank1");
     AssignSprite(sprite, "jovanovici:tank:tank3_side");
@@ -167,7 +137,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     auto& tank2 = reg.emplace<TankCharacter>(entity2);
     auto& cam2 = reg.emplace<CameraCenter>(entity2);
     sprite2.scale = { -1, 1 };
-    transform2.position = { -35, 0, 1 };
+    transform2.position = { -160, 0, 1 };
     collision2.size = sprite2.size;
     input2.contexts.push_back("tank2");
     AssignSprite(sprite2, "jovanovici:tank:tank3_side");
