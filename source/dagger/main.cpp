@@ -1,7 +1,7 @@
 
 #include "core/engine.h"
 #include "gameplay/ping_pong/ping_pong_main.h"
-#include "gameplay/platformer/platformer_main.h"
+//#include "gameplay/platformer/platformer_main.h"
 #include "gameplay/racing/racing_main.h"
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/tiles_example/tiles_example_main.h"
