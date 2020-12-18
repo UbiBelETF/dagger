@@ -12,11 +12,11 @@
 
 void lab::EnemySystem::Run()
 {
-	auto view = Engine::Registry().view<Transform, Bandit, Sprite, SimpleCollision>();
+	auto view = Engine::Registry().view<Transform, Skeleton, Sprite, SimpleCollision>();
 	for (auto entity : view)
 	{
 		auto& t = view.get<Transform>(entity);
-		auto& bandit = view.get<Bandit>(entity);
+		auto& skeleton = view.get<Skeleton>(entity);
 		auto& sprite = view.get<Sprite>(entity);
 		auto& col = view.get<SimpleCollision>(entity);
 
@@ -31,27 +31,29 @@ void lab::EnemySystem::Run()
 			playerPosition.y *= -1;
 		}
 
-		if (bandit.ID == horizontal)
+		if (skeleton.type == horizontal)
 		{
-			if (col.colided && reg.has<CollideW>(col.colidedWith))
+			if (col.colided && !reg.has<Bullet>(col.colidedWith))
 			{
 					col.colided = false;
-					bandit.speed *= -1;
+					skeleton.speed *= -1;
+					sprite.scale.x *= -1;
 			}
-			t.position.x -= bandit.speed * Engine::DeltaTime();
+			t.position.x += skeleton.speed * Engine::DeltaTime();
 		}
 
-		if (bandit.ID == vertical)
+		if (skeleton.type == vertical)
 		{
-			if (col.colided && reg.has<CollideW>(col.colidedWith))
+			if (col.colided && !reg.has<Bullet>(col.colidedWith))
 			{
 				col.colided = false;
-				bandit.speed *= -1;
+				skeleton.speed *= -1;
+				sprite.scale *= -1;
 			}
-			t.position.y -= bandit.speed * Engine::DeltaTime();
+			t.position.y -= skeleton.speed * Engine::DeltaTime();
 		}
 
-		if (bandit.ID == follower)
+		if (skeleton.type == follower)
 		{
 			Vector2 directions = { 1, 1 };
 			if (playerPosition.x < t.position.x)
@@ -69,15 +71,15 @@ void lab::EnemySystem::Run()
 			Float32 ratio = distanceY / distanceX;
 			ratio *= (ratio > 0) ? 1 : -1;
 
-			Float32 speedXIntensity = sqrt((bandit.speed-2) * (bandit.speed - 2) / (1 + ratio * ratio));
-			bandit.speedX = speedXIntensity * directions.x;
-			bandit.speedY = speedXIntensity * ratio * directions.y;
+			Float32 speedXIntensity = sqrt((skeleton.speed-2) * (skeleton.speed - 2) / (1 + ratio * ratio));
+			skeleton.speedX = speedXIntensity * directions.x;
+			skeleton.speedY = speedXIntensity * ratio * directions.y;
 
-			t.position.x += bandit.speedX * Engine::DeltaTime();
-			t.position.y += bandit.speedY * Engine::DeltaTime();
+			t.position.x += skeleton.speedX * Engine::DeltaTime();
+			t.position.y += skeleton.speedY * Engine::DeltaTime();
 		}
 
-		if (bandit.health <= 0)
+		if (skeleton.health <= 0)
 		{
 			reg.remove_all(entity);
 		}
@@ -90,20 +92,19 @@ void lab::EnemySystem::Run()
 				if (entity == col.colidedWith)
 				{
 					Bullet bullet = view2.get<Bullet>(entity);
-					if (bullet.ownership != "bandit")
-						bandit.health -= bullet.damage;
+					skeleton.health -= bullet.damage;
 					col.colided = false;
 				}
 			}
 		}
 
-		if (bandit.cooldown <= 0)
+		if (skeleton.cooldown <= 0)
 		{
 			CreateBullet(t.position, playerPosition);
       
-			bandit.cooldown = bandit.maxCooldown;
+			skeleton.cooldown = skeleton.maxCooldown;
 		}
 		else
-			bandit.cooldown--;
+			skeleton.cooldown--;
 	}
 }

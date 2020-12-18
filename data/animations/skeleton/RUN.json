@@ -1,0 +1,15 @@
+{
+	"animation-name": "skeleton:run",
+	"animation-length-ms": 500,
+	"animation-frames": 
+	[
+		{ "texture-name": "skeleton:run:run1", "relative-length": 1 },
+		{ "texture-name": "skeleton:run:run2", "relative-length": 1 },
+		{ "texture-name": "skeleton:run:run3", "relative-length": 1 },
+		{ "texture-name": "skeleton:run:run4", "relative-length": 1 },
+		{ "texture-name": "skeleton:run:run5", "relative-length": 1 },
+		{ "texture-name": "skeleton:run:run6", "relative-length": 1 },
+		{ "texture-name": "skeleton:run:run7", "relative-length": 1 },
+		{ "texture-name": "skeleton:run:run8", "relative-length": 1 }
+	]
+}

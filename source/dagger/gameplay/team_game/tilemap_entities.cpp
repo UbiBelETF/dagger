@@ -9,7 +9,7 @@
 using namespace dagger;
 using namespace lab;
 
-TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollision_,int roomID_,float b_,String anim_ ,Bool enemy_)
+TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollision_,int roomID_,float b_,String anim_ ,UInt32 enemy_)
 {
     return[name_,depth_,includeCollision_ ,roomID_,b_,anim_,enemy_](Registry& reg_, UInt32 x_, UInt32 y_)->Entity
     {
@@ -24,7 +24,14 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         if(includeCollision_)
         {
             auto& col=reg_.emplace<SimpleCollision>(entity);
-            col.size={sprite.size.x/2,sprite.size.y/2};  
+            if (enemy_)
+            {
+                col.size = { 18, 18 };
+                col.pivot.y += 0.35f;
+                col.pivot.x += 0.1;
+            }
+            else
+                col.size={sprite.size.x/2,sprite.size.y/2};  
         }
         auto& trn=reg_.emplace<Transform>(entity);
         trn.position={ x_ * 16-125.0f, y_ * 16-b_, depth_ };
@@ -41,7 +48,13 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         }
         if(enemy_)
         {
-            auto& bandit = reg_.emplace<Bandit>(entity);
+            auto& skeleton = reg_.emplace<Skeleton>(entity);
+            switch (enemy_)
+            {
+            case 1: skeleton.type = horizontal; break;
+            case 2: skeleton.type = vertical; break;
+            default: skeleton.type = follower; break;
+            }
         }
 
         return entity;

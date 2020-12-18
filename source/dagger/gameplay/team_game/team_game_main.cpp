@@ -121,23 +121,25 @@ struct Player
         chr.currentLvl.addons[2]="tilemaps/lab/addons_room2.map";
 
 
-        chr.currentLvl.legend['#'] = CreateObjectFunction("spritesheets:lab:wall_2",30,true,-1,100.0f,"");//CreateWallTop
-        chr.currentLvl.legend['='] = CreateObjectFunction("spritesheets:lab:wall_5",30,true,-1,100.0f,"");//CreateWallUpPart;
-        chr.currentLvl.legend['-'] = CreateObjectFunction("spritesheets:lab:wall_top_second_left",30,true,-1,100.0f,"");//CreateWallDownPart;
-        chr.currentLvl.legend['.'] = CreateObjectFunction("create_floor",30,false,-1,100.0f,"");
-        chr.currentLvl.legend['|'] = CreateObjectFunction("spritesheets:lab:wall_6",30,true,-1,100.0f,"");//CreateSideWallRight;  
-        chr.currentLvl.legend[':'] = CreateObjectFunction("spritesheets:lab:wall_4",30,true,-1,100.0f,"");//CreateSideWallLeft;
-        chr.currentLvl.legend['1'] = CreateObjectFunction("spritesheets:lab:wall_1",30,true,-1,100.0f,"");//CreateWall1;
-        chr.currentLvl.legend['3'] = CreateObjectFunction("spritesheets:lab:wall_3",30,true,-1,100.0f,"");//CreateWall3;
-        chr.currentLvl.legend['0'] = CreateObjectFunction("",30,false,-1,100.0f,"");//Empty;
-        chr.currentLvl.legend['F'] = CreateObjectFunction("lab:door:lab anims_Animation 5_00",30,true,2,107.1f,"lab:door");//Door;
-        chr.currentLvl.legend['Q'] = CreateObjectFunction("spritesheets:lab:wall_bottom_1",30,true,-1,100.0f,"");//CreateWallBottom1;
-        chr.currentLvl.legend['W'] = CreateObjectFunction("spritesheets:lab:wall_bottom_6",30,true,-1,100.0f,"");//CreateWallBottom6;
-        chr.currentLvl.legend['8'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,1,100.0f,"");//Hall
-        chr.currentLvl.legend['Z'] = CreateObjectFunction("spritesheets:lab:wall_bottom_5_blank",30,false,-1,100.0f,""); //BlankWall
-        chr.currentLvl.legend['9'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,0,100.0f,"");//MainRoom
-        chr.currentLvl.legend['T'] = CreateObjectFunction("spritesheets:lab:tank_classic",20,true,-1,100.0f,"");
-        chr.currentLvl.legend['P'] = CreateObjectFunction("Bandit",20,true,-1,100.0f,"",true);//enemy
+        chr.currentLvl.legend['#'] = CreateObjectFunction("spritesheets:lab:wall_2",30,true,-1,100.0f,"",0);//CreateWallTop
+        chr.currentLvl.legend['='] = CreateObjectFunction("spritesheets:lab:wall_5",30,true,-1,100.0f,"",0);//CreateWallUpPart;
+        chr.currentLvl.legend['-'] = CreateObjectFunction("spritesheets:lab:wall_top_second_left",30,true,-1,100.0f,"",0);//CreateWallDownPart;
+        chr.currentLvl.legend['.'] = CreateObjectFunction("create_floor",30,false,-1,100.0f,"",0);
+        chr.currentLvl.legend['|'] = CreateObjectFunction("spritesheets:lab:wall_6",30,true,-1,100.0f,"",0);//CreateSideWallRight;  
+        chr.currentLvl.legend[':'] = CreateObjectFunction("spritesheets:lab:wall_4",30,true,-1,100.0f,"",0);//CreateSideWallLeft;
+        chr.currentLvl.legend['1'] = CreateObjectFunction("spritesheets:lab:wall_1",30,true,-1,100.0f,"",0);//CreateWall1;
+        chr.currentLvl.legend['3'] = CreateObjectFunction("spritesheets:lab:wall_3",30,true,-1,100.0f,"",0);//CreateWall3;
+        chr.currentLvl.legend['0'] = CreateObjectFunction("",30,false,-1,100.0f,"",0);//Empty;
+        chr.currentLvl.legend['F'] = CreateObjectFunction("lab:door:lab anims_Animation 5_00",30,true,2,107.1f,"lab:door",0);//Door;
+        chr.currentLvl.legend['Q'] = CreateObjectFunction("spritesheets:lab:wall_bottom_1",30,true,-1,100.0f,"",0);//CreateWallBottom1;
+        chr.currentLvl.legend['W'] = CreateObjectFunction("spritesheets:lab:wall_bottom_6",30,true,-1,100.0f,"",0);//CreateWallBottom6;
+        chr.currentLvl.legend['8'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,1,100.0f,"",0);//Hall
+        chr.currentLvl.legend['Z'] = CreateObjectFunction("spritesheets:lab:wall_bottom_5_blank",30,false,-1,100.0f,"",0); //BlankWall
+        chr.currentLvl.legend['9'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,0,100.0f,"",0);//MainRoom
+        chr.currentLvl.legend['T'] = CreateObjectFunction("spritesheets:lab:tank_classic",20,true,-1,100.0f,"",0);
+        chr.currentLvl.legend['H'] = CreateObjectFunction("Skeleton",20,true,-1,100.0f,"skeleton:run",1);//enemy horizontal
+        chr.currentLvl.legend['V'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run", 2);//enemy vertical
+        chr.currentLvl.legend['L'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run", 3);//enemy follow
 
         //sprite.color = ColorRGBA(1, 0.5f, 1, 1);
         TilemapLegend legend=chr.currentLvl.legend;
