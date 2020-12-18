@@ -15,6 +15,10 @@ namespace lab
 		Float32 speedY = 100.f;
 	};
 
+	struct Gun {
+		int ID;
+	};
+
 	class ShootingSystem
 		: public System
 	{

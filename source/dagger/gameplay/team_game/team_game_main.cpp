@@ -87,7 +87,7 @@ struct Player
         auto chr = Player::Get(entity);
 
         chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { position_, 0.0f };
+        chr.sprite.position = { position_, 10 };
         chr.sprite.color = { color_, 1.0f };
 
         AssignSprite(chr.sprite, "main_character:idle:idle1");
@@ -102,7 +102,14 @@ struct Player
         {
             chr.input.contexts.push_back(input_);
         }
-           
+
+        auto gunEntity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(gunEntity);
+        sprite.scale = { 0.9f, 0.9f };
+        AssignSprite(sprite, "Gun");
+        auto& transform = reg.emplace<Transform>(gunEntity);
+        transform.position = { position_, 0.0f };
+        auto& gun = reg.emplace<Gun>(gunEntity);
 
         chr.character.speed = 50;
         chr.currentLvl.id=0;
@@ -150,7 +157,7 @@ struct Player
 void lab::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
-       Vector2 scale(1, 1);              
+       Vector2 scale(1, 1);    
 
      auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
      //Engine::Registry().destroy(mainChar.entity);
