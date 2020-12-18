@@ -75,6 +75,8 @@ void lab::EnemySystem::Run()
 			skeleton.speedX = speedXIntensity * directions.x;
 			skeleton.speedY = speedXIntensity * ratio * directions.y;
 
+			sprite.scale.x = directions.x == 1 ? 1 : -1;
+
 			t.position.x += skeleton.speedX * Engine::DeltaTime();
 			t.position.y += skeleton.speedY * Engine::DeltaTime();
 		}
