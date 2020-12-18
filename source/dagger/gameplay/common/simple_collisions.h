@@ -2,15 +2,26 @@
 #include "core/system.h"
 #include "core/core.h"
 
+
 using namespace dagger;
+
+enum class EHitbox {
+    Rectangular = 1,
+    Circular = 2,
+};
 
 struct SimpleCollision
 {
-    Vector2 size;
+    Vector2 size; // If the hitbox is rectangular, size represents height and width, if circular, diameter and angle of coverage (currently unused)
     Vector2 pivot {-0.5f, -0.5f};
 
+    //Float32 startAngleIfCircular; Possible future upgrade; hitboxes not being full circles
+
+    EHitbox shape = EHitbox::Rectangular;
+
     bool colided = false;
-    entt::entity colidedWith;
+    Entity colidedWith; // Kept for compatibility with the current code
+    Sequence<Entity> colisions = {}; // List of all entities collision happened with
 
     bool IsCollided(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_);
 

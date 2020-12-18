@@ -3,6 +3,8 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
+#include <math.h>
+
 using namespace dagger;
 
 void SimpleCollisionsSystem::Run()
@@ -10,6 +12,16 @@ void SimpleCollisionsSystem::Run()
     auto view = Engine::Registry().view<SimpleCollision, Transform>();
 
     auto it = view.begin();
+    while (it != view.end()) // Reset previous collision info
+    {
+        auto &coll = view.get<SimpleCollision>(*it);
+        coll.colided = false;
+        coll.colisions.clear();
+
+        it++;
+    }
+
+    it = view.begin();
     while(it != view.end())
     {
         auto &collision = view.get<SimpleCollision>(*it);
@@ -27,9 +39,11 @@ void SimpleCollisionsSystem::Run()
             {
                 collision.colided = true;
                 collision.colidedWith = *it2;
+                collision.colisions.emplace_back(*it2);
 
                 col.colided = true;
                 col.colidedWith = *it;
+                col.colisions.emplace_back(*it);
             }
             it2++;
         }
@@ -39,20 +53,60 @@ void SimpleCollisionsSystem::Run()
 
 // SimpleCollision
 
-bool SimpleCollision::IsCollided(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_)
+bool SimpleCollision::IsCollided(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_) // A bit more complicated now circles are in play
 {
-    Vector2 p(pos_.x + pivot.x * size.x, pos_.y + pivot.y * size.y);
-    Vector2 p2(posOther_.x + other_.pivot.x * other_.size.x, posOther_.y + other_.pivot.y * other_.size.y);
+    Float32 maxDistanceFromCenters = 0; // Sum of max distances from the center to the egde of the object; if the object is circular that max distance 
+                                        // equals the radius of the circle; if rectangular, it equals half the lenght of the diagonal (distance to the corner)
+    // Info about this
+    Vector2 p1;
+    Vector2 p1Size;
+    p1.x = pos_.x + pivot.x * size.x;
+    p1Size.x = size.x;
+    if (shape == EHitbox::Rectangular) {
+        p1.y = pos_.y + pivot.y * size.y;
+        p1Size.y = size.y;
+        
+        maxDistanceFromCenters += sqrt(pow(size.x / 2.0f, 2) + pow(size.y / 2.0f, 2));
+    }
+    else {
+        p1.y = pos_.y + pivot.x * size.x; // size.x is the diameter
+        p1Size.y = size.x;
 
-    if (p.x < p2.x + other_.size.x &&
-        p.x + size.x > p2.x &&
-        p.y < p2.y + other_.size.y &&
-        p.y + size.y > p2.y)
-    {
-        return true;
+        maxDistanceFromCenters += size.x / 2.0f;
     }
 
-    return false;
+    // Info about other
+    Vector2 p2;
+    Vector2 p2Size;
+    p2.x = posOther_.x + other_.pivot.x * other_.size.x;
+    p2Size.x = other_.size.x;
+    if (other_.shape == EHitbox::Rectangular) {
+        p2.y = posOther_.y + other_.pivot.y * other_.size.y;
+        p2Size.y = other_.size.y;
+
+        maxDistanceFromCenters += sqrt(pow(other_.size.x / 2.0f, 2) + pow(other_.size.y / 2.0f, 2));
+    }
+    else {
+        p2.y = posOther_.y + other_.pivot.x * other_.size.x; // size.x is the diameter
+        p2Size.y = other_.size.x;
+
+        maxDistanceFromCenters += other_.size.x / 2.0f;
+    }
+
+    Float32 distanceFromCenters = sqrt(pow(posOther_.x - pos_.x, 2) + pow(posOther_.y - pos_.y, 2));
+
+    if (distanceFromCenters > maxDistanceFromCenters) return false; // If the current distance is greater than the max distance at which the collision 
+    else {                                                          // happens, collision won't happen regardless of the object positioning
+        if (p1.x < p2.x + p2Size.x &&                               // This allows for accurate aproximation of the circle with a rectangle
+            p1.x + p1Size.x > p2.x &&                               // because the cases where a rectangle would colide with an object but  
+            p1.y < p2.y + p2Size.y &&                               // a circle wouldn't are excluded because distance is far to great for 
+            p1.y + p1Size.y > p2.y)                                 // collision to happen
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 Vector2 SimpleCollision::GetCollisionSides(const Vector3& pos_, const SimpleCollision& other_, const Vector3& posOther_)

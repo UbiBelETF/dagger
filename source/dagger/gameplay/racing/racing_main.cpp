@@ -15,6 +15,8 @@
 #include "gameplay/racing/racing_player_car.h"
 #include "gameplay/racing/racing_car.h"
 
+#include <random>
+
 using namespace dagger;
 using namespace racing_game;
 
@@ -92,11 +94,45 @@ void racing_game::SetupWorld(Engine &engine_)
 
     zPos -= 0.5f;
 
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> randomNumberOfCars(0, 2);
+    std::uniform_int_distribution<std::mt19937::result_type> randomSpeed(0, 4);
+    // Fix for game always starting at the same state due to rand() function not being random
+
+    // Cameras
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "Racing:left_camera");
+        float ratio = sprite.size.y / sprite.size.x;
+        sprite.size = { 10 * TileSize, 10 * TileSize * ratio };
+
+        auto& transform = reg.emplace<Transform>(entity);
+
+        RacingGameFieldSettings fieldSettings;
+        if (auto* ptr = Engine::GetDefaultResource<RacingGameFieldSettings>())
+        {
+            fieldSettings = *ptr;
+        }
+        Float32 boarderX = fieldSettings.GetXBoarder();
+        Float32 boarderY = fieldSettings.GetYBoarder();
+
+        transform.position = { -boarderX - TileSize/2.0f, boarderY-sprite.size.y/2, 1.5f };
+
+        auto& camera = reg.emplace<RacingCar>(entity);
+        camera.speed = TileSize * (randomSpeed(rng) + 3);
+
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size.x = sprite.size.x;
+        col.shape = EHitbox::Circular;
+    }
+
     // player
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "Racing:police-car-bmw-z4");
+        AssignSprite(sprite, "Racing:red_nsx"); // Because it's a racing game, you need a race car :)
         float ratio = sprite.size.y / sprite.size.x;
         sprite.size = { 2 * TileSize, 2 * TileSize * ratio };
 
@@ -115,7 +151,8 @@ void racing_game::SetupWorld(Engine &engine_)
     // collisions for road bounds
 
     // other cars
-    int amountOfCars = rand() % 3 + 3;
+    /*
+    int amountOfCars = randomNumberOfCars(rng) + 3;  
     for (int i = 0; i < amountOfCars; i++)
     {
         auto entity = reg.create();
@@ -129,9 +166,9 @@ void racing_game::SetupWorld(Engine &engine_)
         transform.position = { TileSize * (3 * (i+1) - Width/2), TileSize * (-i * 2 + Heigh/2), zPos };
 
         auto& racingCar = reg.emplace<RacingCar>(entity);
-        racingCar.speed = TileSize * (rand() % 5 + 3);
+        racingCar.speed = TileSize * (randomSpeed(rng) + 3);
 
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
-    }
+    }*/
 }
