@@ -7,6 +7,7 @@
 #include <gameplay/team_game/team_game_main.h>
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/collisions.h"
+#include "gameplay/team_game/physics.h"
 
 
 using namespace dagger;
@@ -43,7 +44,7 @@ void GameManagerSystem::LoadBackDrop()
 void GameManagerSystem::LoadPlatforms()
 {
     String filePath = fmt::format("levels/platforms/platforms_{}.txt", currentLevel);
-    LoadTextures(filePath, true);
+    LoadTextures(filePath, true,true);
 }
 
 void GameManagerSystem::LoadTraps()
@@ -52,7 +53,7 @@ void GameManagerSystem::LoadTraps()
     LoadTextures(filePath, true);
 }
 
-void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
+void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_,Bool addPhysics_)
 {
 
     FilePath path{ filePath_ };
@@ -98,6 +99,12 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
                     col.size.x = spriteSize.x;
                     col.size.y = spriteSize.y;
                     
+                }
+                if (addPhysics_)
+                {
+                    auto& p = reg.emplace<Physics>(block);
+                    p.nonStatic = false;
+
                 }
             }
         }

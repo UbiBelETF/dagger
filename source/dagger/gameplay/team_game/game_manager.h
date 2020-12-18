@@ -27,7 +27,7 @@ namespace team_game
         void Run() override;
 
         void LoadNextLevel();
-        void LoadTextures(String filePath_, Bool addCollision_);
+        void LoadTextures(String filePath_, Bool addCollision_,bool addPhysics_=false);
         void LoadBackDrop();
         void LoadPlatforms();
         void LoadTraps();
