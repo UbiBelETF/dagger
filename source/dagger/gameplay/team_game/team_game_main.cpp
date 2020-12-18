@@ -29,7 +29,6 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<GameManagerSystem>();
-    engine_.AddSystem<CharacterControllerSystem>();
     //engine_.AddSystem<TeamGamePlayerInputSystem>();    
     engine_.AddSystem<GravitySystem>();
     engine_.AddSystem<CollisionSystem>();
