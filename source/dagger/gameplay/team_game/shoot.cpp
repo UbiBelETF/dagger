@@ -1,11 +1,16 @@
 #include "shoot.h"
 
 #include "core/engine.h"
+#include "core/input/inputs.h"
 #include "core/game/transforms.h"
+#include "gameplay/team_game/player_controller_fsm.h"
 #include "gameplay/common/simple_collisions.h"
 #include <math.h>
 
 #include "core/graphics/sprite.h"
+#include "core/graphics/animation.h"
+
+
 
 
 using namespace dagger;
@@ -40,18 +45,18 @@ void lab::CreateBullet(Vector2 position, Vector2 target)
 	bullet.speedY = speedXIntensity * ratio * directions.y;
 
 	auto& sprite = reg.emplace<Sprite>(entity);
-	AssignSprite(sprite, "Blob");
-	sprite.size = { 10.f, 10.f };
+	AssignSprite(sprite, "Bullet");
+	sprite.size = { 30.f, 30.f };
 
 	auto& transform = reg.emplace<Transform>(entity);
-	Float32 distance = sqrt((20 * 20) / (1 + ratio * ratio));
+	Float32 distance = sqrt((15 * 15) / (1 + ratio * ratio));
 	transform.position.x = position.x + distance * directions.x;
 	transform.position.y = position.y + distance * ratio * directions.y;
 	transform.position.z = 0.0f;
 
 	auto& collision = reg.emplace<SimpleCollision>(entity);
-	collision.size.x = sprite.size.x / 10;
-	collision.size.y = sprite.size.y / 10;
+	collision.size.x = 1;
+	collision.size.y = 1;
 }
 
 void lab::ShootingSystem::Run()
@@ -75,5 +80,20 @@ void lab::ShootingSystem::Run()
 				Engine::Registry().remove_all(entity);
 			}
 		}
+	}
+
+	auto gunView = Engine::Registry().view<Transform, Sprite, Gun>();
+	for (auto entity1 : gunView)
+	{
+		Vector2 playerPosition;
+		auto playerView = Engine::Registry().view<Transform, Sprite, Animator, InputReceiver, PlayerCharacter, NextLvl, SimpleCollision>();
+		for (auto entity2 : playerView)
+		{
+			auto& t = Engine::Registry().get<Transform>(entity2);
+			playerPosition.x = t.position.x;
+			playerPosition.y = t.position.y;
+		}
+		auto& gunT = Engine::Registry().get<Transform>(entity1);
+		gunT.position = { playerPosition , 0.0f };
 	}
 }
