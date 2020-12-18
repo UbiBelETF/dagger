@@ -22,6 +22,7 @@
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/tilemaps.h"
 
 
@@ -98,6 +99,12 @@ struct PlightCharacter
         crosshairSprite.position.y = chr.sprite.position.y;
         crosshairSprite.position.z = chr.sprite.position.z;
 
+        ProjectileSpawnerSettings settings;
+        settings.projectileDamage = 5.f;
+        settings.projectileSpeed = 175.f;
+        settings.pSpriteName = "Plight:projectiles:Arrow_1";
+
+        ProjectileSystem::SetupProjectileSystem(entity, settings);
 
         return chr;
     }
@@ -111,6 +118,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
     engine_.AddSystem<TilemapSystem>();
+    engine_.AddSystem<ProjectileSystem>();
 }
 
 void Plight::WorldSetup(Engine &engine_)

@@ -28,6 +28,11 @@
       ]
     },
     {
+      "command-name": "fire",
+      "trigger": "KeyL",
+      "event": "Released"
+    },
+    {
       "command-name": "use",
       "trigger": "KeyO"
     }
