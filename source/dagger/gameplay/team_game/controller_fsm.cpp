@@ -35,17 +35,6 @@ void team_game::CharacterControllerFSM::Idle::Run(CharacterControllerFSM::StateC
 	{
 		GoTo(ECharacterStates::Jumping, state_);
 	}
-
-
-	auto& collider = Engine::Registry().get<Collider>(state_.entity);
-	if (collider.canGoDown)
-	{
-		Logger::trace("Can");
-	}
-	else
-	{
-		Logger::trace("Can not");
-	}
 }
 
 
@@ -114,14 +103,6 @@ void team_game::CharacterControllerFSM::Jumping::Run(CharacterControllerFSM::Sta
 		transform.position.x += character.speed * sprite.scale.x * Engine::DeltaTime();
 	}
 
-	if (collider.canGoDown)
-	{
-		Logger::trace("Can");
-	}
-	else
-	{
-		Logger::trace("Can not");
-	}
 	if (!collider.canGoDown)
 	{
 		GoTo(ECharacterStates::Idle, state_);
