@@ -105,14 +105,14 @@ void tank_warfare::AddCollectible(bool isPower_)
 	auto& sprite = reg.emplace<Sprite>(entity);
 	auto& anim = reg.emplace<Animator>(entity);
 
-	if (isPower_) 
+	if (isPower_)
 	{
 		int collType = 1 + rand() % 4;
 		AssignSprite(sprite, fmt::format("jovanovici:powerup:power{}", collType));
 		AnimatorPlay(anim, fmt::format("powerup:power{}", collType));
 
 		auto& collectible = reg.emplace<Collectible>(entity);
-		collectible.collType = static_cast<ECollectibleType>(4);
+		collectible.collType = static_cast<ECollectibleType>(collType);
 	}
 	else
 	{
@@ -128,7 +128,6 @@ void tank_warfare::AddCollectible(bool isPower_)
 	int i = rand() % 20 - 10;
 	int j = rand() % 20 - 10;
 	transform.position = { 48 * i, 48 * j, 2 };
-	
+
 	auto& col = reg.emplace<SimpleCollision>(entity);
-	col.size = sprite.size;
 }
