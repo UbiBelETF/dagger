@@ -1,0 +1,19 @@
+{
+	"animation-name": "main_character:death",
+	"animation-length-ms": 2200,
+	"animation-frames": 
+	[
+		{ "texture-name": "main_character:death:death1", "relative-length": 3 },
+		{ "texture-name": "main_character:death:death2", "relative-length": 2 },
+		{ "texture-name": "main_character:death:death3" },
+		{ "texture-name": "main_character:death:death4" },
+		{ "texture-name": "main_character:death:death5" },
+		{ "texture-name": "main_character:death:death6" },
+		{ "texture-name": "main_character:death:death7" },
+		{ "texture-name": "main_character:death:death8" },
+		{ "texture-name": "main_character:death:death9" },
+		{ "texture-name": "main_character:death:death10", "relative-length": 5 },
+		{ "texture-name": "main_character:death:death11" },
+		{ "texture-name": "main_character:death:death12" }
+	]
+}

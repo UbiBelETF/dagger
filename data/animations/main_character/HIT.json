@@ -1,0 +1,9 @@
+{
+	"animation-name": "main_character:hit",
+	"animation-length-ms": 100,
+	"animation-frames": 
+	[
+		{ "texture-name": "main_character:hit:hit1" },
+		{ "texture-name": "main_character:hit:hit2" } 
+	]
+}
