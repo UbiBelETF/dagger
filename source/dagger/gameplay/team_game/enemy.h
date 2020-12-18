@@ -14,8 +14,8 @@ namespace lab
 		Float32 speed = 10.f;
 		Float32 speedX = 10.f;
 		Float32 speedY = 10.f;
-		int cooldown = 200;
-		int maxCooldown = 200;
+		int cooldown = 120;
+		int maxCooldown = 120;
 		int health = 100;
 		Float32 timeWounded = 100;
 	};

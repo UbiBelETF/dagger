@@ -35,7 +35,7 @@ void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
             auto cursorInWindow = dagger::Input::CursorPositionInWorld();
             Vector2 position = { transform.position.x, transform.position.y };
             Vector2 cursor = { cursorInWindow.x, cursorInWindow.y };
-            lab::CreateBullet(position, cursor);
+            lab::CreateBullet(position, cursor, player);
             character.cooldown = character.maxCooldown;
         }
     }
@@ -90,7 +90,7 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
             auto cursorInWindow = dagger::Input::CursorPositionInWorld();
             Vector2 position = { transform.position.x, transform.position.y };
             Vector2 cursor = { cursorInWindow.x, cursorInWindow.y };
-            lab::CreateBullet(position, cursor);
+            lab::CreateBullet(position, cursor, player);
             character.cooldown = character.maxCooldown;
         }
     }
