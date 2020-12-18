@@ -13,13 +13,14 @@
 
 void lab::EnemySystem::Run()
 {
-	auto view = Engine::Registry().view<Transform, Skeleton, Sprite, SimpleCollision>();
+	auto view = Engine::Registry().view<Transform, Skeleton, Sprite, SimpleCollision, Animator>();
 	for (auto entity : view)
 	{
 		auto& t = view.get<Transform>(entity);
 		auto& skeleton = view.get<Skeleton>(entity);
 		auto& sprite = view.get<Sprite>(entity);
 		auto& col = view.get<SimpleCollision>(entity);
+		auto& animator = view.get<Animator>(entity);
 
 		auto& reg = Engine::Instance().Registry();
 
@@ -40,7 +41,8 @@ void lab::EnemySystem::Run()
 					skeleton.speed *= -1;
 					sprite.scale.x *= -1;
 			}
-			t.position.x += skeleton.speed * Engine::DeltaTime();
+			if (skeleton.health > 0)
+				t.position.x += skeleton.speed * Engine::DeltaTime();
 		}
 
 		if (skeleton.type == vertical)
@@ -50,7 +52,8 @@ void lab::EnemySystem::Run()
 				col.colided = false;
 				skeleton.speed *= -1;
 			}
-			t.position.y -= skeleton.speed * Engine::DeltaTime();
+			if (skeleton.health > 0)
+				t.position.y -= skeleton.speed * Engine::DeltaTime();
 		}
 
 		if (skeleton.type == follower)
@@ -74,14 +77,19 @@ void lab::EnemySystem::Run()
 			Float32 speedXIntensity = sqrt((skeleton.speed-2) * (skeleton.speed - 2) / (1 + ratio * ratio));
 			skeleton.speedX = speedXIntensity * directions.x;
 			skeleton.speedY = speedXIntensity * ratio * directions.y;
-
-			t.position.x += skeleton.speedX * Engine::DeltaTime();
-			t.position.y += skeleton.speedY * Engine::DeltaTime();
+			if (skeleton.health > 0)
+			{
+				t.position.x += skeleton.speedX * Engine::DeltaTime();
+				t.position.y += skeleton.speedY * Engine::DeltaTime();
+			}
 		}
 
 		if (skeleton.health <= 0)
 		{
-			reg.remove_all(entity);
+			AnimatorPlay(animator, "skeleton:death");
+			skeleton.deathTimer--;
+			if (skeleton.deathTimer <= 0)
+				reg.remove_all(entity);
 		}
 
 		if (col.colided)

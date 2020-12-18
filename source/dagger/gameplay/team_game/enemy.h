@@ -17,7 +17,7 @@ namespace lab
 		int cooldown = 120;
 		int maxCooldown = 120;
 		int health = 100;
-		Float32 timeWounded = 100;
+		Float32 deathTimer = 125;
 	};
 
 	class EnemySystem
