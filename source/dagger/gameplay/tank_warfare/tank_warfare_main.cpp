@@ -23,9 +23,9 @@ using namespace tank_warfare;
 void TankWarfare::GameplaySystemsSetup(Engine &engine_)
 {
 	engine_.AddSystem<TilemapSystem>();
-    engine_.AddSystem<SimpleCollisionsSystem>();
+ //   engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<TankControllerSystem>();
-    engine_.AddSystem<TankCollisionSystem>();
+  //  engine_.AddSystem<TankCollisionSystem>();
     engine_.AddSystem<CameraCenterSystem>();
     engine_.AddSystem<RocketSystem>();
     engine_.AddSystem<CollectibleSystem>();
@@ -99,7 +99,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
 			auto entityMap = reg.create();
 			auto& sprite = reg.emplace<Sprite>(entityMap);
 			sprite.position = { 0, 0, 5 };
-			AssignSprite(sprite, "jovanovici:maps:preview2");
+			AssignSprite(sprite, "jovanovici:maps:map");
 		}
 	}
 	for (auto& entry : Files::recursive_directory_iterator("textures\\jovanovici\\maps"))
