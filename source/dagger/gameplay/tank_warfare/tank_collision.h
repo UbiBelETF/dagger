@@ -7,13 +7,13 @@ using namespace dagger;
 
 namespace tank_warfare
 {
-    class TankCollisionSystem
-        : public System
-    {
-    public:
+	class TankCollisionSystem
+		: public System
+	{
+	public:
 
-        inline String SystemName() { return "Tank Collision System"; }
+		inline String SystemName() { return "Tank Collision System"; }
 
-        void Run() override;
-    };
+		void Run() override;
+	};
 }

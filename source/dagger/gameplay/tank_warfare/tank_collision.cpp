@@ -6,6 +6,8 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/tank_warfare/tank_controller.h"
+#include "gameplay/tank_warfare/collectibles.h"
+#include "gameplay/tank_warfare/rocket.h"
 
 
 using namespace dagger;
@@ -26,6 +28,12 @@ void TankCollisionSystem::Run()
 		{
 			if (Engine::Registry().valid(col.colidedWith))
 			{
+				if (Engine::Registry().has<Collectible>(col.colidedWith) ||
+					Engine::Registry().has<Rocket>(col.colidedWith))
+				{
+					continue;
+				}
+
 				auto& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
 				auto& transform = viewCollisions.get<Transform>(col.colidedWith);
 
@@ -37,22 +45,22 @@ void TankCollisionSystem::Run()
 					if (collisionSides.x > 0)
 					{
 						t.position.x -= tank.speed * dt;
-						t.position.z = 1;
+						t.position.z = 3;
 					}
 					if (collisionSides.x < 0)
 					{
 						t.position.x += tank.speed * dt;
-						t.position.z = 1;
+						t.position.z = 3;
 					}
 					if (collisionSides.y > 0)
 					{
 						t.position.y -= tank.speed * dt;
-						t.position.z = 1;
+						t.position.z = 3;
 					}
 					if (collisionSides.y < 0)
 					{
 						t.position.y += tank.speed * dt;
-						t.position.z = 3;
+						t.position.z = 5;
 					}
 				} while (col.IsCollided(t.position, collision, transform.position));
 			}
