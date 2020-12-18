@@ -206,37 +206,6 @@ void SetupWorldSmiljana(Engine& engine_) {
         st2.size = wallSprite2.size;
     }
 }
-void SetupWorldKosta(Engine& enigne_) {
-    auto& reg = enigne_.Registry();
-    float zPos = 1.f;
-    {
-        TilemapLegend legend;
-        legend['.'] = &kosta::CreateFloor;
-        legend['#'] = &kosta::CreateWall;
-       // legend['>'] = &kosta::CreateDoor;
-        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/kostaLevel.map", &legend });
-        // PLAYER
-        {
-            auto player = reg.create();
-
-            auto& playerSprite = reg.emplace<Sprite>(player);
-            AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-
-            auto& playerAnimator = reg.emplace<Animator>(player);
-            AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
-
-            auto& playerTransform = reg.emplace<Transform>(player);
-            playerTransform.position = { 0, 0, zPos };
-
-            auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
-            playerInput.contexts.push_back("AmongThemInput");
-
-            auto& playerController = reg.emplace<CharacterController>(player);
-
-            auto& collision = reg.emplace<SimpleCollision>(player);
-        }
-    }
-}
 
 void team_game::SetupWorld(Engine &engine_)
 {
