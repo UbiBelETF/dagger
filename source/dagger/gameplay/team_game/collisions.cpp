@@ -94,6 +94,7 @@ void team_game::CollisionSystem::Run()
                             }
                             else if (collisionSides.y != 0 )
                             {
+                                if (phy_.nonStatic && physics.velocity.y == GetGravity()*dt) break ;
                                 if (physics.velocity.x != 0 && physics.velocity.y != GetGravity() * dt) {
                                     temp_t.x -= physics.velocity.x * dt; physics.velocity.x = 0;
                                 }
