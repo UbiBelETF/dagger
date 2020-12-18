@@ -15,6 +15,10 @@ namespace ancient_defenders {
         Float32 currentHealth;
         Float32 maxHealth;
 
+        Float32 deathTimer;
+        String deathAnimation;
+
+        static constexpr Float32 standardDeathTimer = 1.0f;
         static constexpr Float32 standardHP = 100.0f;
     };
 

@@ -8,8 +8,8 @@ using namespace dagger;
 namespace ancient_defenders {
 
     struct ControlData {
-        static Float32 timeout;
-        static Float32 maxTimeout;
+        Float32 timeout;
+        static constexpr Float32 maxTimeout = 0.2f;
     };
 
     class PlayerControlsSystem
@@ -19,5 +19,8 @@ namespace ancient_defenders {
         inline String SystemName() { return "Player Controls System"; }
 
         void Run() override;
+    
+    private:
+        ControlData m_controlData;
     };
 }

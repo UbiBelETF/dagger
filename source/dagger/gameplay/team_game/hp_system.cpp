@@ -1,8 +1,12 @@
 #include "hp_system.h"
+#include "range_of_attack.h"
 
 #include "core/engine.h"
 #include "core/graphics/sprite.h"
 #include "core/game/transforms.h"
+#include "core/graphics/animation.h"
+
+#include "gameplay/common/simple_collisions.h"
 
 
 using namespace dagger;
@@ -24,7 +28,9 @@ void ancient_defenders::HealthManagementSystem::Run() {
     auto entities = reg.view<Health>();
 
     entities.each([&](Entity entity_, Health& health_)
-        {
+    {
+            if (health_.currentHealth <= 0.0f) return;
+
             auto& healthBarSprite = reg.get_or_emplace<Sprite>(health_.hpBar);
             AssignSprite(healthBarSprite, "spritesheets:hp-bar:hp_100");
             
@@ -41,23 +47,28 @@ void ancient_defenders::HealthManagementSystem::Run() {
                 healthBarSprite.position = parentSprite.position;
                 healthBarSprite.position.x -= (1.0f - health) * (parentSprite.size.x / 2.0f);
                 healthBarSprite.position.y -= parentSprite.size.y / 2.0f;
-                healthBarSprite.position.z = 0.0f;
+                healthBarSprite.position.z = 99.0f;
             }
-        });
+    });
 }
 
 
 void ancient_defenders::HealthManagementSystem::OnEndOfFrame()
 {
     auto view = Engine::Registry().view<Health>();
+
+    auto& reg = Engine::Registry();
     
     Sequence<Entity> toRemove{};
     auto it = view.begin();
     while (it != view.end()) {
         auto & en = view.get<Health>(*it);
         if (en.currentHealth <= 0.0f) {
-            toRemove.push_back(en.hpBar);
-            toRemove.push_back(*it);
+            AnimatorPlay(reg.get<Animator>(*it), en.deathAnimation);
+            if ((en.deathTimer -= Engine::DeltaTime()) <= 0.0f) {
+                toRemove.push_back(en.hpBar);
+                toRemove.push_back(*it);
+            }
         }
         it++;
     }

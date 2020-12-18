@@ -37,6 +37,8 @@ void ancient_defenders::MageBehaviorSystem::Run()
     {
         if (range_.targetFound) mage_.currentAction = EAction::Attacking;
 
+        if (Engine::Registry().get<Health>(entity_).currentHealth <= 0.0f) return; // Don't do anything if the character is in the dying phase
+
         if (mage_.currentAction == EAction::Idling) {
             AnimatorPlay(animation_, "ancient_defenders:mage:IDLE");
         } 
@@ -197,6 +199,9 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
     health.hpBar = reg.create();
     health.currentHealth = Health::standardHP;
     health.maxHealth = Health::standardHP;
+
+    health.deathTimer = Health::standardDeathTimer;
+    health.deathAnimation = "ancient_defenders:mage:DEATH";
 
     Logger::info("Created mage");
     return entity;

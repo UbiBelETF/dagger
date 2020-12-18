@@ -32,6 +32,8 @@ void ancient_defenders::TowerBehaviorSystem::Run()
         if (tower_.constructionProgress < TowerStats::constructionGoal) return;
         else if (!tower_.constructed) {
             tower_.constructed = true;
+            TowerPlacementInfo::availableSpot[tower_.address] = false;
+
 
             auto & sprite = Engine::Registry().emplace<Sprite>(entity_);
             AssignSprite(sprite, "ancient_defenders:" + tower_.type);
@@ -71,8 +73,6 @@ Entity ancient_defenders::Tower::Create(String type_)
 
     coordinates.position = { TowerPlacementInfo::spotCoordinates[tower.address].x,
             TowerPlacementInfo::spotCoordinates[tower.address].y, 1.0f };
-
-    TowerPlacementInfo::availableSpot[tower.address] = false;
 
     hitbox.size = { 250, 0 };
     hitbox.shape = EHitbox::Circular;
