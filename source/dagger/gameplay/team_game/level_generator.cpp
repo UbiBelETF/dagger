@@ -5,6 +5,27 @@
 
 using namespace dagger;
 
+Sequence<Entity> level_generator::smiljana::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
+{
+    Entity entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
+    sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
+    AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
+
+
+    return { entity };
+}
+
+Sequence<Entity> level_generator::smiljana::CreateWall(Registry& reg_, SInt32 x_, SInt32 y_)
+{
+    Entity entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
+    sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
+    AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
+
+    return { entity };
+}
+
 Entity level_generator::jovica::CreateTile(Registry& reg_, SInt32 x_, SInt32 y_, SInt32 z_, String name_)
 {
     Entity entity = reg_.create();

@@ -96,32 +96,7 @@ void SetupWorldJovica(Engine& engine_)
 
         reg.emplace<MovableBody>(player);
     }
-}
-
-namespace smiljana {
-    
-    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_)
-    {
-       
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
-        AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
-        
-
-        return entity;
-    }
-    Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_)
-    {
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
-        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
-
-        return entity;
-    }
-}
-    
+}   
 
 void SetupWorldSmiljana(Engine& engine_) {
   
@@ -131,8 +106,8 @@ void SetupWorldSmiljana(Engine& engine_) {
 
         {
             TilemapLegend legend;
-            //legend['.'] = &smiljana::CreateFloor;
-            //legend['#'] = &smiljana::CreateWall;
+            legend['.'] = &level_generator::smiljana::CreateFloor;
+            legend['#'] = &level_generator::smiljana::CreateWall;
 
             Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
 
@@ -164,6 +139,7 @@ void SetupWorldSmiljana(Engine& engine_) {
 void team_game::SetupWorld(Engine &engine_)
 {
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-	SetupWorldJovica(engine_);
-    //SetupWorldSmiljana(engine_);
+    SetupWorldSmiljana(engine_);
+    //SetupWorldKosta(engine_);
+    //SetupWorldJovica(engine_);
 }
