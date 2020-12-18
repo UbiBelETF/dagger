@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include "shoot.h"
+#include "tilemap_entities.h"
 
 #include "core/graphics/animation.h"
 #include "core/input/inputs.h"
@@ -33,7 +34,7 @@ void lab::EnemySystem::Run()
 
 		if (skeleton.type == horizontal)
 		{
-			if (col.colided && !reg.has<Bullet>(col.colidedWith))
+			if (col.colided && reg.has<Wall>(col.colidedWith))
 			{
 					col.colided = false;
 					skeleton.speed *= -1;
@@ -44,11 +45,10 @@ void lab::EnemySystem::Run()
 
 		if (skeleton.type == vertical)
 		{
-			if (col.colided && !reg.has<Bullet>(col.colidedWith))
+			if (col.colided && reg.has<Wall>(col.colidedWith))
 			{
 				col.colided = false;
 				skeleton.speed *= -1;
-				sprite.scale *= -1;
 			}
 			t.position.y -= skeleton.speed * Engine::DeltaTime();
 		}
@@ -92,7 +92,8 @@ void lab::EnemySystem::Run()
 				if (entity == col.colidedWith)
 				{
 					Bullet bullet = view2.get<Bullet>(entity);
-					skeleton.health -= bullet.damage;
+					if(bullet.ownership == player)
+						skeleton.health -= bullet.damage;
 					col.colided = false;
 				}
 			}
@@ -100,8 +101,7 @@ void lab::EnemySystem::Run()
 
 		if (skeleton.cooldown <= 0)
 		{
-			CreateBullet(t.position, playerPosition);
-      
+			CreateBullet(t.position, playerPosition, Unit::skeleton);
 			skeleton.cooldown = skeleton.maxCooldown;
 		}
 		else

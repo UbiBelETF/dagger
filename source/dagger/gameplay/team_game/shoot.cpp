@@ -17,12 +17,13 @@ using namespace dagger;
 
 using namespace lab;
 
-void lab::CreateBullet(Vector2 position, Vector2 target)
+void lab::CreateBullet(Vector2 position, Vector2 target, Unit owner)
 {
 	auto& reg = Engine::Instance().Registry();
 
 	auto entity = reg.create();
 	auto& bullet = reg.emplace<Bullet>(entity);
+	bullet.ownership = owner;
 
 	Vector2 directions = { 1, 1 };
 	if (target.x < position.x)
