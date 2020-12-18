@@ -29,6 +29,7 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
     auto entity = reg.create();
 
     auto& sprite = reg.emplace<Sprite>(entity);
+    sprite.rotation = (angle_ * 180.) / M_PI - 45;
     AssignSprite(sprite, settings_.pSpriteName);
 
     auto& transform = reg.emplace<Transform>(entity);
