@@ -134,8 +134,10 @@ struct Boss
         auto& col = reg.get_or_emplace<SimpleCollision>(entity);
         ATTACH_TO_FSM(BossFSM, entity);
         
-        col.size.x = 10;
-        col.size.y = 60;
+        col.size.x = 20;
+        col.size.y = 21;
+        col.pivot = { -0.5f, -1.85f };
+        sprite.pivot = { 0.2f, 0.0f };
         physics.nonStatic = true;
         return Boss{ entity, sprite, anim, input, character,transform,physics,col };
     }
@@ -143,7 +145,7 @@ struct Boss
     static Boss Create(
         String input_ = "",
         ColorRGB color_ = { 1, 1, 1 },
-        Vector2 position_ = { 0, 0 })
+        Vector2 position_ = { 100, 100 })
     {
         auto& reg = Engine::Registry();
         auto entity = reg.create();
@@ -153,7 +155,7 @@ struct Boss
         chr.sprite.position = { position_, 1.0f };
         chr.sprite.color = { color_, 1.0f };
 
-        chr.transform.position = { position_,0.0f };
+        chr.transform.position = { 100, 100, 0.0f };
 
         AssignSprite(chr.sprite, "spritesheets:team_game:boss:idle:boss_idle");
         AnimatorPlay(chr.animator, "boss:boss_idle");
