@@ -51,7 +51,7 @@ struct PlightCharacter
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
         physics.my_groups.push_back(1);
-        physics.collision_groups.push_back(0);
+        physics.collision_groups.push_back(1);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
 
@@ -87,7 +87,7 @@ struct PlightCharacter
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
-        chr.character.speed = 100.f;
+        chr.character.speed = 2000.f;
 
         chr.crosshair.crosshairSprite = reg.create();
         chr.crosshair.angle = 0.f;

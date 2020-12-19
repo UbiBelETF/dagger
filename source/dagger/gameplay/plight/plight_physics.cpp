@@ -48,17 +48,17 @@ void plight::PhysicsSystem::Run()
 
 void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& my_, const Vector3& posOther_, const PlightCollision& other_)
 {
-    Vector2 sides = my_.GetCollisionSides(pos_, other_, posOther_);
+   Vector2 sides = my_.GetCollisionSides(pos_, other_, posOther_);
 
     if (sides.x != 0) {
-        if (sides.x == 1) pos_.x = posOther_.x - my_.size.x;
-        else pos_.x = posOther_.x + other_.size.x;
+        if (sides.x == 1) pos_.x = posOther_.x - my_.size.x - 1;
+        else pos_.x = posOther_.x + other_.size.x + 1;
     }
     if (sides.y != 0) {
-        if (sides.y == 1) pos_.y = posOther_.y - my_.size.y;
-        else pos_.y = posOther_.y + other_.size.y;
+        if (sides.y == 1) pos_.y = posOther_.y - my_.size.y - 1;
+        else pos_.y = posOther_.y + other_.size.y + 1;
     }
-
+    my_.colidedWith.remove(other_);
     my_.colided = false;
 }
 
