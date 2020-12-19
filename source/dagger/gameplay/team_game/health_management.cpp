@@ -23,6 +23,10 @@ void HealthManagementSystem::Run()
             {
                 auto& enemyCharacter = Engine::Registry().get<team_game::Character>(other);
                 character.health -= enemyCharacter.damage * Engine::DeltaTime();
+                if (character.health < 0)
+                {
+                    character.health = 0;
+                }
             }
         }
     }

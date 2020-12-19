@@ -87,6 +87,7 @@ void team_game::SetupWorld(Engine& engine_)
       
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
+
         reg.emplace<PlayerCharacter>(entity);
         auto& animation = reg.emplace<Animator>(entity);
 //        AnimatorPlay(animation, "TeamGame:Player-Bomb_Guy:RUNNING");
@@ -95,30 +96,27 @@ void team_game::SetupWorld(Engine& engine_)
         auto& character = reg.emplace<Character>(entity);
         reg.emplace<Text>(entity);
 
+
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
         
-
+        
         // Add enemy
-        auto entity1 = reg.create();
-        auto& sprite1 = reg.emplace<Sprite>(entity1);
-        AssignSprite(sprite1, "TeamGame:Characters:Enemy-Bald_Pirate:1-Idle:1");
+        auto entity2 = reg.create();
+        auto& sprite2 = reg.emplace<Sprite>(entity2);
+        AssignSprite(sprite2, "TeamGame:Characters:Enemy-Bald_Pirate:1-Idle:1");
 
-        auto& transform1 = reg.get_or_emplace<Transform>(entity1);
-        transform1.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
-        transform1.position.x += 100;
+        auto& transform2 = reg.get_or_emplace<Transform>(entity2);
+        transform2.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
+        transform2.position.x += 100;
+        
+        auto& collider2 = reg.get_or_emplace<Collider>(entity2);
+        collider2.size = sprite2.size;
+        collider2.entityType = CollisionID::ENEMY;
+        collider2.hasGravity = true;
+        
+        auto& gravity2 = reg.get_or_emplace<Gravity>(entity2);
 
-        auto& collider1 = reg.get_or_emplace<Collider>(entity1);
-        collider1.size = sprite1.size;
-        collider1.entityType = CollisionID::ENEMY;
-        collider1.hasGravity = true;
-
-        auto& gravity1 = reg.get_or_emplace<Gravity>(entity1);
-
-        auto& input1 = reg.emplace<InputReceiver>(entity1);
-        input1.contexts.push_back("ASDW");
-
-        auto& character1 = reg.emplace<Character>(entity1);
-        reg.emplace<EnemyCharacter>(entity1);
-        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity1);
+        auto& character2 = reg.emplace<Character>(entity2);
+        reg.emplace<EnemyCharacter>(entity2);
     }
 }
