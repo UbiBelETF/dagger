@@ -107,7 +107,7 @@ void team_game::SetupWorld(Engine& engine_)
 
         auto& transform2 = reg.get_or_emplace<Transform>(entity2);
         transform2.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()-1];
-        transform2.position.x += 100;
+        transform2.position.x += 400;
         
         auto& collider2 = reg.get_or_emplace<Collider>(entity2);
         collider2.size = sprite2.size;
