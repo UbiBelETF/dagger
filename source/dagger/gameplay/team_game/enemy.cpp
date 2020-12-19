@@ -55,9 +55,11 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 
 	if (transform.position.x < destinationX) {
 		ctrl.direction.x = 1;
+		sprite.scale.x = 1;
 	}
 	else if (transform.position.x > destinationX) {
 		ctrl.direction.x = -1;
+		sprite.scale.x = -1;
 		
 	}
 	else ctrl.direction.x = 0;
@@ -89,6 +91,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 		if ((ctrl.postition + 1) >= ctrl.numberOfPoints) {
 			return;
 		}
+		
 	}
 
 	

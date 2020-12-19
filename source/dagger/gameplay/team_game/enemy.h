@@ -15,7 +15,7 @@ enum struct EEnemyState
 
 struct EnemyDescription {
 
-	Float32 speed{ 100 };
+	Float32 speed{ 50 };
 	UInt32 numberOfPoints=0;
 	Sequence<Vector2> path = {};
 	SInt32 postition = 0;

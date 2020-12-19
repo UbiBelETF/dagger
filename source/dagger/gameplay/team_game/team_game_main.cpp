@@ -26,6 +26,7 @@ using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
+    engine_.AddSystem<EnemyControllerSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CameraSystem>();
@@ -122,7 +123,7 @@ void SetupWorldSmiljana(Engine& engine_) {
         AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
 
         auto& enemyTransform = reg.emplace<Transform>(enemy);
-        enemyTransform.position = { 0, 0, zPos };
+        enemyTransform.position = { 0, 25, zPos };
 
         reg.emplace<EnemyDescription>(enemy);
 
