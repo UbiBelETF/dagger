@@ -11,7 +11,7 @@ namespace team_game
 	struct Character
 	{
 		Float32 health{ 100.0f };
-		Float32 speed{ 70.f };
+		Float32 speed{ 140.f };
 		Float32 damage{ 25.0f };
 	};
 
