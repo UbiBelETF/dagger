@@ -45,6 +45,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     camera->Update();
     
     team_game::SetupWorld(engine_);
+    team_game::LoadPath();
 }
 
 namespace smiljana {
@@ -124,9 +125,10 @@ void SetupWorldSmiljana(Engine& engine_) {
         auto& enemyTransform = reg.emplace<Transform>(enemy);
         enemyTransform.position = { 0, 0, zPos };
 
-        reg.emplace<EnemyController>(enemy);
+        reg.emplace<EnemyDescription>(enemy);
 
         reg.emplace<MovableBody>(enemy);
+
 
 
     }
@@ -136,4 +138,18 @@ void team_game::SetupWorld(Engine &engine_)
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
    
     SetupWorldSmiljana(engine_);
+}
+
+
+void team_game::LoadPath() {
+
+    FileInputStream inFile{ "path.txt" };
+
+    Vector2 point;
+
+    while (inFile >> point.x >> point.y) {
+        WalkingPath::path.emplace_back(point);
+    }
+
+    WalkingPath::numberOfPoints = WalkingPath::path.size();
 }

@@ -11,6 +11,8 @@ namespace team_game
 {
     void SetupWorld(Engine& engine_);
 
+    void LoadPath();
+
     class TeamGame : public Game
     {
         inline String GetIniFile() override

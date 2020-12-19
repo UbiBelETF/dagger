@@ -11,18 +11,29 @@ enum struct EEnemyState
 	Chasing
 };
 
+struct WalkingPath {
+	static UInt32 numberOfPoints;
+	static Sequence<Vector2> path;
+};
 
+struct EnemyDescription {
 
-struct EnemyController
-{
 	Float32 speed{ 100 };
+	
+
+	SInt32 postition = 0;
+	Vector2 direction = { -1, 0 };
+	Vector2 offset = { 0,0 };
+
 
 };
 
+
+
 struct EnemyFSM : public FSM<EEnemyState>
 {
-	DEFINE_STATE(CharacterFSM, EEnemyState, Patrolling);
-	DEFINE_STATE(CharacterFSM, EEnemyState, Chasing);
+	DEFINE_STATE(EnemyFSM, EEnemyState, Patrolling);
+	DEFINE_STATE(EnemyFSM, EEnemyState, Chasing);
 
 	EnemyFSM()
 	{
