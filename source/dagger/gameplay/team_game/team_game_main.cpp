@@ -145,6 +145,8 @@ struct Player
         
         chr.currentLvl.legend['Q'] = CreateObjectFunction("spritesheets:lab:wall_bottom_1",30,true,-1,100.0f,"",true,0);//CreateWallBottom1;
         chr.currentLvl.legend['W'] = CreateObjectFunction("spritesheets:lab:wall_bottom_6",30,true,-1,100.0f,"",true,0);//CreateWallBottom6;
+        chr.currentLvl.legend['*'] = CreateObjectFunction("spritesheets:lab:wall_bottom_3",30,true,-1,100.0f,"",true,0);//CreateWallBottom3;
+        chr.currentLvl.legend['7'] = CreateObjectFunction("spritesheets:lab:wall_7",30,true,-1,100.0f,"",true,0);//CreateWall7;
         chr.currentLvl.legend['4'] = CreateObjectFunction("spritesheets:lab:wall_9",30,true,-1,100.0f,"", true, 0);//CreateWall9;
         chr.currentLvl.legend['6'] = CreateObjectFunction("spritesheets:lab:wall_8",30,true,-1,100.0f,"", true, 0);//CreateWallB8;
         
@@ -152,10 +154,11 @@ struct Player
         chr.currentLvl.legend['Z'] = CreateObjectFunction("spritesheets:lab:wall_bottom_5_blank",30,false,-1,100.0f,"",true,0); //BlankWall
         chr.currentLvl.legend['T'] = CreateObjectFunction("spritesheets:lab:tank_classic",20,true,-1,100.0f,"",false,0);//Tank
         chr.currentLvl.legend['R'] = CreateObjectFunction("spritesheets:lab:tank_broken",20,true,-1,100.0f,"",false,0);//TankBroken
-        chr.currentLvl.legend['U'] = CreateObjectFunction("spritesheets:lab:tank_classic",15,true,-1,107.1f,"lab:tank",false,0);//TankBubbling
-        chr.currentLvl.legend['K'] = CreateObjectFunction("spritesheets:lab:acid_tenk",15,true,-1,107.1f,"lab:tank",false,0); //Acid tank
-        chr.currentLvl.legend['Y'] = CreateObjectFunction("spritesheets:lab:acid_tenk_spill",15,true,-1,107.1f,"lab:tank",false,0); //Acid tank spill
-
+        chr.currentLvl.legend['U'] = CreateObjectFunction("spritesheets:lab:tank_classic",15,true,-1,100.0f,"lab:tank",false,0);//TankBubbling
+        chr.currentLvl.legend['K'] = CreateObjectFunction("spritesheets:lab:acid_tenk",10,true,-1,100.0f,"",false,0); //Acid tank
+        chr.currentLvl.legend['Y'] = CreateObjectFunction("spritesheets:lab:acid_tenk_spill",15,true,-1,100.0f,"",false,0); //Acid tank spill
+        chr.currentLvl.legend['S'] = CreateObjectFunction("spritesheets:lab:slime",25,false,-1,100.0f,"",true,0); //Slime
+        chr.currentLvl.legend['G'] = CreateObjectFunction("lab:puddle:lab anims_green puddle_0",25,false,-1,100.0f,"",true,0); //Slime
 
         //enemy
         chr.currentLvl.legend['H'] = CreateObjectFunction("Skeleton",20,true,-1,100.0f,"skeleton:run",false,1);//enemy horizontal
@@ -195,40 +198,6 @@ void lab::SetupWorld(Engine &engine_)
 
      auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
      //Engine::Registry().destroy(mainChar.entity);
-/*
-      
-    for (int i = 0; i < 3; i++)
-    {
-        auto entity = reg.create();
-        auto& bandit = reg.emplace<Bandit>(entity);
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "Bandit");
-        sprite.scale = { 1, 1 };
-        if (i == 0)
-        {
-            bandit.ID = horizontal;
-            sprite.position = { 50, 0, 0.0f };
-        }
 
-        if (i == 1)
-        {
-            bandit.ID = vertical;
-            sprite.position = { 100, 30, 0.0f };
-        }
-
-        if (i == 2)
-        {
-            bandit.ID = follower;
-            sprite.position = { 100, -30, 0.0f };
-        }
-
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position = sprite.position;
-
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size = {sprite.size.x / 5, sprite.size.y /2 };
-    }
-
-*/
 }
 
