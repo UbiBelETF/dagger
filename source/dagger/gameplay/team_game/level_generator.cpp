@@ -1,5 +1,6 @@
 #include "level_generator.h"
 
+#include "core/engine.h"
 #include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
 
@@ -46,6 +47,8 @@ void level_generator::jovica::EmplaceCollider(Registry& reg_, Entity entity_, SI
 {
     auto& collider = reg_.emplace<StaticBody>(entity_);
     collider.size = { 32, 32 };
+    Engine::GetDefaultResource<StaticBodyMap>()->put(x_, y_, collider);
+    Logger::info("Inserted into map on [{}, {}]", x_, y_);
 }
 
 void level_generator::jovica::CreateCollider(Registry& reg_, SInt32 x_, SInt32 y_)

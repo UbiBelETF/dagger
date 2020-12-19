@@ -53,6 +53,12 @@ void SetupWorldJovica(Engine& engine_)
     float zPos = 1.f;
 
     {
+        // STATIC BODIES MAP
+        auto mapEnt = reg.create();
+        auto& map = reg.emplace<StaticBodyMap>(mapEnt);
+        Engine::PutDefaultResource<StaticBodyMap>(&map);
+
+        // TILEMAP
         TilemapLegend legend;
         legend[' '] = &level_generator::jovica::Nothing;
         legend['.'] = &level_generator::jovica::CreateFloor;
