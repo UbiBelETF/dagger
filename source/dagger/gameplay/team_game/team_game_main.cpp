@@ -1,6 +1,6 @@
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
-
+#include "gameplay/team_game/slime_controller.h"
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
@@ -19,7 +19,7 @@
 #include "tilemap_legends.h"
 
 #include "gameplay/team_game/collision.h"
-
+#include"gameplay/team_game/ai_system.h"
 using namespace dagger;
 using namespace team_game;
 
@@ -29,15 +29,16 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<TeamGameControllerSystem>();
-    
+    engine_.AddSystem<TeamGameSlimeControllerSystem>();
+    engine_.AddSystem<AiSystem>();
 }
 void SetCameraTeam()
 {
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
-    camera->size = { 1920, 1080 };
-    camera->zoom = 1.2;
-    camera->position = { 300,300, 0 };
+    camera->size = { 400, 400 };
+    camera->zoom = 0.5;
+    camera->position = { 100,100, 0 };
     camera->Update();
 }
 struct MainCharacter

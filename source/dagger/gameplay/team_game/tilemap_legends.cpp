@@ -12,6 +12,7 @@
 #include "core/graphics/animations.h"
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
+#include "gameplay/team_game/slime_controller.h"
 #include "collision.h"
  int scale = 1;
  int x_step = 16 *scale;
@@ -76,6 +77,9 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	auto& transform = reg_.emplace<Transform>(entity);
 	reg_.emplace<Collision>(entity);
 	reg_.emplace<CollisionType::Character>(entity);
+	reg_.emplace<SlimeAi>(entity);
+	reg_.emplace<TeamGameSlime>(entity);
+	ATTACH_TO_FSM(SlimeControllerFSM, entity);
 	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
 	transform.position = { x_ * x_step, y_ * y_step, 30 };
