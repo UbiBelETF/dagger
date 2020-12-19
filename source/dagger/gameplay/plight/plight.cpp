@@ -309,11 +309,6 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
     auto entity = Engine::Registry().create();
     auto& pgInfo = Engine::Registry().emplace<PlightGameInfo>(entity);
-    pgInfo.newGameMessage = Engine::Registry().create();
-    auto& text = Engine::Registry().emplace<Text>(pgInfo.newGameMessage);
-    text.spacing = 0.6f;
-    text.position.y = 150;
-    text.position.x = 50;
 
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
     mainChar.crosshair.startAngle = 0.f;

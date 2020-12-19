@@ -34,21 +34,30 @@ void PlightGameLogicSystem::Run()
         for (auto entity : view1) {
             auto& gameInfo = view1.get<PlightGameInfo>(entity);
             if (gameInfo.newGame) {
-                auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
-                text.Set("pixel-font", gameInfo.newGameMessageString);
+                gameInfo.newGameMessage = Engine::Registry().create();
+                auto& text = Engine::Registry().emplace<Text>(gameInfo.newGameMessage);
+                text.Set("pixel-font", gameInfo.newGameMessageString1, {50.f,150.f,0.f});
                 gameInfo.newGame = false;
                 gameInfo.displayingMessage = true;
             }
-            else if (gameInfo.displayingMessage) {
+            if (gameInfo.displayingMessage) {
                 gameInfo.currentMessageDuration += Engine::DeltaTime();
-                if (gameInfo.currentMessageDuration >= gameInfo.newGameMessageDuration) {
+               
+                 if (gameInfo.currentMessageDuration >= gameInfo.newGameMessageDuration) {
                     gameInfo.displayingMessage = false;
+                    gameInfo.displayingMessage2 = false;
                     gameInfo.currentMessageDuration = 0.f;
                     auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
                     for (auto ent : text.entities) {
                         Engine::Registry().remove_all(ent);
                     }
+                    Engine::Registry().remove_all(gameInfo.newGameMessage);
                 }
+                 else if (gameInfo.currentMessageDuration >= gameInfo.newGameMessageDuration / 2 && !gameInfo.displayingMessage2) {
+                     auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
+                     text.Set("pixel-font", gameInfo.newGameMessageString2, { 50.f,150.f,0.f });
+                     gameInfo.displayingMessage2 = true;
+                 }
             }
             
         }
@@ -72,11 +81,29 @@ void PlightGameLogicSystem::OnEndOfFrame()
 
         plight::ResetCharacters();
 
+       auto view1 = Engine::Registry().view<PlightGameInfo>();
+       for (auto entity : view1) {
+           auto& gameInfo = view1.get<PlightGameInfo>(entity);
+           if (gameInfo.displayingMessage) {
+               auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
+               for (auto ent : text.entities) {
+                   Engine::Registry().remove_all(ent);
+               }
+               Engine::Registry().remove_all(gameInfo.newGameMessage);
+               gameInfo.displayingMessage = false;
+               gameInfo.displayingMessage2 = false;
+               gameInfo.currentMessageDuration = 0.f;
+           }
+           gameInfo.newGame = true;
+           
+       }
 
        auto view2 = Engine::Registry().view<Projectile>();
        for (auto entity : view2) {
            Engine::Registry().remove_all(entity);
        }
+
+      
       
     }
 }

@@ -10,7 +10,10 @@ namespace plight
     struct PlightGameInfo {
         bool newGame = true;
         bool displayingMessage = false;
-        String newGameMessageString = "New Game!";
+        bool displayingMessage2 = false;
+        String newGameMessageString1 = "New Game!";
+        String newGameMessageString2 = "Battle!";
+
         Entity newGameMessage;
 
         Float32 newGameMessageDuration = 2.f;
