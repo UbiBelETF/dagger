@@ -17,6 +17,7 @@
 #include "gameplay/team_game/camera.h"
 #include "gameplay/team_game/level_generator.h"
 #include "gameplay/team_game/movement.h"
+#include "gameplay/team_game/physics.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -27,6 +28,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CameraSystem>();
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<PhysicsSystem>();
     engine_.AddSystem<MovementSystem>();
 }
 
@@ -116,7 +118,7 @@ void SetupWorldSmiljana(Engine& engine_) {
 
             auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
             playerState.currentState = ECharacterState::Idle;
-
+          
             auto& playerSprite = reg.emplace<Sprite>(player);
             AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
             playerSprite.scale = { 1, 1 };
@@ -132,7 +134,48 @@ void SetupWorldSmiljana(Engine& engine_) {
 
         reg.emplace<CharacterController>(player);
 
-        reg.emplace<MovableBody>(player);
+        auto& movable = reg.emplace<MovableBody>(player);
+        movable.size = playerSprite.size;
+
+        // Wall
+        auto wall = reg.create();
+
+        auto& wallTransform = reg.emplace<Transform>(wall);
+        wallTransform.position = { 0, 0, 0 };
+
+        auto& wallSprite = reg.emplace<Sprite>(wall);
+        AssignSprite(wallSprite, "EmptyWhitePixel");
+        wallSprite.color = { 0.0f, 0.0f, 0.0f, 1.0f };
+        wallSprite.size = { 30, 30 };
+
+        auto& st = reg.emplace<StaticBody>(wall);
+        st.size = wallSprite.size;
+
+        auto wall1 = reg.create();
+
+        auto& wallTransform1 = reg.emplace<Transform>(wall1);
+        wallTransform1.position = { 30, 0, 0 };
+
+        auto& wallSprite1 = reg.emplace<Sprite>(wall1);
+        AssignSprite(wallSprite1, "EmptyWhitePixel");
+        wallSprite1.color = { 0.0f, 0.0f, 0.0f, 1.0f };
+        wallSprite1.size = { 30, 30 };
+
+        auto& st1 = reg.emplace<StaticBody>(wall1);
+        st1.size = wallSprite1.size;
+
+        auto wall2 = reg.create();
+
+        auto& wallTransform2 = reg.emplace<Transform>(wall2);
+        wallTransform2.position = { 0, 30, 0 };
+
+        auto& wallSprite2 = reg.emplace<Sprite>(wall2);
+        AssignSprite(wallSprite2, "EmptyWhitePixel");
+        wallSprite2.color = { 0.0f, 0.0f, 0.0f, 1.0f };
+        wallSprite2.size = { 30, 30 };
+
+        auto& st2 = reg.emplace<StaticBody>(wall2);
+        st2.size = wallSprite2.size;
     }
 }
 
