@@ -3,6 +3,8 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
+#include "gameplay/team_game/character.h"
+
 using namespace dagger;
 using namespace team_game;
 

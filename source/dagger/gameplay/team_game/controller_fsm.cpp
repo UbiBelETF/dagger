@@ -12,6 +12,7 @@
 #include "animation_fsm.h"
 #include "core/graphics/animations.h"
 #include "gameplay/team_game/team_game_collisions.h"
+#include "gameplay/team_game/character.h"
 
 
 using namespace dagger;
@@ -62,7 +63,7 @@ void team_game::CharacterControllerFSM::Running::Exit(CharacterControllerFSM::St
 
 void team_game::CharacterControllerFSM::Running::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter>(state_.entity);
+	auto&& [sprite, transform, input, character] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::Character>(state_.entity);
 
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");
@@ -98,13 +99,13 @@ void team_game::CharacterControllerFSM::InAir::Enter(CharacterControllerFSM::Sta
 
 void team_game::CharacterControllerFSM::InAir::Exit(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
+	auto&& [sprite, transform, input, character, playerCharacter, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::Character, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
 	gravity.verticalCurrentSpeed = 0.f;
 }
 
 void team_game::CharacterControllerFSM::InAir::Run(CharacterControllerFSM::StateComponent& state_)
 {
-	auto&& [sprite, transform, input, character, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
+	auto&& [sprite, transform, input, character, playerCharacter, collider, gravity] = Engine::Registry().get<Sprite, Transform, InputReceiver, team_game::Character, team_game::PlayerCharacter, Collider, Gravity>(state_.entity);
 
 	Float32 run = input.Get("run");
 	Float32 jump = input.Get("jump");
