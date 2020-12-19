@@ -98,6 +98,7 @@ void SetupWorldJovica(Engine& engine_)
 
         reg.emplace<MovableBody>(player);
     }
+}
 
 void SetupWorldSmiljana(Engine& engine_) {
   
@@ -180,6 +181,6 @@ void SetupWorldSmiljana(Engine& engine_) {
 void team_game::SetupWorld(Engine &engine_)
 {
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-   // SetupWorldJovica(engine_);
+    SetupWorldJovica(engine_);
     //SetupWorldKosta(engine_);
 }
