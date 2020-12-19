@@ -38,8 +38,8 @@ wall_1 96 64 16 16
 wall_2 112 64 16 16
 wall_3 128 64 16 16
 wall_4 96 80 16 16
-wall_bars 112 80 16 16
-wall_crack 128 80 16 16
+wall_5 112 80 16 16
+wall_6 128 80 16 16
 
 wall_arch_left 112 96 16 16
 wall_arch_right 128 96 16 16
@@ -54,5 +54,5 @@ wall_bottom_inner_right 48 96 16 16
 wall_bottom_inner_left 64 96 16 16
 wall_bottom_right 80 96 16 16
 wall_top_inner_right_2 16 112 16 16
-wall_bottom 32 112 16 16
+wall_top 32 112 16 16
 wall_top_inner_left_2 80 112 16 16
