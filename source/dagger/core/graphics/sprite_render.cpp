@@ -38,7 +38,7 @@ void SpriteRenderSystem::SpinUp()
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 	glBufferData(GL_ARRAY_BUFFER, s_BufferSize, nullptr, GL_STATIC_DRAW);
 
-    const StaticArray<Pair<UInt32, UInt32>, 7> sizesAndStrides = {
+    const StaticArray<Pair<UInt32, UInt32>, 8> sizesAndStrides = {
         pair(2, 0),     // #2: sub size
         pair(2, 2),     // #3: sub origin
         pair(2, 4),     // #4: sub origin
@@ -46,6 +46,7 @@ void SpriteRenderSystem::SpinUp()
         pair(2, 9),     // #6: quad pivot
         pair(4, 11),    // #7: quad tint color
         pair(2, 15),    // #8: scale
+        pair(1, 17),    // #9: rotation
     };
 
     for (UInt32 i = 0; i < sizesAndStrides.size(); i++)
@@ -158,6 +159,28 @@ void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<SpriteFrame> requ
 
 void SpriteRenderSystem::OnRender()
 {
+    static auto SortSprites = [](const Sprite& a_, const Sprite& b_)
+    {
+        UInt32 aShader = a_.shader->programId;
+        UInt32 bShader = b_.shader->programId;
+        UInt32 aZ = a_.position.z;
+        UInt32 bZ = b_.position.z;
+        UInt32 aImage = a_.image == nullptr ? 0 : a_.image->TextureId();
+        UInt32 bImage = b_.image == nullptr ? 0 : b_.image->TextureId();
+
+        if (aZ == bZ)
+        {
+            if (aShader == bShader)
+            {
+                return aImage < bImage;
+            }
+            else
+                return aShader < bShader;
+        }
+        else
+            return aZ > bZ;
+    };
+
 	glBindVertexArray(m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 
@@ -167,30 +190,9 @@ void SpriteRenderSystem::OnRender()
 
     const auto& view = Engine::Registry().view<Sprite>();
     Sequence<Sprite> sprites{ view.raw(), view.raw() + view.size() };
+    std::sort(sprites.begin(), sprites.end(), SortSprites);
     UInt64 dataSize = sizeof(SpriteData) * sprites.size();
     Sequence<SpriteData> currentRender{};
-
-    std::sort(sprites.begin(), sprites.end(), [](const Sprite& a_, const Sprite& b_)
-        {
-            UInt32 aShader = a_.shader->programId;
-            UInt32 bShader = b_.shader->programId;
-            UInt32 aZ = a_.position.z;
-            UInt32 bZ = b_.position.z;
-            UInt32 aImage = a_.image == nullptr ? 0 : a_.image->TextureId();
-            UInt32 bImage = b_.image == nullptr ? 0 : b_.image->TextureId();
-
-            if (aZ == bZ)
-            {
-                if (aShader == bShader)
-                {
-                    return aImage < bImage;
-                }
-                else
-                    return aShader < bShader;
-            }
-            else
-                return aZ > bZ;
-        });
 
     for (auto ptr = sprites.begin(); ptr != sprites.end();)
     {
