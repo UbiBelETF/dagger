@@ -15,12 +15,17 @@
 
 using namespace team_game;
 
+String run = "among_them_animations:bat";
+
 void EnemyControllerSystem::Run()
 {
 	Engine::Registry().view<EnemyFSM::StateComponent>().each(
 		[&](EnemyFSM::StateComponent& state_)
-	{
-		
+	{   
+		auto& inputshape = Engine::Registry().get<InputEnemiesFile>(state_.entity);
+		if (inputshape.currentshape=="goblin") { run = "among_them_animations:goblin_run"; }
+		if (inputshape.currentshape == "slime") { run = "among_them_animations:slime_run"; }
+		if(inputshape.currentshape == "bat") { run = "among_them_animations:bat"; }
 		m_EnemyStateMachine.Run(state_);
 	
 	});
@@ -35,10 +40,11 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	auto& sprite = Engine::Registry().get<Sprite>(state_.entity);
 	auto& transform = Engine::Registry().get<Transform>(state_.entity);
 	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
-
+	auto& path = Engine::Registry().get<InputEnemiesFile>(state_.entity);
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 
-	FileInputStream inFile{ "path.txt" };
+	
+	FileInputStream inFile{ path.pathname };
 
 	Vector2 point;
 	while (inFile >> point.x >> point.y) {
@@ -71,7 +77,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	}
 	else { ctrl.direction.y = 0; }
 
-	AnimatorPlay(animator, "among_them_animations:goblin_run");
+	AnimatorPlay(animator, run);
 	transform.position.x += ctrl.direction.x * ctrl.speed * Engine::DeltaTime();
 	transform.position.y += ctrl.direction.y * ctrl.speed * Engine::DeltaTime();
 

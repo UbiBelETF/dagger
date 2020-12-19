@@ -101,7 +101,7 @@ void SetupWorldSmiljana(Engine& engine_) {
 
             auto& playerTransform = reg.emplace<Transform>(player);
             playerTransform.position = { 0, 0, zPos };
-
+            
             auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
             playerInput.contexts.push_back("AmongThemInput");
 
@@ -125,9 +125,39 @@ void SetupWorldSmiljana(Engine& engine_) {
         auto& enemyTransform = reg.emplace<Transform>(enemy);
         enemyTransform.position = { 0, 25, zPos };
 
+        auto& enemyInput = reg.emplace<InputEnemiesFile>(enemy);
+        enemyInput.pathname = "path.txt";
+        enemyInput.currentshape = "goblin";
+
         reg.emplace<EnemyDescription>(enemy);
 
         reg.emplace<MovableBody>(enemy);
+
+        //ENEMY NO.2
+
+        //ENEMY 
+        auto enemy2 = reg.create();
+
+        auto& enemy2State = ATTACH_TO_FSM(EnemyFSM, enemy2);
+        enemy2State.currentState = EEnemyState::Patrolling;
+
+        auto& enemy2Sprite = reg.emplace<Sprite>(enemy2);
+        AssignSprite(enemy2Sprite, "spritesheets:among_them_spritesheet:bat_anim:1");
+        enemy2Sprite.scale = { 1, 1 };
+
+        auto& enemy2Animator = reg.emplace<Animator>(enemy2);
+        AnimatorPlay(enemy2Animator, "among_them_animations:bat");
+
+        auto& enemy2Transform = reg.emplace<Transform>(enemy2);
+        enemy2Transform.position = { 0, 60, zPos };
+
+        auto& enemy2Input = reg.emplace<InputEnemiesFile>(enemy2);
+        enemy2Input.pathname = "pathbat.txt";
+        enemy2Input.currentshape = "bat";
+
+        reg.emplace<EnemyDescription>(enemy2);
+
+        reg.emplace<MovableBody>(enemy2);
 
 
 
