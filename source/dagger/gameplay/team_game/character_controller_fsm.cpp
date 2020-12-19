@@ -5,7 +5,7 @@
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "gameplay/team_game/player_controller_fsm.h"
-#include "shoot.h"
+#include "gameplay/team_game/shoot.h"
 
 using namespace dagger;
 using namespace lab;

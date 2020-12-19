@@ -1,0 +1,17 @@
+{
+	"animation-name": "lab:tank",
+	"animation-length-ms": 2000,
+	"animation-frames": 
+	[
+		{ "texture-name": "lab:tank:lab anims_Alien tank_0" },
+		{ "texture-name": "lab:tank:lab anims_Alien tank_0" },
+		{ "texture-name": "lab:tank:lab anims_Alien tank_1" },
+		{ "texture-name": "lab:tank:lab anims_Alien tank_2" },
+        { "texture-name": "lab:tank:lab anims_Alien tank_3" },
+        { "texture-name": "lab:tank:lab anims_Alien tank_4" },
+        { "texture-name": "lab:tank:lab anims_Alien tank_5" },
+        { "texture-name": "lab:tank:lab anims_Alien tank_6" },
+        { "texture-name": "lab:tank:lab anims_Alien tank_7" }
+
+	]
+}

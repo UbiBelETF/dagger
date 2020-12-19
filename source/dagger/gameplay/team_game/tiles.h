@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tile.h"
+#include "gameplay/team_game/tile.h"
 #include "core/core.h"
 #include "core/system.h"
 #include <functional>
