@@ -98,35 +98,6 @@ void SetupWorldJovica(Engine& engine_)
 
         reg.emplace<MovableBody>(player);
     }
-}
-namespace kosta {
-    Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_) {
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 30 };
-        AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
-
-        return entity;
-    }
-
-    Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_) {
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 30 };
-        AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_2");
-        auto& collision = reg_.emplace<SimpleCollision>(entity);
-        return entity;
-    }
-
-    Entity CreateDoor(Registry& reg_, UInt32 x_, UInt32 y_) {
-        Entity entity = reg_.create();
-        auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 30 };
-        AssignSprite(sprite, "spritesheets:among_them_tilemap:door_floor");
-
-        return entity;
-    }
- }   
 
 void SetupWorldSmiljana(Engine& engine_) {
   
@@ -206,11 +177,9 @@ void SetupWorldSmiljana(Engine& engine_) {
         st2.size = wallSprite2.size;
     }
 }
-
 void team_game::SetupWorld(Engine &engine_)
 {
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-    SetupWorldSmiljana(engine_);
+   // SetupWorldJovica(engine_);
     //SetupWorldKosta(engine_);
-    //SetupWorldJovica(engine_);
 }

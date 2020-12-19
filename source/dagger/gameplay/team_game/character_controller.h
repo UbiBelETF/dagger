@@ -21,7 +21,7 @@ enum struct ECharacterShape {
 struct CharacterController
 {
 	Float32 speed{ 70 };
-	
+	ECharacterShape shape = ECharacterShape::Hero;
 };
 
 struct CharacterFSM : public FSM<ECharacterState>
@@ -39,13 +39,9 @@ struct CharacterFSM : public FSM<ECharacterState>
 class CharacterControllerSystem : public System
 {
 	CharacterFSM m_CharStateMachine;
-	ECharacterShape s_shape;
 
 public:
 	inline String SystemName() override { return "Character Controller System"; }
-
-	ECharacterShape GetShape() { return s_shape; }
-	void SetShape(ECharacterShape newShape_) { s_shape = newShape_; }
 
 	void Run() override;
 
