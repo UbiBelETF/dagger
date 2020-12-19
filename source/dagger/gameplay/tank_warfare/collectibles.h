@@ -13,9 +13,9 @@ namespace tank_warfare
     {
         Coin,
         ExtraLife,
-        FireRateUp,
+        Shield,
         Health,
-        Shield
+        FireRateUp
     };
 
     struct Collectible
