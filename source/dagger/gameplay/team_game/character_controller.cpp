@@ -21,17 +21,20 @@ using namespace team_game;
 
 void CharacterControllerSystem::Run()
 {
-	Engine::Registry().view<CharacterFSM::StateComponent>().each(
-		[&](CharacterFSM::StateComponent& state_)
-		{   
-		auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
-		if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; SetShape(ECharacterShape::Goblin); }
-		if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; SetShape(ECharacterShape::Slime);		}
-		if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; SetShape(ECharacterShape::Bat); }
-		if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; SetShape(ECharacterShape::Hero);	}
-			m_CharStateMachine.Run(state_);
-		});
-	
+	auto view = Engine::Registry().view<CharacterController>();
+	for (auto entity : view) {
+		auto& chController = view.get<CharacterController>(entity);
+		Engine::Registry().view<CharacterFSM::StateComponent>().each(
+			[&](CharacterFSM::StateComponent& state_)
+			{
+				auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
+				if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; chController.shape = ECharacterShape::Goblin; }
+				if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; chController.shape = ECharacterShape::Slime; }
+				if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; chController.shape = ECharacterShape::Bat; }
+				if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; chController.shape = ECharacterShape::Hero; }
+				m_CharStateMachine.Run(state_);
+			});
+	}
 }
 
 DEFAULT_ENTER(CharacterFSM, Idle);
