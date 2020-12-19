@@ -1,6 +1,6 @@
 {
 	"animation-name": "lab:tank",
-	"animation-length-ms": 3000,
+	"animation-length-ms": 2000,
 	"animation-frames": 
 	[
 		{ "texture-name": "lab:tank:lab anims_Alien tank_0" },
