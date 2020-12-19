@@ -171,6 +171,67 @@ struct Boss
     }
 };
 
+//Guide
+struct Guide
+{
+    Entity entity;
+    Sprite& sprite;
+    Animator& animator;
+
+    static Guide Get(Entity entity)
+    {
+        auto& reg = Engine::Registry();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        auto& anim = reg.get_or_emplace<Animator>(entity);          
+        return Guide{ entity, sprite, anim};
+    }
+
+    static Guide Create(
+        ColorRGB color_ = { 1, 1, 1 },
+        Vector2 position_ = { 100, 100 })
+    {
+        auto& reg = Engine::Registry();
+        auto entity = reg.create();
+        auto chr = Guide::Get(entity);
+        chr.sprite.scale = { 1, 1 };
+        chr.sprite.position = { 2430.0, 22, 0.0f };
+        chr.sprite.color = { color_, 1.0f };
+        AssignSprite(chr.sprite, "team_game:Guide:Animation0");
+        AnimatorPlay(chr.animator, "guide:idle");
+        return chr;
+    }
+};
+
+//Bubble
+struct Bubble
+{
+    Entity entity;
+    Sprite& sprite;
+    Animator& animator;
+
+    static Bubble Get(Entity entity)
+    {
+        auto& reg = Engine::Registry();
+        auto& sprite = reg.get_or_emplace<Sprite>(entity);
+        auto& anim = reg.get_or_emplace<Animator>(entity);
+        return Bubble{ entity, sprite, anim };
+    }
+
+    static Bubble Create(
+        ColorRGB color_ = { 1, 1, 1 },
+        Vector2 position_ = { 100, 100 })
+    {
+        auto& reg = Engine::Registry();
+        auto entity = reg.create();
+        auto chr = Bubble::Get(entity);
+        chr.sprite.scale = { 1, 1 };
+        chr.sprite.position = { 2350, 72, 0.0f };
+        chr.sprite.color = { color_, 1.0f };
+        AssignSprite(chr.sprite, "team_game:Quotes:bubble1");
+        AnimatorPlay(chr.animator, "quotes:talk");
+        return chr;
+    }
+};
 //bacckground
 void CreateBackground()
 {
@@ -283,6 +344,8 @@ void team_game::SetupWorld_Demo(Engine& engine_)
 
     auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, 100 });
     auto boss = Boss::Create("Arrows", { 1,1,1 }, { 50,100 });
+    auto guide = Guide::Create( { 1,1,1 }, { 50,100 });
+    auto bubble = Bubble::Create({ 1,1,1 }, { 50,100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);
 }
 void TeamGame::WorldSetup(Engine& engine_)

@@ -1,0 +1,10 @@
+{
+	"animation-name": "quotes:talk",
+	"animation-length-ms": 16000,
+	"animation-frames": [
+		{ "texture-name": "team_game:Quotes:bubble1" },
+		{ "texture-name": "team_game:Quotes:bubble2" },
+		{ "texture-name": "team_game:Quotes:bubble3" },
+		{ "texture-name": "team_game:Quotes:bubble4" }
+	]
+}
