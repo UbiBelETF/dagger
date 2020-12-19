@@ -62,7 +62,7 @@ void PlightCombatSystem::Run()
 
 			//Stamina will not be affecting running , it will be used for special movement like dashing or rolling when it gets implemented (used on running for example here)
 
-			if (character.running) {
+			/*if (character.running) {
 
 				cstats.currentStamina -= STAMINA_FOR_RUNNING_FRAME;
 				if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
@@ -76,10 +76,25 @@ void PlightCombatSystem::Run()
 				auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
 				cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
 				sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+			}*/
+			if (character.dashing){
+				cstats.currentStamina -= STAMINA_FOR_DASHING_FRAME;
+				if (cstats.currentStamina < STAMINA_FOR_DASHING_FRAME) {
+					if (cstats.currentStamina < 0.f) {
+						cstats.currentStamina = 0.f;
+					}
+					character.running = false;
+					character.dashing = false;
+					character.resting = true;
+
+				}
+				auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+				cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+				sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 			}
 			else {
 
-				cstats.currentStamina += STAMINA_FOR_RUNNING_FRAME / 2;
+				cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME / 2;
 				if (cstats.currentStamina > 100) {
 					cstats.currentStamina = 100;
 				}
