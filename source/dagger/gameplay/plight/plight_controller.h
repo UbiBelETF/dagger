@@ -29,6 +29,9 @@ namespace plight
 		Float32 currentDashingTime{ 0.f };
 		Float32 doubleTapDurationWindow{ 0.25f };
 		Float32 currentDoubleTapDuration{ 0.f };
+
+		//used for reseting characters
+		Vector2 startPosition = { 0.f,0.f };
 	};
 
 	class PlightControllerSystem

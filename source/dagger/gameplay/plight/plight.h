@@ -10,6 +10,7 @@ using namespace dagger;
 namespace plight
 {
     void SetupWorld(Engine& engine_);
+    void ResetCharacters();
     void SetupWorld_test1(Engine& engine_);
     void SetupWorld_CombatSystem(Engine& engine_);
     void SetupWorld_AimingSystem(Engine& engine_);

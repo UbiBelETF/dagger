@@ -47,5 +47,6 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 		AssignSprite(sprite, spritesheet);
 
 		positionX += (int)(spritesheet->frame.size.x * spacing);
+		entities.push_back(entity);
 	}
 }

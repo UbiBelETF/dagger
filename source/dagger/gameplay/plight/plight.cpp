@@ -10,6 +10,7 @@
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
 #include "core/graphics/sprite_render.h"
+#include "core/graphics/text.h"
 #include "core/graphics/textures.h"
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
@@ -82,6 +83,7 @@ struct PlightCharacter
         chr.col.size.y = 16;
 
         chr.transform.position = { position_, 2.0f };
+        chr.character.startPosition = position_;
 
         AssignSprite(chr.sprite, "spritesheets:dungeon:big_demon_idle_anim:1");
         AnimatorPlay(chr.animator, "Plight:big_deamon:IDLE");
@@ -142,6 +144,46 @@ void Plight::WorldSetup(Engine &engine_)
 
 void plight::SetupWorld(Engine &engine_)
 {
+}
+
+void plight::ResetCharacters()
+{
+    auto view = Engine::Registry().view<PlightCharacterController>();
+    for (auto entity : view) {
+        auto character = PlightCharacter::Get(entity);
+        character.cstats.currentHealth = character.cstats.maxHealth;
+        character.cstats.currentStamina = character.cstats.maxStamina;
+        character.transform.position.x = character.character.startPosition.x;
+        character.transform.position.y = character.character.startPosition.y;
+
+        auto& currentHealthBar = Engine::Registry().get<Sprite>(character.cstats.currentHealthBar);
+        auto& currentStaminaBar = Engine::Registry().get<Sprite>(character.cstats.currentStaminaBar);
+        auto& backgroundHealthBar = Engine::Registry().get<Sprite>(character.cstats.backgroundHealthBar);
+        auto& backgroundStaminaBar = Engine::Registry().get<Sprite>(character.cstats.backgroundStaminaBar);
+
+        currentHealthBar.size.x = 50;
+        currentStaminaBar.size.x = 50;
+        currentHealthBar.position.x = backgroundHealthBar.position.x;
+        currentStaminaBar.position.x = backgroundStaminaBar.position.x;
+        character.cstats.healthBarOffset = 0.f;
+        character.cstats.staminaBarOffset = 0.f;
+
+        auto& crosshairSprite = Engine::Registry().get<Sprite>(character.crosshair.crosshairSprite);
+        crosshairSprite.position.x = character.transform.position.x + character.crosshair.playerDistance;
+        crosshairSprite.position.y = character.transform.position.y;
+        crosshairSprite.position.z = character.transform.position.z;
+
+        character.crosshair.angle = character.crosshair.startAngle;
+        if (character.crosshair.angle > 0.f) {
+            auto& crosshairSprite = Engine::Registry().get<Sprite>(character.crosshair.crosshairSprite);
+            crosshairSprite.position.x -= character.crosshair.playerDistance * 2;
+            character.sprite.scale.x = -1;
+        }
+
+        
+        
+        
+    }
 }
 
 void setUpBackground(Engine& engine_) {
@@ -265,9 +307,16 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
 void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
-    //setUpBackground(engine_);
+    auto entity = Engine::Registry().create();
+    auto& pgInfo = Engine::Registry().emplace<PlightGameInfo>(entity);
+    pgInfo.newGameMessage = Engine::Registry().create();
+    auto& text = Engine::Registry().emplace<Text>(pgInfo.newGameMessage);
+    text.spacing = 0.6f;
+    text.position.y = 150;
+    text.position.x = 50;
 
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
+    mainChar.crosshair.startAngle = 0.f;
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -314,6 +363,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 });
     sndChar.crosshair.angle = M_PI;
+    sndChar.crosshair.startAngle = M_PI;
     auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
 
