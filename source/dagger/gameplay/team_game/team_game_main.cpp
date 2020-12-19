@@ -1,5 +1,5 @@
-#include "team_game_main.h"
-#include "tiles.h"
+#include "gameplay/team_game/team_game_main.h"
+#include "gameplay/team_game/tiles.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -20,7 +20,7 @@
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/player_controller_fsm.h"
 
-#include "tilemap_entities.h"
+#include "gameplay/team_game/tilemap_entities.h"
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/enemy.h"
 #include "core/graphics/text.h"

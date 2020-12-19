@@ -1,6 +1,6 @@
-#include "player_controller_fsm.h"
-#include "shoot.h"
-#include "tilemap_entities.h"
+#include "gameplay/team_game/player_controller_fsm.h"
+#include "gameplay/team_game/shoot.h"
+#include "gameplay/team_game/tilemap_entities.h"
 
 #include "core/core.h"
 #include "core/engine.h"

@@ -1,5 +1,5 @@
-#include "tiles.h"
-#include "tile.h"
+#include "gameplay/team_game/tiles.h"
+#include "gameplay/team_game/tile.h"
 
 #include "core/core.h"
 #include "core/engine.h"

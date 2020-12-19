@@ -7,7 +7,7 @@
 #include "core/graphics/animations.h"
 #include "gameplay/common/simple_collisions.h"
 #include "core/game/transforms.h"
-#include "tile.h"
+#include "gameplay/team_game/tile.h"
 
 
 

@@ -2,7 +2,7 @@
 
 #include "core/core.h"
 #include "core/system.h"
-#include "tile.h"
+#include "gameplay/team_game/tile.h"
 #include "core/game/transforms.h"
 #include "gameplay/team_game/character_controller_fsm.h"
 
