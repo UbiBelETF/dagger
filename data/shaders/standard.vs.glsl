@@ -11,6 +11,7 @@ layout (location = 5) in vec3 ai_QuadPosition;
 layout (location = 6) in vec2 ai_QuadPivot;
 layout (location = 7) in vec4 ai_QuadColor;
 layout (location = 8) in vec2 ai_Scale;
+layout (location = 9) in float ai_Rotation;
 
 uniform mat4 u_Projection;
 uniform mat4 u_Viewport;
@@ -23,6 +24,10 @@ out highp vec4 v_QuadColor;
 
 void main()
 {
+	float radianRotation = 0.0174533 * ai_Rotation;
+	float cosRotation = cos(radianRotation);
+	float sinRotation = sin(radianRotation);
+
 	v_TextureCoord = a_TextureCoord;
 	v_SubTexSize = ai_SubTexSize;
 	v_SubTexOrigin = ai_SubTexOrigin;
@@ -33,6 +38,10 @@ void main()
 	recenteredVertexPosition.x *= ai_ImageDimensions.x * ai_Scale.x;
 	recenteredVertexPosition.y *= ai_ImageDimensions.y * ai_Scale.y;
 
+	vec2 rotatedVertexPosition = vec2(
+		cosRotation * recenteredVertexPosition.x - sinRotation * recenteredVertexPosition.y, 
+		sinRotation * recenteredVertexPosition.x + cosRotation * recenteredVertexPosition.y);
+
 	gl_Position = u_Projection * u_Viewport * u_Camera * 
-		vec4(recenteredVertexPosition + ai_QuadPosition.xy, -ai_QuadPosition.z, 1.0f);
+		vec4(rotatedVertexPosition + ai_QuadPosition.xy, -ai_QuadPosition.z, 1.0f);
 }
