@@ -14,22 +14,27 @@ void team_game::GravitySystem::Run()
         {
             if (!collider_.canGoUp)
             {
-                gravity_.verticalCurrentSpeed = -100.f;
+                gravity_.verticalCurrentSpeed = 0.f;
             }
+
             if (collider_.canGoDown)
             {       
-                if (abs(gravity_.verticalCurrentSpeed) > gravity_.terminalVelocity)
-                {
-                    gravity_.verticalCurrentSpeed = - gravity_.terminalVelocity;
-                }
-                
-                transform_.position.y += gravity_.verticalCurrentSpeed * Engine::DeltaTime();
-                
-                gravity_.verticalCurrentSpeed -= m_GravityAcceleration * Engine::DeltaTime();
+                gravity_.verticalGravitySpeed -= m_GravityAcceleration * Engine::DeltaTime();                
             }
             else
             {
-                gravity_.verticalCurrentSpeed = 0.f;
-            } 
+                gravity_.verticalGravitySpeed = 0.f;
+            }
+
+            transform_.position.y += (gravity_.verticalCurrentSpeed + gravity_.verticalGravitySpeed) * Engine::DeltaTime();
+            /*
+            if (abs(gravity_.verticalCurrentSpeed + gravity_.verticalGravitySpeed) > gravity_.terminalVelocity)
+            {
+               
+            }
+            else
+            {
+                transform_.position.y -= gravity_.terminalVelocity * Engine::DeltaTime();
+            }*/
         });
 }
