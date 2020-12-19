@@ -11,16 +11,13 @@ enum struct EEnemyState
 	Chasing
 };
 
-struct WalkingPath {
-	static UInt32 numberOfPoints;
-	static Sequence<Vector2> path;
-};
+
 
 struct EnemyDescription {
 
 	Float32 speed{ 100 };
-	
-
+	UInt32 numberOfPoints=0;
+	Sequence<Vector2> path = {};
 	SInt32 postition = 0;
 	Vector2 direction = { -1, 0 };
 	Vector2 offset = { 0,0 };
