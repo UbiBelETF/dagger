@@ -47,7 +47,7 @@ void level_generator::jovica::EmplaceCollider(Registry& reg_, Entity entity_, SI
 {
     auto& collider = reg_.emplace<StaticBody>(entity_);
     collider.size = { 32, 32 };
-    Engine::GetDefaultResource<StaticBodyMap>()->put(x_, y_, collider);
+    Engine::GetDefaultResource<StaticBodyMap>()->put(x_, y_, entity_);
     Logger::info("Inserted into map on [{}, {}]", x_, y_);
 }
 

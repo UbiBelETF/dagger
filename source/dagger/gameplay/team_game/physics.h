@@ -14,14 +14,14 @@ namespace team_game
 
 	struct StaticBodyMap
 	{
-		std::map<Pair<SInt32, SInt32>, StaticBody> map;
+		std::map<Pair<SInt32, SInt32>, Entity> map;
 
-		void put(SInt32 x_, SInt32 y_, StaticBody& body_)
+		void put(SInt32 x_, SInt32 y_, Entity& entity_)
 		{
-			map[pair(x_, y_)] = body_;
+			map[pair(x_, y_)] = entity_;
 		}
 
-		StaticBody get(SInt32 x_, SInt32 y_)
+		Entity get(SInt32 x_, SInt32 y_)
 		{
 			return map[pair(x_, y_)];
 		}
