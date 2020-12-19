@@ -15,6 +15,7 @@ using namespace dagger;
 void InputSystem::OnKeyboardEvent(KeyboardEvent input_)
 {
 	auto key = (UInt64)input_.key;
+    if ((SInt64)input_.key < 0) return;
 
 	if (input_.action == EDaggerInputState::Pressed)
 	{

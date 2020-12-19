@@ -36,7 +36,7 @@ void SpriteRenderSystem::SpinUp()
     
     glGenBuffers(1, &m_InstanceQuadInfoVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
-	glBufferData(GL_ARRAY_BUFFER, s_BufferSize, nullptr, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, s_BufferSize, nullptr, GL_STATIC_DRAW);
 
     const StaticArray<Pair<UInt32, UInt32>, 7> sizesAndStrides = {
         pair(2, 0),     // #2: sub size
@@ -201,9 +201,10 @@ void SpriteRenderSystem::OnRender()
             Engine::Dispatcher().trigger<ShaderChangeRequest>(ShaderChangeRequest(prevShader));
         }
 
-        assert(ptr->image != nullptr);
         while (ptr != sprites.end() && ptr->image == nullptr) ptr++;
         if (ptr == sprites.end()) break;
+
+        assert(ptr->image != nullptr);
 
         prevTexture = ptr->image;
 
@@ -217,9 +218,10 @@ void SpriteRenderSystem::OnRender()
 
         const UInt32 renderSize = sizeof(SpriteData) * currentRender.size();
 
-        m_Data = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, sizeof(Sprite) * currentRender.size(), GL_MAP_WRITE_BIT));
+        m_Data = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, sizeof(SpriteData) * currentRender.size(), GL_MAP_WRITE_BIT));
         memcpy(m_Data, &(*currentRender.begin()), renderSize);
         glUnmapBuffer(GL_ARRAY_BUFFER);
+        glFlush();
 
         glBindTexture(GL_TEXTURE_2D, prevTexture->TextureId());
         glDrawArraysInstanced(GL_TRIANGLES, 0, s_VertexCount, (GLsizei)currentRender.size());

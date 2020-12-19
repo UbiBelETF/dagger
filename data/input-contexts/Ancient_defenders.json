@@ -1,0 +1,21 @@
+{
+	"context-name": "AD_Controls",
+	"commands": [
+		{ "command-name": "move", "trigger": "KeyM" },
+		{ "command-name": "chant", "trigger": "KeyC" },
+		{ "command-name": "enemy", "trigger": "KeyE" },
+		{ "command-name": "num", 
+		  "actions": [
+			{ "trigger": "Key1", "value": 1 },
+			{ "trigger": "Key2", "value": 2 },
+			{ "trigger": "Key3", "value": 3 },
+			{ "trigger": "Key4", "value": 4 },
+			{ "trigger": "Key5", "value": 5 },
+			{ "trigger": "Key6", "value": 6 },
+			{ "trigger": "Key7", "value": 7 },
+			{ "trigger": "Key8", "value": 8 } 
+		] }, 
+		{ "command-name": "tower", "trigger": "KeyT" },
+		{ "command-name": "spot", "trigger": "KeyS" }
+	]
+}

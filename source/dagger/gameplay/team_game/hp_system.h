@@ -10,19 +10,17 @@ using namespace dagger;
 namespace ancient_defenders {
 
     struct Health {
-        Entity hpBar = Engine::Registry().create();
-        //Sprite & sprite = Engine::Registry().emplace<Sprite>(hpBar);
+        Entity hpBar;
         
         Float32 currentHealth;
         Float32 maxHealth;
 
+        Float32 deathTimer;
+        String deathAnimation;
+
+        static constexpr Float32 standardDeathTimer = 1.0f;
         static constexpr Float32 standardHP = 100.0f;
-
-        static Sequence<Float32> hpSteps;
-
     };
-
-    Float32 closestNeighbour(Float32 number_);
 
     class HealthManagementSystem
         : public System

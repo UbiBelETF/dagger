@@ -2,7 +2,9 @@
 #include "mage.h"
 #include "golem.h"
 #include "range_of_attack.h"
+#include "towers.h"
 #include "hp_system.h"
+#include "controls.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -24,8 +26,10 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
       engine_.AddSystem<SimpleCollisionsSystem>();
       engine_.AddSystem<RangedTargetingSystem>();
       engine_.AddSystem<MageBehaviorSystem>();
-	    engine_.AddSystem<GolemBehaviorSystem>();
+      engine_.AddSystem<TowerBehaviorSystem>();
+      engine_.AddSystem<EnemyBehaviorSystem>();
       engine_.AddSystem<HealthManagementSystem>();
+      engine_.AddSystem<PlayerControlsSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -41,7 +45,8 @@ void TeamGame::WorldSetup(Engine &engine_)
 
     ancient_defenders::SetupWorld(engine_);
     ancient_defenders::LoadPath();
-    ancient_defenders::SetupDemoCharacter(engine_);
+    ancient_defenders::LoadTowerSpots();
+    ancient_defenders::SetupControls(engine_);
 }
 
 void ancient_defenders::SetupWorld(Engine &engine_)
@@ -62,96 +67,15 @@ void ancient_defenders::SetupWorld(Engine &engine_)
 
 
 
-void ancient_defenders::SetupDemoCharacter(Engine& engine_) {
+void ancient_defenders::SetupControls(Engine& engine_) {
     auto& reg = engine_.Registry();
 
-    float zPos = 1.f;
-
-
-  	auto demoGolem = Golem::Create();
-    auto demoMage = Mage::Create();
-	/*
-
-    auto demoMage1 = Mage::Create();
-    auto demoMage2 = Mage::Create();
-    auto demoMage3 = Mage::Create();
-
     {
         auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
+        auto & inputs = reg.emplace<InputReceiver>(entity);
 
-        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
-        sprite.scale = { -2,2 };
-        sprite.color = { 0.5f,0.5f,0.5f,0.5f };
-
-        auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { 38, -178 , 1.0f };
-
-
-        auto & en = reg.emplace<Health>(entity);
-        en.currentHealth = 10.0f;
-        en.maxHealth = 10.0f;
-
-        auto & sc = reg.emplace<SimpleCollision>(entity);
-        sc.size = sprite.size;
-        auto & roa = reg.emplace<RangeOfAttack>(entity);
-        roa.range = sc.size.x;
-
-        roa.unitType = ETarget::Golem;
-        roa.targetType = ETarget::Mage;
+        inputs.contexts.push_back("AD_Controls");
     }
-	*/
-	/*
-    {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-
-        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
-        sprite.scale = { 2,2 };
-        sprite.color = { 0.5f,0.5f,0.5f,0.5f };
-
-        auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { 292, 8 , 1.0f };
-
-
-        auto & en = reg.emplace<Health>(entity);
-        en.currentHealth = 30.0f;
-        en.maxHealth = 30.0f;
-
-        auto & sc = reg.emplace<SimpleCollision>(entity);
-        sc.size = sprite.size;
-        auto & roa = reg.emplace<RangeOfAttack>(entity);
-        roa.range = sc.size.x;
-
-        roa.unitType = ETarget::Golem;
-        roa.targetType = ETarget::Mage;
-    }
-	*/
-	/*
-    {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-
-        AssignSprite(sprite, "spritesheets:mage:mage_stand_front:1");
-        sprite.scale = { 2,2 };
-        sprite.color = { 0.5f,0.5f,0.5f,0.5f };
-
-        auto & coordinates = reg.emplace<Transform>(entity);
-        coordinates.position = { -312, -100 , 1.0f };
-
-        auto & en = reg.emplace<Health>(entity);
-        en.currentHealth = 10.0f;
-        en.maxHealth = 10.0f;
-
-        auto & sc = reg.emplace<SimpleCollision>(entity);
-        sc.size = sprite.size;
-        auto & roa = reg.emplace<RangeOfAttack>(entity);
-        roa.range = sc.size.x;
-
-        roa.unitType = ETarget::Golem;
-        roa.targetType = ETarget::Mage;
-
-    }*/
 }
 
 void ancient_defenders::LoadPath() {
@@ -165,4 +89,15 @@ void ancient_defenders::LoadPath() {
     }
 
     WalkingPath::numberOfPoints = WalkingPath::path.size();
+}
+
+void ancient_defenders::LoadTowerSpots() {
+
+    FileInputStream inFile{ "spots.txt" };
+
+    Vector2 point;
+
+    while (inFile >> point.x >> point.y) {
+        TowerPlacementInfo::spotCoordinates.emplace_back(point);
+    }
 }

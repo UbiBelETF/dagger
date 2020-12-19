@@ -20,12 +20,13 @@ namespace ancient_defenders {
         Moving = 2,
         Attacking = 3,
         Chanting = 4,
-        Defending = 5,
     };
 
     struct MageStats {
         Float32 speed;
         Float32 meleeDmg;
+
+        UInt32 chantingSpot;
 
         SInt32 postition = 0;
         Vector2 direction = { -1, 0 };
@@ -36,18 +37,8 @@ namespace ancient_defenders {
 
     struct Mage {
         Entity entity;
-        Sprite & sprite;
-        Transform & coordinates;
-        Animator & animator;
-        MageStats & mage;
-        SimpleCollision & hitbox;
-        RangeOfAttack & range;
-        Health & health;
 
-        static Mage Get(Entity entity_);
-
-        static Mage Create();
-        
+        static Entity Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true);        
     };
 
     struct WalkingPath {
@@ -61,7 +52,7 @@ namespace ancient_defenders {
     {
 
     public:
-        inline String SystemName() { return "Mage Behaviour System"; }
+        inline String SystemName() { return "Mage Behavior System"; }
 
         void SpinUp() override;
         void WindDown() override;

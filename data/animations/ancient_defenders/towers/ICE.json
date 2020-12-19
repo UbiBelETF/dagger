@@ -1,0 +1,13 @@
+{
+	"animation-name": "ancient_defenders:towers:ICE",
+	"animation-length-ms": 1200,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:IceTower:ice_tower:1" },
+		{ "texture-name": "spritesheets:IceTower:ice_tower:2" },
+		{ "texture-name": "spritesheets:IceTower:ice_tower:3" },
+		{ "texture-name": "spritesheets:IceTower:ice_tower:4" },
+		{ "texture-name": "spritesheets:IceTower:ice_tower:5" },
+		{ "texture-name": "spritesheets:IceTower:ice_tower:6" }
+	]
+}
