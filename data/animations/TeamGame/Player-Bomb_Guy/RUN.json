@@ -1,0 +1,21 @@
+{
+	"animation-name": "TeamGame:Player-Bomb_Guy:RUN",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:1" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:2" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:3" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:4" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:5" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:6" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:7" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:8" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:9" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:10" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:11" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:12" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:13" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Run:14" }
+	]
+}

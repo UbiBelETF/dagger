@@ -1,6 +1,7 @@
 #pragma once
 #include "core/core.h"
 #include "core/game/finite_state_machine.h"
+#include "gameplay/team_game/animation_fsm.h"
 
 namespace team_game
 {
@@ -10,8 +11,7 @@ namespace team_game
 		Idle,
 		Running,
 		Dashing,
-		Jumping,
-		Falling,
+		InAir,
 		DoubleJumping,
 		Using,
 		Attacking,
@@ -21,15 +21,19 @@ namespace team_game
 
 	struct CharacterControllerFSM : public FSM<ECharacterStates>
 	{
+		AnimationFSM animationFSM;
+
 		DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Idle);
 		DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Running);
-		DEFINE_STATE(CharacterControllerFSM, ECharacterStates, Jumping);
+		DEFINE_STATE(CharacterControllerFSM, ECharacterStates, InAir);
 
 		CharacterControllerFSM()
 		{
 			CONNECT_STATE(ECharacterStates, Idle);
 			CONNECT_STATE(ECharacterStates, Running);
-			CONNECT_STATE(ECharacterStates, Jumping);
+			CONNECT_STATE(ECharacterStates, InAir);
 		}
+
+		void Run(StateComponent& component_) override;
 	};
 }

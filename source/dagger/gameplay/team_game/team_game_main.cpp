@@ -7,6 +7,7 @@
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
+#include "core/graphics/animations.h"
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
@@ -80,6 +81,10 @@ void team_game::SetupWorld(Engine& engine_)
       
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
+
+        auto& animation = reg.emplace<Animator>(entity);
+//        AnimatorPlay(animation, "TeamGame:Player-Bomb_Guy:RUNNING");
+        ATTACH_TO_FSM(team_game::AnimationFSM, entity);
 
         auto& character = reg.emplace<PlayerCharacter>(entity);
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
