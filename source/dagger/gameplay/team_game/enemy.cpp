@@ -77,11 +77,13 @@ void lab::EnemySystem::Run()
 			Float32 speedXIntensity = sqrt((skeleton.speed-2) * (skeleton.speed - 2) / (1 + ratio * ratio));
 			skeleton.speedX = speedXIntensity * directions.x;
 			skeleton.speedY = speedXIntensity * ratio * directions.y;
-			if (skeleton.health > 0)
-			{
-				t.position.x += skeleton.speedX * Engine::DeltaTime();
-				t.position.y += skeleton.speedY * Engine::DeltaTime();
-			}
+
+
+			sprite.scale.x = directions.x == 1 ? 1 : -1;
+
+			t.position.x += skeleton.speedX * Engine::DeltaTime();
+			t.position.y += skeleton.speedY * Engine::DeltaTime();
+
 		}
 
 		if (skeleton.health <= 0)
