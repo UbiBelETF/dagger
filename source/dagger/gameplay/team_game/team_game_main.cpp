@@ -17,6 +17,7 @@
 #include "gameplay/team_game/physics.h"
 #include "gameplay/team_game/collisions.h"
 #include "gameplay/team_game/boss_fsm.h"
+#include "gameplay/team_game/combat.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -27,7 +28,8 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddPausableSystem<PhysicsSystem>();
     engine_.AddPausableSystem<GameManagerSystem>();
     engine_.AddPausableSystem<BrawlerControllerSystem>();
-    engine_.AddPausableSystem<SimpleCollisionsSystem>();
+    //engine_.AddPausableSystem<SimpleCollisionsSystem>();
+    engine_.AddPausableSystem<CombatSystem>();
     engine_.AddPausableSystem<CollisionSystem>();
     engine_.AddPausableSystem<TransformSystem>();
 }
@@ -72,6 +74,7 @@ struct Player
         auto& col=reg.get_or_emplace<SimpleCollision>(entity);
         ATTACH_TO_FSM(ControllerFSM, entity);
         ATTACH_TO_FSM(AnimationsFSM, entity);
+        character.attackSize = 25;
         col.size.x = 5;
         col.size.y = 15;
         physics.nonStatic = true;
@@ -133,7 +136,7 @@ struct Boss
         auto& physics = reg.get_or_emplace<Physics>(entity);
         auto& col = reg.get_or_emplace<SimpleCollision>(entity);
         ATTACH_TO_FSM(BossFSM, entity);
-        
+        character.attackSize = 120;
         col.size.x = 20;
         col.size.y = 21;
         col.pivot = { -0.5f, -1.85f };

@@ -1,0 +1,8 @@
+{
+	"animation-name": "character:HITTED",
+	"animation-length-ms": 200,
+	"animation-frames": [
+		{ "texture-name": "EmptyWhitePixel" },
+		{ "texture-name": "Light:idlea" }
+	]
+}

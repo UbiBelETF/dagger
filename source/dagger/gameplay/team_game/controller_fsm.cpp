@@ -26,8 +26,9 @@ void ControllerFSM::Idle::Enter(ControllerFSM::StateComponent& state_)
 
 void ControllerFSM::Idle::Run(ControllerFSM::StateComponent& state_) 
 {
-    auto&& [input,physics_] = Engine::Registry().get<InputReceiver,Physics>(state_.entity);
-    if (EPSILON_NOT_ZERO(input.Get("light"))) 
+    auto&& [input,physics_,char_] = Engine::Registry().get<InputReceiver,Physics,BrawlerCharacter>(state_.entity);
+    if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
+    else if (EPSILON_NOT_ZERO(input.Get("light"))) 
     {
         GoTo(ECharacterStates::Attacking, state_);
     }
@@ -50,7 +51,8 @@ void ControllerFSM::Running::Enter(ControllerFSM::StateComponent& state_)
 void ControllerFSM::Running::Run(ControllerFSM::StateComponent& state_) {
     auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics>(state_.entity);
-    if (EPSILON_NOT_ZERO(input.Get("light")))
+    if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
+    else if (EPSILON_NOT_ZERO(input.Get("light")))
     {
         GoTo(ECharacterStates::Attacking, state_);
     }
@@ -86,7 +88,8 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
 {
     auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_,transform_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics,Transform>(state_.entity);
-    if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
+    if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
+    else if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
     {
         physics_.velocity.y += char_.speed.y;
         char_.doubleJump = false;
@@ -125,16 +128,20 @@ void ControllerFSM::Attacking::Run(ControllerFSM::StateComponent& state_)
 {
     auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
     auto& char_ = Engine::Registry().get<BrawlerCharacter>(state_.entity);
-    if (EPSILON_ZERO(char_.attacking))
+    if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
+    else if (EPSILON_ZERO(char_.attacking))
     {
         char_.attacking = 0.4f;
     }
     else
     {
         char_.attacking -= Engine::DeltaTime();
+        char_.hitSize = 100 * char_.attacking + 1;
         if (char_.attacking <= 0)
         {
             char_.attacking = 0.f;
+            char_.hitSize = 100;
+            char_.hittedEnemy = false;
             if (EPSILON_NOT_ZERO(input_.Get("jump"))) GoTo(ECharacterStates::InAir, state_);
             else if (EPSILON_NOT_ZERO(input_.Get("run"))) GoTo(ECharacterStates::Running, state_);
             else GoTo(ECharacterStates::Idle, state_);
@@ -142,3 +149,56 @@ void ControllerFSM::Attacking::Run(ControllerFSM::StateComponent& state_)
     }
 }
 DEFAULT_EXIT(ControllerFSM, Attacking);
+
+//hitted
+void ControllerFSM::Hitted::Enter(ControllerFSM::StateComponent& state_)
+{
+    auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
+    ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Hitted, anim);
+}
+void ControllerFSM::Hitted::Run(ControllerFSM::StateComponent& state_)
+{
+    auto& char_ = Engine::Registry().get<BrawlerCharacter>(state_.entity);
+    auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
+
+    char_.gotHit -= Engine::DeltaTime();
+
+    if (char_.gotHit <= 0) {
+        char_.gotHit = 0.f;
+        if (char_.healthHearts == 0) GoTo(ECharacterStates::Dead, state_);
+        else if (input_.Get("light")) GoTo(ECharacterStates::Attacking, state_);
+        else if (input_.Get("run"))GoTo(ECharacterStates::Running, state_);
+        else GoTo(ECharacterStates::Idle, state_);
+    }
+}
+DEFAULT_EXIT(ControllerFSM, Hitted);
+
+//dead
+void ControllerFSM::Dead::Enter(ControllerFSM::StateComponent& state_)
+{
+    auto& anim = Engine::Registry().get<AnimationsFSM::StateComponent>(state_.entity);
+    ((ControllerFSM*)this->GetFSM())->animationsFSM.GoTo(EAnimationsState::Dead, anim);
+}
+void ControllerFSM::Dead::Run(ControllerFSM::StateComponent& state_)
+{
+    auto& char_ = Engine::Registry().get<BrawlerCharacter>(state_.entity);
+    auto& sprite_ = Engine::Registry().get<Sprite>(state_.entity);
+    if (!char_.dead)
+    {
+        if (EPSILON_ZERO(char_.gotHit))
+        {
+            char_.gotHit = 0.7f;
+        }
+        else
+        {
+            char_.gotHit -= Engine::DeltaTime();
+            if (char_.gotHit <= 0)
+            {
+                auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
+                AnimatorStop(animator_);
+            }
+
+        }
+    }
+}
+DEFAULT_EXIT(ControllerFSM, Dead);

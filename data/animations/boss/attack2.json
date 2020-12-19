@@ -1,6 +1,6 @@
 {
 	"animation-name": "boss:boss_attack2",
-	"animation-length-ms": 1000,
+	"animation-length-ms": 500,
 	"animation-frames": 
 	[
 		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:1" },

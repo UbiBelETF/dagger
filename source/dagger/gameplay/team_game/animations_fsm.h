@@ -8,7 +8,9 @@ enum struct EAnimationsState
     Running,
     Falling,
     Jumping,
-    Attacking
+    Attacking,
+    Hitted,
+    Dead
 };
 
 
@@ -19,6 +21,8 @@ struct AnimationsFSM :public FSM<EAnimationsState>
     DEFINE_STATE(AnimationsFSM,EAnimationsState, Jumping);
     DEFINE_STATE(AnimationsFSM,EAnimationsState, Falling);
     DEFINE_STATE(AnimationsFSM, EAnimationsState, Attacking);
+    DEFINE_STATE(AnimationsFSM, EAnimationsState, Hitted);
+    DEFINE_STATE(AnimationsFSM, EAnimationsState, Dead);
 
     AnimationsFSM() {
         CONNECT_STATE(EAnimationsState, Idle);
@@ -26,6 +30,9 @@ struct AnimationsFSM :public FSM<EAnimationsState>
         CONNECT_STATE(EAnimationsState, Jumping);
         CONNECT_STATE(EAnimationsState, Falling);
         CONNECT_STATE(EAnimationsState, Attacking);
+        CONNECT_STATE(EAnimationsState, Hitted);
+        CONNECT_STATE(EAnimationsState, Dead);
+       
     }
     
 
