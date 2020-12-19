@@ -89,7 +89,7 @@ void SetupWorldJovica(Engine& engine_)
         AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
         auto& playerTransform = reg.emplace<Transform>(player);
-        playerTransform.position = { 0, 0, zPos };
+        playerTransform.position = { 50, -50, zPos };
 
         auto& playerInput = reg.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThemInput");
