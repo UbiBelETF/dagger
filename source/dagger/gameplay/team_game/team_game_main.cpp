@@ -13,8 +13,8 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include "gameplay/team_game/character_controller.h"
-#include "gameplay/team_game/tilemap.h"
 #include "gameplay/team_game/camera.h"
+#include "gameplay/team_game/tilemap.h"
 #include "gameplay/team_game/level_generator.h"
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
