@@ -169,7 +169,8 @@ void PlightCharacterControllerFSM::Dashing::Enter(PlightCharacterControllerFSM::
     auto& animator = Engine::Registry().get<Animator>(state_.entity);
     AnimatorPlay(animator, "Plight:big_deamon:DASH");
     auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
-    character.resting = false; character.running = false;
+    character.resting = false; 
+    character.running = false;
 
 
 }
