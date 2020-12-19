@@ -1,6 +1,6 @@
 {
 	"animation-name": "lab:door",
-	"animation-length-ms": 3000,
+	"animation-length-ms": 2000,
 	"animation-frames": 
 	[
 		{ "texture-name": "lab:door:lab anims_Animation 5_00" },
