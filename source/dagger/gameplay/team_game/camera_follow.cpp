@@ -11,6 +11,10 @@ using namespace team_game;
 void CameraFollowSystem::Run()
 {
     auto* camera = Engine::GetDefaultResource<Camera>();
+    auto camPosition = (Vector2)camera->position;
+
+    Vector2 center{};
+    UInt32 count{ 0 };
 
     Engine::Registry().view<CameraFollowFocus, Sprite>().each([&](const CameraFollowFocus& focus_, const Sprite& sprite_)
         {
