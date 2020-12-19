@@ -7,6 +7,7 @@
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
+#include "core/graphics/animations.h"
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
@@ -33,7 +34,6 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<GameManagerSystem>();
-    engine_.AddSystem<CharacterControllerSystem>();
     //engine_.AddSystem<TeamGamePlayerInputSystem>();    
     engine_.AddSystem<GravitySystem>();
     engine_.AddSystem<CollisionSystem>();
@@ -87,11 +87,14 @@ void team_game::SetupWorld(Engine& engine_)
       
         auto& input = reg.emplace<InputReceiver>(entity);
         input.contexts.push_back("Controls");
+        reg.emplace<PlayerCharacter>(entity);
+        auto& animation = reg.emplace<Animator>(entity);
+//        AnimatorPlay(animation, "TeamGame:Player-Bomb_Guy:RUNNING");
+        ATTACH_TO_FSM(team_game::AnimationFSM, entity);
 
         auto& character = reg.emplace<Character>(entity);
-        reg.emplace<PlayerCharacter>(entity);
-
         reg.emplace<Text>(entity);
+
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
         
 

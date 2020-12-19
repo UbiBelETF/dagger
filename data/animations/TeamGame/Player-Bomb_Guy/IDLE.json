@@ -1,0 +1,33 @@
+{
+	"animation-name": "TeamGame:Player-Bomb_Guy:IDLE",
+	"animation-length-ms": 3600,
+	"animation-frames": 
+	[
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:1" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:2" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:3" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:4" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:5" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:6" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:7" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:8" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:9" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:10" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:11" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:12" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:13" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:14" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:15" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:16" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:17" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:18" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:19" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:20" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:21" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:22" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:23" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:24" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:25" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Idle:26" }
+	]
+}

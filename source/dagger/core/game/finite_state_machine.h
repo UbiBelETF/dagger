@@ -19,15 +19,27 @@ struct FSM
 		inline virtual void Enter(StateComponent&) {}
 		inline virtual void Run(StateComponent&) {}
 		inline virtual void Exit(StateComponent&) {}
+		const States m_State;
 
-		State(FSM<States>* parent_)
+		State(FSM<States>* parent_, States state_)
 			: m_Parent{ parent_ }
+			, m_State{ state_ }
 		{}
 
 		inline void GoTo(States nextState_, StateComponent& component_)
 		{
 			assert(m_Parent != nullptr);
 			m_Parent->GoTo(nextState_, component_);
+		}
+
+		FSM<States>* GetFSM()
+		{
+			return m_Parent.get();
+		}
+
+		State* GetState() const
+		{
+			return m_Parent->GetStates()[m_State];
 		}
 
 	private:
@@ -45,10 +57,15 @@ struct FSM
 		}
 	}
 
-	inline void Run(StateComponent& component_)
+	inline virtual void Run(StateComponent& component_)
 	{
 		assert(m_StatePointers.contains(component_.currentState));
 		m_StatePointers[component_.currentState]->Run(component_);
+	}
+
+	inline Map<States, OwningPtr<State>> GetStates() const
+	{
+		return m_StatePointers;
 	}
 
 protected:
@@ -64,7 +81,7 @@ protected:
 	virtual void Enter(StateComponent& component_) override; \
 	virtual void Run(StateComponent& component_) override; \
 	virtual void Exit(StateComponent& component_) override; \
-	State_(FSM<States_>* parent_) : State(parent_) {} \
+	State_(FSM<States_>* parent_) : State(parent_, States_::State_) {} \
 };
 
 #define ATTACH_TO_FSM(Machine_, Entity_) Engine::Registry().get_or_emplace<Machine_::StateComponent>(Entity_, Entity_);

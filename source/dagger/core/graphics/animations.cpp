@@ -3,6 +3,7 @@
 #include "core/engine.h"
 #include "core/graphics/sprite.h"
 
+using namespace team_game;
 
 ViewPtr<Animation> AnimationSystem::Get(String name_)
 {
@@ -24,7 +25,7 @@ void AnimationSystem::SpinUp()
 void AnimationSystem::Run()
 {
     const auto& entities = Engine::Registry().view<Animator, Sprite>();
-    entities.each([](Animator& animator_, Sprite& sprite_) 
+    entities.each([&](Animator& animator_, Sprite& sprite_)
         {
             if (animator_.animationPlaying)
             {

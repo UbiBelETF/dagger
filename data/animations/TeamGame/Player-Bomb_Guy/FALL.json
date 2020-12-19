@@ -1,0 +1,9 @@
+{
+	"animation-name": "TeamGame:Player-Bomb_Guy:FALL",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Fall:1" },
+		{ "texture-name": "TeamGame:Characters:Player-Bomb_Guy:Fall:2" }
+	]
+}
