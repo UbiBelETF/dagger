@@ -9,6 +9,7 @@ using namespace dagger;
 void Text::Set(String font_, String message_, Vector3 pos_)
 {
 	font = font_;
+	position=pos_;
 
 	auto& registry = Engine::Registry();
 
@@ -17,6 +18,7 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 	if (entities.size() > 0)
 	{
 		registry.remove(entities.begin(), entities.end());
+		registry.destroy(entities.begin(), entities.end());
 		entities.clear();
 	}
 
