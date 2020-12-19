@@ -11,7 +11,7 @@ namespace team_game
 {
 	struct TeamGameSlime
 	{
-		int speed{ 15 };
+		int speed{ 20 };
 	};
 	enum Movement{STAY,LEFT,RIGHT,UP,DOWN};
 	struct SlimeAiCommand {

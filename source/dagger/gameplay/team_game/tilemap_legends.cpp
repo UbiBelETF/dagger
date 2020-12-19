@@ -75,7 +75,7 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);
-	reg_.emplace<Collision>(entity);
+	auto& col=reg_.emplace<Collision>(entity);
 	reg_.emplace<CollisionType::Character>(entity);
 	reg_.emplace<SlimeAi>(entity);
 	reg_.emplace<TeamGameSlime>(entity);
@@ -83,6 +83,7 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	sprite.size = Vector2(1, 1) * size;
 	sprite.scale = { scale,scale };
 	transform.position = { x_ * x_step, y_ * y_step, 30 };
+	col.size = { 18, 18 };
 	AssignSprite(sprite, "spritesheets:chara_slime:slime_idle_anim:1");
 	auto& anim = reg_.emplace<Animator>(entity);
 	AnimatorPlay(anim, "chara_slime:slime_idle");
