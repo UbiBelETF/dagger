@@ -13,6 +13,7 @@
 
 void lab::EnemySystem::Run()
 {
+	auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
 	auto view = Engine::Registry().view<Transform, Skeleton, Sprite, SimpleCollision, Animator>();
 	for (auto entity : view)
 	{
@@ -58,6 +59,7 @@ void lab::EnemySystem::Run()
 
 		if (skeleton.type == follower)
 		{
+				
 			Vector2 directions = { 1, 1 };
 			if (playerPosition.x < t.position.x)
 				directions.x = -1;
@@ -80,37 +82,69 @@ void lab::EnemySystem::Run()
 
 
 			sprite.scale.x = directions.x == 1 ? 1 : -1;
-
+			
 			if (skeleton.health > 0)
 			{
 				t.position.x += skeleton.speedX * Engine::DeltaTime();
 				t.position.y += skeleton.speedY * Engine::DeltaTime();
 			}
 
+			
+			
 		}
 
-		if (skeleton.health <= 0)
-		{
-			AnimatorPlay(animator, "skeleton:death");
-			skeleton.deathTimer--;
-			if (skeleton.deathTimer <= 0)
-				reg.remove_all(entity);
-		}
-
-		if (col.colided)
-		{
-			auto view2 = reg.view<Bullet, Sprite, Transform, SimpleCollision>();
-			for (auto entity : view2)
+		if (col.colided && skeleton.health>0)
+		{	if(skeleton.type==follower)
 			{
-				if (entity == col.colidedWith)
+				
+				if (Engine::Registry().valid(col.colidedWith))
 				{
-					Bullet bullet = view2.get<Bullet>(entity);
-					if(bullet.ownership == player)
-						skeleton.health -= bullet.damage;
-					col.colided = false;
+					SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
+					Transform& transform = viewCollisions.get<Transform>(col.colidedWith);
+
+					Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
+
+
+					do
+					{
+						Float32 dt = Engine::DeltaTime();
+						if (collisionSides.x > 0)
+						{
+							t.position.x -= (skeleton.speed * dt);
+						}
+
+						if (collisionSides.y > 0)
+						{
+							t.position.y -= (skeleton.speed* dt);
+						}
+						if (collisionSides.x < 0)
+						{
+							t.position.x += (skeleton.speed * dt);
+						}
+
+						if (collisionSides.y < 0)
+						{
+							t.position.y += (skeleton.speed* dt);
+						}
+							
+					} while (col.IsCollided(t.position, collision, transform.position));
 				}
 			}
+
+			auto view2 = reg.view<Bullet, Sprite, Transform, SimpleCollision>();
+			if (Engine::Registry().has<Bullet>(col.colidedWith))
+			{
+				Bullet &bullet = Engine::Registry().get<Bullet>(col.colidedWith);
+				if(bullet.ownership == player)
+				{
+					skeleton.health -= bullet.damage;
+				}
+			}       
+
+		
+			col.colided = false;
 		}
+			
 
 		if (skeleton.cooldown <= 0)
 		{
@@ -118,6 +152,20 @@ void lab::EnemySystem::Run()
 			skeleton.cooldown = skeleton.maxCooldown;
 		}
 		else
+		{
 			skeleton.cooldown--;
+		}
+			
+
+		if (skeleton.health <= 0)
+		{
+			AnimatorPlay(animator, "skeleton:death");
+			skeleton.deathTimer--;
+			if (skeleton.deathTimer <= 0)
+			{
+				reg.remove_all(entity);
+			}
+				
+		}
 	}
 }
