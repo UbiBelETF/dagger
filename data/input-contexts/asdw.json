@@ -19,6 +19,7 @@
 					"value": 1
 				}
 		] },
+		{ "command-name": "restart", "trigger": "KeySpace" },
 		{ "command-name": "light", "trigger": "KeyR", "event": "Released" },
 		{ "command-name": "heavy", "trigger": "KeyR", "duration": 1000 },
 		{ "command-name": "use", "trigger": "KeyE" },

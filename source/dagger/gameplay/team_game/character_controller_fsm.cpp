@@ -6,6 +6,7 @@
 #include "core/graphics/animation.h"
 #include "gameplay/team_game/player_controller_fsm.h"
 #include "gameplay/team_game/shoot.h"
+#include "gameplay/team_game/team_game_main.h"
 
 using namespace dagger;
 using namespace lab;
@@ -40,6 +41,11 @@ void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
         }
     }
      character.cooldown--;
+    if(EPSILON_NOT_ZERO(input.Get("restart")) )
+    {
+        Engine::Registry().clear();
+        lab::SetupWorld(Engine::Instance());
+    }
 
 }
 
@@ -95,6 +101,11 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
         }
     }
      character.cooldown--;  
+    if(EPSILON_NOT_ZERO(input.Get("restart")) )
+    {
+        Engine::Registry().clear();
+        lab::SetupWorld(Engine::Instance());
+    }
 }
             
 //Dying
@@ -105,9 +116,17 @@ void CharacterFSM::Dying::Enter(CharacterFSM::StateComponent& state_)
 }
 
 void CharacterFSM::Dying::Exit(CharacterFSM::StateComponent& state_) 
-{}
+{
+}
 void CharacterFSM::Dying::Run(CharacterFSM::StateComponent& state_) 
-{}
+{
+    auto& input= Engine::Registry().get<InputReceiver>(state_.entity);
+    if(EPSILON_NOT_ZERO(input.Get("restart")) )
+    {
+        Engine::Registry().clear();
+        lab::SetupWorld(Engine::Instance());
+    }
+}
 
 //GetHit
 void CharacterFSM::GetHit::Enter(CharacterFSM::StateComponent& state_)
@@ -137,11 +156,19 @@ void CharacterFSM::GetHit::Run(CharacterFSM::StateComponent& state_)
             GoTo(ECharacterState::Idle, state_);
         }
 
-        }
+    }
     else
     {
         character.hitCooldown--;
     }
+
+    if(EPSILON_NOT_ZERO(input.Get("restart")))
+    {
+        Engine::Registry().clear();
+        lab::SetupWorld(Engine::Instance());
+    }
+
+
        
     
 }
