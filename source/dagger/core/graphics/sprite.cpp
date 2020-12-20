@@ -13,7 +13,7 @@ void SpriteCutoutData::Use(SpriteFrame* spritesheet_)
 	size = spritesheet_->frame.size;
 }
 
-void dagger::AssignSprite(Sprite& spriteTarget_, String textureName_)
+void dagger::AssignSprite(Sprite& spriteTarget_, String textureName_, UInt32 size_)
 {
 	if (Engine::Res<SpriteFrame>().contains(textureName_))
 	{
@@ -25,6 +25,7 @@ void dagger::AssignSprite(Sprite& spriteTarget_, String textureName_)
 	spriteTarget_.image = texture.get();
 	spriteTarget_.size.x = texture->Width();
 	spriteTarget_.size.y = texture->Height();
+	spriteTarget_.size *= size_;
 	spriteTarget_.UseFullImage();
 }
 

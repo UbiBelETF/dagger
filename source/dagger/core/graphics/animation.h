@@ -30,9 +30,10 @@ namespace dagger
 		Bool animationPlaying{ false };
 		UInt32 currentFrame{ 0 };
 		Float64 currentFrameTime{ 0 };
+		UInt32 size{ 1 };
 	};
 
-	void AnimatorPlay(Animator& animator_, String animationName_);
+	void AnimatorPlay(Animator& animator_, String animationName_, UInt32 size_ = 1);
 	void AnimatorStop(Animator& animator_);
 	UInt32 AnimatorNumberOfFrames(Animator& animator_);
 }

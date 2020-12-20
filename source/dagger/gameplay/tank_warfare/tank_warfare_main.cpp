@@ -32,7 +32,8 @@ void TankWarfare::GameplaySystemsSetup(Engine &engine_)
 void TankWarfare::WorldSetup(Engine &engine_)
 {
     tank_warfare::SetupCamera(engine_);
-    tank_warfare::SetupTestWorld(engine_);
+    tank_warfare::SetupStartScreen(engine_);
+    //tank_warfare::SetupTestWorld(engine_);
 }
 
 void tank_warfare::SetupCamera(Engine &engine_)
@@ -42,7 +43,7 @@ void tank_warfare::SetupCamera(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 2;
+    camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -140,4 +141,30 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     input2.contexts.push_back("tank2");
     AssignSprite(sprite2, "jovanovici:tank:tank3_side");
 
+}
+
+void tank_warfare::SetupStartScreen(Engine& engine_)
+{
+    auto& reg = engine_.Registry();
+    
+    auto entity = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entity);
+    sprite.position.z = 2;
+    AssignSprite(sprite, "jovanovici:menu");
+
+    auto entity1 = reg.create();
+    auto& sprite1 = reg.emplace<Sprite>(entity1);
+    auto& anim1 = reg.emplace<Animator>(entity1);
+    sprite1.position.z = 1;
+    sprite1.position.y = 125;
+    AssignSprite(sprite1, "jovanovici:logoJov:logo1");
+    sprite1.size *= 3;
+    AnimatorPlay(anim1, "logo:tankwarfare", 3);
+
+    auto entity2 = reg.create();
+    auto& sprite2 = reg.emplace<Sprite>(entity2);
+    sprite2.position.z = 1;
+    sprite2.position.y = -100;
+    AssignSprite(sprite2, "jovanovici:buttons:start1");
+    sprite2.size *= 1.5;
 }

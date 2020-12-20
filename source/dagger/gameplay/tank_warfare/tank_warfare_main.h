@@ -10,6 +10,7 @@ using namespace dagger;
 namespace tank_warfare
 {
     void SetupCamera(Engine& engine_);
+    void SetupStartScreen(Engine& engine_);
     void SetupWorld(Engine& engine_);
     void SetupTestWorld(Engine& engine_);
 
