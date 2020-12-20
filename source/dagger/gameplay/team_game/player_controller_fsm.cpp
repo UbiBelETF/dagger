@@ -55,7 +55,8 @@ void PlayerControllerSystem::Run()
     {
         characterFSM.Run(state_);
     });
-            
+
+             
     auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
     auto view = Engine::Registry().view<Transform,SimpleCollision,PlayerCharacter,Text>();
     auto viewText = Engine::Registry().view<PlayerCharacter,Text>();
@@ -76,17 +77,17 @@ void PlayerControllerSystem::Run()
             });
             player.deathCooldown--;
             if(player.deathCooldown==0)
-            {
+            {     
+                Engine::Registry().remove<Sprite>(entity);
+                Engine::Registry().remove<Transform>(entity);
                 tex.alignment={ TextAlignment::CENTER };
-                tex.Set("pixel-font", "GAME OVER",{30,30});
-                Engine::Registry().destroy(entity); 
-            }                       
-                            
+                tex.Set("pixel-font", "GAME OVER",{30,30});    
+            }                                     
         }
+        
 
 
-
-        if (col.colided)
+        else if (col.colided)
         {
             if (Engine::Registry().valid(col.colidedWith))
             {
@@ -142,7 +143,7 @@ void PlayerControllerSystem::Run()
                     }
                         
                     
-
+                    tex.alignment={ TextAlignment::RIGHT };
                     tex.Set("pixel-font", std::to_string(player.health)+"/100",{10,-95,0},{10,10});
                     
                 } 
