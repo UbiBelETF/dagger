@@ -53,11 +53,6 @@ void SetupWorldJovica(Engine& engine_)
     float zPos = 1.f;
 
     {
-        // STATIC BODIES MAP
-        auto mapEnt = reg.create();
-        auto& map = reg.emplace<StaticBodyMap>(mapEnt);
-        Engine::PutDefaultResource<StaticBodyMap>(&map);
-
         // TILEMAP
         TilemapLegend legend;
         legend[' '] = &level_generator::jovica::Nothing;
@@ -186,6 +181,11 @@ void SetupWorldSmiljana(Engine& engine_) {
 }
 void team_game::SetupWorld(Engine &engine_)
 {
+    // STATIC BODIES MAP
+    auto mapEnt = reg.create();
+	auto& map = reg.emplace<StaticBodyMap>(mapEnt);
+	Engine::PutDefaultResource<StaticBodyMap>(&map);
+	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
     SetupWorldJovica(engine_);
     //SetupWorldKosta(engine_);
