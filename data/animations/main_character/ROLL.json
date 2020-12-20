@@ -1,0 +1,11 @@
+{
+	"animation-name": "main_character:roll",
+	"animation-length-ms": 400,
+	"animation-frames": 
+	[
+		{ "texture-name": "main_character:roll:roll1", "relative-length": 1 },
+		{ "texture-name": "main_character:roll:roll2", "relative-length": 1 },
+		{ "texture-name": "main_character:roll:roll3", "relative-length": 1 },
+		{ "texture-name": "main_character:roll:roll4", "relative-length": 1 }
+	]
+}
