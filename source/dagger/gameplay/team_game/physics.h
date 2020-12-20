@@ -10,6 +10,7 @@ namespace team_game
 	struct StaticBody
 	{
 		Vector2 size;
+		Bool enabled{ true };
 	};
 
 	struct StaticBodyMap
