@@ -22,7 +22,9 @@ void lab::EnemySystem::Run()
 		playerPosition.y *= -1;
 	}
 
-	auto view = Engine::Registry().view<Transform, Skeleton, Sprite, SimpleCollision, Animator>();
+	auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
+
+  auto view = Engine::Registry().view<Transform, Skeleton, Sprite, SimpleCollision, Animator>();
 	for (auto entity : view)
 	{
 		auto& t = view.get<Transform>(entity);
@@ -142,6 +144,8 @@ void lab::EnemySystem::Run()
 			else
 				skeleton.cooldown--;
 
+			
+			
 		}
 	}
 
@@ -187,8 +191,12 @@ void lab::EnemySystem::Run()
 					case 7: CreateBullet(newSprite.position, { -rand(), -rand() }, Unit::slime, "Blob"); break;
 					}
 				}
-			}
+			}       
+
+		
+			col.colided = false;
 		}
+			
 
 		else if (slime.health > 0)
 		{
