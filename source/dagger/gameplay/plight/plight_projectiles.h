@@ -3,6 +3,9 @@
 #include "core/system.h"
 #include "core/core.h"
 
+
+#define PROJECTILE_COST 5.f
+
 using namespace dagger;
 
 namespace plight
