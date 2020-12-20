@@ -10,6 +10,11 @@ namespace dagger
 {
     constexpr inline static UInt32 InputCount = 400;
     constexpr inline static UInt32 MouseStart = 150;
+    
+    struct InputEnemiesFile {
+        String pathname;
+        String currentshape;
+    };
 
     struct InputAction
     {
