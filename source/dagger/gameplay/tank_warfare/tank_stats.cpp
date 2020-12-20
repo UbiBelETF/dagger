@@ -24,8 +24,7 @@ void TankStatsSystem::Run()
 
         if (tank.health <= 0)
         {
-            tank.triggerHealth = true;
-            tank.lives--;
+            tank.zeroHealth = true;
             if (tank.lives <= 0) {
                 tank.lastOrientation = ETankOrientation::TankDestroyed;
                 AnimatorPlay(anim, "explosion:big");
@@ -38,6 +37,7 @@ void TankStatsSystem::Run()
             {
                 tank.health = tank.maxHealth;
             }
+            tank.lives--;
         }
 
         for (auto entityHS : viewHS)
@@ -52,13 +52,30 @@ void TankStatsSystem::Run()
                 t.position.y += (sprite.size.y / 2 + 5);
                 if (tank.toBeDestroyed) ts.toBeDestroyed = true;
 
-                if (s.size.x >= (tank.health / tank.maxHealth * ts.barWidth))
+                if (s.size.x > (tank.health / tank.maxHealth * ts.barWidth) || tank.zeroHealth)
                 {
                     s.size.x -= 0.1;
+                    s.color.a = 1;
+                    ts.barTime = ts.maxBarTime;
+                    if (s.size.x <= 0.0)
+                    {
+                        tank.zeroHealth = false;
+                    }
                 }
-                else if (s.size.x <= (tank.health / tank.maxHealth * ts.barWidth))
+                else if (s.size.x < (tank.health / tank.maxHealth * ts.barWidth))
                 {
                     s.size.x = tank.health / tank.maxHealth * ts.barWidth;
+                    s.color.a = 1;
+                    ts.barTime = ts.maxBarTime;
+                }
+                else
+                {
+                    ts.barTime -= Engine::DeltaTime();
+                    if (ts.barTime < -1) ts.barTime = 0;
+                    if (ts.barTime <= 0)
+                    {
+                        s.color.a = 0;
+                    }
                 }
             }
 
@@ -68,13 +85,26 @@ void TankStatsSystem::Run()
                 t.position.y += (sprite.size.y / 2 + 8);
                 if (tank.toBeDestroyed) ts.toBeDestroyed = true;
 
-                if (s.size.x >= (tank.shield / tank.maxShield * ts.barWidth))
+                if (s.size.x > (tank.shield / tank.maxShield * ts.barWidth))
                 {
+                    s.color.a = 1;
+                    ts.barTime = ts.maxBarTime;
                     s.size.x -= 0.1;
                 }
-                else if (s.size.x <= (tank.shield / tank.maxShield * ts.barWidth))
+                else if (s.size.x < (tank.shield / tank.maxShield * ts.barWidth))
                 {
                     s.size.x = tank.shield / tank.maxShield * ts.barWidth;
+                    s.color.a = 1;
+                    ts.barTime = ts.maxBarTime;
+                }
+                else
+                {
+                    ts.barTime -= Engine::DeltaTime();
+                    if (ts.barTime < -1) ts.barTime = 0;
+                    if (ts.barTime <= 0)
+                    {
+                        s.color.a = 0;
+                    }
                 }
             }
         }

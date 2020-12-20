@@ -37,23 +37,21 @@ namespace tank_warfare
 		int maxFireRate{ 2 };
 		Float32 reloadTime{ 1 };
 		Float32 powerDuration{ 0 };
-		int lives{ 0 };
+		int lives{ 1 };
 		Float32 health{ 100 };
 		Float32 maxHealth{ 100 };
 		Float32 shield{ 0 };
 		Float32 maxShield{ 100 };
 
-		bool triggerHealth{ false };
-		bool triggerShield{ false };
+		bool zeroHealth{ false };
 	};
 
 	struct TankStats
 	{
 		int id;
-		int lives{ 0 };
-		Float32 health{ 100 };
-		Float32 shield{ 0 };
 		Float32 barWidth{ 0 };
+		Float32 barTime{ 0 };
+		Float32 maxBarTime{ 0.8 };
 		EStatType type{ EStatType::Health };
 		bool toBeDestroyed{ false };
 	};
