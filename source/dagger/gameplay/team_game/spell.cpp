@@ -28,7 +28,7 @@ void ancient_defenders::SpellBehaviorSystem::WindDown()
 void ancient_defenders::SpellBehaviorSystem::Run()
 {
 	Engine::Registry().view<SpellStats, Sprite, Transform, Animator, RangeOfAttack>().each(
-		[](Entity entity_, SpellStats& spell_, Sprite& sprite_, Transform& transform_, Animator& animation_, RangeOfAttack& range_)
+		[](Entity entity_, SpellStats& spell_, RangeOfAttack& range_)
 		{
 			if (spell_.time > 0)
 				spell_.time -= Engine::DeltaTime();
@@ -46,8 +46,6 @@ void ancient_defenders::SpellBehaviorSystem::OnEndOfFrame()
 {
 	
 	auto view = Engine::Registry().view<SpellStats>();
-
-	auto& reg = Engine::Registry();
 
 	Sequence<Entity> toRemove{};
 	auto it = view.begin();
@@ -72,8 +70,6 @@ Entity ancient_defenders::Spell::Create(Vector3 position_, String type_)
 	auto& spell = reg.emplace<SpellStats>(entity);
 	auto& hitbox = reg.emplace<SimpleCollision>(entity);
 	auto& range = reg.emplace<RangeOfAttack>(entity);
-
-	//AssignSprite(sprite, "spritesheets:golem-little-sheet:golem_stand_side:1"); // Skipped because it was creating issues with HP sprite, Animator will add the sprite
  
 	std::random_device dev;
 	std::mt19937 rng(dev());
@@ -89,8 +85,8 @@ Entity ancient_defenders::Spell::Create(Vector3 position_, String type_)
 	spell.dmg = 5.0f;
 	AnimatorPlay(anim, "ancient_defenders:spell:" + spell.type);
 
-	hitbox.size = sprite.size;
-	range.range = hitbox.size.x;
+	hitbox.shape = EHitbox::Circular;
+	hitbox.size.x = 44.0f;
 
 	range.unitType = ETarget::Spell;
 	range.targetType = ETarget::Golem;

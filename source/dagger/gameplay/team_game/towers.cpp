@@ -48,7 +48,7 @@ void ancient_defenders::TowerBehaviorSystem::Run()
         AnimatorPlay(animator_, "ancient_defenders:towers:" + tower_.type);
         if (tower_.currentAction == EAction::Idling) {}
         else if (tower_.currentAction == EAction::Attacking) {
-			//treba stvoriti spell
+			//MAKING SPELL MISSES
             tower_.currentAction = EAction::Idling;
         }
     });
