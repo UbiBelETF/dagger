@@ -87,7 +87,7 @@ struct PlightCharacter
         if (input_ != "")
             chr.input.contexts.push_back(input_);
 
-        chr.character.speed = 2000.f;
+        chr.character.speed = 200.f;
 
         chr.crosshair.crosshairSprite = reg.create();
         chr.crosshair.angle = 0.f;
@@ -120,7 +120,7 @@ void Plight::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1.5;
+    camera->zoom = 1.0;
     camera->position = { 0, 0, 0 };
     camera->Update();
 

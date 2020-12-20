@@ -24,6 +24,7 @@ void plight::PhysicsSystem::Run()
             auto it2 = collision.colidedWith.begin();
             while (it2 != collision.colidedWith.end())
             {
+                bool skip = false;
                 if (Engine::Registry().has<PhysicsObject>(*it2)) {
                     auto& other_physics = view.get<PhysicsObject>(*it2);
                     bool has = false;
@@ -36,29 +37,35 @@ void plight::PhysicsSystem::Run()
                     if (has) {
                         auto& other_transform = view.get<Transform>(*it2);
                         auto& other_collision = view.get<PlightCollision>(*it2);
-                        ResolveCollision(transform.position, collision, other_transform.position, other_collision);
+                        ResolveCollision(transform.position, collision, *it, other_transform.position, other_collision, it2);
+                        skip = true;
                     }
                 }
-                it2++;
+                if (!skip) it2++;
             }
             it++;
         }
     }
 }
 
-void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& my_, const Vector3& posOther_, const PlightCollision& other_)
+void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myCol_, entt::entity my_, const Vector3& posOther_, PlightCollision& otherCol_, std::list<entt::entity>::iterator& other_)
 {
-   Vector2 sides = my_.GetCollisionSides(pos_, other_, posOther_);
+    // Moves the coliding object out of the other coliding object & increments it2
+   Vector2 sides = myCol_.GetCollisionSides(pos_, otherCol_, posOther_);
 
     if (sides.x != 0) {
-        if (sides.x == 1) pos_.x = posOther_.x - my_.size.x - 1;
-        else pos_.x = posOther_.x + other_.size.x + 1;
+        if (sides.x == 1) pos_.x = posOther_.x - myCol_.size.x - 1;
+        else pos_.x = posOther_.x + otherCol_.size.x + 1;
     }
     if (sides.y != 0) {
-        if (sides.y == 1) pos_.y = posOther_.y - my_.size.y - 1;
-        else pos_.y = posOther_.y + other_.size.y + 1;
+        if (sides.y == 1) pos_.y = posOther_.y - myCol_.size.y - 1;
+        else pos_.y = posOther_.y + otherCol_.size.y + 1;
     }
-    my_.colidedWith.remove(other_);
-    my_.colided = false;
+
+    other_=myCol_.colidedWith.erase(other_);
+    if(myCol_.colidedWith.size() == 0) myCol_.colided = false;
+
+    otherCol_.colidedWith.remove(my_);
+    if (otherCol_.colidedWith.size() == 0) otherCol_.colided = false;
 }
 
