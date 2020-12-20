@@ -1,6 +1,9 @@
 #include "level_generator.h"
 
 #include "core/engine.h"
+
+#include "core/graphics/animation.h"
+
 #include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
 
@@ -13,10 +16,10 @@ Sequence<Entity> level_generator::smiljana::CreateFloor(Registry& reg_, SInt32 x
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
+    sprite.position = { x_ * 16, y_ * 16, 30};
     AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
-
-
+    auto& entityAnimator = reg_.emplace<Animator>(entity);
+   
     return { entity };
 }
 
@@ -24,12 +27,20 @@ Sequence<Entity> level_generator::smiljana::CreateWall(Registry& reg_, SInt32 x_
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16 - 125.0f, y_ * 16 - 50.0f, 30 };
+    sprite.position = { x_ * 16, y_ * 16, 30};
     AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
 
     return { entity };
 }
 
+Sequence<Entity> level_generator::smiljana::CreateDoor(Registry& reg_, SInt32 x_, SInt32 y_)
+{  
+    Entity entity = jovica::CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_spritesheet:door_open_anim:14");
+    jovica::CreateCollider(reg_, x_, y_);
+    return { entity };
+    
+}
+ 
 Entity level_generator::jovica::CreateTile(Registry& reg_, SInt32 x_, SInt32 y_, SInt32 z_, String name_)
 {
     Entity entity = reg_.create();

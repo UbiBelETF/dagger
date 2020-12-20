@@ -67,7 +67,7 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
     legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
     legend['t'] = &level_generator::jovica::CreateTopLeftConcWallS;
-    legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
+    legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;  
 
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
@@ -96,75 +96,49 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
-    TilemapLegend legend;
-    legend['.'] = &level_generator::smiljana::CreateFloor;
-    legend['#'] = &level_generator::smiljana::CreateWall;
+    
 
-    Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
 
-    // PLAYER
-    auto player = reg_.create();
 
-    auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
-    playerState.currentState = ECharacterState::Idle;
-          
-    auto& playerSprite = reg_.emplace<Sprite>(player);
-    AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-    playerSprite.scale = { 1, 1 };
+    {
+        TilemapLegend legend;
+        legend['.'] = &level_generator::smiljana::CreateFloor;
+        legend['#'] = &level_generator::smiljana::CreateWall;
+        legend['D'] = &level_generator::smiljana::CreateDoor;
 
-    auto& playerAnimator = reg_.emplace<Animator>(player);
-    AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
-    auto& playerTransform = reg_.emplace<Transform>(player);
-    playerTransform.position = { 0, 0, 1 };
+        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
 
-    auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
-    playerInput.contexts.push_back("AmongThemInput");
+        // PLAYER
+        auto player = reg_.create();
 
-    reg_.emplace<CharacterController>(player);
+        auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+        playerState.currentState = ECharacterState::Idle;
 
-    auto& movable = reg_.emplace<MovableBody>(player);
-    movable.size = playerSprite.size;
 
-    // Wall
-    auto wall = reg_.create();
+    
 
-    auto& wallTransform = reg_.emplace<Transform>(wall);
-    wallTransform.position = { 0, 0, 0 };
+        auto& playerSprite = reg_.emplace<Sprite>(player);
+        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+        playerSprite.scale = { 1, 1 };
 
-    auto& wallSprite = reg_.emplace<Sprite>(wall);
-    AssignSprite(wallSprite, "EmptyWhitePixel");
-    wallSprite.color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    wallSprite.size = { 30, 30 };
+        auto& playerAnimator = reg_.emplace<Animator>(player);
+        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
-    auto& st = reg_.emplace<StaticBody>(wall);
-    st.size = wallSprite.size;
+        auto& playerTransform = reg_.emplace<Transform>(player);
+        playerTransform.position = { 0, 0, 1 };
 
-    auto wall1 = reg_.create();
+        auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
+        playerInput.contexts.push_back("AmongThemInput");
 
-    auto& wallTransform1 = reg_.emplace<Transform>(wall1);
-    wallTransform1.position = { 30, 0, 0 };
+        reg_.emplace<CharacterController>(player);
 
-    auto& wallSprite1 = reg_.emplace<Sprite>(wall1);
-    AssignSprite(wallSprite1, "EmptyWhitePixel");
-    wallSprite1.color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    wallSprite1.size = { 30, 30 };
+        auto& movable = reg_.emplace<MovableBody>(player);
+        movable.size = playerSprite.size;
 
-    auto& st1 = reg_.emplace<StaticBody>(wall1);
-    st1.size = wallSprite1.size;
 
-    auto wall2 = reg_.create();
 
-    auto& wallTransform2 = reg_.emplace<Transform>(wall2);
-    wallTransform2.position = { 0, 30, 0 };
-
-    auto& wallSprite2 = reg_.emplace<Sprite>(wall2);
-    AssignSprite(wallSprite2, "EmptyWhitePixel");
-    wallSprite2.color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    wallSprite2.size = { 30, 30 };
-
-    auto& st2 = reg_.emplace<StaticBody>(wall2);
-    st2.size = wallSprite2.size;
+    }
 }
 void team_game::SetupWorld(Engine &engine_)
 {
@@ -178,6 +152,7 @@ void team_game::SetupWorld(Engine &engine_)
 	Engine::PutDefaultResource<StaticBodyMap>(&map);
 	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-    SetupWorldJovica(engine_, reg);
-    //SetupWorldKosta(engine_, reg);
+    //SetupWorldJovica(engine_, reg);
+      SetupWorldSmiljana(engine_, reg);
+
 }

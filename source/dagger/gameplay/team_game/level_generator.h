@@ -8,6 +8,7 @@ namespace level_generator
     {
         Sequence<Entity> CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateWall(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateDoor(Registry& reg_, SInt32 x_, SInt32 y_);
     }
 
 	namespace jovica
@@ -16,7 +17,7 @@ namespace level_generator
 
         void EmplaceCollider(Registry& reg_, Entity entity_, SInt32 x_, SInt32 y_);
         void CreateCollider(Registry& reg_, SInt32 x_, SInt32 y_);
-
+       
         Sequence<Entity> CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> Nothing(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_);
