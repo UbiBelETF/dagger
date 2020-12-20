@@ -14,6 +14,9 @@ namespace level_generator
 	{
         Entity CreateTile(Registry& reg_, SInt32 x_, SInt32 y_, SInt32 z_, String name_);
 
+        void EmplaceCollider(Registry& reg_, Entity entity_, SInt32 x_, SInt32 y_);
+        void CreateCollider(Registry& reg_, SInt32 x_, SInt32 y_);
+
         Sequence<Entity> CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> Nothing(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_);
