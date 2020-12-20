@@ -1,0 +1,15 @@
+{
+	"animation-name": "slime:run",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "slime:run:move1", "relative-length": 1 },
+		{ "texture-name": "slime:run:move2", "relative-length": 1 },
+		{ "texture-name": "slime:run:move3", "relative-length": 1 },
+		{ "texture-name": "slime:run:move4", "relative-length": 1 },
+		{ "texture-name": "slime:run:move5", "relative-length": 1 },
+		{ "texture-name": "slime:run:move6", "relative-length": 1 },
+		{ "texture-name": "slime:run:move7", "relative-length": 1 },
+		{ "texture-name": "slime:run:move8", "relative-length": 1 }
+	]
+}

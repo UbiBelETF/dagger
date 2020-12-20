@@ -164,6 +164,7 @@ struct Player
         chr.currentLvl.legend['H'] = CreateObjectFunction("Skeleton",20,true,-1,100.0f,"skeleton:run",false,1);//enemy horizontal
         chr.currentLvl.legend['V'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run",false, 2);//enemy vertical
         chr.currentLvl.legend['L'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run",false, 3);//enemy follow
+        chr.currentLvl.legend['M'] = CreateObjectFunction("Slime", 20, true, -1, 100.0f, "slime:run", false, 4);//slime
 
         //Room Transition
         chr.currentLvl.legend['8'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,1,100.0f,"",false,0);//Hall

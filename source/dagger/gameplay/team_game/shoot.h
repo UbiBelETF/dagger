@@ -7,11 +7,11 @@ using namespace dagger;
 
 namespace lab
 {
-	enum Unit { player, skeleton };
+	enum Unit { player, skeleton, slime };
 
 	struct Bullet {
 		Unit ownership;
-		int damage = 10;
+		int damage = 5;
 		Float32 speed = 100.f;
 		Float32 speedX = 100.f;
 		Float32 speedY = 100.f;
@@ -30,6 +30,6 @@ namespace lab
 		}
 		void Run() override;
 	};
-	void CreateBullet(Vector2 position, Vector2 target, Unit owner);
+	void CreateBullet(Vector2 position, Vector2 target, Unit owner, String spritename);
 
 }

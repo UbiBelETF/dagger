@@ -17,13 +17,20 @@ using namespace dagger;
 
 using namespace lab;
 
-void lab::CreateBullet(Vector2 position, Vector2 target, Unit owner)
+void lab::CreateBullet(Vector2 position, Vector2 target, Unit owner, String spritename)
 {
 	auto& reg = Engine::Instance().Registry();
 
 	auto entity = reg.create();
 	auto& bullet = reg.emplace<Bullet>(entity);
 	bullet.ownership = owner;
+
+	switch (owner)
+	{
+	case player: bullet.damage = 15; break;
+	case skeleton: bullet.damage = 5; break;
+	case slime: bullet.damage = 15; break;
+	}
 
 	Vector2 directions = { 1, 1 };
 	if (target.x < position.x)
@@ -46,7 +53,7 @@ void lab::CreateBullet(Vector2 position, Vector2 target, Unit owner)
 	bullet.speedY = speedXIntensity * ratio * directions.y;
 
 	auto& sprite = reg.emplace<Sprite>(entity);
-	AssignSprite(sprite, "Bullet");
+	AssignSprite(sprite, spritename);
 	sprite.size = { 30.f, 30.f };
 
 	auto& transform = reg.emplace<Transform>(entity);
