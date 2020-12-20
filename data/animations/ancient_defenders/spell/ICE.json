@@ -1,0 +1,24 @@
+{
+	"animation-name": "ancient_defenders:spell:ICE",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "ancient_defenders:spell_ice:ice1:1" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice2:2" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice3:3" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice4:4" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice5:5" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice6:6" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice7:7" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice8:8" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice9:9" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice10:10" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice11:11" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice12:12" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice13:13" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice14:14" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice15:15" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice16:16" },
+		{ "texture-name": "ancient_defenders:spell_ice:ice17:17" }
+	]
+}

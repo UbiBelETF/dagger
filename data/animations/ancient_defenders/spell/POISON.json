@@ -1,0 +1,24 @@
+{
+	"animation-name": "ancient_defenders:spell:POISON",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "ancient_defenders:spell_sun:air1:1" },
+		{ "texture-name": "ancient_defenders:spell_sun:air2:2" },
+		{ "texture-name": "ancient_defenders:spell_sun:air3:3" },
+		{ "texture-name": "ancient_defenders:spell_sun:air4:4" },
+		{ "texture-name": "ancient_defenders:spell_sun:air5:5" },
+		{ "texture-name": "ancient_defenders:spell_sun:air6:6" },
+		{ "texture-name": "ancient_defenders:spell_sun:air7:7" },
+		{ "texture-name": "ancient_defenders:spell_sun:air8:8" },
+		{ "texture-name": "ancient_defenders:spell_sun:air9:9" },
+		{ "texture-name": "ancient_defenders:spell_sun:air10:10" },
+		{ "texture-name": "ancient_defenders:spell_sun:air11:11" },
+		{ "texture-name": "ancient_defenders:spell_sun:air12:12" },
+		{ "texture-name": "ancient_defenders:spell_sun:air13:13" },
+		{ "texture-name": "ancient_defenders:spell_sun:air14:14" },
+		{ "texture-name": "ancient_defenders:spell_sun:air15:15" },
+		{ "texture-name": "ancient_defenders:spell_sun:air16:16" },
+		{ "texture-name": "ancient_defenders:spell_sun:air17:17" }
+	]
+}

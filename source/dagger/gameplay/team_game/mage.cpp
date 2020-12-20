@@ -109,7 +109,8 @@ void ancient_defenders::MageBehaviorSystem::Run()
             else {
                 AnimatorPlay(animation_, "ancient_defenders:mage:ATTACK_FRONT");
             }
-            Engine::Registry().get<Health>(range_.target).currentHealth -= mage_.meleeDmg * Engine::DeltaTime();
+			for (auto target : range_.targets)
+				Engine::Registry().get<Health>(target).currentHealth -= mage_.meleeDmg * Engine::DeltaTime();
             mage_.currentAction = EAction::Moving; // Go back to moving after attacking
         }
         else if (mage_.currentAction == EAction::Chanting) {

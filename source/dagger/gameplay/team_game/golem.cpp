@@ -90,7 +90,8 @@ void ancient_defenders::EnemyBehaviorSystem::Run()
 			}
 			else if (enemy_.currentAction == EAction::Attacking) {
 				AnimatorPlay(animation_, "ancient_defenders:golem:ATTACK_FRONT");
-				Engine::Registry().get<Health>(range_.target).currentHealth -= enemy_.meleeDmg* Engine::DeltaTime();
+				for (auto target : range_.targets)
+					Engine::Registry().get<Health>(target).currentHealth -= enemy_.meleeDmg* Engine::DeltaTime();
 				enemy_.currentAction = EAction::Moving; // Go back to moving after attacking
 			}
 		});
