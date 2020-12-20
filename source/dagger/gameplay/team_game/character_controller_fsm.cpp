@@ -69,6 +69,7 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 	Float32 rl = input.Get("rightleft");
     Float32 ud = input.Get("updown");
     Float32 shoot = input.Get("shoot");
+    Float32 fast = input.Get("fast");
 
 	if (EPSILON_ZERO(rl) && EPSILON_ZERO(ud))
 	{
@@ -76,6 +77,14 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 	}
 	else 
     {
+        if(EPSILON_NOT_ZERO(fast))
+        {
+            character.speed=80;
+        }
+        else
+        {
+            character.speed=50;
+        }
         if (rl != 0)
         { 
             sprite.scale.x = rl;
