@@ -13,6 +13,11 @@
 #include "gameplay/common/simple_collisions.h"
 
 #include "gameplay/team_game/character_controller.h"
+#include "gameplay/team_game/enemy.h"
+
+
+
+
 #include "gameplay/team_game/camera.h"
 #include "gameplay/team_game/tilemap.h"
 #include "gameplay/team_game/level_generator.h"
@@ -24,6 +29,7 @@ using namespace team_game;
 
 void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
+    engine_.AddSystem<EnemyControllerSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CameraSystem>();
@@ -137,7 +143,6 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
         movable.size = playerSprite.size;
 
 
-
     }
 }
 void team_game::SetupWorld(Engine &engine_)
@@ -148,11 +153,13 @@ void team_game::SetupWorld(Engine &engine_)
 
     // STATIC BODIES MAP
     auto mapEnt = reg.create();
-	auto& map = reg.emplace<StaticBodyMap>(mapEnt);
-	Engine::PutDefaultResource<StaticBodyMap>(&map);
+	  auto& map = reg.emplace<StaticBodyMap>(mapEnt);
+	  Engine::PutDefaultResource<StaticBodyMap>(&map);
 	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
     //SetupWorldJovica(engine_, reg);
       SetupWorldSmiljana(engine_, reg);
 
 }
+
+
