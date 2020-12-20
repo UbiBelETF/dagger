@@ -11,6 +11,7 @@ namespace team_game
 {
 	struct PlayerCharacter
 	{
+		int id;
 		float speed{ 140.f };
 	};
 
