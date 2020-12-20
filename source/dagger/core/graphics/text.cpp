@@ -16,9 +16,11 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 
 	if (entities.size() > 0)
 	{
-		registry.remove(entities.begin(), entities.end());
+		registry.destroy(entities.begin(), entities.end());
 		entities.clear();
 	}
+
+	position = pos_;
 
 	UInt32 positionX = position.x;
 	auto& sheets = Engine::Res<SpriteFrame>();

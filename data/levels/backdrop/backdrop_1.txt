@@ -7,6 +7,5 @@ BACKGROUND PalmTreeRegular 4.0 128.0 128.0 -285.0 -115.0 1 1
 
 Other ShipHelm 4.0 48.0 48.0 -360.0 183.0 1 1
 Other Flag 5.0 34.0 75.0 315.0 190.0 1 1
-Other Spikes 4.0 64.0 64.0 175.0 -108.0 1 1
 Other Cannon 4.0 62.0 46.0 -40.0 -61.0 1 1
 Other DiamondRed 4.0 36.0 36.0 236.0 132.0 1 1

@@ -9,7 +9,7 @@ namespace team_game
 {
     enum class CollisionSide { NONE, RIGHT, LEFT, TOP, BOTTOM };
 
-    enum class CollisionID { PLAYER, TERRAIN, ENEMY };
+    enum class CollisionID { PLAYER, TERRAIN, ENEMY, TRAP };
 
     enum class MovementState { IMMOBILE, UNSTOPPABLE, MOVEABLE };
 

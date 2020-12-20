@@ -11,7 +11,8 @@ namespace team_game
 {
 	struct PlayerCharacter
 	{
-		float speed{ 140.f };
+		UInt8 id;
+		Float32 speed{ 140.f };
 	};
 
 	class CharacterControllerSystem
