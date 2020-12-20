@@ -30,7 +30,6 @@ void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<GameManagerSystem>();
-    //engine_.AddSystem<TeamGamePlayerInputSystem>();    
     engine_.AddSystem<GravitySystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<CameraFollowSystem>();
@@ -60,32 +59,64 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
 
 void team_game::SetupWorld(Engine& engine_)
 {
-    auto& reg = engine_.Registry();
+
+    auto& reg1 = engine_.Registry();
     {
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
+        auto entity = reg1.create();
+        auto& sprite = reg1.emplace<Sprite>(entity);
         AssignSprite(sprite, "TeamGame:Characters:Player-Bomb_Guy:Idle:1");
 
-        auto& transform = reg.get_or_emplace<Transform>(entity);
+        auto& transform = reg1.get_or_emplace<Transform>(entity);
         transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel() - 1];
 
-        reg.get_or_emplace<CameraFollowFocus>(entity);
+        reg1.get_or_emplace<CameraFollowFocus>(entity);
 
-        auto& collider = reg.get_or_emplace<Collider>(entity);
+        auto& collider = reg1.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;
         collider.entityType = CollisionID::PLAYER;
         collider.hasGravity = true;
 
-        auto& gravity = reg.get_or_emplace<Gravity>(entity);
-      
-        auto& input = reg.emplace<InputReceiver>(entity);
-        input.contexts.push_back("Controls");
+        auto& gravity = reg1.get_or_emplace<Gravity>(entity);
 
-        auto& animation = reg.emplace<Animator>(entity);
-//        AnimatorPlay(animation, "TeamGame:Player-Bomb_Guy:RUNNING");
+        auto& input = reg1.emplace<InputReceiver>(entity);
+        input.contexts.push_back("Arrows");
+
+
+        auto& animation = reg1.emplace<Animator>(entity);
         ATTACH_TO_FSM(team_game::AnimationFSM, entity);
 
-        auto& character = reg.emplace<PlayerCharacter>(entity);
+        auto& character = reg1.emplace<PlayerCharacter>(entity);
+        character.id = 0;
+        ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
+    }
+
+    auto& reg2 = engine_.Registry();
+    {
+        auto entity = reg2.create();
+        auto& sprite = reg2.emplace<Sprite>(entity);
+        AssignSprite(sprite, "TeamGame:Characters:Enemy-Bald_Pirate:Idle:1");
+
+        auto& transform = reg2.get_or_emplace<Transform>(entity);
+        transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()];
+
+        reg2.get_or_emplace<CameraFollowFocus>(entity);
+
+        auto& collider = reg2.get_or_emplace<Collider>(entity);
+        collider.size = sprite.size;
+        collider.entityType = CollisionID::PLAYER;
+        collider.hasGravity = true;
+
+        auto& gravity = reg2.get_or_emplace<Gravity>(entity);
+
+        auto& input = reg2.emplace<InputReceiver>(entity);
+        input.contexts.push_back("ASDW");
+
+
+        auto& animation = reg2.emplace<Animator>(entity);
+        ATTACH_TO_FSM(team_game::AnimationFSM, entity);
+
+        auto& character = reg2.emplace<PlayerCharacter>(entity);
+        character.id = 1;
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
     }
 }

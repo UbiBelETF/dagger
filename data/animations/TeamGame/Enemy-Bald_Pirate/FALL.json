@@ -1,0 +1,9 @@
+{
+	"animation-name": "TeamGame:Enemy-Bald_Pirate:FALL",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "TeamGame:Characters:Enemy-Bald_Pirate:Fall:1" },
+		{ "texture-name": "TeamGame:Characters:Enemy-Bald_Pirate:Fall:2" }
+	]
+}
