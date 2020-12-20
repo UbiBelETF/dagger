@@ -180,7 +180,9 @@ void plight::ResetCharacters()
             character.sprite.scale.x = -1;
         }
 
-        
+        character.character.dashing = false;
+        character.character.running = false;
+        character.character.resting = false;
         
         
     }

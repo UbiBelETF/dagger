@@ -179,7 +179,7 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
 {
     auto&& [sprite, character, cstats, crosshair, transform] = Engine::Registry().get<Sprite,PlightCharacterController, CombatStats, PlightCrosshair, Transform>(state_.entity);
 
-    if (cstats.currentStamina < STAMINA_FOR_DASHING_FRAME)
+    if (!character.dashing || cstats.currentStamina < STAMINA_FOR_DASHING_FRAME)
     {
         GoTo(PlightCharacterStates::Idle, state_);
     }
