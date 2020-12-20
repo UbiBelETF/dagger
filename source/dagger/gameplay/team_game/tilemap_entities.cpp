@@ -18,17 +18,22 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         {
             return entity;
         }
-        auto& sprite =reg_.emplace<Sprite>(entity);   
+        auto& sprite =reg_.emplace<Sprite>(entity);
         if(name_=="create_floor") AssignSprite(sprite,fmt::format("spritesheets:lab:floor_{}", 1 + (rand() % 6)));
         else AssignSprite(sprite,name_);
         if(includeCollision_)
         {
             auto& col=reg_.emplace<SimpleCollision>(entity);
-            if (enemy_)
+            if (enemy_ < 4 && enemy_ > 0)
             {
                 col.size = { 18, 18 };
                 col.pivot.y += 0.35f;
                 col.pivot.x += 0.1;
+            }
+            else if (enemy_ == 4)
+            {
+                col.size = { 20, 20 };
+                col.pivot.y -= 0.3;
             }
             else
                 col.size={sprite.size.x/2,sprite.size.y/2};  
@@ -52,12 +57,20 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         }
         if(enemy_)
         {
-            auto& skeleton = reg_.emplace<Skeleton>(entity);
-            switch (enemy_)
+            if (enemy_ < 4)
             {
-            case 1: skeleton.type = horizontal; break;
-            case 2: skeleton.type = vertical; break;
-            default: skeleton.type = follower; break;
+                auto& skeleton = reg_.emplace<Skeleton>(entity);
+                switch (enemy_)
+                {
+                case 1: skeleton.type = horizontal; break;
+                case 2: skeleton.type = vertical; break;
+                case 3: skeleton.type = follower; break;
+                }
+            }
+            else
+            {
+                auto& slime = reg_.emplace<Slime>(entity);
+                sprite.size = { 100, 100 };
             }
         }
 

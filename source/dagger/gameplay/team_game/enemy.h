@@ -14,9 +14,20 @@ namespace lab
 		Float32 speed = 10.f;
 		Float32 speedX = 10.f;
 		Float32 speedY = 10.f;
-		int cooldown = 120;
-		int maxCooldown = 120;
+		int cooldown = 150;
+		int maxCooldown = 150;
+		int meleeCooldown = 300;
+		int maxMeleeCooldown = 300;
+		Float32 meleeDamage = 0.5f;
 		int health = 100;
+		Float32 deathTimer = 125;
+	};
+
+	struct Slime {
+		Float32 speed = 2.f;
+		Float32 speedX;
+		Float32 speedY;
+		int health = 150;
 		Float32 deathTimer = 125;
 	};
 
@@ -29,4 +40,6 @@ namespace lab
 		}
 		void Run() override;
 	};
+
+	Vector2 speedForFollow(Vector2 position_, Vector2 target_, Float32 speed_);
 }

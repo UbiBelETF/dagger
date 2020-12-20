@@ -1,0 +1,13 @@
+{
+	"animation-name": "slime:death",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "slime:death:death1" },
+		{ "texture-name": "slime:death:death2" },
+		{ "texture-name": "slime:death:death3" },
+		{ "texture-name": "slime:death:death4" },
+		{ "texture-name": "slime:death:death5" },
+		{ "texture-name": "slime:death:death6" }
+	]
+}

@@ -1,6 +1,7 @@
 #include "gameplay/team_game/player_controller_fsm.h"
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/tilemap_entities.h"
+#include "gameplay/team_game/enemy.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -88,6 +89,7 @@ void PlayerControllerSystem::Run()
 
         if (col.colided)
         {
+
             if (Engine::Registry().valid(col.colidedWith))
             {
                 SimpleCollision& collision = viewCollisions.get<SimpleCollision>(col.colidedWith);
@@ -95,6 +97,7 @@ void PlayerControllerSystem::Run()
 
                 Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
 
+                
 
                 do
                 {
@@ -119,9 +122,6 @@ void PlayerControllerSystem::Run()
                     }
                         
                 } while (col.IsCollided(t.position, collision, transform.position));
-            
-            
-                       
 
                 if (Engine::Registry().has<Bullet>(col.colidedWith))
                 {
@@ -141,11 +141,38 @@ void PlayerControllerSystem::Run()
                         });
                     }
                         
-                    
+                   
 
                     tex.Set("pixel-font", std::to_string(player.health)+"/100",{10,-95,0},{10,10});
                     
                 } 
+
+                if (Engine::Registry().has<Skeleton>(col.colidedWith))
+                {
+                    auto& skeleton = Engine::Registry().get<Skeleton>(col.colidedWith);
+                    if (skeleton.type == follower)
+                    {
+                        player.health -= skeleton.meleeDamage;
+
+                        if (player.health <= 0)
+                        {
+                            player.health = 0;
+                        }
+                        else
+                        {
+                            Engine::Registry().view<CharacterFSM::StateComponent>()
+                                .each([&](CharacterFSM::StateComponent& state_)
+                                    {
+                                        characterFSM.GoTo(ECharacterState::GetHit, state_);
+                                    });
+                        }
+
+
+
+                        tex.Set("pixel-font", std::to_string(player.health) + "/100", { 10,-95,0 }, { 10,10 });
+                    }
+
+                }
 
                 if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
                 {
