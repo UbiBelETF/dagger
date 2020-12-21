@@ -77,10 +77,6 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
 
                 String rootDir = "TeamGame:";
                 AssignSprite(spriteBlock, rootDir + baseDir + ":" + textureName);
-                /*
-                spriteBlock.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
-                                         j * spriteSize.y + spriteSize.y / 2 + pos.y,
-                                         zPos };*/
                 auto& transform = reg.get_or_emplace<Transform>(block);
                 transform.position = { i * spriteSize.x + spriteSize.x / 2 + pos.x,
                                      j * spriteSize.y + spriteSize.y / 2 + pos.y,
