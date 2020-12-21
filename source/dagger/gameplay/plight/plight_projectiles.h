@@ -17,6 +17,8 @@ namespace plight
         Float32 projectileDamage;
         Float32 angle;
         Float32 timeOfLiving = 2.f;
+
+        bool destroy = false;
     };
 
     struct ProjectileSpawnerSettings
