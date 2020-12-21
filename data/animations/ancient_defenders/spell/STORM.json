@@ -1,0 +1,22 @@
+{
+	"animation-name": "ancient_defenders:spell:STORM",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "ancient_defenders:spell_storm:thunde1:1" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde2:2" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde3:3" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde4:4" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde5:5" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde6:6" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde7:7" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde8:8" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde9:9" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde10:10" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde11:11" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde12:12" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde13:13" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde14:14" },
+		{ "texture-name": "ancient_defenders:spell_storm:thunde15:15" }
+	]
+}

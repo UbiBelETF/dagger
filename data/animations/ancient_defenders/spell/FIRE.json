@@ -1,0 +1,21 @@
+{
+	"animation-name": "ancient_defenders:spell:FIRE",
+	"animation-length-ms": 1000,
+	"animation-frames": 
+	[
+		{ "texture-name": "ancient_defenders:spell_fire:fire1" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire2" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire3" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire4" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire5" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire6" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire7" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire8" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire9" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire10" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire11" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire12" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire13" },
+		{ "texture-name": "ancient_defenders:spell_fire:fire14" }
+	]
+}

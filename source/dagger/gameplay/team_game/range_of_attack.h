@@ -6,10 +6,11 @@ using namespace dagger;
 
 namespace ancient_defenders 
 {
-    enum class ETarget {
-        Mage = 1,
-        Golem = 2,
-        Tower = 3,
+	enum class ETarget {
+		Mage = 1,
+		Golem = 2,
+		Tower = 3,
+		Spell = 4
     };
 
     struct RangeOfAttack {
@@ -19,7 +20,7 @@ namespace ancient_defenders
         ETarget targetType;
 
         bool targetFound;
-        Entity target;
+        Sequence<Entity> targets;
     };
 
     class RangedTargetingSystem

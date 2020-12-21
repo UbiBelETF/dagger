@@ -1,5 +1,6 @@
 #include "towers.h"
 #include "mage.h"
+#include "spell.h"
 
 #include "core/engine.h"
 
@@ -47,7 +48,7 @@ void ancient_defenders::TowerBehaviorSystem::Run()
         AnimatorPlay(animator_, "ancient_defenders:towers:" + tower_.type);
         if (tower_.currentAction == EAction::Idling) {}
         else if (tower_.currentAction == EAction::Attacking) {
-            Engine::Registry().get<Health>(range_.target).currentHealth -= 15.0f*Engine::DeltaTime();
+			//MAKING SPELL MISSES
             tower_.currentAction = EAction::Idling;
         }
     });
