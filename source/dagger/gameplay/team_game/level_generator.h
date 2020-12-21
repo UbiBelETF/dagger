@@ -8,7 +8,6 @@ namespace level_generator
     {
         Sequence<Entity> CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateWall(Registry& reg_, SInt32 x_, SInt32 y_);
-        Sequence<Entity> CreateDoor(Registry& reg_, SInt32 x_, SInt32 y_);
     }
 
 	namespace jovica
