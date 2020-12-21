@@ -94,14 +94,21 @@ void lab::ShootingSystem::Run()
 	for (auto entity1 : gunView)
 	{
 		Vector2 playerPosition;
+		Float32 gunScaleX = 1;
 		auto playerView = Engine::Registry().view<Transform, Sprite, Animator, InputReceiver, PlayerCharacter, NextLvl, SimpleCollision>();
 		for (auto entity2 : playerView)
 		{
 			auto& t = Engine::Registry().get<Transform>(entity2);
 			playerPosition.x = t.position.x;
 			playerPosition.y = t.position.y;
+
+			auto& s = Engine::Registry().get<Sprite>(entity2);
+			gunScaleX = s.scale.x;
 		}
 		auto& gunT = Engine::Registry().get<Transform>(entity1);
 		gunT.position = { playerPosition , 0.0f };
+
+		auto& gunS = Engine::Registry().get<Sprite>(entity1);
+		gunS.scale.x = gunScaleX;
 	}
 }
