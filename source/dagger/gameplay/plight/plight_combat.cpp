@@ -30,6 +30,11 @@ void PlightCombatSystem::Run()
 
 		CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
 
+		if (character.dead) {
+			break;
+		}
+
+
 		cstats.currentTimer += Engine::DeltaTime();
 		if (cstats.currentTimer >= cstats.updateTimer) {
 			//Will add conditions based on the current character state (to be implemented in character controller system)
@@ -41,7 +46,10 @@ void PlightCombatSystem::Run()
 							auto& ch = Engine::Registry().get<CombatStats>(*it);
 							auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
 
-
+							if (pchar.dead) {
+								break;
+							}
+							
 							ch.currentHealth -= 0.1f;
 
 							if (ch.currentHealth <= 0.f) {
@@ -60,6 +68,10 @@ void PlightCombatSystem::Run()
 				}
 			}
 
+			if (cstats.currentHealth <= 0.f) {
+				cstats.currentHealth = 0.f;
+				character.dead = true;
+			}
 			//Stamina will not be affecting running , it will be used for special movement like dashing or rolling when it gets implemented (used on running for example here)
 
 			/*if (character.running) {

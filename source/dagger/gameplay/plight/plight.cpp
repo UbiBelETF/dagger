@@ -184,6 +184,7 @@ void plight::ResetCharacters()
         character.character.dashing = false;
         character.character.running = false;
         character.character.resting = false;
+        character.character.dead = false;
         
         
     }
@@ -315,6 +316,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
     mainChar.crosshair.startAngle = 0.f;
+    mainChar.character.playerNumber = "Player 1";
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -364,6 +366,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     sndChar.crosshair.startAngle = M_PI;
     auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
+    sndChar.character.playerNumber = "Player 2";
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
