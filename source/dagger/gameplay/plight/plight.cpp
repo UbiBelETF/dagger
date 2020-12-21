@@ -27,6 +27,7 @@
 #include "gameplay/plight/tilemaps.h"
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
+#include "gameplay/plight/plight_particles.h"
 
 
 using namespace dagger;
@@ -102,12 +103,18 @@ struct PlightCharacter
         crosshairSprite.position.y = chr.sprite.position.y;
         crosshairSprite.position.z = chr.sprite.position.z;
 
-        ProjectileSpawnerSettings settings;
-        settings.projectileDamage = 5.f;
-        settings.projectileSpeed = 175.f;
-        settings.pSpriteName = "Plight:projectiles:Arrow_1";
+        ProjectileSpawnerSettings projectile_settings;
+        projectile_settings.projectileDamage = 5.f;
+        projectile_settings.projectileSpeed = 175.f;
+        projectile_settings.pSpriteName = "Plight:projectiles:Arrow_1";
 
-        ProjectileSystem::SetupProjectileSystem(entity, settings);
+        ProjectileSystem::SetupProjectileSystem(entity, projectile_settings);
+
+        //Particle spawner for taking damage
+        PlightParticleSpawnerSettings particle_settings;
+        particle_settings.Setup(0.1f, { 7.f, 7.f }, { -0.50f, -0.30f }, { 0.50f, 0.f },
+            { 1.f,0.f,0.f,1 }, { 1.f,0.f,0.f,1 }, "EmptyWhitePixel", false,0.7f);
+        PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
 
         return chr;
     }
@@ -124,6 +131,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<ProjectileSystem>();
     engine_.AddSystem<PlightGameLogicSystem>();
     engine_.AddSystem<PlightSpikesSystem>();
+    engine_.AddSystem<PlightParticleSystem>();
 }
 
 void Plight::WorldSetup(Engine &engine_)
