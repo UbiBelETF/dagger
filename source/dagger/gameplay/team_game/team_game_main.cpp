@@ -42,7 +42,7 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 0.9;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
