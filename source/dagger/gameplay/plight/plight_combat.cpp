@@ -13,10 +13,6 @@
 
 #include "gameplay/plight/plight_controller.h"
 
-
-
-#define BAR_START_SIZE 50.f
-
 using namespace plight;
 
 void PlightCombatSystem::Run()
