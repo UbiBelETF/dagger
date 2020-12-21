@@ -21,7 +21,12 @@ enum struct ECharacterShape {
 struct CharacterController
 {
 	Float32 speed{ 70 };
-	ECharacterShape shape = ECharacterShape::Hero;
+	ECharacterShape shape{ ECharacterShape::Hero };
+
+	void SetShape(ECharacterShape shape_)
+	{
+		shape = shape_;
+	}
 };
 
 struct CharacterFSM : public FSM<ECharacterState>

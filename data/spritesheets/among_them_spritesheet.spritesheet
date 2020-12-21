@@ -10,6 +10,7 @@ door_open_anim  0 112 32 32 14
 chest_shine_anim 96 16 16 16 9
 torch_anim 96 48 16 16 6
 spikes_anim 96 64 16 16 10
+poof_anim 0 144 32 32 4
 
 chest_closed 96 16 16 16
 chest_open 224 16 16 16
