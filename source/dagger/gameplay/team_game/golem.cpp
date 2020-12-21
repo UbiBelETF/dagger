@@ -30,6 +30,7 @@ void ancient_defenders::EnemyBehaviorSystem::Run()
 	Engine::Registry().view<Enemy, Sprite, Transform, Animator, RangeOfAttack>().each(
 		[](Entity entity_, Enemy& enemy_, Sprite& sprite_, Transform& transform_, Animator& animation_, RangeOfAttack& range_)
 		{
+            sprite_.scale = { 1.5f,1.5f };
 			if (range_.targetFound) enemy_.currentAction = EAction::Attacking;
             
             if (Engine::Registry().get<Health>(entity_).currentHealth <= 0.0f) return; // Don't do anything if the character is in the dying phase

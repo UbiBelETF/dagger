@@ -44,25 +44,25 @@ void ancient_defenders::PlayerControlsSystem::Run()
         }
         if (EPSILON_NOT_ZERO(input_.Get("num")))
         {
-            if (TowerPlacementInfo::selectMode == SelectMode::Spot) {
+            if (TowerPlacementInfo::selectMode == ESelectMode::Spot) {
                 if (TowerPlacementInfo::availableSpot[input_.Get("num") - 1]) {
                     TowerPlacementInfo::selectedSpot = input_.Get("num") - 1;
                     Logger::info("Switched to spot: " + std::to_string(TowerPlacementInfo::selectedSpot));
                 }
             }
-            else if (TowerPlacementInfo::selectMode == SelectMode::Tower && input_.Get("num") <= 6) {
+            else if (TowerPlacementInfo::selectMode == ESelectMode::Tower && input_.Get("num") <= 6) {
                 TowerPlacementInfo::selectedTower = TowerPlacementInfo::towerNames[input_.Get("num") - 1];
                 Logger::info("Switched to tower: "+ TowerPlacementInfo::selectedTower);
             }
         }
         if (EPSILON_NOT_ZERO(input_.Get("spot")))
         {
-            TowerPlacementInfo::selectMode = SelectMode::Spot;
+            TowerPlacementInfo::selectMode = ESelectMode::Spot;
             Logger::info("Switched to Spot selecting");
         }
         if (EPSILON_NOT_ZERO(input_.Get("tower")))
         {
-            TowerPlacementInfo::selectMode = SelectMode::Tower;
+            TowerPlacementInfo::selectMode = ESelectMode::Tower;
             Logger::info("Switched to Tower selecting");
         }
 

@@ -3,17 +3,20 @@
 #include "spell.h"
 
 #include "core/engine.h"
+#include "core/game/transforms.h"
 
 using namespace ancient_defenders;
 
 UInt32 ancient_defenders::TowerPlacementInfo::selectedSpot = 0;
 String ancient_defenders::TowerPlacementInfo::selectedTower = "STORM";
-SelectMode ancient_defenders::TowerPlacementInfo::selectMode = SelectMode::Spot;
+ESelectMode ancient_defenders::TowerPlacementInfo::selectMode = ESelectMode::Spot;
 Sequence<Vector2> ancient_defenders::TowerPlacementInfo::spotCoordinates = {};
 Sequence<Bool> ancient_defenders::TowerPlacementInfo::availableSpot = { true, true, true, true, true, true, true, true };
 Sequence<String> ancient_defenders::TowerPlacementInfo::towerNames = {"BLOOD", "FIRE", "ICE", "POISON", "STORM", "SUN"};
 
 Float32 ancient_defenders::TowerStats::constructionGoal = 10.0f;
+Float32 ancient_defenders::TowerStats::maxCooldown = 2.0f;
+
 
 void ancient_defenders::TowerBehaviorSystem::SpinUp()
 {
@@ -43,13 +46,17 @@ void ancient_defenders::TowerBehaviorSystem::Run()
             sprite.scale = { 2,2 };
         }
 
+        if ((tower_.cooldown -= Engine::DeltaTime()) > 0) return;
+        
         if (range_.targetFound) tower_.currentAction = EAction::Attacking;
-
+        
         AnimatorPlay(animator_, "ancient_defenders:towers:" + tower_.type);
         if (tower_.currentAction == EAction::Idling) {}
         else if (tower_.currentAction == EAction::Attacking) {
-			//MAKING SPELL MISSES
+            Spell::Create(Engine::Registry().get<Transform>(range_.targets[0]).position, tower_.type);
             tower_.currentAction = EAction::Idling;
+            tower_.cooldown = TowerStats::maxCooldown;
+
         }
     });
 }

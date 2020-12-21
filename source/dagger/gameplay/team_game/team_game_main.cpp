@@ -5,6 +5,7 @@
 #include "towers.h"
 #include "hp_system.h"
 #include "controls.h"
+#include "spell.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -25,9 +26,10 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
 {
       engine_.AddSystem<SimpleCollisionsSystem>();
       engine_.AddSystem<RangedTargetingSystem>();
+      engine_.AddSystem<SpellBehaviorSystem>();
       engine_.AddSystem<MageBehaviorSystem>();
-      engine_.AddSystem<TowerBehaviorSystem>();
       engine_.AddSystem<EnemyBehaviorSystem>();
+      engine_.AddSystem<TowerBehaviorSystem>();
       engine_.AddSystem<HealthManagementSystem>();
       engine_.AddSystem<PlayerControlsSystem>();
 }

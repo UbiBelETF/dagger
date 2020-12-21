@@ -9,7 +9,7 @@ using namespace dagger;
 
 namespace ancient_defenders {
 
-    enum class SelectMode {
+    enum class ESelectMode {
         Spot = 1,
         Tower = 2,
     };
@@ -18,7 +18,7 @@ namespace ancient_defenders {
         static UInt32 selectedSpot;
         static String selectedTower;
 
-        static SelectMode selectMode;
+        static ESelectMode selectMode;
 
         static Sequence<Vector2> spotCoordinates;
         static Sequence<Bool> availableSpot;
@@ -34,6 +34,8 @@ namespace ancient_defenders {
 
         EAction currentAction = EAction::Idling;
         String type;
+        Float32 cooldown = 0.0f;
+        static Float32 maxCooldown;
     };
 
 
