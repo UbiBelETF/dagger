@@ -3,8 +3,9 @@
 
 #include "core/core.h"
 #include "core/system.h"
-#include "player_controller_fsm.h"
+#include "gameplay/team_game/player_controller_fsm.h"
 #include "gameplay/team_game/enemy.h"
+#include "gameplay/team_game/collectables.h"
 
 using namespace dagger;
 using namespace lab;
@@ -20,7 +21,15 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         }
         auto& sprite =reg_.emplace<Sprite>(entity);
         if(name_=="create_floor") AssignSprite(sprite,fmt::format("spritesheets:lab:floor_{}", 1 + (rand() % 6)));
-        else AssignSprite(sprite,name_);
+        else
+        {
+            AssignSprite(sprite, name_);
+            if (name_ == "Heart")
+            {
+                sprite.scale *= 0.4f;
+                auto& heart = reg_.emplace<Heart>(entity);
+            }
+        }
         if(includeCollision_)
         {
             auto& col=reg_.emplace<SimpleCollision>(entity);
