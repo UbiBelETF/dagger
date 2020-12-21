@@ -27,6 +27,7 @@
 #include "gameplay/plight/tilemaps.h"
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
+#include "gameplay/plight/plight_particles.h"
 
 
 using namespace dagger;
@@ -76,13 +77,13 @@ struct PlightCharacter
 
 
         chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { position_, 2.f };
+        chr.sprite.position = { position_, 82.f };
         chr.sprite.color = { color_, 1.0f };
 
         chr.col.size.x = 16;
         chr.col.size.y = 16;
 
-        chr.transform.position = { position_, 2.0f };
+        chr.transform.position = { position_, 82.f };
         chr.character.startPosition = position_;
 
         AssignSprite(chr.sprite, "spritesheets:dungeon:knight_m_idle_anim:1");
@@ -102,12 +103,18 @@ struct PlightCharacter
         crosshairSprite.position.y = chr.sprite.position.y;
         crosshairSprite.position.z = chr.sprite.position.z;
 
-        ProjectileSpawnerSettings settings;
-        settings.projectileDamage = 5.f;
-        settings.projectileSpeed = 175.f;
-        settings.pSpriteName = "Plight:projectiles:Arrow_1";
+        ProjectileSpawnerSettings projectile_settings;
+        projectile_settings.projectileDamage = 5.f;
+        projectile_settings.projectileSpeed = 175.f;
+        projectile_settings.pSpriteName = "Plight:projectiles:Arrow_1";
 
-        ProjectileSystem::SetupProjectileSystem(entity, settings);
+        ProjectileSystem::SetupProjectileSystem(entity, projectile_settings);
+
+        //Particle spawner for taking damage
+        PlightParticleSpawnerSettings particle_settings;
+        particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.35f, -0.30f }, { 0.35f, 0.f },
+            { 1.f,0.f,0.f,1 }, { 1.f,0.f,0.f,1 }, "EmptyWhitePixel", false, .5f,0.5f);
+        PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
 
         return chr;
     }
@@ -124,6 +131,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<ProjectileSystem>();
     engine_.AddSystem<PlightGameLogicSystem>();
     engine_.AddSystem<PlightSpikesSystem>();
+    engine_.AddSystem<PlightParticleSystem>();
 }
 
 void Plight::WorldSetup(Engine &engine_)
@@ -335,7 +343,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite.color = { 0, 0, 0, 1 };
     backgroundSprite.size = { 50, 5 };
     backgroundSprite.scale = { 1, 1 };
-    backgroundSprite.position = { -100, 125, 2 };
+    backgroundSprite.position = { -100, 125, 82 };
 
     auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentHealthBar);
 
@@ -343,7 +351,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontSprite.color = { 1, 0, 0, 1 };
     frontSprite.size = { 50, 5 };
     frontSprite.scale = { 1, 1 };
-    frontSprite.position = { -100, 125, 0 };
+    frontSprite.position = { -100, 125, 81 };
 
     auto& backgroundStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundStaminaBar);
 
@@ -351,7 +359,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite.size = { 50, 5 };
     backgroundStaminaSprite.scale = { 1, 1 };
-    backgroundStaminaSprite.position = { -100, 115, 2 };
+    backgroundStaminaSprite.position = { -100, 115, 82 };
 
     auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
 
@@ -359,7 +367,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite.color = { 0, 1, 0, 1 };
     frontStaminaSprite.size = { 50, 5 };
     frontStaminaSprite.scale = { 1, 1 };
-    frontStaminaSprite.position = { -100, 115, 0 };
+    frontStaminaSprite.position = { -100, 115, 81 };
 
     auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 });
     sndChar.crosshair.angle = M_PI;
@@ -384,7 +392,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite2.color = { 0, 0, 0, 1 };
     backgroundSprite2.size = { 50, 5 };
     backgroundSprite2.scale = { 1, 1 };
-    backgroundSprite2.position = { 100, 125, 2 };
+    backgroundSprite2.position = { 100, 125, 82 };
 
     auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
 
@@ -392,7 +400,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontSprite2.color = { 1, 0, 0, 1 };
     frontSprite2.size = { 50, 5 };
     frontSprite2.scale = { 1, 1 };
-    frontSprite2.position = { 100, 125, 0};
+    frontSprite2.position = { 100, 125, 81};
 
     auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
 
@@ -400,7 +408,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite2.size = { 50, 5 };
     backgroundStaminaSprite2.scale = { 1, 1 };
-    backgroundStaminaSprite2.position = { 100, 115, 2 };
+    backgroundStaminaSprite2.position = { 100, 115, 82 };
 
     auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
 
@@ -408,7 +416,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite2.color = { 0, 1, 0, 1 };
     frontStaminaSprite2.size = { 50, 5 };
     frontStaminaSprite2.scale = { 1, 1 };
-    frontStaminaSprite2.position = { 100, 115, 0 };
+    frontStaminaSprite2.position = { 100, 115, 81 };
 }
 
 void plight::SetupTilemaps()

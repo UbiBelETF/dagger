@@ -33,6 +33,23 @@ void PlightGameLogicSystem::Run()
         auto view1 = Engine::Registry().view<PlightGameInfo>();
         for (auto entity : view1) {
             auto& gameInfo = view1.get<PlightGameInfo>(entity);
+
+            auto view = Engine::Registry().view<PlightCharacterController>();
+            for (auto entity : view) {
+                auto& character = view.get<PlightCharacterController>(entity);
+                if (character.dead && !gameInfo.displayingMessageEndGame) {
+                    gameInfo.endGame = true;
+                    if (character.playerNumber == "Player 1") {
+                        gameInfo.endGameMessageString3 = "Player 2";
+                    }
+                    else {
+                        gameInfo.endGameMessageString3 = "Player 1";
+                    }
+                    
+                    break;
+                }
+            }
+
             if (gameInfo.newGame) {
                 gameInfo.newGameMessage = Engine::Registry().create();
                 auto& text = Engine::Registry().emplace<Text>(gameInfo.newGameMessage);
@@ -75,15 +92,6 @@ void PlightGameLogicSystem::Run()
                 gameInfo.displayingMessageEndGame = true;
             }
 
-            auto view = Engine::Registry().view<PlightCharacterController>();
-            for (auto entity : view) {
-                auto& character = view.get<PlightCharacterController>(entity);
-                if (character.dead) {
-                    gameInfo.endGame = true;
-                    gameInfo.endGameMessageString3 = character.playerNumber;
-                    break;
-                }
-            }
             
         }  
         auto view = Engine::Registry().view<InputReceiver>();
