@@ -29,7 +29,7 @@ void team_game::CombatSystem::Run()
             Float32 proc_ = (int)(brawler_.attacking * 100);
             Vector3 temp_t = { 0,0,0 };
             temp_t.x = t_.position.x;
-            temp_t.x+=(brawler_.attackSize/2 * sprite_.scale.x);
+            temp_t.x+=(brawler_.attackSize/(2*brawler_.hitSize) * sprite_.scale.x);
             temp_t.y = t_.position.y;
             temp_t.z = t_.position.z;
             col_.size.x += brawler_.attackSize / (2 * brawler_.hitSize);
