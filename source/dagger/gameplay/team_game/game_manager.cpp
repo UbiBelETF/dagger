@@ -30,6 +30,7 @@ void GameManagerSystem::LoadNextLevel()
     currentLevel++;
     LoadBackDrop();
     LoadPlatforms();
+    LoadTraps();
     completedObjective = false;
 }
 
