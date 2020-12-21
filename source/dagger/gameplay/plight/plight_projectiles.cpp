@@ -8,10 +8,13 @@
 #include <math.h>
 
 #include "gameplay/plight/plight_collisions.h"
+#include "gameplay/plight/plight_combat.h"
+#include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_aiming.h"
 
 #include <algorithm>
 #include <execution>
+
 
 using namespace dagger;
 using namespace plight;
@@ -47,23 +50,30 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
 void ProjectileSystem::Run()
 {
     //Check for fire input 
-    auto projectileSpawners = Engine::Registry().view<ProjectileSpawner, Transform, InputReceiver,PlightCrosshair>();
+    auto projectileSpawners = Engine::Registry().view<ProjectileSpawner, Transform, InputReceiver,PlightCrosshair,CombatStats>();
     for (auto& entity : projectileSpawners) {
         auto& projectileSys = projectileSpawners.get<ProjectileSpawner>(entity);
         auto& t = projectileSpawners.get<Transform>(entity);
         auto& input = projectileSpawners.get<InputReceiver>(entity);
         auto& crosshair = projectileSpawners.get<PlightCrosshair>(entity);
+        auto& cstats = projectileSpawners.get<CombatStats>(entity);
+
         if (projectileSys.active) {
             Float32 fire = input.Get("fire");
             if (EPSILON_NOT_ZERO(fire)) {
-
-                auto& sprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
+                if (cstats.currentStamina >= PROJECTILE_COST) {
+                    cstats.currentStamina -= PROJECTILE_COST;
+                    
+                    auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+                    cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+                    sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 
                 Float32 x = crosshair.playerDistance * cos(crosshair.angle);
                 Float32 y = crosshair.playerDistance * sin(crosshair.angle);
                 
                 Vector3 pos = {x+t.position.x,y+t.position.y,t.position.z};
                 CreateProjectile(projectileSys.settings,pos,crosshair.angle);
+                }
             }
         }     
     }
