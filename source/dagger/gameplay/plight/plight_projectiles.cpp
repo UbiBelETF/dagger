@@ -8,6 +8,7 @@
 #include <math.h>
 
 #include "gameplay/plight/plight_collisions.h"
+#include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_aiming.h"
 
 #include <algorithm>
@@ -56,6 +57,8 @@ void ProjectileSystem::Run()
         if (projectileSys.active) {
             Float32 fire = input.Get("fire");
             if (EPSILON_NOT_ZERO(fire)) {
+                auto& character = Engine::Registry().get<PlightCharacterController>(entity);
+                character.hit = true;
 
                 auto& sprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
 

@@ -13,6 +13,7 @@ namespace plight
 	{
 		bool running{ false };
 		bool dashing{ false };
+		bool hit{ false };
 		bool doubleTap{ false }; // Waiting for a double tap to perform dash animation
 		bool resting{ false };
 
@@ -29,6 +30,10 @@ namespace plight
 		Float32 currentDashingTime{ 0.f };
 		Float32 doubleTapDurationWindow{ 0.25f };
 		Float32 currentDoubleTapDuration{ 0.f };
+
+		//Hit
+		Float32 hitTime{ 0.50f };
+		Float32 currentHitTime{ 0.f };
 	};
 
 	class PlightControllerSystem

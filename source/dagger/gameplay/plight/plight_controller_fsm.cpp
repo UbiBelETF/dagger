@@ -43,6 +43,10 @@ void PlightCharacterControllerFSM::Idle::Run(PlightCharacterControllerFSM::State
         }
     }
 
+    if (character.hit) {
+        GoTo(PlightCharacterStates::Hit, state_);
+    }
+
     Float32 move = input.Get("move");
         
         if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
@@ -132,6 +136,10 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
         }
     }
 
+    if (character.hit) {
+        GoTo(PlightCharacterStates::Hit, state_);
+    }
+
     Float32 move = input.Get("move");
 
     if (EPSILON_ZERO(move) || cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME)
@@ -179,6 +187,10 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
 {
     auto&& [sprite, character, cstats, crosshair, transform] = Engine::Registry().get<Sprite,PlightCharacterController, CombatStats, PlightCrosshair, Transform>(state_.entity);
 
+    if (character.hit) {
+        GoTo(PlightCharacterStates::Hit, state_);
+    }
+
     if (cstats.currentStamina < STAMINA_FOR_DASHING_FRAME)
     {
         GoTo(PlightCharacterStates::Idle, state_);
@@ -216,3 +228,29 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
 }
 
 DEFAULT_EXIT(PlightCharacterControllerFSM, Dashing);
+
+//Hit
+
+
+void PlightCharacterControllerFSM::Hit::Enter(PlightCharacterControllerFSM::StateComponent& state_)
+{
+    auto& animator = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator, "Plight:knight_m:HIT");
+    auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
+    character.running = false; character.dashing = false;
+}
+
+DEFAULT_EXIT(PlightCharacterControllerFSM, Hit);
+
+void PlightCharacterControllerFSM::Hit::Run(PlightCharacterControllerFSM::StateComponent& state_)
+{
+    auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
+
+    character.currentHitTime += Engine::DeltaTime();
+    if (character.currentHitTime >= character.hitTime) {
+        character.currentHitTime = 0.f;
+        character.hit = false;
+        GoTo(PlightCharacterStates::Idle, state_);
+    }
+
+}

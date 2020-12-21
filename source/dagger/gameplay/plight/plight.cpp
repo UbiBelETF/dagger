@@ -94,7 +94,7 @@ struct PlightCharacter
         chr.crosshair.angle = 0.f;
         chr.crosshair.playerDistance = 20.f;
         auto& crosshairSprite = reg.emplace<Sprite>(chr.crosshair.crosshairSprite);
-        AssignSprite(crosshairSprite, "Plight:crosshair:crosshair");
+        AssignSprite(crosshairSprite, "Plight:crosshair:crosshair1");
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
         crosshairSprite.position.z = chr.sprite.position.z;
