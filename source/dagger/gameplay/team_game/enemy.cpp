@@ -104,7 +104,7 @@ void lab::EnemySystem::Run()
 				}
 				else
 				{
-					Vector2 speed = speedForFollow(t.position, playerPosition, (skeleton.speed - 2));
+					Vector2 speed = speedForFollow(t.position, playerPosition, skeleton.speed);
 					skeleton.speedX = speed.x;
 					skeleton.speedY = speed.y;
 
@@ -200,21 +200,53 @@ void lab::EnemySystem::Run()
 
 		else if (slime.health > 0)
 		{
-			if (slime.deathTimer > 0)
+			if (col.colided && !Engine::Registry().has<Bullet>(col.colidedWith))
 			{
-				
-			}
-			Vector2 slimeSpeed = speedForFollow(t.position, playerPosition, slime.speed);
+				SimpleCollision& collision = Engine::Registry().get<SimpleCollision>(col.colidedWith);
+				Transform& transform = Engine::Registry().get<Transform>(col.colidedWith);
 
-			t.position.x += slimeSpeed.x * Engine::DeltaTime();
-			t.position.y += slimeSpeed.y * Engine::DeltaTime();
+				Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
 
-			if (col.colided && Engine::Registry().has<Bullet>(col.colidedWith))
-			{
-				auto& bullet = Engine::Registry().get<Bullet>(col.colidedWith);
-				if (bullet.ownership == player)
-					slime.health -= bullet.damage;
+				do
+				{
+					Float32 dt = Engine::DeltaTime();
+					if (collisionSides.x > 0)
+					{
+						t.position.x -= slime.speed * dt;
+					}
+
+					if (collisionSides.y > 0)
+					{
+						t.position.y -= slime.speed * dt;
+					}
+					if (collisionSides.x < 0)
+					{
+						t.position.x += slime.speed * dt;
+					}
+
+					if (collisionSides.y < 0)
+					{
+						t.position.y += slime.speed * dt;
+					}
+				} while (col.IsCollided(t.position, collision, transform.position));
+
 				col.colided = false;
+			}
+
+			else
+			{
+				Vector2 slimeSpeed = speedForFollow(t.position, playerPosition, slime.speed);
+
+				t.position.x += slimeSpeed.x * Engine::DeltaTime();
+				t.position.y += slimeSpeed.y * Engine::DeltaTime();
+
+				if (col.colided && Engine::Registry().has<Bullet>(col.colidedWith))
+				{
+					auto& bullet = Engine::Registry().get<Bullet>(col.colidedWith);
+					if (bullet.ownership == player)
+						slime.health -= bullet.damage;
+					col.colided = false;
+				}
 			}
 		}
 	}
