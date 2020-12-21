@@ -14,7 +14,7 @@
 
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/enemy.h"
-#include "gameplay/team_game/door_interaction.h"
+
 
 
 
@@ -36,7 +36,6 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PhysicsSystem>();
     engine_.AddSystem<MovementSystem>();
-    engine_.AddSystem<DoorSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -111,6 +110,7 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
         TilemapLegend legend;
         legend['.'] = &level_generator::smiljana::CreateFloor;
         legend['#'] = &level_generator::smiljana::CreateWall;
+        legend['D'] = &level_generator::smiljana::CreateDoor;
 
 
         Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
@@ -142,24 +142,7 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
         auto& movable = reg_.emplace<MovableBody>(player);
         movable.size = playerSprite.size;
 
-        //DOOR
 
-        auto door = reg_.create();
-
-        auto& doorSprite = reg_.emplace<Sprite>(door);
-        AssignSprite(doorSprite, "spritesheets:among_them_spritesheet:door_open_anim:1");
-        doorSprite.scale = { 1, 1 };
-
-        auto& doorAnimator = reg_.emplace<Animator>(door);
-        
-        auto& doorTransform = reg_.emplace<Transform>(door);
-        doorTransform.position = { 45, 20, 1 };
-
-        auto& doorCollision = reg_.emplace<SimpleCollision>(door);
-        doorCollision.size = doorSprite.size;
-        
-       reg_.emplace<Door>(door);
-        
     }
 }
 void team_game::SetupWorld(Engine &engine_)
