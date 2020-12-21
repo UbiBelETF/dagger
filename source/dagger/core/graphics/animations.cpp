@@ -41,6 +41,7 @@ void AnimationSystem::Run()
                     if (animator_.currentFrame == 0 && !animator_.isLooping)
                     {
                         animator_.animationPlaying = false;
+                        animator_.currentAnimation = "";
                     }
                     else
                     {

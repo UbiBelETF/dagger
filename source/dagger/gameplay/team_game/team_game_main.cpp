@@ -23,7 +23,8 @@
 #include "gameplay/team_game/level_generator.h"
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
-#include "gameplay/team_game/follow.h"
+#include "gameplay/team_game/follow.h""
+#include "gameplay/team_game/remote_animation.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -38,6 +39,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PhysicsSystem>();
     engine_.AddSystem<MovementSystem>();
     engine_.AddSystem<FollowSystem>();
+    engine_.AddSystem<RemoteAnimationSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -98,7 +100,7 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
     playerInput.contexts.push_back("AmongThemInput");
 
-    reg_.emplace<CharacterController>(player);
+    auto& controller = reg_.emplace<CharacterController>(player);
 
     reg_.emplace<MovableBody>(player);
 
@@ -108,12 +110,20 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     reg_.emplace<Transform>(poofEntity);
 
     auto& poofSprite = reg_.emplace<Sprite>(poofEntity);
-    AssignSprite(poofSprite, "spritesheets:among_them_spritesheet:poof_anim:1");
+    AssignSprite(poofSprite, "spritesheets:among_them_spritesheet:poof_anim:5");
     poofSprite.scale = { 0.5, 0.5 };
 
-    auto& poofFollow= reg_.emplace<Follow>(poofEntity);
+    auto& poofFollow = reg_.emplace<Follow>(poofEntity);
     poofFollow.target = player;
     poofFollow.offset.z = -1;
+
+    auto& poofAnimator = reg_.emplace<Animator>(poofEntity);
+    poofAnimator.isLooping = false;
+
+    auto& exec = reg_.emplace<AnimationExecutor>(poofEntity);
+    exec.source = &controller.animationTrigger;
+    exec.animationName = "among_them_animations:poof";
+    exec.startingSpriteName = "spritesheets:among_them_spritesheet:poof_anim:1";
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
