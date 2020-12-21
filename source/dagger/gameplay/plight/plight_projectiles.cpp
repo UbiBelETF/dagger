@@ -57,9 +57,6 @@ void ProjectileSystem::Run()
         if (projectileSys.active) {
             Float32 fire = input.Get("fire");
             if (EPSILON_NOT_ZERO(fire)) {
-                auto& character = Engine::Registry().get<PlightCharacterController>(entity);
-                character.hit = true;
-
                 auto& sprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
 
                 Float32 x = crosshair.playerDistance * cos(crosshair.angle);

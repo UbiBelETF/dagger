@@ -15,7 +15,7 @@
 
 
 
-#define BAR_START_SIZE 50.f
+
 
 using namespace plight;
 

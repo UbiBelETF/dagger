@@ -237,7 +237,7 @@ void PlightCharacterControllerFSM::Hit::Enter(PlightCharacterControllerFSM::Stat
     auto& animator = Engine::Registry().get<Animator>(state_.entity);
     AnimatorPlay(animator, "Plight:knight_m:HIT");
     auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
-    character.running = false; character.dashing = false;
+    character.running = false; character.dashing = false; character.doubleTap = false;
 }
 
 DEFAULT_EXIT(PlightCharacterControllerFSM, Hit);

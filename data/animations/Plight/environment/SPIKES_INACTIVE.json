@@ -1,0 +1,7 @@
+{
+  "animation-name": "Plight:environment:SPIKES_INACTIVE",
+  "animation-length-ms": 1000,
+  "animation-frames": [
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:1" }
+  ]
+}

@@ -24,7 +24,7 @@
 #include "gameplay/plight/plight_aiming.h"
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/tilemaps.h"
-
+#include "gameplay/plight/plight_spikes.h"
 
 
 using namespace dagger;
@@ -119,6 +119,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightAimingSystem>();
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<ProjectileSystem>();
+    engine_.AddSystem<PlightSpikesSystem>();
 }
 
 void Plight::WorldSetup(Engine &engine_)
