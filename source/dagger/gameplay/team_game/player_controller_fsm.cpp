@@ -84,11 +84,14 @@ void PlayerControllerSystem::Run()
                 tex.alignment={ TextAlignment::CENTER };
                 tex.Set("pixel-font", "GAME OVER",{30,30});    
             }                                     
+        }else
+        {
+            tex.alignment={ TextAlignment::RIGHT };
+            tex.Set("pixel-font", std::to_string(player.health) + "/100", { 10,-95,0 }, { 10,10 });
         }
         
 
-
-        else if (col.colided)
+         if (col.colided)
         {
 
             if (Engine::Registry().valid(col.colidedWith))
@@ -141,9 +144,7 @@ void PlayerControllerSystem::Run()
                             characterFSM.GoTo(ECharacterState::GetHit, state_);
                         });
                     }
-                               
-                    tex.alignment={ TextAlignment::RIGHT };
-                    tex.Set("pixel-font", std::to_string(player.health)+"/100",{10,-95,0},{10,10});
+                
                     
                 } 
 
@@ -167,12 +168,9 @@ void PlayerControllerSystem::Run()
                                     });
                         }
 
-
-
-                        tex.Set("pixel-font", std::to_string(player.health) + "/100", { 10,-95,0 }, { 10,10 });
                     }
 
-                }
+                } 
 
                 if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
                 {
