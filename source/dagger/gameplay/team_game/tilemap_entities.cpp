@@ -33,7 +33,7 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
             else if (enemy_ == 4)
             {
                 col.size = { 20, 20 };
-                col.pivot.y -= 0.3;
+                col.pivot.y -= 0.1;
             }
             else
                 col.size={sprite.size.x/2,sprite.size.y/2};  
@@ -70,7 +70,6 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
             else
             {
                 auto& slime = reg_.emplace<Slime>(entity);
-                sprite.size = { 100, 100 };
             }
         }
 
