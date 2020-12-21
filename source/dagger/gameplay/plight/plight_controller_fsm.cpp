@@ -191,7 +191,7 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
         GoTo(PlightCharacterStates::Hit, state_);
     }
 
-    if (cstats.currentStamina < STAMINA_FOR_DASHING_FRAME)
+    if (!character.dashing || cstats.currentStamina < STAMINA_FOR_DASHING_FRAME)
     {
         GoTo(PlightCharacterStates::Idle, state_);
     }

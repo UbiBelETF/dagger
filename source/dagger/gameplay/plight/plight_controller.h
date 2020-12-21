@@ -31,6 +31,9 @@ namespace plight
 		Float32 doubleTapDurationWindow{ 0.25f };
 		Float32 currentDoubleTapDuration{ 0.f };
 
+		//used for reseting characters
+		Vector2 startPosition = { 0.f,0.f };
+
 		//Hit
 		Float32 hitTime{ 0.50f };
 		Float32 currentHitTime{ 0.f };

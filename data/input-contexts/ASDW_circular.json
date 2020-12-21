@@ -33,6 +33,11 @@
       "event": "Released"
     },
     {
+      "command-name": "restart",
+      "trigger": "KeyY",
+      "event": "Released"
+    },
+    {
       "command-name": "use",
       "trigger": "KeyE"
     }

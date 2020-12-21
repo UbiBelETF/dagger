@@ -13,6 +13,8 @@ namespace plight {
         Float32 playerDistance{ 20.f };
 
         Float32 rotationSpeed{ 5.f };
+
+        Float32 startAngle{ 0.f };
     };
 
     class PlightAimingSystem : public System
