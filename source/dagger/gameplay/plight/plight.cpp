@@ -26,7 +26,7 @@
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/tilemaps.h"
 #include "gameplay/plight/plight_game_logic.h"
-
+#include "gameplay/plight/plight_spikes.h"
 
 
 using namespace dagger;
@@ -85,8 +85,8 @@ struct PlightCharacter
         chr.transform.position = { position_, 2.0f };
         chr.character.startPosition = position_;
 
-        AssignSprite(chr.sprite, "spritesheets:dungeon:big_demon_idle_anim:1");
-        AnimatorPlay(chr.animator, "Plight:big_deamon:IDLE");
+        AssignSprite(chr.sprite, "spritesheets:dungeon:knight_m_idle_anim:1");
+        AnimatorPlay(chr.animator, "Plight:knight_m:IDLE");
 
         if (input_ != "")
             chr.input.contexts.push_back(input_);
@@ -97,7 +97,7 @@ struct PlightCharacter
         chr.crosshair.angle = 0.f;
         chr.crosshair.playerDistance = 20.f;
         auto& crosshairSprite = reg.emplace<Sprite>(chr.crosshair.crosshairSprite);
-        AssignSprite(crosshairSprite, "Plight:crosshair:crosshair");
+        AssignSprite(crosshairSprite, "Plight:crosshair:crosshair1");
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
         crosshairSprite.position.z = chr.sprite.position.z;
@@ -123,6 +123,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<ProjectileSystem>();
     engine_.AddSystem<PlightGameLogicSystem>();
+    engine_.AddSystem<PlightSpikesSystem>();
 }
 
 void Plight::WorldSetup(Engine &engine_)

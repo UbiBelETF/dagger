@@ -13,6 +13,7 @@ namespace plight
 	{
 		bool running{ false };
 		bool dashing{ false };
+		bool hit{ false };
 		bool doubleTap{ false }; // Waiting for a double tap to perform dash animation
 		bool resting{ false };
 
@@ -32,6 +33,10 @@ namespace plight
 
 		//used for reseting characters
 		Vector2 startPosition = { 0.f,0.f };
+
+		//Hit
+		Float32 hitTime{ 0.50f };
+		Float32 currentHitTime{ 0.f };
 	};
 
 	class PlightControllerSystem

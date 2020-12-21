@@ -2,8 +2,13 @@
 
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
+#include "core/game/transforms.h"
+
+#include "gameplay/plight/plight_spikes.h"
+#include "gameplay/plight/plight_collisions.h"
 
 using namespace dagger;
+using namespace plight;
 
 Entity CreateFloor(Registry& reg_, INT32 x_, INT32 y_)
 {
@@ -191,10 +196,19 @@ Entity CreateRedFountain(Registry& reg_, INT32 x_, INT32 y_)
 Entity CreateFloorSpikes(Registry& reg_, INT32 x_, INT32 y_)
 {
     Entity entity = reg_.create();
+    auto& spikes = reg_.emplace<PlightSpikes>(entity);
+
     auto& sprite = reg_.emplace<Sprite>(entity);
     sprite.position = { x_ * 16, y_ * 16, 89 };
     AssignSprite(sprite, "spritesheets:dungeon:floor_spikes_anim:1");
-    reg_.emplace<Animator>(entity);
+
+    auto& transform = reg_.emplace<Transform>(entity);
+    transform.position = sprite.position;
+
+    auto& collision = reg_.emplace<PlightCollision>(entity);
+    auto& animator = reg_.emplace<Animator>(entity);
+    ATTACH_TO_FSM(PlightSpikesFSM, entity);
+
     return entity;
 }
 

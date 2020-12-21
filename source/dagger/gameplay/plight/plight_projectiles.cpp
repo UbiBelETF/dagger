@@ -9,6 +9,7 @@
 
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_combat.h"
+#include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_aiming.h"
 
 #include <algorithm>
