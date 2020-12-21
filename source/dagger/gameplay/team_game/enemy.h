@@ -27,6 +27,7 @@ namespace lab
 		Float32 speed = 2.f;
 		Float32 speedX;
 		Float32 speedY;
+		Float32 damage = 1;
 		int health = 150;
 		Float32 deathTimer = 125;
 	};

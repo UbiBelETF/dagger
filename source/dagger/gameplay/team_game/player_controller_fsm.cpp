@@ -180,6 +180,25 @@ void PlayerControllerSystem::Run()
 
                 } 
 
+                else if (Engine::Registry().has<Slime>(col.colidedWith))
+                {
+                    auto& slime = Engine::Registry().get<Slime>(col.colidedWith);
+                        player.health -= slime.damage;
+
+                        if (player.health <= 0)
+                        {
+                            player.health = 0;
+                        }
+                        else
+                        {
+                            Engine::Registry().view<CharacterFSM::StateComponent>()
+                                .each([&](CharacterFSM::StateComponent& state_)
+                                    {
+                                        characterFSM.GoTo(ECharacterState::GetHit, state_);
+                                    });
+                        }
+                }
+
                 if (Engine::Registry().has<lab::NextLvl>(col.colidedWith))
                 {
                     lab::NextLvl& nextLvl = Engine::Registry().get<lab::NextLvl>(col.colidedWith);
