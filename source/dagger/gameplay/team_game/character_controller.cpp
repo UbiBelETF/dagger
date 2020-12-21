@@ -4,6 +4,11 @@
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animations.h"
+#include "core/game/transforms.h"
+#include "gameplay/common/simple_collisions.h"
+#include "gameplay/team_game/door_interaction.h"
+#include "core/graphics/text.h"
+#include <core/graphics/animation.h>
 
 #include <glm/gtc/epsilon.hpp>
 
@@ -33,6 +38,8 @@ void CharacterControllerSystem::Run()
 				if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; chController.shape = ECharacterShape::Bat; }
 				if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; chController.shape = ECharacterShape::Hero; }
 				m_CharStateMachine.Run(state_);
+
+				
 			});
 	}
 }
@@ -85,6 +92,7 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 	}
 
 	body.movement = glm::normalize(Vector2{ runX, runY }) * ctrl.speed * Engine::DeltaTime();
-}
+	
 
+}
 DEFAULT_EXIT(CharacterFSM, Running);
