@@ -82,8 +82,8 @@ struct PlightCharacter
 
         chr.transform.position = { position_, 2.0f };
 
-        AssignSprite(chr.sprite, "spritesheets:dungeon:big_demon_idle_anim:1");
-        AnimatorPlay(chr.animator, "Plight:big_deamon:IDLE");
+        AssignSprite(chr.sprite, "spritesheets:dungeon:knight_m_idle_anim:1");
+        AnimatorPlay(chr.animator, "Plight:knight_m:IDLE");
 
         if (input_ != "")
             chr.input.contexts.push_back(input_);

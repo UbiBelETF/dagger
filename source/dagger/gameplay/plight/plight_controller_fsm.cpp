@@ -23,7 +23,7 @@ using namespace plight;
 void PlightCharacterControllerFSM::Idle::Enter(PlightCharacterControllerFSM::StateComponent& state_)
 {
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-	AnimatorPlay(animator, "Plight:big_deamon:IDLE");
+	AnimatorPlay(animator, "Plight:knight_m:IDLE");
     auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
     character.running = false; character.dashing = false;
     
@@ -86,7 +86,7 @@ void PlightCharacterControllerFSM::Idle::Run(PlightCharacterControllerFSM::State
 void PlightCharacterControllerFSM::Running::Enter(PlightCharacterControllerFSM::StateComponent& state_)
 {
     auto& animator = Engine::Registry().get<Animator>(state_.entity);
-    AnimatorPlay(animator, "Plight:big_deamon:RUN");
+    AnimatorPlay(animator, "Plight:knight_m:RUN");
 
     auto&& [sprite, character, crosshair, transform] = Engine::Registry().get<Sprite, PlightCharacterController, PlightCrosshair, Transform>(state_.entity);
 
@@ -167,7 +167,7 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
 void PlightCharacterControllerFSM::Dashing::Enter(PlightCharacterControllerFSM::StateComponent& state_)
 {
     auto& animator = Engine::Registry().get<Animator>(state_.entity);
-    AnimatorPlay(animator, "Plight:big_deamon:DASH");
+    AnimatorPlay(animator, "Plight:knight_m:DASH");
     auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
     character.resting = false; 
     character.running = false;
