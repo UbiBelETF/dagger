@@ -25,6 +25,7 @@ struct PlightParticleSpawnerSettings
     ColorRGBA pColorMin{ 1.0f, 1.0f, 1.0f, 1.0f };
     ColorRGBA pColorMax{ 1.0f, 1.0f, 1.0f, 1.0f };
     String pSpriteName;
+    Float32 pTimeOfLiving = 1.f;
     bool includeScaleSpeed = false;
 
     Float32 spawnDuration{ 2.f };
@@ -32,7 +33,7 @@ struct PlightParticleSpawnerSettings
 
     void Setup(Float32 timeToNewParticle_, Vector2 pSize_, Vector2 pSpeedMin_, Vector2 pSpeedMax_,
         ColorRGBA pColorMin_ = { 1.0f, 1.0f, 1.0f, 1.0f }, ColorRGBA pColorMax_ = { 1.0f, 1.0f, 1.0f, 1.0f },
-        String pSpriteName_ = "EmptyWhitePixel", bool includeScaleSpeed_ = false, Float32 spawnDuration_ = 2.f)
+        String pSpriteName_ = "EmptyWhitePixel", bool includeScaleSpeed_ = false, Float32 spawnDuration_ = 2.f,Float32 pTimeOfLiving_ = 1.f)
     {
         timeToNewParticle = timeToNewParticle_;
         pSize = pSize_;
@@ -43,6 +44,7 @@ struct PlightParticleSpawnerSettings
         pColorMax = pColorMax_;
         includeScaleSpeed = includeScaleSpeed_;
         spawnDuration = spawnDuration_;
+        pTimeOfLiving = pTimeOfLiving_;
     }
 };
 

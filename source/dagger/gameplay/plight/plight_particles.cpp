@@ -48,7 +48,7 @@ void PlightParticleSystem::CreateParticle(const PlightParticleSpawnerSettings& s
     randSpeedVal.y = glm::mix(settings_.pSpeedMin.y, settings_.pSpeedMax.y, PlightParticle_getRand());
     particle.positionSpeed = {randSpeedVal.x, randSpeedVal.y, 0.f};
 
-    particle.colorSpeed = {0.f,0.f,0.f,-0.01f};
+    particle.colorSpeed = {0.f,0.f,0.f,-0.005f};
     if (settings_.includeScaleSpeed) {
         Float32 randAddition = 0.1f * (1 - 2 * (rand() % 2));
         particle.scaleSpeed = settings_.pSize * randAddition;
@@ -56,6 +56,7 @@ void PlightParticleSystem::CreateParticle(const PlightParticleSpawnerSettings& s
     else {
         particle.scaleSpeed = {0.f,0.f};
     }
+    particle.timeOfLiving = settings_.pTimeOfLiving;
     
 }
 
