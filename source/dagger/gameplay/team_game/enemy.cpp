@@ -1,6 +1,7 @@
 #include "gameplay/team_game/enemy.h"
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/tilemap_entities.h"
+#include "gameplay/team_game/collectables.h"
 
 #include "core/graphics/animation.h"
 #include "core/input/inputs.h"
@@ -70,7 +71,7 @@ void lab::EnemySystem::Run()
 
 			if (skeleton.type == follower)
 			{
-				if (col.colided && !Engine::Registry().has<Bullet>(col.colidedWith))
+				if (col.colided && !Engine::Registry().has<Bullet>(col.colidedWith) && !Engine::Registry().has<Heart>(col.colidedWith))
 				{
 					SimpleCollision& collision = Engine::Registry().get<SimpleCollision>(col.colidedWith);
 					Transform& transform = Engine::Registry().get<Transform>(col.colidedWith);

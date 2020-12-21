@@ -1,4 +1,5 @@
 #include "gameplay/team_game/shoot.h"
+#include "gameplay/team_game/collectables.h"
 
 #include "core/engine.h"
 #include "core/input/inputs.h"
@@ -83,7 +84,7 @@ void lab::ShootingSystem::Run()
 		{
 			col.colided = false;
 			auto& reg = Engine::Instance().Registry();
-			if (!reg.has<Bullet>(col.colidedWith))
+			if (!reg.has<Bullet>(col.colidedWith) && !reg.has<Heart>(col.colidedWith))
 			{
 				Engine::Registry().remove_all(entity);
 			}

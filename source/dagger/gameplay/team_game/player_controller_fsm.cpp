@@ -2,6 +2,7 @@
 #include "gameplay/team_game/shoot.h"
 #include "gameplay/team_game/tilemap_entities.h"
 #include "gameplay/team_game/enemy.h"
+#include "gameplay/team_game/collectables.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -101,7 +102,14 @@ void PlayerControllerSystem::Run()
 
                 Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
 
-                
+                if (Engine::Registry().has<Heart>(col.colidedWith))
+                {
+                    Engine::Registry().remove_all(col.colidedWith);
+                    player.health += 40;
+                    if (player.health > 100)
+                        player.health = 100;
+                    col.colided = false;
+                }
 
                 do
                 {
