@@ -56,6 +56,19 @@ Entity CreateBlackBackground(Registry& reg_, INT32 x_, INT32 y_)
     return entity;
 }
 
+Entity CreatePhysicsObject(Registry& reg_, INT32 x_, INT32 y_)
+{
+    Entity entity = reg_.create();
+    auto& collision = reg_.emplace<PlightCollision>(entity);
+    collision.size.x = 16;
+    collision.size.y = 16;
+    auto& t = reg_.emplace<Transform>(entity);
+    t.position = { x_ * 16, y_ * 16, 90 };
+    auto& physic_object = reg_.emplace<PhysicsObject>(entity);
+    physic_object.collision_groups.push_back(1);
+    return entity;
+}
+
 Entity CreateEmpty(Registry& reg_, INT32 x_, INT32 y_)
 {
     return Entity();
@@ -97,6 +110,15 @@ Entity CreateWallCornerBottomRight(Registry& reg_, INT32 x_, INT32 y_)
     AssignSprite(sprite, "spritesheets:dungeon:wall_corner_bottom_right");
     return entity;
 }
+Entity CreateWallCornerBottomRightColumn(Registry& reg_, INT32 x_, INT32 y_)
+{
+    Entity entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
+    sprite.position = { x_ * 16, y_ * 16, 75 };
+    AssignSprite(sprite, "spritesheets:dungeon:wall_corner_bottom_right");
+    return entity;
+}
+
 Entity CreateWallCornerMidRight(Registry& reg_, INT32 x_, INT32 y_)
 {
     Entity entity = reg_.create();
@@ -230,11 +252,28 @@ Entity CreateFrontWall(Registry& reg_, INT32 x_, INT32 y_)
     }
     return entity;
 }
+Entity CreateFrontWallColumn(Registry& reg_, INT32 x_, INT32 y_)
+{
+    Entity entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
+    sprite.position = { x_ * 16, y_ * 16, 75 };
+    float mod = (float)rand() / RAND_MAX;
+    if (mod <= 0.33) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_top_left");
+    }
+    else if (0.33 < mod <= 0.66) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_top_mid");
+    }
+    else {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_top_right");
+    }
+    return entity;
+}
 Entity CreateRoof(Registry& reg_, INT32 x_, INT32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 80 };
+    sprite.position = { x_ * 16, y_ * 16, 78 };
     float mod = (float)rand() / RAND_MAX;
     if (mod <= 0.33) {
         AssignSprite(sprite, "spritesheets:dungeon:wall_left");
@@ -254,34 +293,6 @@ Entity CreateWallMid(Registry& reg_, INT32 x_, INT32 y_)
     auto& sprite = reg_.emplace<Sprite>(entity);
     sprite.position = { x_ * 16, y_ * 16, 89 };
    
-    float mod = (float)rand() / RAND_MAX;
-    if (mod <= 0.33) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_left");
-    }
-    else if (0.33 < mod <= 0.66) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_mid");
-    }
-    else {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_right");
-    }
-    return entity;
-}
-
-Entity CreateWallMidCollision(Registry& reg_, INT32 x_, INT32 y_)
-{
-
-    Entity entity = reg_.create();
-    auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 89 };
-
-    auto& collision = reg_.emplace<PlightCollision>(entity);
-    collision.size.x = 16;
-    collision.size.y = 16;
-    auto& t = reg_.emplace<Transform>(entity);
-    t.position = sprite.position;
-    auto& physic_object = reg_.emplace<PhysicsObject>(entity);
-    physic_object.collision_groups.push_back(1);
-
     float mod = (float)rand() / RAND_MAX;
     if (mod <= 0.33) {
         AssignSprite(sprite, "spritesheets:dungeon:wall_left");
@@ -331,14 +342,15 @@ Entity CreateWallColumn(Registry& reg_, INT32 x_, INT32 y_)
     sprite.position = { x_ * 16, y_ * 16, 90 };
     AssignSprite(sprite, "spritesheets:dungeon:wall_coulmn_base");
 
+   
     Entity entity2 = reg_.create();
     auto& sprite2 = reg_.emplace<Sprite>(entity2);
-    sprite2.position = { x_ * 16, (y_+1) * 16, 89 };
+    sprite2.position = { x_ * 16, (y_+1) * 16, 79 };
     AssignSprite(sprite2, "spritesheets:dungeon:column_mid");
 
     Entity entity3 = reg_.create();
     auto& sprite3 = reg_.emplace<Sprite>(entity3);
-    sprite3.position = { x_ * 16, (y_ + 2) * 16, 89 };
+    sprite3.position = { x_ * 16, (y_ + 2) * 16, 79 };
     AssignSprite(sprite3, "spritesheets:dungeon:column_top");
 
     return entity;

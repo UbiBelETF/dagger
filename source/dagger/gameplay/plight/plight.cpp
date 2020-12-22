@@ -373,7 +373,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite.color = { 0, 0, 0, 1 };
     backgroundSprite.size = { 50, 5 };
     backgroundSprite.scale = { 1, 1 };
-    backgroundSprite.position = { -356, 57, 2 };
+    backgroundSprite.position = { -356, 57,  1 };
 
 
     auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentHealthBar);
@@ -391,7 +391,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite.size = { 50, 5 };
     backgroundStaminaSprite.scale = { 1, 1 };
-    backgroundStaminaSprite.position = { -356, 47, 2 };
+    backgroundStaminaSprite.position = { -356, 47, 1 };
 
 
     auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
@@ -426,7 +426,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite2.color = { 0, 0, 0, 1 };
     backgroundSprite2.size = { 50, 5 };
     backgroundSprite2.scale = { 1, 1 };
-    backgroundSprite2.position = { 356, 57, 2 };
+    backgroundSprite2.position = { 356, 57, 1};
 
 
     auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
@@ -435,7 +435,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontSprite2.color = { 1, 0, 0, 1 };
     frontSprite2.size = { 50, 5 };
     frontSprite2.scale = { 1, 1 };
-    frontSprite2.position = { 356, 57, 0};
+    frontSprite2.position = { 356, 57, 0 };
 
 
     auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
@@ -444,7 +444,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite2.size = { 50, 5 };
     backgroundStaminaSprite2.scale = { 1, 1 };
-    backgroundStaminaSprite2.position = { 356, 47, 2 };
+    backgroundStaminaSprite2.position = { 356, 47, 1 };
 
 
     auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
@@ -463,7 +463,7 @@ void plight::SetupTilemaps()
     floorLegend['.'] = &CreateFloor;
     floorLegend[','] = &CreateBlackBackground;
     floorLegend['S'] = &CreateFloorSpikes;
-    floorLegend['R'] = &CreateWallMidCollision;
+    floorLegend['R'] = &CreateWallMid;
     floorLegend['C'] = &CreateRoof;
     floorLegend['P'] = &CreateWallColumn;
 
@@ -473,12 +473,14 @@ void plight::SetupTilemaps()
     wallLegend['2'] = &CreateWallSideTopRight;
     wallLegend['3'] = &CreateWallCornerBottomLeft;
     wallLegend['4'] = &CreateWallCornerBottomRight;
+    wallLegend['5'] = &CreateWallCornerBottomRightColumn;
     wallLegend['J'] = &CreateWallCornerMidRight;
     wallLegend['|'] = &CreateWallSideMidLeft;
     wallLegend['}'] = &CreateSideWallMidRight;
     wallLegend['#'] = &CreateWallMid;
     wallLegend['L'] = &CreateWallSideFrontLeft;
     wallLegend['_'] = &CreateFrontWall;
+    wallLegend['6'] = &CreateFrontWallColumn;
     wallLegend['-'] = &CreateWallCornerRight;
     wallLegend['R'] = &CreateWallSideFrontRight;
     wallLegend['Z'] = &CreateWallBannerBlue;
@@ -493,9 +495,16 @@ void plight::SetupTilemaps()
     featuresLegend[','] = &CreateEmpty;
     featuresLegend['.'] = &CreateEmpty;
 
+    TilemapLegend physicsObjectLegend;
+    physicsObjectLegend['.'] = &CreateEmpty;
+    physicsObjectLegend['B'] = &CreatePhysicsObject;
+
+
+
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_floor.map", &floorLegend });
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_walls.map", &wallLegend });
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_features.map", &featuresLegend });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/map1_physics_objects.map", &physicsObjectLegend });
 }
 
 
