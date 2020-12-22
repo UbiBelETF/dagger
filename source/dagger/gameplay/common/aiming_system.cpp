@@ -29,8 +29,8 @@ void AimingSystem::Run()
                      }
                     ]
        */
-            Float32 rotate = input_.Get("rotate");        //Get the input value of the rotate command - the amount the angle changes if the button is pressed 
 
+            Float32 rotate = input_.Get("rotate");      //Get the input value of the rotate command - the amount the angle changes if the button is pressed 
 
             if (rotate) { 
                 crosshair_.angle += rotate;   //Change the angle of the crosshair

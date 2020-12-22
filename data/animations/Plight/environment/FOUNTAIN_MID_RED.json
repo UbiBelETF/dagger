@@ -1,0 +1,9 @@
+{
+  "animation-name": "Plight:environment:FOUNTAIN_MID_RED",
+  "animation-length-ms": 600,
+  "animation-frames": [
+    { "texture-name": "spritesheets:dungeon:wall_fountain_mid_red_anim:1" },
+    { "texture-name": "spritesheets:dungeon:wall_fountain_mid_red_anim:2" },
+    { "texture-name": "spritesheets:dungeon:wall_fountain_mid_red_anim:3" }
+  ]
+}

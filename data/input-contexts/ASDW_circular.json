@@ -6,11 +6,11 @@
       "actions": [
         {
           "trigger": "KeyA",
-          "value": 0.05
+          "value": 1
         },
         {
           "trigger": "KeyD",
-          "value": -0.05
+          "value": -1
         }
       ]
     },
@@ -26,6 +26,16 @@
           "value": -1
         }
       ]
+    },
+    {
+      "command-name": "fire",
+      "trigger": "KeyF",
+      "event": "Released"
+    },
+    {
+      "command-name": "restart",
+      "trigger": "KeyY",
+      "event": "Released"
     },
     {
       "command-name": "use",
