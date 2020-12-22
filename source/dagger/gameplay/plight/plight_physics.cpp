@@ -37,7 +37,10 @@ void plight::PhysicsSystem::Run()
                     if (has) {
                         auto& other_transform = view.get<Transform>(*it2);
                         auto& other_collision = view.get<PlightCollision>(*it2);
-                        ResolveCollision(transform.position, collision, *it, other_transform.position, other_collision, it2);
+                        if (other_physics.is_static)
+                            ResolveCollision(transform.position, collision, *it, other_transform.position, other_collision, it2);
+                        else 
+                            ResolveDynamicCollision(transform.position, collision, *it, other_transform.position, other_collision, it2);
                         skip = true;
                     }
                 }
@@ -69,3 +72,40 @@ void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myC
     if (otherCol_.colidedWith.size() == 0) otherCol_.colided = false;
 }
 
+void plight::PhysicsSystem::ResolveDynamicCollision(Vector3& pos_, PlightCollision& myCol_, entt::entity my_, Vector3& posOther_, PlightCollision& otherCol_, std::list<entt::entity>::iterator& other_)
+{
+    // Moves the coliding object out of the other coliding object & increments it2
+    Vector2 sides = myCol_.GetCollisionSides(pos_, otherCol_, posOther_);
+    float diference;
+    if (sides.x != 0) {
+        
+        if (sides.x == 1) {
+            diference = pos_.x + myCol_.size.x - posOther_.x;
+            pos_.x -= diference /2;
+            posOther_.x += diference / 2;
+        }
+        else {
+            diference = posOther_.x + otherCol_.size.x - pos_.x;
+            pos_.x += diference/2;
+            posOther_.x -= diference / 2;
+        }
+    }
+    if (sides.y != 0) {
+        if (sides.y == 1) {
+            diference = pos_.y + myCol_.size.y - posOther_.y;
+            pos_.y -= diference /2;
+            posOther_.y += diference / 2;
+        }
+        else {
+            diference = posOther_.y + otherCol_.size.y - pos_.y;
+            pos_.y += diference /2;
+            posOther_.y -= diference / 2;
+        }
+    }
+
+    other_ = myCol_.colidedWith.erase(other_);
+    if (myCol_.colidedWith.size() == 0) myCol_.colided = false;
+
+    otherCol_.colidedWith.remove(my_);
+    if (otherCol_.colidedWith.size() == 0) otherCol_.colided = false;
+}
