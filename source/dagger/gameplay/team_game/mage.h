@@ -11,6 +11,10 @@
 
 #include "gameplay/common/simple_collisions.h"
 
+#ifndef TOWER_NONE
+#define TOWER_NONE 101
+#endif // TOWER_NONE
+
 using namespace dagger;
 
 namespace ancient_defenders {
@@ -38,7 +42,7 @@ namespace ancient_defenders {
     struct Mage {
         Entity entity;
 
-        static Entity Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true);        
+        static Entity Create(Vector2 position_, EAction action_ = EAction::Idling, Bool offset_ = true, UInt32 spot_ = TOWER_NONE);
     };
 
     struct WalkingPath {

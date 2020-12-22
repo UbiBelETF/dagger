@@ -27,17 +27,21 @@ void ancient_defenders::SpellBehaviorSystem::WindDown()
 
 void ancient_defenders::SpellBehaviorSystem::Run()
 {
-	Engine::Registry().view<SpellStats, Sprite, Transform, Animator, RangeOfAttack>().each(
-		[](Entity entity_, SpellStats& spell_, RangeOfAttack& range_)
+	auto& registry = Engine::Registry();
+	auto delta = Engine::DeltaTime();
+
+	registry.view<SpellStats, Sprite, Transform, Animator, RangeOfAttack>().each(
+		[&](Entity entity_, SpellStats& spell_, Sprite, Transform, Animator, RangeOfAttack& range_)
 		{
 			if (spell_.time > 0)
-				spell_.time -= Engine::DeltaTime();
+				spell_.time -= delta;
 			else
 				return;
-			for (auto target : range_.targets) {
-				Engine::Registry().get<Health>(target).currentHealth -= spell_.dmg * Engine::DeltaTime();
+
+			for (auto target : range_.targets) 
+			{
+				registry.get<Health>(target).currentHealth -= spell_.dmg * delta;
 			}
-				
 		});
 
 }

@@ -6,23 +6,28 @@
 
 using namespace ancient_defenders;
 
-UInt32 ancient_defenders::TowerPlacementInfo::selectedSpot = 0;
-String ancient_defenders::TowerPlacementInfo::selectedTower = "STORM";
-SelectMode ancient_defenders::TowerPlacementInfo::selectMode = SelectMode::Spot;
+UInt32 ancient_defenders::TowerPlacementInfo::selectedSpot = TOWER_NONE;
+String ancient_defenders::TowerPlacementInfo::selectedTower = "BLOOD";
+SelectMode ancient_defenders::TowerPlacementInfo::selectMode = SelectMode::Tower;
+
 Sequence<Vector2> ancient_defenders::TowerPlacementInfo::spotCoordinates = {};
-Sequence<Bool> ancient_defenders::TowerPlacementInfo::availableSpot = { true, true, true, true, true, true, true, true };
-Sequence<String> ancient_defenders::TowerPlacementInfo::towerNames = {"BLOOD", "FIRE", "ICE", "POISON", "STORM", "SUN"};
+StaticArray<Bool, SPOT_COUNT> ancient_defenders::TowerPlacementInfo::availableSpot = { true, true, true, true, true, true, true, true };
+StaticArray<UInt32, SPOT_COUNT> ancient_defenders::TowerPlacementInfo::chantingMages = { 0, 0, 0, 0, 0, 0, 0, 0 };
+StaticArray<String, SPOT_COUNT> ancient_defenders::TowerPlacementInfo::spotTowerNames = { "", "", "", "", "", "", "", "" };
+StaticArray<String, TOWER_COUNT> ancient_defenders::TowerPlacementInfo::towerNames = {"BLOOD", "FIRE", "ICE", "POISON", "STORM", "SUN"};
 
 Float32 ancient_defenders::TowerStats::constructionGoal = 10.0f;
 
 void ancient_defenders::TowerBehaviorSystem::SpinUp()
 {
     Engine::Dispatcher().sink<NextFrame>().connect<&TowerBehaviorSystem::OnEndOfFrame>(this);
+    Engine::PutDefaultResource<TowerMenuState>(new TowerMenuState{});
 }
 
 void ancient_defenders::TowerBehaviorSystem::WindDown()
 {
     Engine::Dispatcher().sink<NextFrame>().disconnect<&TowerBehaviorSystem::OnEndOfFrame>(this);
+    delete Engine::GetDefaultResource<TowerMenuState>();
 }
 
 void ancient_defenders::TowerBehaviorSystem::Run()
@@ -33,6 +38,7 @@ void ancient_defenders::TowerBehaviorSystem::Run()
         if (tower_.constructionProgress < TowerStats::constructionGoal) return;
         else if (!tower_.constructed) {
             tower_.constructed = true;
+            TowerPlacementInfo::chantingMages[tower_.address] = 0;
             TowerPlacementInfo::availableSpot[tower_.address] = false;
 
 
