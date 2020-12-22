@@ -92,8 +92,9 @@ struct Player
         chr.sprite.color = { color_, 1.0f };
         
         //chr.transform.position = {2160, 1175, 0.0f };
-        chr.transform.position = { 2550, 26, 0.0f };
-        //chr.transform.position = { position_, 0.0f };
+        //chr.transform.position = { 2550, 26, 0.0f };
+        //chr.transform.position = { 2630, 1025, 0.0f };
+        chr.transform.position = { position_, 0.0f };
 
         AssignSprite(chr.sprite, "Light:idle");
         AnimatorPlay(chr.animator, "character:IDLE");
@@ -157,7 +158,7 @@ struct Boss
         chr.sprite.position = { position_, 1.0f };
         chr.sprite.color = { color_, 1.0f };
 
-        chr.transform.position = { 100, 100, 0.0f };
+        chr.transform.position = { position_ ,0.f};
 
         AssignSprite(chr.sprite, "spritesheets:team_game:boss:idle:boss_idle");
         AnimatorPlay(chr.animator, "boss:boss_idle");
@@ -237,10 +238,11 @@ struct Bubble
 //bacckground
 void CreateBackground()
 {
-    auto& reg = Engine::Registry();
+   /* auto& reg = Engine::Registry();
     auto* camera = Engine::GetDefaultResource<Camera>();
-
-    /* Create terrain */ {
+    
+    //Create terrain 
+    {
         auto back = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(back);
         AssignSprite(sprite, "EmptyWhitePixel");
@@ -302,7 +304,8 @@ void CreateBackground()
         transform.position.z = 1;
     }
 
-    /* Put background image */ {
+    // Put background image 
+    {
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
 
@@ -310,7 +313,7 @@ void CreateBackground()
         sprite.position.z = 10;
     }
     
-    /* Put grass */ {
+    // Put grass  {
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
 
@@ -318,19 +321,33 @@ void CreateBackground()
         sprite.position = { 0, -25, 5 };
     }
 
-    /* Put trees */ {
+    // Put trees 
+    {
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
 
         AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Tree");
         sprite.position = { 0, 30, 7 };
+    }*/
+    auto& reg = Engine::Registry();
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    {
+        auto entity = reg.create();
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size.x = 3000;
+        col.size.y = 200;
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position.x = 1250;
+        transform.position.y =-400;
+        transform.position.z = 1;
     }
+
 }
 
 void team_game::SetupWorld(Engine& engine_)
 {
     SetupCamera();
-    CreateBackground();
 
     auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, 0 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);
@@ -342,10 +359,23 @@ void team_game::SetupWorld(Engine& engine_)
 void team_game::SetupWorld_Demo(Engine& engine_)
 {
     SetupCamera();
-    //CreateBackground();
-
-    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0, 100 });
-    auto boss = Boss::Create("Arrows", { 1,1,1 }, { 50,100 });
+    auto& reg = Engine::Registry();
+    auto* camera = Engine::GetDefaultResource<Camera>();
+    {
+        auto entity = reg.create();
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size.x = 3000;
+        col.size.y = 200;
+        auto& physics = reg.emplace<Physics>(entity);
+        physics.nonStatic = false;
+        physics.deathFloor = true;
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position.x = 1250;
+        transform.position.y = -400;
+        transform.position.z = 1;
+    }
+    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,100});
+    auto boss = Boss::Create("Arrows", { 1,1,1 }, { 2630, 1100 });
     auto guide = Guide::Create( { 1,1,1 }, { 50,100 });
     auto bubble = Bubble::Create({ 1,1,1 }, { 50,100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);

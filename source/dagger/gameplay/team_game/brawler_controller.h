@@ -15,6 +15,7 @@ namespace team_game
 		Bool attack = false;
 		Float32 attacking = 0.0f;
 		Bool doubleJump = false;
+		Bool jump = false;
 	};
 
 	class BrawlerControllerSystem : public System

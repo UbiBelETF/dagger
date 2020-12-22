@@ -89,10 +89,11 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
 {
     auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_,transform_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics,Transform>(state_.entity);
-    if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
+    if (EPSILON_NOT_ZERO(input_.Get("jump")) && !char_.jump && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
     {
         physics_.velocity.y += char_.speed.y;
-        char_.doubleJump = false;
+        char_.jump = true;
+        //char_.doubleJump = false;
         //JUMP ONLY WHEN RELEASED KEY(Not holding)
     }
     if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y <GetGravity()*Engine::DeltaTime()&& !char_.doubleJump)
@@ -106,11 +107,11 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
     }
     if (EPSILON_NOT_ZERO(input_.Get("run")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
     {
-        char_.doubleJump = false;
+        //char_.doubleJump = false;
         GoTo(ECharacterStates::Running, state_);
     }
     else if (physics_.velocity.y == GetGravity() * Engine::DeltaTime()) {
-        char_.doubleJump = false;
+        //char_.doubleJump = false;
         GoTo(ECharacterStates::Idle, state_);
     }
     
