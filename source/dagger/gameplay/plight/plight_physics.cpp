@@ -4,6 +4,8 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
+#include "gameplay/plight/plight_controller.h"
+
 #include <algorithm>    
 
 using namespace plight;
@@ -32,6 +34,12 @@ void plight::PhysicsSystem::Run()
                         if (std::find(physics.my_groups.begin(), physics.my_groups.end(), group) != physics.my_groups.end()) {
                             has = true;
                             break;
+                        }
+                    }
+                    if (Engine::Registry().has<PlightCharacterController>(*it)) {
+                        auto& character = Engine::Registry().get<PlightCharacterController>(*it);
+                        if (!character.running) {
+                            has = false;
                         }
                     }
                     if (has) {
