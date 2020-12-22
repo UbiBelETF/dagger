@@ -105,30 +105,6 @@ void PlightCharacterControllerFSM::Running::Enter(PlightCharacterControllerFSM::
 
     transform.position.x += dx;
     transform.position.y += dy;
-
-    auto& csprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
-
-    Float32 x = crosshair.playerDistance * cos(crosshair.angle);
-    Float32 y = crosshair.playerDistance * sin(crosshair.angle);
-
-
-    csprite.position.x = x + sprite.position.x;
-    csprite.position.y = y + sprite.position.y;
-
-    if (crosshair.angle > 0.5 * M_PI && crosshair.angle < 1.5 * M_PI) {
-        sprite.scale = { -1,1 };
-    }
-    else {
-        sprite.scale = { 1,1 };
-    }
-
-    Float32 x_weapon = character.weaponOffset * cos(crosshair.angle);
-    Float32 y_weapon = character.weaponOffset * sin(crosshair.angle);
-
-    auto& weapon_sprite = Engine::Registry().get<Sprite>(character.weaponSprite);
-    weapon_sprite.position.x = sprite.position.x + x_weapon;
-    weapon_sprite.position.y = sprite.position.y - 3.f + y_weapon;
-    weapon_sprite.rotation = (crosshair.angle * 180.) / M_PI + 45;
 }
 
 // same as: DEFAULT_EXIT(CharacterControllerFSM, Running);
@@ -168,29 +144,6 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
 
         transform.position.x += dx;
         transform.position.y += dy;
-
-        auto& csprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
-
-        Float32 x = crosshair.playerDistance * cos(crosshair.angle);
-        Float32 y = crosshair.playerDistance * sin(crosshair.angle);
-
-
-        csprite.position.x = x + sprite.position.x;
-        csprite.position.y = y + sprite.position.y;
-
-        if (crosshair.angle > 0.5 * M_PI && crosshair.angle < 1.5 * M_PI) {
-            sprite.scale = { -1,1 };
-        }
-        else {
-            sprite.scale = { 1,1 };
-        }
-        Float32 x_weapon = character.weaponOffset * cos(crosshair.angle);
-        Float32 y_weapon = character.weaponOffset * sin(crosshair.angle);
-
-        auto& weapon_sprite = Engine::Registry().get<Sprite>(character.weaponSprite);
-        weapon_sprite.position.x = sprite.position.x + x_weapon;
-        weapon_sprite.position.y = sprite.position.y - 3.f + y_weapon;
-        weapon_sprite.rotation = (crosshair.angle * 180.) / M_PI + 45;
     }
 }
 
@@ -229,30 +182,6 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
 
         transform.position.x += dx;
         transform.position.y += dy;
-
-        auto& csprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
-
-        Float32 x = crosshair.playerDistance * cos(crosshair.angle);
-        Float32 y = crosshair.playerDistance * sin(crosshair.angle);
-
-
-        csprite.position.x = x + sprite.position.x;
-        csprite.position.y = y + sprite.position.y;
-
-        if (crosshair.angle > 0.5 * M_PI && crosshair.angle < 1.5 * M_PI) {
-            sprite.scale = { -1,1 };
-        }
-        else {
-            sprite.scale = { 1,1 };
-        }
-
-        Float32 x_weapon = character.weaponOffset * cos(crosshair.angle);
-        Float32 y_weapon = character.weaponOffset * sin(crosshair.angle);
-
-        auto& weapon_sprite = Engine::Registry().get<Sprite>(character.weaponSprite);
-        weapon_sprite.position.x = sprite.position.x + x_weapon;
-        weapon_sprite.position.y = sprite.position.y - 3.f + y_weapon;
-        weapon_sprite.rotation = (crosshair.angle * 180.) / M_PI + 45;
     }
 
     character.currentDashingTime += Engine::DeltaTime();
