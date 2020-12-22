@@ -6,11 +6,11 @@
       "actions": [
         {
           "trigger": "KeyRight",
-          "value": -0.05
+          "value": -1
         },
         {
           "trigger": "KeyLeft",
-          "value": 0.05
+          "value": 1
         }
       ]
     },
@@ -26,6 +26,11 @@
           "value": -1
         }
       ]
+    },
+    {
+      "command-name": "fire",
+      "trigger": "KeyL",
+      "event": "Released"
     },
     {
       "command-name": "use",

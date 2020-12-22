@@ -1,0 +1,7 @@
+{
+	"animation-name": "Plight:knight_m:HIT",
+	"animation-length-ms": 100,
+	"animation-frames": [
+		{ "texture-name": "Plight:knight_m:HIT:knight_m_hit_anim_f0" }
+	]
+}

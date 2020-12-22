@@ -1,0 +1,13 @@
+{
+  "animation-name": "Plight:environment:SPIKES_ACTIVE",
+  "animation-length-ms": 600,
+  "animation-frames": [
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:1" },
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:2" },
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:3" },
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:4" },
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:3" },
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:2" },
+    { "texture-name": "spritesheets:dungeon:floor_spikes_anim:1" }
+  ]
+}
