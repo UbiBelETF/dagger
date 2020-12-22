@@ -30,6 +30,7 @@ void TankWarfare::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<RocketSystem>();
     engine_.AddSystem<CollectibleSystem>();
     engine_.AddSystem<GameMenuSystem>();
+    engine_.AddSystem<TankStatsSystem>();
 }
 
 void TankWarfare::WorldSetup(Engine &engine_)
@@ -120,34 +121,10 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     col3.size.y -= 35;
     
     //tank1
-    auto entity = reg.create();
-    auto& sprite = reg.emplace<Sprite>(entity);
-    auto& anim = reg.emplace<Animator>(entity);
-    auto& transform = reg.emplace<Transform>(entity);
-    auto& collision = reg.emplace<SimpleCollision>(entity);
-    auto& input = reg.emplace<InputReceiver>(entity);
-    auto& tank = reg.emplace<TankCharacter>(entity);
-    auto& cam = reg.emplace<CameraCenter>(entity);
-    sprite.scale = { -1, 1 };
-    transform.position = { 35, 0, 3 };
-    collision.size = sprite.size;
-    input.contexts.push_back("tank1");
-    AssignSprite(sprite, "jovanovici:tank:tank3_side");
+    CreateTankCharacter({ 35, 0, 3 }, "tank1");
 
     //tank2
-    auto entity2 = reg.create();
-    auto& sprite2 = reg.emplace<Sprite>(entity2);
-    auto& anim2 = reg.emplace<Animator>(entity2);
-    auto& transform2 = reg.emplace<Transform>(entity2);
-    auto& collision2 = reg.emplace<SimpleCollision>(entity2);
-    auto& input2 = reg.emplace<InputReceiver>(entity2);
-    auto& tank2 = reg.emplace<TankCharacter>(entity2);
-    auto& cam2 = reg.emplace<CameraCenter>(entity2);
-    sprite2.scale = { -1, 1 };
-    transform2.position = { -35, 0, 3 };
-    collision2.size = sprite2.size;
-    input2.contexts.push_back("tank2");
-    AssignSprite(sprite2, "jovanovici:tank:tank3_side");
+    CreateTankCharacter({ -35, 0, 3 }, "tank2");
 
 }
 

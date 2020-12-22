@@ -3,7 +3,7 @@
 #include "core/core.h"
 #include "core/system.h"
 
-#include "gameplay/tank_warfare/tank_controller.h"
+#include "gameplay/tank_warfare/tank_stats.h"
 
 using namespace dagger;
 
