@@ -3,6 +3,7 @@
 #include "range_of_attack.h"
 #include "towers.h"
 #include "hp_system.h"
+#include "game_manager.h"
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
@@ -200,6 +201,8 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
     health.hpBar = reg.create();
     health.currentHealth = Health::standardHP;
     health.maxHealth = Health::standardHP;
+
+    Engine::GetDefaultResource<PlayerInfo>()->health -= Health::standardHP;
 
     health.deathTimer = Health::standardDeathTimer;
     health.deathAnimation = "ancient_defenders:mage:DEATH";

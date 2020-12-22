@@ -16,6 +16,7 @@
 			{ "trigger": "Key8", "value": 8 } 
 		] }, 
 		{ "command-name": "tower", "trigger": "KeyT" },
-		{ "command-name": "spot", "trigger": "KeyS" }
+		{ "command-name": "spot", "trigger": "KeyS" },
+		{ "command-name": "restart", "trigger": "KeyR" }
 	]
 }

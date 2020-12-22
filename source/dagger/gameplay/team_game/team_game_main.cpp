@@ -6,6 +6,7 @@
 #include "hp_system.h"
 #include "controls.h"
 #include "spell.h"
+#include "game_manager.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -32,6 +33,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
       engine_.AddSystem<TowerBehaviorSystem>();
       engine_.AddSystem<HealthManagementSystem>();
       engine_.AddSystem<PlayerControlsSystem>();
+      engine_.AddSystem<GameManagerSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -65,6 +67,32 @@ void ancient_defenders::SetupWorld(Engine &engine_)
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { 0, 0, 100 };
     }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "spritesheets:hp-bar:hp_BCK");
+        sprite.scale = { 10,10 };
+        
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { 0, -260, 99 };
+    }
+    {
+        auto player = new PlayerInfo();
+
+        player->sprite = reg.create();
+        
+        auto& sprite = reg.emplace<Sprite>(player->sprite);
+
+        AssignSprite(sprite, "spritesheets:hp-bar:hp_100");
+        sprite.scale = { 10,10 };
+
+        auto& transform = reg.emplace<Transform>(player->sprite);
+        transform.position = { 0, -260, 99 };
+
+        Engine::PutDefaultResource<PlayerInfo>(player);
+    }
+
 }
 
 
