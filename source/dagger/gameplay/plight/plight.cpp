@@ -60,6 +60,7 @@ struct PlightCharacter
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
+        physics.is_static = false;
         physics.my_groups.push_back(1);
         physics.collision_groups.push_back(1);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
