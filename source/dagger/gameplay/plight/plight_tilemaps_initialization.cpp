@@ -275,6 +275,8 @@ Entity CreateWallMidCollision(Registry& reg_, INT32 x_, INT32 y_)
     sprite.position = { x_ * 16, y_ * 16, 89 };
 
     auto& collision = reg_.emplace<PlightCollision>(entity);
+    collision.size.x = 16;
+    collision.size.y = 16;
     auto& t = reg_.emplace<Transform>(entity);
     t.position = sprite.position;
     auto& physic_object = reg_.emplace<PhysicsObject>(entity);
