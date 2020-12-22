@@ -18,6 +18,17 @@ void CameraFollowSystem::Run()
 
     Engine::Registry().view<CameraFollowFocus, Sprite>().each([&](const CameraFollowFocus& focus_, const Sprite& sprite_)
         {
-            camera->position = sprite_.position;
+            for (UInt32 i = 0; i < focus_.weight; i++)
+            {
+                center += (Vector2)sprite_.position;
+            }
+            count += focus_.weight;
         });
+
+    if (count > 0)
+    {
+        center /= count;
+        camera->position = Vector3{ glm::mix((Vector2)camera->position, center, 0.1f), 0.0f };
+    }
+    //camera->position.y += 100.f;
 }

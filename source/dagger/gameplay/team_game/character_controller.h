@@ -13,6 +13,7 @@ namespace team_game
 	{
 		int id;
 		float speed{ 200.f };
+		Float32 distanceToChest{ 0.f };
 	};
 
 	class CharacterControllerSystem

@@ -12,17 +12,20 @@ void team_game::GravitySystem::Run()
 {
     Engine::Registry().view<Collider, Gravity, Transform>().each([&](Collider& collider_, Gravity& gravity_, Transform& transform_) 
         {
-            if (!collider_.canGoUp)
+            if (collider_.hasGravity)
             {
-                gravity_.verticalCurrentSpeed = -70.f;
-            }
+                if (!collider_.canGoUp)
+                {
+                    gravity_.verticalCurrentSpeed = -70.f;
+                }
 
-            if (collider_.canGoDown)
-            {       
-                gravity_.verticalCurrentSpeed -= m_GravityAcceleration * Engine::DeltaTime();                
-            }
+                if (collider_.canGoDown)
+                {
+                    gravity_.verticalCurrentSpeed -= m_GravityAcceleration * Engine::DeltaTime();
+                }
 
-            transform_.position.y += gravity_.verticalCurrentSpeed * Engine::DeltaTime();
+                transform_.position.y += gravity_.verticalCurrentSpeed * Engine::DeltaTime();
+            }
             
         });
 }

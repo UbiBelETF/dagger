@@ -99,7 +99,8 @@ void team_game::SetupWorld(Engine& engine_)
         auto& transform = reg2.get_or_emplace<Transform>(entity);
         transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()];
 
-        reg2.get_or_emplace<CameraFollowFocus>(entity);
+        auto& cameraFocus = reg2.get_or_emplace<CameraFollowFocus>(entity);
+        cameraFocus.weight = 2;
 
         auto& collider = reg2.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;
@@ -118,5 +119,21 @@ void team_game::SetupWorld(Engine& engine_)
         auto& character = reg2.emplace<PlayerCharacter>(entity);
         character.id = 1;
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
+    }
+
+    {
+        auto entity = reg1.create();
+        auto& sprite = reg1.get_or_emplace<Sprite>(entity);
+        AssignSprite(sprite, "TeamGame:Other:Chest");
+
+        auto& transform = reg1.get_or_emplace<Transform>(entity);
+        transform.position = { 5000, 5000, 1 };
+
+        auto& collider = reg1.get_or_emplace<Collider>(entity);
+        collider.size = sprite.size;
+        collider.entityType = CollisionID::TERRAIN;
+        collider.hasGravity = false;
+
+        auto& treasure = reg1.get_or_emplace<TreasureChest>(entity);
     }
 }

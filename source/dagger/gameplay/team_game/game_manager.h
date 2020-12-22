@@ -4,11 +4,17 @@
 #include "core/system.h"
 #include "core/game.h"
 #include "core/engine.h"
+#include "core/game/transforms.h"
 
 using namespace dagger;
 
 namespace team_game
 {
+    struct TreasureChest
+    {
+        Bool hadCollisionWithPlayer = false;
+    };
+
     class GameManagerSystem : public System
     {
     private:
@@ -31,6 +37,8 @@ namespace team_game
         void LoadBackDrop();
         void LoadPlatforms();
         void LoadTraps();
+
+        Float32 CalculateDistanceToTreasure(Transform& treasure_, Transform& player_);
 
         inline static Sequence<Vector3>& GetPlayerPositionsPerLevel()
         {
