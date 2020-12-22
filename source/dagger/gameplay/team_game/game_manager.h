@@ -38,8 +38,6 @@ namespace team_game
         void LoadPlatforms();
         void LoadTraps();
 
-        Float32 CalculateDistanceToTreasure(Transform& treasure_, Transform& player_);
-
         inline static Sequence<Vector3>& GetPlayerPositionsPerLevel()
         {
             return playerPositionsPerLevel;

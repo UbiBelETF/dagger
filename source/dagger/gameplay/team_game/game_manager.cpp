@@ -25,51 +25,6 @@ void GameManagerSystem::WindDown()
 
 void GameManagerSystem::Run()
 {
-    auto view = Engine::Registry().view<Collider, TreasureChest, Transform>();
-    auto& iterator = view.begin();
-    while (iterator != view.end())
-    {
-        auto&& [treasureCollider, treasureChest, treasureTransform] = Engine::Registry().get<Collider, TreasureChest, Transform>(*iterator);
-
-        auto view1 = Engine::Registry().view<Transform, CameraFollowFocus, PlayerCharacter>();
-        auto& it1 = view1.begin();
-
-        while (it1 != view1.end())
-        {
-            auto&& [player, transform, focus] = Engine::Registry().get<PlayerCharacter, Transform, CameraFollowFocus>(*it1);
-
-            player.distanceToChest = CalculateDistanceToTreasure(treasureTransform, transform);
-            focus.weight = 1;
-
-            it1++;
-        }
-
-        it1 = view1.begin();
-
-        Float32 minDistance = Engine::Registry().get<PlayerCharacter>(*it1).distanceToChest;
-        entt::entity entity = *it1;
-
-        while (it1 != view1.end())
-        {
-            auto& player = Engine::Registry().get<PlayerCharacter>(*it1);
-
-            if (player.distanceToChest < minDistance)
-            {
-                minDistance = player.distanceToChest;
-                entity = *it1;
-            }
-            it1++;
-        }
-
-        Engine::Registry().get<CameraFollowFocus>(entity).weight = 2;
-
-        iterator++;
-    }
-}
-
-Float32 GameManagerSystem::CalculateDistanceToTreasure(Transform& treasure_, Transform& player_)
-{
-    return std::sqrt(std::pow((treasure_.position.x - player_.position.x), 2) + std::pow((treasure_.position.y - player_.position.y), 2));
 }
 
 void GameManagerSystem::LoadNextLevel()
