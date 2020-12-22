@@ -1,5 +1,6 @@
 #define _USE_MATH_DEFINES
 #include "plight_projectiles.h"
+#include "plight_game_logic.h"
 #include "core/engine.h"
 #include "core/graphics/sprite.h"
 #include "core/input/inputs.h"
@@ -53,53 +54,53 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
 
 void ProjectileSystem::Run()
 {
-    //Check for fire input 
-    auto projectileSpawners = Engine::Registry().view<ProjectileSpawner, Transform, InputReceiver,PlightCrosshair,CombatStats,PlightCharacterController>();
-    for (auto& entity : projectileSpawners) {
-        auto& projectileSys = projectileSpawners.get<ProjectileSpawner>(entity);
-        auto& t = projectileSpawners.get<Transform>(entity);
-        auto& input = projectileSpawners.get<InputReceiver>(entity);
-        auto& crosshair = projectileSpawners.get<PlightCrosshair>(entity);
-        auto& cstats = projectileSpawners.get<CombatStats>(entity);
-        auto& character = projectileSpawners.get<PlightCharacterController>(entity);
+	auto viewLS1 = Engine::Registry().view<PlightIntro>();
+	auto it = viewLS1.begin();
+	auto& pin = viewLS1.get<PlightIntro>(*it);
 
-        if (character.dead) {
-            continue;
-        }
-        else if (projectileSys.active) {
-            Float32 fire = input.Get("fire");
-            if (EPSILON_NOT_ZERO(fire)) {
-                if (cstats.currentStamina >= PROJECTILE_COST) {
-                    cstats.currentStamina -= PROJECTILE_COST;
-                    
-                    auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
-                    cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
-                    sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+	if (pin.IsFinished()) 
+	{
+		//Check for fire input 
+		auto projectileSpawners = Engine::Registry().view<ProjectileSpawner, Transform, InputReceiver, PlightCrosshair, CombatStats>();
+		for (auto& entity : projectileSpawners) {
+			auto& projectileSys = projectileSpawners.get<ProjectileSpawner>(entity);
+			auto& t = projectileSpawners.get<Transform>(entity);
+			auto& input = projectileSpawners.get<InputReceiver>(entity);
+			auto& crosshair = projectileSpawners.get<PlightCrosshair>(entity);
+			auto& cstats = projectileSpawners.get<CombatStats>(entity);
 
-                Float32 x = crosshair.playerDistance * cos(crosshair.angle);
-                Float32 y = crosshair.playerDistance * sin(crosshair.angle);
-                
-                Vector3 pos = {x+t.position.x,y+t.position.y,t.position.z};
-                CreateProjectile(projectileSys.settings,pos,crosshair.angle);
-                }
-            }
-        }     
-    }
+			if (projectileSys.active) {
+				Float32 fire = input.Get("fire");
+				if (EPSILON_NOT_ZERO(fire)) {
+					if (cstats.currentStamina >= PROJECTILE_COST) {
+						cstats.currentStamina -= PROJECTILE_COST;
 
-    // update all projectiles
-    Engine::Registry().view<Projectile, Transform, Sprite, PlightCollision>().each([&](Projectile& projectile_, Transform& transform_, Sprite& sprite_, PlightCollision& col_)
-        {
-            projectile_.timeOfLiving -= Engine::DeltaTime();
-            if (projectile_.timeOfLiving < 0) {
-                projectile_.destroy = true;
-            }
-            Float32 dx = projectile_.projectileSpeed * cos(projectile_.angle) * Engine::DeltaTime();
-            Float32 dy = projectile_.projectileSpeed * sin(projectile_.angle) * Engine::DeltaTime();
+						auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+						cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+						sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 
-            transform_.position.x += dx;
-            transform_.position.y += dy;
+						Float32 x = crosshair.playerDistance * cos(crosshair.angle);
+						Float32 y = crosshair.playerDistance * sin(crosshair.angle);
 
-        });
+						Vector3 pos = { x + t.position.x,y + t.position.y,t.position.z };
+						CreateProjectile(projectileSys.settings, pos, crosshair.angle);
+					}
+				}
+			}
+		}
+
+		// update all projectiles
+		Engine::Registry().view<Projectile, Transform, Sprite>().each([&](Projectile& projectile_, Transform& transform_, Sprite& sprite_)
+		{
+			projectile_.timeOfLiving -= Engine::DeltaTime();
+			Float32 dx = projectile_.projectileSpeed * cos(projectile_.angle) * Engine::DeltaTime();
+			Float32 dy = projectile_.projectileSpeed * sin(projectile_.angle) * Engine::DeltaTime();
+
+			transform_.position.x += dx;
+			transform_.position.y += dy;
+
+		});
+	}
 }
 
 void ProjectileSystem::SpinUp()
