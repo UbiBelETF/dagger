@@ -33,6 +33,23 @@ void PlightGameLogicSystem::Run()
         auto view1 = Engine::Registry().view<PlightGameInfo>();
         for (auto entity : view1) {
             auto& gameInfo = view1.get<PlightGameInfo>(entity);
+
+            auto view = Engine::Registry().view<PlightCharacterController>();
+            for (auto entity : view) {
+                auto& character = view.get<PlightCharacterController>(entity);
+                if (character.dead && !gameInfo.displayingMessageEndGame) {
+                    gameInfo.endGame = true;
+                    if (character.playerNumber == "Player 1") {
+                        gameInfo.endGameMessageString3 = "Player 2";
+                    }
+                    else {
+                        gameInfo.endGameMessageString3 = "Player 1";
+                    }
+                    
+                    break;
+                }
+            }
+
             if (gameInfo.newGame) {
                 gameInfo.newGameMessage = Engine::Registry().create();
                 auto& text = Engine::Registry().emplace<Text>(gameInfo.newGameMessage);
@@ -59,9 +76,24 @@ void PlightGameLogicSystem::Run()
                      gameInfo.displayingMessage2 = true;
                  }
             }
+            if (gameInfo.endGame) {
+                gameInfo.endGameMessage1 = Engine::Registry().create();
+                auto& text1 = Engine::Registry().emplace<Text>(gameInfo.endGameMessage1);
+                text1.Set("pixel-font", gameInfo.endGameMessageString1, { 50.f,150.f,0.f });
+                
+                gameInfo.endGameMessage3 = Engine::Registry().create();
+                auto& text3 = Engine::Registry().emplace<Text>(gameInfo.endGameMessage3);
+                text3.Set("pixel-font", gameInfo.endGameMessageString3 + " Wins!", { 50.f,100.f,0.f });
+
+                gameInfo.endGameMessage2 = Engine::Registry().create();
+                auto& text2 = Engine::Registry().emplace<Text>(gameInfo.endGameMessage2);
+                text2.Set("pixel-font", gameInfo.endGameMessageString2, { 50.f,50.f,0.f });
+                gameInfo.endGame = false;
+                gameInfo.displayingMessageEndGame = true;
+            }
+
             
-        }
-    
+        }  
         auto view = Engine::Registry().view<InputReceiver>();
         for (auto entity : view)
         {
@@ -84,6 +116,27 @@ void PlightGameLogicSystem::OnEndOfFrame()
        auto view1 = Engine::Registry().view<PlightGameInfo>();
        for (auto entity : view1) {
            auto& gameInfo = view1.get<PlightGameInfo>(entity);
+           if (gameInfo.displayingMessageEndGame) {
+               auto& text1 = Engine::Registry().get<Text>(gameInfo.endGameMessage1);
+               for (auto ent : text1.entities) {
+                   Engine::Registry().remove_all(ent);
+               }
+               Engine::Registry().remove_all(gameInfo.endGameMessage1);
+
+               auto& text2 = Engine::Registry().get<Text>(gameInfo.endGameMessage2);
+               for (auto ent : text2.entities) {
+                   Engine::Registry().remove_all(ent);
+               }
+               Engine::Registry().remove_all(gameInfo.endGameMessage2);
+
+               auto& text3 = Engine::Registry().get<Text>(gameInfo.endGameMessage3);
+               for (auto ent : text3.entities) {
+                   Engine::Registry().remove_all(ent);
+               }
+               Engine::Registry().remove_all(gameInfo.endGameMessage3);
+               gameInfo.displayingMessageEndGame = false;
+               gameInfo.endGameMessageString3 = "";
+           }
            if (gameInfo.displayingMessage) {
                auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
                for (auto ent : text.entities) {

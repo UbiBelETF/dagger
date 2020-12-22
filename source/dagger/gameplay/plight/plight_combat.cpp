@@ -31,6 +31,11 @@ void PlightCombatSystem::Run()
 
 		CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
 
+		if (character.dead) {
+			continue;
+		}
+
+
 		cstats.currentTimer += Engine::DeltaTime();
 		
 			//Will add conditions based on the current character state (to be implemented in character controller system)
@@ -43,7 +48,10 @@ void PlightCombatSystem::Run()
 								auto& ch = Engine::Registry().get<CombatStats>(*it);
 								auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
 
-
+							if (pchar.dead) {
+								it++;
+								continue;
+							}
 								ch.currentHealth -= 0.1f;
 
 								if (ch.currentHealth <= 0.f) {
@@ -77,23 +85,11 @@ void PlightCombatSystem::Run()
 				}
 			}
 
-			//Stamina will not be affecting running , it will be used for special movement like dashing or rolling when it gets implemented (used on running for example here)
-
-			/*if (character.running) {
-
-				cstats.currentStamina -= STAMINA_FOR_RUNNING_FRAME;
-				if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
-					if (cstats.currentStamina < 0.f) {
-						cstats.currentStamina = 0.f;
-					}
-					character.running = false;
-					character.resting = true;
-
-				}
-				auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
-				cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
-				sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
-			}*/
+			if (cstats.currentHealth <= 0.f) {
+				cstats.currentHealth = 0.f;
+				character.dead = true;
+			}
+			
 			if (cstats.currentTimer >= cstats.updateTimer) {
 				if (character.dashing) {
 					cstats.currentStamina -= STAMINA_FOR_DASHING_FRAME;

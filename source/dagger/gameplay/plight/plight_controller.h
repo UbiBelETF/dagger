@@ -16,6 +16,7 @@ namespace plight
 		bool hit{ false };
 		bool doubleTap{ false }; // Waiting for a double tap to perform dash animation
 		bool resting{ false };
+		bool dead{ false };
 
 		Float32 speed{ 100.f };
 
@@ -37,6 +38,8 @@ namespace plight
 		//Hit
 		Float32 hitTime{ 0.50f };
 		Float32 currentHitTime{ 0.f };
+
+		String playerNumber = "";
 	};
 
 	class PlightControllerSystem
