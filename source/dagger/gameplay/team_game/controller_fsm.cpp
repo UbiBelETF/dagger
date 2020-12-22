@@ -26,13 +26,9 @@ void ControllerFSM::Idle::Enter(ControllerFSM::StateComponent& state_)
 
 void ControllerFSM::Idle::Run(ControllerFSM::StateComponent& state_) 
 {
-<<<<<<< HEAD
     auto&& [input,physics_,char_] = Engine::Registry().get<InputReceiver,Physics,BrawlerCharacter>(state_.entity);
     if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
-=======
-    auto&& [input,physics_] = Engine::Registry().get<InputReceiver,Physics>(state_.entity);
-    if (EPSILON_NOT_ZERO(input.Get("interact"))) GoTo(ECharacterStates::Interact, state_);
->>>>>>> team/tired_bunch/fix/collisions
+   else if (EPSILON_NOT_ZERO(input.Get("interact"))) GoTo(ECharacterStates::Interact, state_);
     else if (EPSILON_NOT_ZERO(input.Get("light"))) 
     {
         GoTo(ECharacterStates::Attacking, state_);
@@ -56,12 +52,9 @@ void ControllerFSM::Running::Enter(ControllerFSM::StateComponent& state_)
 void ControllerFSM::Running::Run(ControllerFSM::StateComponent& state_) {
     auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics>(state_.entity);
-<<<<<<< HEAD
+
     if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
-=======
-    
-    if (EPSILON_NOT_ZERO(input.Get("interact"))) GoTo(ECharacterStates::Interact, state_);
->>>>>>> team/tired_bunch/fix/collisions
+    else if (EPSILON_NOT_ZERO(input.Get("interact"))) GoTo(ECharacterStates::Interact, state_);
     else if (EPSILON_NOT_ZERO(input.Get("light")))
     {
         GoTo(ECharacterStates::Attacking, state_);
