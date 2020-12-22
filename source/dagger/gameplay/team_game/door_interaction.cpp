@@ -39,12 +39,16 @@ void DoorSystem::Run()
 		auto& transform = view.get<Transform>(entity);
 		auto& statbody = view.get<StaticBody>(entity);
 
+
+		if (keytaken == true) {
+			statbody.enabled = false;
+		}
 		if (col.colided)
 		{
 			if (Engine::Registry().has<CharacterController>(col.colidedWith))
 				{
-					    if (keytaken ==true) {
-						statbody.enabled = false;
+					    
+						if(keytaken==true) {
 						auto ui = Engine::Registry().create();
 						auto& text = Engine::Registry().emplace<Text>(ui);
 						text.spacing = 0.6f;
@@ -54,9 +58,9 @@ void DoorSystem::Run()
 					}
 			
 				}
-
+			col.colided = false;
 		}
-		col.colided = false;
+	
 
 	}
 }

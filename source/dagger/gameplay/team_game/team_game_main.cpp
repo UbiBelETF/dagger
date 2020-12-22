@@ -157,15 +157,17 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
         auto& doorAnimator = reg_.emplace<Animator>(door);
         
         auto& doorTransform = reg_.emplace<Transform>(door);
-        doorTransform.position = { 45, 35, 1 };
+        doorTransform.position = { 40, 20, 1 };
 
         auto& doorCollision = reg_.emplace<SimpleCollision>(door);
         doorCollision.size = doorSprite.size;
         
+        SInt32 x = ((SInt32)doorTransform.position.x + 8) / 16;
+        SInt32 y = ((SInt32)doorTransform.position.y - 8) / 16;
+
         auto& collider = reg_.emplace<StaticBody>(door);
         collider.size = doorSprite.size;
-        Engine::GetDefaultResource<StaticBodyMap>()->put(2,2, door);
-        
+        Engine::GetDefaultResource<StaticBodyMap>()->put(x,y, door);
 
         reg_.emplace<Door>(door);
        
@@ -179,7 +181,7 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
        keySprite.scale = { 1, 1 };
 
        auto& keyTransform = reg_.emplace<Transform>(key);
-       keyTransform.position = { 45, -20, 1 };
+       keyTransform.position = { 45, -40, 1 };
 
        auto& keyCollision = reg_.emplace<SimpleCollision>(key);
        keyCollision.size = keySprite.size;
