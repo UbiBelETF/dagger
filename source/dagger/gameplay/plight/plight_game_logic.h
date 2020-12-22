@@ -16,12 +16,16 @@ namespace plight
 		String teamName1 = " Team  MorningAfternoon";
 
 		bool displaying = false;
+		bool BattleOn = false;
 		
+		Float32 displayTime = 2.f;
+		Float32 currDT = 0.f;
+
 		Entity team;
 		Entity message;
 		Entity team1;
 		Entity message1;
-
+		
 
 		bool IsFinished() {
 			return (!loading_screen);
@@ -35,6 +39,8 @@ namespace plight
         bool newGame = true;
         bool displayingMessage = false;
         bool displayingMessage2 = false;
+		
+
         String newGameMessageString1 = "New Game!";
         String newGameMessageString2 = "Battle!";
 

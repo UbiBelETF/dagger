@@ -75,6 +75,34 @@ void PlightGameLogicSystem::Run()
 		auto& pin = viewLS1.get<PlightIntro>(*it);
 
 		if (pin.IsFinished()) {
+			if (!pin.BattleOn) {
+				auto& text4 = Engine::Registry().get<Text>(pin.team);
+				for (auto ent : text4.entities) {
+					Engine::Registry().remove_all(ent);
+				}
+				Engine::Registry().remove_all(pin.team);
+
+				auto& text1 = Engine::Registry().get<Text>(pin.team1);
+				for (auto ent : text1.entities) {
+					Engine::Registry().remove_all(ent);
+				}
+				Engine::Registry().remove_all(pin.team1);
+
+				auto& text2 = Engine::Registry().get<Text>(pin.message);
+				for (auto ent : text2.entities) {
+					Engine::Registry().remove_all(ent);
+				}
+				Engine::Registry().remove_all(pin.message);
+
+				auto& text3 = Engine::Registry().get<Text>(pin.message1);
+				for (auto ent : text3.entities) {
+					Engine::Registry().remove_all(ent);
+				}
+				Engine::Registry().remove_all(pin.message1);
+				pin.BattleOn = true;
+			}
+			
+
 
 			auto view1 = Engine::Registry().view<PlightGameInfo>();
 			for (auto entity : view1) {
@@ -149,8 +177,35 @@ void PlightGameLogicSystem::OnEndOfFrame()
        for (auto entity : view2) {
            Engine::Registry().remove_all(entity);
        }
+	   
+	   
 
       
       
     }
+	auto viewLS1 = Engine::Registry().view<PlightIntro, Sprite>();
+	auto it = viewLS1.begin();
+	auto& pin = viewLS1.get<PlightIntro>(*it);
+
+	if (pin.IsFinished() && pin.displaying )
+	{
+		pin.currDT += Engine::DeltaTime();
+		if (pin.currDT >= pin.displayTime )
+		{
+
+		}
+		else
+		{
+			auto& sprt = viewLS1.get<Sprite>(*it);
+			if (1.f - pin.currDT > 0.f) {
+				sprt.color = { 1.f - pin.currDT , 1.f - pin.currDT, 1.f - pin.currDT , 1.f - pin.currDT };
+			}
+			else {
+				sprt.color = { 0.f , 0.f, 0.f,0.f };
+			}
+			
+		}
+
+	}
+
 }
