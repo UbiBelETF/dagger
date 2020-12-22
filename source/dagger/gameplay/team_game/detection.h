@@ -11,8 +11,9 @@ struct Detection {
 
 	bool detected = false;
 	entt::entity who;
+	Vector3 where;
 
-	bool IsDetected(const Vector3& pos_, const Detection& other_, const Vector3& posOther_);
+	bool IsDetected( Vector3& pos_,  Detection& other_,  Vector3& posOther_);
 
 	// return (0,1) if collision happen by y, (1,0) if collision happen by x
 	Vector2 GetDetectionSides(const  Vector3& pos_, const Detection& other_, const Vector3& posOther_);
