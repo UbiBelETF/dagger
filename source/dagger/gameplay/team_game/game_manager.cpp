@@ -100,9 +100,13 @@ void GameManagerSystem::LoadCollectables()
         {
             collectable.type = CollectableType::SPEED;
         }
-        else
+        else if (collectableType == "HEALTH")
         {
             collectable.type = CollectableType::HEALTH;
+        }
+        else
+        {
+            collectable.type = CollectableType::JUMP;
         }
     }
 }

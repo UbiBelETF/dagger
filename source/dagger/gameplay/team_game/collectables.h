@@ -7,7 +7,7 @@ using namespace dagger;
 
 namespace team_game
 {
-    enum class CollectableType { HEALTH, SPEED };
+    enum class CollectableType { HEALTH, SPEED, JUMP };
 
     struct Collectable
     {

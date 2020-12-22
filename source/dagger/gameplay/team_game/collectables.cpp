@@ -5,6 +5,7 @@
 
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_collisions.h"
+#include "gameplay/team_game/gravity.h"
 
 using namespace team_game;
 
@@ -39,9 +40,14 @@ void CollectablePickupSystem::Run()
                         {
                             character.health += collectable.improvement;
                         }
-                        else
+                        else if (collectable.type == CollectableType::SPEED)
                         {
                             character.speed *= collectable.improvement;
+                        }
+                        else
+                        {
+                            auto& gravity = Engine::Registry().get<Gravity>(entity);
+                            gravity.verticalInitialSpeed *= collectable.improvement;
                         }
 
                         collectable.pickedUp = true;
@@ -52,7 +58,11 @@ void CollectablePickupSystem::Run()
         }
         else
         {
-            if (collectable.type == CollectableType::SPEED)
+            if (collectable.type == CollectableType::HEALTH)
+            {
+                collectable.finished = true;
+            }
+            else
             {
                 collectable.timeLeft -= Engine::DeltaTime();
                 if (collectable.timeLeft <= 0)
@@ -63,16 +73,20 @@ void CollectablePickupSystem::Run()
                         auto& character = Engine::Registry().get<PlayerCharacter>(entity);
                         if (character.id == collectable.userId)
                         {
-                            character.speed /= collectable.improvement;
+                            if (collectable.type == CollectableType::SPEED)
+                            {
+                                character.speed /= collectable.improvement;
+                            }
+                            else
+                            {
+                                auto& gravity = Engine::Registry().get<Gravity>(entity);
+                                gravity.verticalInitialSpeed /= collectable.improvement;
+                            }
                         }
                     }
 
                     collectable.finished = true;
                 }
-            }
-            else
-            {
-                collectable.finished = true;
             }
         }
     }
