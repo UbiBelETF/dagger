@@ -1,8 +1,0 @@
-{
-	"animation-name": "souls_like_knight_character:FALLING",
-	"animation-length-ms": 100,
-	"animation-frames": 
-	[
-		{ "texture-name": "souls_like_knight_character:FALLING:fall" }
-	]
-}

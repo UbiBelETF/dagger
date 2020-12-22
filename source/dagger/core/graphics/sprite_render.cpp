@@ -3,6 +3,8 @@
 #include "textures.h"
 #include "texture.h"
 #include "core/engine.h"
+#include "core/graphics/animation.h"
+#include "core/graphics/animations.h"
 
 #include <limits>
 #include <algorithm>
@@ -102,10 +104,10 @@ void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<SpriteFrame> requ
 
     std::ifstream framesInput{ request_.path };
     String line;
-
+    std::regex noSpritesheet("spritesheets:([a-zA-Z_0-9\-]+)");
     std::regex emptyLine("^[ \t\n]*$");
-    std::regex animationLine("([a-zA-Z_0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)");
-    std::regex spriteLine("([a-zA-Z_0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)");
+    std::regex animationLine("([a-zA-Z_0-9\-]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)");
+    std::regex spriteLine("([a-zA-Z_0-9\-]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)[ \t\n]+([0-9]+)");
 
     while (std::getline(framesInput, line))
     {
@@ -132,6 +134,20 @@ void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<SpriteFrame> requ
         auto w = std::atoi(match[4].str().c_str());
         auto h = std::atoi(match[5].str().c_str());
 
+        Animation* animation = nullptr;
+
+        if (count > 1)
+        {
+            std::smatch nameMatch;
+            std::regex_match(textureName, nameMatch, noSpritesheet);
+
+            animation = new Animation();
+            animation->name = fmt::format("{}:{}", nameMatch[1].str(), spriteName);
+            animation->length = 500;
+            animation->frameLengthRelativeSum = count;
+            animation->absoluteLength = animation->length / 1000.0;
+        }
+
         for (UInt32 i = 0; i < count; ++i)
         {
             SpriteFrame* spritesheet = new SpriteFrame();
@@ -153,6 +169,34 @@ void SpriteRenderSystem::OnRequestSpritesheet(AssetLoadRequest<SpriteFrame> requ
 
             Logger::info("Spritesheet loaded: {} -> {} {} {} {} {}",
                 textureName.c_str(), fullSpriteName, x, y, w, h);
+
+            if (animation != nullptr)
+            {
+                Frame frame;
+                frame.textureName = fullSpriteName;
+                frame.pivot = { 0.0f, 0.0f };
+                frame.relativeLength = 1;
+                frame.spritesheet = *spritesheet;
+                animation->frames.push_back(std::move(frame));
+            }
+        }
+
+        if (animation != nullptr)
+        {
+            for (auto& frame : animation->frames)
+            {
+                frame.absoluteLength = animation->absoluteLength *
+                    ((Float64)frame.relativeLength / (Float64)animation->frameLengthRelativeSum);
+            }
+
+            auto& library = Engine::Res<Animation>();
+            if (library.contains(animation->name))
+            {
+                delete library[animation->name];
+            }
+
+            library[animation->name] = animation;
+            Logger::info("Animation '{}' loaded!", animation->name);
         }
     }
 }

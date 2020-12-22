@@ -32,6 +32,6 @@ namespace dagger
 		Float64 currentFrameTime{ 0 };
 	};
 
-	void AnimatorPlay(Animator& animator_, String animationName_);
+	void AnimatorPlay(Animator& animator_, String animationName_, UInt32 startFromFrame_ = 0);
 	void AnimatorStop(Animator& animator_);
 }
