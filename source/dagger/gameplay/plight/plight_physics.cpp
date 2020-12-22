@@ -16,10 +16,11 @@ void plight::PhysicsSystem::Run()
     auto view = Engine::Registry().view<PlightCollision, Transform, PhysicsObject>();
     auto it = view.begin();
 
-    auto& physics = view.get<PhysicsObject>(*it);
-    if (!physics.is_static) {
-        while (it != view.end())
-        {
+
+    while (it != view.end())
+    {
+        auto& physics = view.get<PhysicsObject>(*it);
+        if (!physics.is_static) {
             auto& collision = view.get<PlightCollision>(*it);
             auto& transform = view.get<Transform>(*it);
 
@@ -36,12 +37,7 @@ void plight::PhysicsSystem::Run()
                             break;
                         }
                     }
-                    if (Engine::Registry().has<PlightCharacterController>(*it)) {
-                        auto& character = Engine::Registry().get<PlightCharacterController>(*it);
-                        if (!character.running) {
-                            has = false;
-                        }
-                    }
+
                     if (has) {
                         auto& other_transform = view.get<Transform>(*it2);
                         auto& other_collision = view.get<PlightCollision>(*it2);
@@ -54,8 +50,8 @@ void plight::PhysicsSystem::Run()
                 }
                 if (!skip) it2++;
             }
-            it++;
         }
+        it++;
     }
 }
 
