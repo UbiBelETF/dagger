@@ -23,9 +23,9 @@ using namespace plight;
 void PlightCharacterControllerFSM::Idle::Enter(PlightCharacterControllerFSM::StateComponent& state_)
 {
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-	AnimatorPlay(animator, "Plight:big_deamon:IDLE");
+	AnimatorPlay(animator, "Plight:knight_m:IDLE");
     auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
-    character.running = false;
+    character.running = false; character.dashing = false;
     
 }
 
@@ -35,9 +35,24 @@ void PlightCharacterControllerFSM::Idle::Run(PlightCharacterControllerFSM::State
 {
     auto&& [input, character, cstats] = Engine::Registry().get<InputReceiver, PlightCharacterController, CombatStats>(state_.entity);
 
+    if (character.dead) {
+        return;
+    }
+
+    if (character.doubleTap) {
+        character.currentDoubleTapDuration += Engine::DeltaTime();
+        if (character.currentDoubleTapDuration >= character.doubleTapDurationWindow) {
+            character.doubleTap = false;
+            character.currentDoubleTapDuration = 0.f;
+        }
+    }
+
+    if (character.hit) {
+        GoTo(PlightCharacterStates::Hit, state_);
+    }
 
     Float32 move = input.Get("move");
-
+        
         if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
             if (cstats.currentStamina < 0.f) {
                 cstats.currentStamina = 0.f;
@@ -53,8 +68,22 @@ void PlightCharacterControllerFSM::Idle::Run(PlightCharacterControllerFSM::State
             }
         }
         else if (EPSILON_NOT_ZERO(move)) {
-            character.firstMoveInput = move;
-            GoTo(PlightCharacterStates::Running, state_);
+            if (move > 0) {
+                if (!character.doubleTap) {
+                    character.doubleTap = true;
+                }
+                else {
+                    character.dashing = true;
+                    character.currentDoubleTapDuration = 0.f;
+                    character.doubleTap = false;
+                    GoTo(PlightCharacterStates::Dashing, state_);
+                }
+            }
+            if (!character.dashing) {
+                character.firstMoveInput = move;
+                GoTo(PlightCharacterStates::Running, state_);
+            }
+            
         }
 
       
@@ -65,7 +94,7 @@ void PlightCharacterControllerFSM::Idle::Run(PlightCharacterControllerFSM::State
 void PlightCharacterControllerFSM::Running::Enter(PlightCharacterControllerFSM::StateComponent& state_)
 {
     auto& animator = Engine::Registry().get<Animator>(state_.entity);
-    AnimatorPlay(animator, "Plight:big_deamon:RUN");
+    AnimatorPlay(animator, "Plight:knight_m:RUN");
 
     auto&& [sprite, character, crosshair, transform] = Engine::Registry().get<Sprite, PlightCharacterController, PlightCrosshair, Transform>(state_.entity);
 
@@ -74,8 +103,6 @@ void PlightCharacterControllerFSM::Running::Enter(PlightCharacterControllerFSM::
     Float32 dx = character.speed * cos(crosshair.angle) * Engine::DeltaTime() * character.firstMoveInput;
     Float32 dy = character.speed * sin(crosshair.angle) * Engine::DeltaTime() * character.firstMoveInput;
 
-    sprite.position.x += dx;
-    sprite.position.y += dy;
     transform.position.x += dx;
     transform.position.y += dy;
 
@@ -105,6 +132,22 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
    
     auto&& [sprite, input, character,cstats,crosshair,transform] = Engine::Registry().get<Sprite, InputReceiver, PlightCharacterController,CombatStats,PlightCrosshair,Transform>(state_.entity);
 
+    if (character.dead) {
+        GoTo(PlightCharacterStates::Idle, state_);
+        return;
+    }
+    if (character.doubleTap) {
+        character.currentDoubleTapDuration += Engine::DeltaTime();
+        if (character.currentDoubleTapDuration >= character.doubleTapDurationWindow) {
+            character.doubleTap = false;
+            character.currentDoubleTapDuration = 0.f;
+        }
+    }
+
+    if (character.hit) {
+        GoTo(PlightCharacterStates::Hit, state_);
+    }
+
     Float32 move = input.Get("move");
 
     if (EPSILON_ZERO(move) || cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME)
@@ -115,8 +158,6 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
         Float32 dx = character.speed * cos(crosshair.angle) * Engine::DeltaTime() * move;
         Float32 dy = character.speed * sin(crosshair.angle) * Engine::DeltaTime() * move;
 
-        sprite.position.x += dx;
-        sprite.position.y += dy;
         transform.position.x += dx;
         transform.position.y += dy;
 
@@ -136,4 +177,93 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
             sprite.scale = { 1,1 };
         }
     }
+}
+
+//Dashing
+void PlightCharacterControllerFSM::Dashing::Enter(PlightCharacterControllerFSM::StateComponent& state_)
+{
+    auto& animator = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator, "Plight:knight_m:DASH");
+    auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
+    character.resting = false; 
+    character.running = false;
+
+
+}
+
+void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::StateComponent& state_)
+{
+    auto&& [sprite, character, cstats, crosshair, transform] = Engine::Registry().get<Sprite,PlightCharacterController, CombatStats, PlightCrosshair, Transform>(state_.entity);
+   
+    if (character.dead) {
+        GoTo(PlightCharacterStates::Idle, state_);
+        return;
+    }
+
+    if (character.hit) {
+        GoTo(PlightCharacterStates::Hit, state_);
+    }
+
+    if (!character.dashing || cstats.currentStamina < STAMINA_FOR_DASHING_FRAME)
+    {
+        GoTo(PlightCharacterStates::Idle, state_);
+    }
+    else {
+        Float32 dx = character.dashingSpeed * cos(crosshair.angle) * Engine::DeltaTime();
+        Float32 dy = character.dashingSpeed * sin(crosshair.angle) * Engine::DeltaTime();
+
+        transform.position.x += dx;
+        transform.position.y += dy;
+
+        auto& csprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
+
+        Float32 x = crosshair.playerDistance * cos(crosshair.angle);
+        Float32 y = crosshair.playerDistance * sin(crosshair.angle);
+
+
+        csprite.position.x = x + sprite.position.x;
+        csprite.position.y = y + sprite.position.y;
+
+        if (crosshair.angle > 0.5 * M_PI && crosshair.angle < 1.5 * M_PI) {
+            sprite.scale = { -1,1 };
+        }
+        else {
+            sprite.scale = { 1,1 };
+        }
+    }
+
+    character.currentDashingTime += Engine::DeltaTime();
+    if (character.currentDashingTime >= character.dashingTime) {
+        character.dashing = false;
+        character.currentDashingTime = 0.f;
+        GoTo(PlightCharacterStates::Idle, state_);
+    }
+}
+
+DEFAULT_EXIT(PlightCharacterControllerFSM, Dashing);
+
+//Hit
+
+
+void PlightCharacterControllerFSM::Hit::Enter(PlightCharacterControllerFSM::StateComponent& state_)
+{
+    auto& animator = Engine::Registry().get<Animator>(state_.entity);
+    AnimatorPlay(animator, "Plight:knight_m:HIT");
+    auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
+    character.running = false; character.dashing = false; character.doubleTap = false;
+}
+
+DEFAULT_EXIT(PlightCharacterControllerFSM, Hit);
+
+void PlightCharacterControllerFSM::Hit::Run(PlightCharacterControllerFSM::StateComponent& state_)
+{
+    auto& character = Engine::Registry().get<PlightCharacterController>(state_.entity);
+
+    character.currentHitTime += Engine::DeltaTime();
+    if (character.currentHitTime >= character.hitTime) {
+        character.currentHitTime = 0.f;
+        character.hit = false;
+        GoTo(PlightCharacterStates::Idle, state_);
+    }
+
 }
