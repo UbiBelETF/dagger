@@ -35,9 +35,11 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
     auto& sprite = reg.emplace<Sprite>(entity);
     sprite.rotation = (angle_ * 180.) / M_PI - 45;
     AssignSprite(sprite, settings_.pSpriteName);
+    sprite.position = pos_;
 
     auto& transform = reg.emplace<Transform>(entity);
     transform.position = pos_;
+
 
     reg.emplace<PlightCollision>(entity);
 

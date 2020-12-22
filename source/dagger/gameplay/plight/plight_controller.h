@@ -42,7 +42,7 @@ namespace plight
 		String playerNumber = "";
 
 		Entity weaponSprite;
-		Float32 weaponOffset = 10.f;
+		Float32 weaponOffset = 15.f;
 	};
 
 	class PlightControllerSystem

@@ -36,6 +36,13 @@ namespace plight
             
         }
     };
+    struct ProjectileSpawner
+    {
+        Bool active = true;
+        Float32 timer = 0.f;
+
+        ProjectileSpawnerSettings settings;
+    };
 
     class ProjectileSystem
         : public System
@@ -46,13 +53,7 @@ namespace plight
         void Run() override;
         void WindDown() override;
 
-        struct ProjectileSpawner
-        {
-            Bool active = true;
-            Float32 timer = 0.f;
-
-            ProjectileSpawnerSettings settings;
-        };
+        
 
     public:
         static void SetupProjectileSystem(Entity entity_, const ProjectileSpawnerSettings& settings_);
