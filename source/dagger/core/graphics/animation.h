@@ -30,6 +30,7 @@ namespace dagger
 		Bool animationPlaying{ false };
 		UInt32 currentFrame{ 0 };
 		Float64 currentFrameTime{ 0 };
+		Bool isLooping{ true };
 	};
 
 	void AnimatorPlay(Animator& animator_, String animationName_);

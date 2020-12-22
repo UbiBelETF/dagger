@@ -23,6 +23,8 @@
 #include "gameplay/team_game/level_generator.h"
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
+#include "gameplay/team_game/follow.h""
+#include "gameplay/team_game/remote_animation.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -38,6 +40,8 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<MovementSystem>();
     engine_.AddSystem<DoorSystem>();
     engine_.AddSystem<KeySystem>();
+    engine_.AddSystem<FollowSystem>();
+    engine_.AddSystem<RemoteAnimationSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -98,9 +102,30 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
     playerInput.contexts.push_back("AmongThemInput");
 
-    reg_.emplace<CharacterController>(player);
+    auto& controller = reg_.emplace<CharacterController>(player);
 
     reg_.emplace<MovableBody>(player);
+
+    // POOF
+    auto poofEntity = reg_.create();
+    
+    reg_.emplace<Transform>(poofEntity);
+
+    auto& poofSprite = reg_.emplace<Sprite>(poofEntity);
+    AssignSprite(poofSprite, "spritesheets:among_them_spritesheet:poof_anim:5");
+    poofSprite.scale = { 0.5, 0.5 };
+
+    auto& poofFollow = reg_.emplace<Follow>(poofEntity);
+    poofFollow.target = player;
+    poofFollow.offset.z = -1;
+
+    auto& poofAnimator = reg_.emplace<Animator>(poofEntity);
+    poofAnimator.isLooping = false;
+
+    auto& exec = reg_.emplace<AnimationExecutor>(poofEntity);
+    exec.source = &controller.animationTrigger;
+    exec.animationName = "among_them_animations:poof";
+    exec.startingSpriteName = "spritesheets:among_them_spritesheet:poof_anim:1";
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
@@ -108,7 +133,7 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
 
 
-    {
+    
         TilemapLegend legend;
         legend['.'] = &level_generator::smiljana::CreateFloor;
         legend['#'] = &level_generator::smiljana::CreateWall;
@@ -188,7 +213,58 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
        reg_.emplace<Key>(key);
        
-    }
+    
+
+
+    //ENEMY 
+    auto enemy = reg_.create();
+
+    auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
+    enemyState.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite = reg_.emplace<Sprite>(enemy);
+    AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite.scale = { 1, 1 };
+
+    auto& enemyAnimator = reg_.emplace<Animator>(enemy);
+    AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform = reg_.emplace<Transform>(enemy);
+    enemyTransform.position = { 0, 25, 1 };
+
+    auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
+    enemyInput.pathname = "path.txt";
+    enemyInput.currentshape = "goblin";
+
+    reg_.emplace<EnemyDescription>(enemy);
+
+    reg_.emplace<MovableBody>(enemy);
+
+    //ENEMY NO.2
+
+    //ENEMY 
+    auto enemy2 = reg_.create();
+
+    auto& enemy2State = ATTACH_TO_FSM(EnemyFSM, enemy2);
+    enemy2State.currentState = EEnemyState::Patrolling;
+
+    auto& enemy2Sprite = reg_.emplace<Sprite>(enemy2);
+    AssignSprite(enemy2Sprite, "spritesheets:among_them_spritesheet:bat_anim:1");
+    enemy2Sprite.scale = { 1, 1 };
+
+    auto& enemy2Animator = reg_.emplace<Animator>(enemy2);
+    AnimatorPlay(enemy2Animator, "among_them_animations:bat");
+
+    auto& enemy2Transform = reg_.emplace<Transform>(enemy2);
+    enemy2Transform.position = { 0, 60, 1 };
+
+    auto& enemy2Input = reg_.emplace<InputEnemiesFile>(enemy2);
+    enemy2Input.pathname = "pathbat.txt";
+    enemy2Input.currentshape = "bat";
+
+    reg_.emplace<EnemyDescription>(enemy2);
+
+    reg_.emplace<MovableBody>(enemy2);
 }
 void team_game::SetupWorld(Engine &engine_)
 {
