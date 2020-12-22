@@ -31,6 +31,7 @@ namespace team_game
         void LoadBackDrop();
         void LoadPlatforms();
         void LoadTraps();
+        void LoadCollectables();
 
         inline static Sequence<Vector3>& GetPlayerPositionsPerLevel()
         {

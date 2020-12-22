@@ -23,16 +23,18 @@
 #include "gameplay/team_game/game_manager.h"
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_player_input.h"
+#include "gameplay/team_game/collectables.h"
 
 using namespace dagger;
 
-void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
+void team_game::TeamGame::GameplaySystemsSetup(Engine& engine_)
 {
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<GameManagerSystem>();
     engine_.AddSystem<GravitySystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<CameraFollowSystem>();
+    engine_.AddSystem<CollectablePickupSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
