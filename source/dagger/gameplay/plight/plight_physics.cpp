@@ -38,7 +38,7 @@ void plight::PhysicsSystem::Run()
                     }
                     if (Engine::Registry().has<PlightCharacterController>(*it)) {
                         auto& character = Engine::Registry().get<PlightCharacterController>(*it);
-                        if (!character.running) {
+                        if (!character.running && !character.dashing) {
                             has = false;
                         }
                     }
@@ -63,7 +63,11 @@ void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myC
    bool moveBoth = false;
    Float32 newPosx, newPosy, newOtherPosx, newOtherPosy;
    if (Engine::Registry().has<PlightCharacterController>(*other_)) {
-       moveBoth = true;
+       auto& character = Engine::Registry().get<PlightCharacterController>(*other_);
+       if (character.running || character.dashing) {
+           moveBoth = true;
+       }
+
    }
 
     if (sides.x != 0) {
@@ -71,9 +75,10 @@ void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myC
             newPosx = posOther_.x - myCol_.size.x - 1;
             if (moveBoth) {
                 newOtherPosx = pos_.x + otherCol_.size.x + 1;
+                posOther_.x = newOtherPosx;
             }
             pos_.x = newPosx;
-            posOther_.x = newOtherPosx;
+
         }
         else {
             newPosx = posOther_.x + otherCol_.size.x + 1;
