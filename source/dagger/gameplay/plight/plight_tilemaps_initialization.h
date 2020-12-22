@@ -19,6 +19,7 @@ Entity CreateWallSideMidLeft(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallCornerRight(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateFrontWall(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallMid(Registry& reg_, INT32 x_, INT32 y_);
+Entity CreateWallMidCollision(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallSideFrontLeft(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallSideFrontRight(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateSideWallMidRight(Registry& reg_, INT32 x_, INT32 y_);

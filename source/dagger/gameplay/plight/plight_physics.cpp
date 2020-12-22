@@ -36,12 +36,6 @@ void plight::PhysicsSystem::Run()
                             break;
                         }
                     }
-                    if (Engine::Registry().has<PlightCharacterController>(*it)) {
-                        auto& character = Engine::Registry().get<PlightCharacterController>(*it);
-                        if (!character.running) {
-                            has = false;
-                        }
-                    }
                     if (has) {
                         auto& other_transform = view.get<Transform>(*it2);
                         auto& other_collision = view.get<PlightCollision>(*it2);

@@ -6,7 +6,7 @@ namespace plight {
 
     struct PhysicsObject
     {
-        bool is_static = false;
+        bool is_static = true;
         std::vector<UINT16> my_groups;
         std::vector<UINT16> collision_groups;
     };

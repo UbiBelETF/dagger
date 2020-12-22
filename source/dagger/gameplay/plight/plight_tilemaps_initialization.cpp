@@ -6,6 +6,7 @@
 
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_collisions.h"
+#include "gameplay/plight/plight_physics.h"
 
 using namespace dagger;
 using namespace plight;
@@ -253,6 +254,32 @@ Entity CreateWallMid(Registry& reg_, INT32 x_, INT32 y_)
     auto& sprite = reg_.emplace<Sprite>(entity);
     sprite.position = { x_ * 16, y_ * 16, 89 };
    
+    float mod = (float)rand() / RAND_MAX;
+    if (mod <= 0.33) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_left");
+    }
+    else if (0.33 < mod <= 0.66) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_mid");
+    }
+    else {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_right");
+    }
+    return entity;
+}
+
+Entity CreateWallMidCollision(Registry& reg_, INT32 x_, INT32 y_)
+{
+
+    Entity entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
+    sprite.position = { x_ * 16, y_ * 16, 89 };
+
+    auto& collision = reg_.emplace<PlightCollision>(entity);
+    auto& t = reg_.emplace<Transform>(entity);
+    t.position = sprite.position;
+    auto& physic_object = reg_.emplace<PhysicsObject>(entity);
+    physic_object.collision_groups.push_back(1);
+
     float mod = (float)rand() / RAND_MAX;
     if (mod <= 0.33) {
         AssignSprite(sprite, "spritesheets:dungeon:wall_left");
