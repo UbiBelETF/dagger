@@ -221,12 +221,13 @@ void AnimationSystem::OnLoadAsset(AssetLoadRequest<Animation> request_)
 
 void AnimationSystem::LoadDefaultAssets()
 {
-    for (auto& entry : Files::recursive_directory_iterator("animations"))
-    {
-        auto path = entry.path().string();
-        if (entry.is_regular_file() && entry.path().extension() == ".json")
+    if (Files::exists("animations"))
+        for (auto& entry : Files::recursive_directory_iterator("animations"))
         {
-            Engine::Dispatcher().trigger<AssetLoadRequest<Animation>>(AssetLoadRequest<Animation>{ path });
+            auto path = entry.path().string();
+            if (entry.is_regular_file() && entry.path().extension() == ".json")
+            {
+                Engine::Dispatcher().trigger<AssetLoadRequest<Animation>>(AssetLoadRequest<Animation>{ path });
+            }
         }
-    }
 }

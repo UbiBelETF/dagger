@@ -81,6 +81,6 @@ void team_game::SetupWorld(Engine &engine_)
 {
     for (int i = 0; i < 10; i++)
     {
-        MakePeep("human-warrior");
+        MakePeep("human-peasant");
     }
 }

@@ -69,14 +69,15 @@ void InputSystem::SpinUp()
 
 void InputSystem::LoadDefaultAssets()
 {
-	for (auto& entry : Files::recursive_directory_iterator("input-contexts"))
-	{
-		auto path = entry.path().string();
-		if (entry.is_regular_file() && entry.path().extension() == ".json")
+	if (Files::exists("input-contexts"))
+		for (auto& entry : Files::recursive_directory_iterator("input-contexts"))
 		{
-			Engine::Dispatcher().trigger<AssetLoadRequest<InputContext>>(AssetLoadRequest<InputContext>{ path });
+			auto path = entry.path().string();
+			if (entry.is_regular_file() && entry.path().extension() == ".json")
+			{
+				Engine::Dispatcher().trigger<AssetLoadRequest<InputContext>>(AssetLoadRequest<InputContext>{ path });
+			}
 		}
-	}
 }
 
 void InputSystem::LoadInputAction(InputCommand& command_, JSON::json& input_)
