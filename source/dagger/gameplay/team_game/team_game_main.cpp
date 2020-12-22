@@ -265,4 +265,3 @@ void team_game::SetupWorld(Engine &engine_)
     //SetupWorldSmiljana(engine_, reg);
 }
 
-
