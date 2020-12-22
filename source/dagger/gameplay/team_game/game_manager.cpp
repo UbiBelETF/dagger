@@ -6,6 +6,7 @@
 
 #include <gameplay/team_game/team_game_main.h>
 #include "gameplay/team_game/team_game_collisions.h"
+#include "gameplay/team_game/collectables.h"
 
 
 using namespace dagger;
@@ -31,6 +32,7 @@ void GameManagerSystem::LoadNextLevel()
     LoadBackDrop();
     LoadPlatforms();
     LoadTraps();
+    LoadCollectables();
     completedObjective = false;
 }
 
@@ -50,6 +52,63 @@ void GameManagerSystem::LoadTraps()
 {
     String filePath = fmt::format("levels/traps/traps_{}.txt", currentLevel);
     LoadTextures(filePath, true);
+}
+
+void GameManagerSystem::LoadCollectables()
+{
+    String filePath = fmt::format("levels/collectables/collectables_{}.txt", currentLevel);
+    FilePath path{ filePath };
+    std::ifstream fin(Files::absolute(path).string().c_str());
+
+    String baseDir, textureName, collectableType;
+    Float32 zPos, improvement, powerUpTime;
+    Vector2 spriteSize, scale, pos;
+
+    auto& reg = Engine::Registry();
+
+    while (fin >> baseDir >> textureName >> zPos >>
+        spriteSize.x >> spriteSize.y >>
+        pos.x >> pos.y >> 
+        collectableType >> improvement >> powerUpTime)
+    {
+        auto block = reg.create();
+        auto& spriteBlock = reg.get_or_emplace<Sprite>(block);
+
+        String rootDir = "TeamGame:";
+        AssignSprite(spriteBlock, rootDir + baseDir + ":" + textureName);
+        auto& transform = reg.get_or_emplace<Transform>(block);
+        transform.position = {spriteSize.x / 2 + pos.x,
+                              spriteSize.y / 2 + pos.y,
+                              zPos};
+
+        scale.x = spriteSize.x / spriteBlock.size.x;
+        scale.y = spriteSize.y / spriteBlock.size.y;
+
+        spriteBlock.scale = scale;
+            
+        auto& collider = reg.get_or_emplace<Collider>(block);
+        collider.entityType = CollisionID::COLLECTABLE;
+        collider.state = MovementState::IMMOBILE;
+        collider.size = spriteBlock.size * spriteBlock.scale;
+
+        auto& collectable = reg.get_or_emplace<Collectable>(block);
+        collectable.improvement = improvement;
+        collectable.powerUpTime = powerUpTime;
+        collectable.timeLeft = collectable.powerUpTime;
+
+        if (collectableType == "SPEED")
+        {
+            collectable.type = CollectableType::SPEED;
+        }
+        else if (collectableType == "HEALTH")
+        {
+            collectable.type = CollectableType::HEALTH;
+        }
+        else
+        {
+            collectable.type = CollectableType::JUMP;
+        }
+    }
 }
 
 void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
