@@ -39,6 +39,17 @@ void RocketSystem::Run()
 				}
 				else
 				{
+					if (tank.shield > 0) 
+					{
+						tank.shield -= rocket.damage;
+						rocket.damage = 0;
+					}
+					if (tank.shield < 0)
+					{
+						tank.health += tank.shield;
+						tank.shield = 0;
+						rocket.damage = 0;
+					}
 					tank.health -= rocket.damage;
 					rocket.damage = 0;
 					AnimatorPlay(anim, "explosion:small");

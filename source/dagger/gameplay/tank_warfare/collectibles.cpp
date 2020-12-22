@@ -10,7 +10,7 @@
 #include "core/game/transforms.h"
 
 #include "gameplay/common/simple_collisions.h"
-#include "gameplay/tank_warfare/tank_controller.h"
+#include "gameplay/tank_warfare/tank_stats.h"
 
 using namespace tank_warfare;
 
