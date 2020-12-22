@@ -56,51 +56,18 @@ void plight::PhysicsSystem::Run()
     }
 }
 
-void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myCol_, entt::entity my_, Vector3& posOther_, PlightCollision& otherCol_, std::list<entt::entity>::iterator& other_)
+void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myCol_, entt::entity my_, const Vector3& posOther_, PlightCollision& otherCol_, std::list<entt::entity>::iterator& other_)
 {
     // Moves the coliding object out of the other coliding object & increments it2
    Vector2 sides = myCol_.GetCollisionSides(pos_, otherCol_, posOther_);
-   bool moveBoth = false;
-   Float32 newPosx, newPosy, newOtherPosx, newOtherPosy;
-   if (Engine::Registry().has<PlightCharacterController>(*other_)) {
-       moveBoth = true;
-   }
 
     if (sides.x != 0) {
-        if (sides.x == 1) {
-            newPosx = posOther_.x - myCol_.size.x - 1;
-            if (moveBoth) {
-                newOtherPosx = pos_.x + otherCol_.size.x + 1;
-            }
-            pos_.x = newPosx;
-            posOther_.x = newOtherPosx;
-        }
-        else {
-            newPosx = posOther_.x + otherCol_.size.x + 1;
-            if (moveBoth) {
-                newOtherPosx = pos_.x - otherCol_.size.x - 1;
-                posOther_.x = newOtherPosx;
-            }
-            pos_.x = newPosx;        
-        }
+        if (sides.x == 1) pos_.x = posOther_.x - myCol_.size.x - 1;
+        else pos_.x = posOther_.x + otherCol_.size.x + 1;
     }
     if (sides.y != 0) {
-        if (sides.y == 1) {
-            newPosy = posOther_.y - myCol_.size.y - 1;
-            if (moveBoth) {
-                newOtherPosy = pos_.y + otherCol_.size.y + 1;
-                posOther_.y = newOtherPosy;
-            }
-            pos_.y = newPosy;
-        }
-        else {
-            newPosy = posOther_.y + otherCol_.size.y + 1;
-            if (moveBoth) {
-                newOtherPosy = pos_.y - otherCol_.size.y - 1;
-                posOther_.y = newOtherPosy;
-            }
-            pos_.y = newPosy;
-        }
+        if (sides.y == 1) pos_.y = posOther_.y - myCol_.size.y - 1;
+        else pos_.y = posOther_.y + otherCol_.size.y + 1;
     }
 
     other_=myCol_.colidedWith.erase(other_);
