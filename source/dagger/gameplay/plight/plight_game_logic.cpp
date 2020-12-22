@@ -29,47 +29,82 @@ void PlightGameLogicSystem::WindDown()
 
 void PlightGameLogicSystem::Run()
 {
+		auto viewLS = Engine::Registry().view<PlightIntro, InputReceiver>();
+		int i = 0;
+		for (auto entity : viewLS) 
+		{
+			auto& pintro = viewLS.get<PlightIntro>(entity);
+			if (pintro.IsFinished()) 
+			{
+				break;
+			}
 
-        auto view1 = Engine::Registry().view<PlightGameInfo>();
-        for (auto entity : view1) {
-            auto& gameInfo = view1.get<PlightGameInfo>(entity);
-            if (gameInfo.newGame) {
-                gameInfo.newGameMessage = Engine::Registry().create();
-                auto& text = Engine::Registry().emplace<Text>(gameInfo.newGameMessage);
-                text.Set("pixel-font", gameInfo.newGameMessageString1, {50.f,150.f,0.f});
-                gameInfo.newGame = false;
-                gameInfo.displayingMessage = true;
-            }
-            if (gameInfo.displayingMessage) {
-                gameInfo.currentMessageDuration += Engine::DeltaTime();
-               
-                 if (gameInfo.currentMessageDuration >= gameInfo.newGameMessageDuration) {
-                    gameInfo.displayingMessage = false;
-                    gameInfo.displayingMessage2 = false;
-                    gameInfo.currentMessageDuration = 0.f;
-                    auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
-                    for (auto ent : text.entities) {
-                        Engine::Registry().remove_all(ent);
-                    }
-                    Engine::Registry().remove_all(gameInfo.newGameMessage);
-                }
-                 else if (gameInfo.currentMessageDuration >= gameInfo.newGameMessageDuration / 2 && !gameInfo.displayingMessage2) {
-                     auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
-                     text.Set("pixel-font", gameInfo.newGameMessageString2, { 50.f,150.f,0.f });
-                     gameInfo.displayingMessage2 = true;
-                 }
-            }
-            
-        }
-    
-        auto view = Engine::Registry().view<InputReceiver>();
-        for (auto entity : view)
-        {
-            auto& input = view.get<InputReceiver>(entity);
-            if (EPSILON_NOT_ZERO(input.Get("restart"))) {
-                m_Restart = true;
-            }
-        }
+			pintro.team = Engine::Registry().create();
+			auto& teamTxt = Engine::Registry().emplace<Text>(pintro.team);
+			teamTxt.Set("pixel-font", pintro.teamName, { 0,-100,0 });
+
+
+			pintro.message = Engine::Registry().create();
+			auto& msg = Engine::Registry().emplace<Text>(pintro.message);
+			msg.Set("pixel-font", pintro.introText, { 0,-100,0 });
+
+
+			auto& input = viewLS.get<InputReceiver>(entity);
+			Float32 procced = input.Get("intro");
+			if (EPSILON_NOT_ZERO(procced))
+			{
+				pintro.IntroFinished();
+			}
+
+		}
+
+		auto viewLS1 = Engine::Registry().view<PlightIntro>();
+		auto it = viewLS1.begin();
+		auto& pin = viewLS1.get<PlightIntro>(*it);
+
+		if (pin.IsFinished()) {
+
+			auto view1 = Engine::Registry().view<PlightGameInfo>();
+			for (auto entity : view1) {
+				auto& gameInfo = view1.get<PlightGameInfo>(entity);
+				if (gameInfo.newGame) {
+					gameInfo.newGameMessage = Engine::Registry().create();
+					auto& text = Engine::Registry().emplace<Text>(gameInfo.newGameMessage);
+					text.Set("pixel-font", gameInfo.newGameMessageString1, { 50.f,150.f,0.f });
+					gameInfo.newGame = false;
+					gameInfo.displayingMessage = true;
+				}
+				if (gameInfo.displayingMessage) {
+					gameInfo.currentMessageDuration += Engine::DeltaTime();
+
+					if (gameInfo.currentMessageDuration >= gameInfo.newGameMessageDuration) {
+						gameInfo.displayingMessage = false;
+						gameInfo.displayingMessage2 = false;
+						gameInfo.currentMessageDuration = 0.f;
+						auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
+						for (auto ent : text.entities) {
+							Engine::Registry().remove_all(ent);
+						}
+						Engine::Registry().remove_all(gameInfo.newGameMessage);
+					}
+					else if (gameInfo.currentMessageDuration >= gameInfo.newGameMessageDuration / 2 && !gameInfo.displayingMessage2) {
+						auto& text = Engine::Registry().get<Text>(gameInfo.newGameMessage);
+						text.Set("pixel-font", gameInfo.newGameMessageString2, { 50.f,150.f,0.f });
+						gameInfo.displayingMessage2 = true;
+					}
+				}
+
+			}
+
+			auto view = Engine::Registry().view<InputReceiver>();
+			for (auto entity : view)
+			{
+				auto& input = view.get<InputReceiver>(entity);
+				if (EPSILON_NOT_ZERO(input.Get("restart"))) {
+					m_Restart = true;
+				}
+			}
+		}
     
 }
 
