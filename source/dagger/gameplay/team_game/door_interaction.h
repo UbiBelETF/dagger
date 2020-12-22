@@ -6,12 +6,9 @@
 using namespace dagger;
 
 struct Door {
-	bool data;
+	
 };
 
-struct Key {
-	bool ispickedup;
-};
 
 
 class DoorSystem : public System

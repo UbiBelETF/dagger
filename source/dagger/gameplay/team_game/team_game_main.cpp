@@ -15,7 +15,7 @@
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/enemy.h"
 #include "gameplay/team_game/door_interaction.h"
-
+#include "gameplay/team_game/key.h"
 
 
 #include "gameplay/team_game/camera.h"
@@ -37,6 +37,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PhysicsSystem>();
     engine_.AddSystem<MovementSystem>();
     engine_.AddSystem<DoorSystem>();
+    engine_.AddSystem<KeySystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -137,6 +138,9 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
         auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
         playerInput.contexts.push_back("AmongThemInput");
 
+        auto& playerCollision = reg_.emplace<SimpleCollision>(player);
+        playerCollision.size = playerSprite.size;
+
         reg_.emplace<CharacterController>(player);
 
         auto& movable = reg_.emplace<MovableBody>(player);
@@ -153,13 +157,35 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
         auto& doorAnimator = reg_.emplace<Animator>(door);
         
         auto& doorTransform = reg_.emplace<Transform>(door);
-        doorTransform.position = { 45, 20, 1 };
+        doorTransform.position = { 45, 35, 1 };
 
         auto& doorCollision = reg_.emplace<SimpleCollision>(door);
         doorCollision.size = doorSprite.size;
         
-       reg_.emplace<Door>(door);
+        auto& collider = reg_.emplace<StaticBody>(door);
+        collider.size = doorSprite.size;
+        Engine::GetDefaultResource<StaticBodyMap>()->put(2,2, door);
         
+
+        reg_.emplace<Door>(door);
+       
+
+       //KEY
+
+       auto key = reg_.create();
+
+       auto& keySprite = reg_.emplace<Sprite>(key);
+       AssignSprite(keySprite, "spritesheets:among_them_tilemap:key");
+       keySprite.scale = { 1, 1 };
+
+       auto& keyTransform = reg_.emplace<Transform>(key);
+       keyTransform.position = { 45, -20, 1 };
+
+       auto& keyCollision = reg_.emplace<SimpleCollision>(key);
+       keyCollision.size = keySprite.size;
+
+       reg_.emplace<Key>(key);
+       
     }
 }
 void team_game::SetupWorld(Engine &engine_)

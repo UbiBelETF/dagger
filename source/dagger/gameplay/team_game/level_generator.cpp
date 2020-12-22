@@ -29,6 +29,7 @@ Sequence<Entity> level_generator::smiljana::CreateWall(Registry& reg_, SInt32 x_
     auto& sprite = reg_.emplace<Sprite>(entity);
     sprite.position = { x_ * 16, y_ * 16, 30};
     AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
+    jovica::EmplaceCollider(reg_, entity, x_, y_);
 
     return { entity };
 }
