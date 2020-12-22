@@ -48,6 +48,10 @@ void PlightSpikesFSM::Inactive::Run(PlightSpikesFSM::StateComponent& state_)
 						auto& ch = Engine::Registry().get<CombatStats>(*it);
 						auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
 
+						if (pchar.dead) {
+							break;
+						}
+
 						ch.currentHealth -= 10.f;
 
 						if (ch.currentHealth <= 0.f) {

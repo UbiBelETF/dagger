@@ -23,10 +23,13 @@
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_physics.h"
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/tilemaps.h"
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
+#include "gameplay/plight/plight_particles.h"
+
 
 
 using namespace dagger;
@@ -41,6 +44,7 @@ struct PlightCharacter
     PlightCharacterController& character;
     PlightCollision& col;
     Transform& transform;
+    plight::PhysicsObject& physics;
     CombatStats& cstats;
     PlightCrosshair& crosshair;
 
@@ -55,10 +59,14 @@ struct PlightCharacter
         auto& character = reg.get_or_emplace<PlightCharacterController>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
+        auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
+        physics.is_static = false;
+        physics.my_groups.push_back(1);
+        physics.collision_groups.push_back(1);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
 
-        return PlightCharacter{ entity_, sprite, anim, input, character ,col,transform,cstats,crosshair};
+        return PlightCharacter{ entity_, sprite, anim, input, character, col, transform, physics, cstats, crosshair};
 
     }
 
@@ -76,13 +84,13 @@ struct PlightCharacter
 
 
         chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { position_, 2.f };
+        chr.sprite.position = { position_, 82.f };
         chr.sprite.color = { color_, 1.0f };
 
         chr.col.size.x = 16;
         chr.col.size.y = 16;
 
-        chr.transform.position = { position_, 2.0f };
+        chr.transform.position = { position_, 82.f };
         chr.character.startPosition = position_;
 
         AssignSprite(chr.sprite, "spritesheets:dungeon:knight_m_idle_anim:1");
@@ -102,12 +110,18 @@ struct PlightCharacter
         crosshairSprite.position.y = chr.sprite.position.y;
         crosshairSprite.position.z = chr.sprite.position.z;
 
-        ProjectileSpawnerSettings settings;
-        settings.projectileDamage = 5.f;
-        settings.projectileSpeed = 175.f;
-        settings.pSpriteName = "Plight:projectiles:Arrow_1";
+        ProjectileSpawnerSettings projectile_settings;
+        projectile_settings.projectileDamage = 5.f;
+        projectile_settings.projectileSpeed = 175.f;
+        projectile_settings.pSpriteName = "Plight:projectiles:Arrow_1";
 
-        ProjectileSystem::SetupProjectileSystem(entity, settings);
+        ProjectileSystem::SetupProjectileSystem(entity, projectile_settings);
+
+        //Particle spawner for taking damage
+        PlightParticleSpawnerSettings particle_settings;
+        particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.35f, -0.30f }, { 0.35f, 0.f },
+            { 1.f,0.f,0.f,1 }, { 1.f,0.f,0.f,1 }, "EmptyWhitePixel", false, .5f,0.5f);
+        PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
 
         return chr;
     }
@@ -118,12 +132,15 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
 
     engine_.AddSystem<PlightControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
+    engine_.AddSystem<plight::PhysicsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<ProjectileSystem>();
     engine_.AddSystem<PlightGameLogicSystem>();
     engine_.AddSystem<PlightSpikesSystem>();
+    engine_.AddSystem<PlightParticleSystem>();
+
 }
 
 void Plight::WorldSetup(Engine &engine_)
@@ -186,6 +203,7 @@ void plight::ResetCharacters()
         character.character.dashing = false;
         character.character.running = false;
         character.character.resting = false;
+        character.character.dead = false;
         
         
     }
@@ -266,6 +284,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
     auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 356,32 });
 
+
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
     auto backgroundStaminaBar2 = Engine::Registry().create();
@@ -335,6 +354,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
 
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
     mainChar.crosshair.startAngle = 0.f;
+    mainChar.character.playerNumber = "Player 1";
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -355,6 +375,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite.scale = { 1, 1 };
     backgroundSprite.position = { -356, 57, 2 };
 
+
     auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentHealthBar);
 
     AssignSprite(frontSprite, "EmptyWhitePixel");
@@ -362,6 +383,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontSprite.size = { 50, 5 };
     frontSprite.scale = { 1, 1 };
     frontSprite.position = { -356, 57, 0 };
+
 
     auto& backgroundStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundStaminaBar);
 
@@ -371,6 +393,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite.scale = { 1, 1 };
     backgroundStaminaSprite.position = { -356, 47, 2 };
 
+
     auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
 
     AssignSprite(frontStaminaSprite, "EmptyWhitePixel");
@@ -379,11 +402,13 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite.scale = { 1, 1 };
     frontStaminaSprite.position = { -356, 47, 0 };
 
+
     auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 });
     sndChar.crosshair.angle = M_PI;
     sndChar.crosshair.startAngle = M_PI;
     auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
+    sndChar.character.playerNumber = "Player 2";
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
@@ -403,6 +428,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite2.scale = { 1, 1 };
     backgroundSprite2.position = { 356, 57, 2 };
 
+
     auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
 
     AssignSprite(frontSprite2, "EmptyWhitePixel");
@@ -410,6 +436,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontSprite2.size = { 50, 5 };
     frontSprite2.scale = { 1, 1 };
     frontSprite2.position = { 356, 57, 0};
+
 
     auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
 
@@ -419,6 +446,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite2.scale = { 1, 1 };
     backgroundStaminaSprite2.position = { 356, 47, 2 };
 
+
     auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
 
     AssignSprite(frontStaminaSprite2, "EmptyWhitePixel");
@@ -426,6 +454,7 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite2.size = { 50, 5 };
     frontStaminaSprite2.scale = { 1, 1 };
     frontStaminaSprite2.position = { 356, 47, 0 };
+
 }
 
 void plight::SetupTilemaps()
