@@ -7,6 +7,7 @@
 			{ "trigger": "KeyD", "value": 1 } 
 		]},
 		{"command-name": "jump","trigger": "KeyW"},
-		{ "command-name": "light", "trigger": "KeyE", "event": "Released" }
+		{ "command-name": "light", "trigger": "KeyE", "event": "Released" },
+		{ "command-name": "interact", "trigger": "KeySpace" }
 	]
 }

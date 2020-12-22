@@ -26,8 +26,13 @@ void ControllerFSM::Idle::Enter(ControllerFSM::StateComponent& state_)
 
 void ControllerFSM::Idle::Run(ControllerFSM::StateComponent& state_) 
 {
+<<<<<<< HEAD
     auto&& [input,physics_,char_] = Engine::Registry().get<InputReceiver,Physics,BrawlerCharacter>(state_.entity);
     if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
+=======
+    auto&& [input,physics_] = Engine::Registry().get<InputReceiver,Physics>(state_.entity);
+    if (EPSILON_NOT_ZERO(input.Get("interact"))) GoTo(ECharacterStates::Interact, state_);
+>>>>>>> team/tired_bunch/fix/collisions
     else if (EPSILON_NOT_ZERO(input.Get("light"))) 
     {
         GoTo(ECharacterStates::Attacking, state_);
@@ -51,7 +56,12 @@ void ControllerFSM::Running::Enter(ControllerFSM::StateComponent& state_)
 void ControllerFSM::Running::Run(ControllerFSM::StateComponent& state_) {
     auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics>(state_.entity);
+<<<<<<< HEAD
     if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
+=======
+    
+    if (EPSILON_NOT_ZERO(input.Get("interact"))) GoTo(ECharacterStates::Interact, state_);
+>>>>>>> team/tired_bunch/fix/collisions
     else if (EPSILON_NOT_ZERO(input.Get("light")))
     {
         GoTo(ECharacterStates::Attacking, state_);
@@ -88,11 +98,13 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
 {
     auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
     auto&& [sprite_, char_, physics_,transform_] = Engine::Registry().get<Sprite, BrawlerCharacter, Physics,Transform>(state_.entity);
+
     if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(ECharacterStates::Hitted, state_);
-    else if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
+    else if (EPSILON_NOT_ZERO(input_.Get("jump")) && !char_.jump && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
     {
         physics_.velocity.y += char_.speed.y;
-        char_.doubleJump = false;
+        char_.jump = true;
+        //char_.doubleJump = false;
         //JUMP ONLY WHEN RELEASED KEY(Not holding)
     }
     if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y <GetGravity()*Engine::DeltaTime()&& !char_.doubleJump)
@@ -106,11 +118,11 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
     }
     if (EPSILON_NOT_ZERO(input_.Get("run")) && physics_.velocity.y == GetGravity() * Engine::DeltaTime())
     {
-        char_.doubleJump = false;
+        //char_.doubleJump = false;
         GoTo(ECharacterStates::Running, state_);
     }
     else if (physics_.velocity.y == GetGravity() * Engine::DeltaTime()) {
-        char_.doubleJump = false;
+        //char_.doubleJump = false;
         GoTo(ECharacterStates::Idle, state_);
     }
     
@@ -202,3 +214,24 @@ void ControllerFSM::Dead::Run(ControllerFSM::StateComponent& state_)
     }
 }
 DEFAULT_EXIT(ControllerFSM, Dead);
+
+//interact
+DEFAULT_ENTER(ControllerFSM, Interact);
+void ControllerFSM::Interact::Run(ControllerFSM::StateComponent& state_)
+{
+    auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
+    if (input_.Get("interact"))
+    {
+        auto& t_ = Engine::Registry().get<Transform>(state_.entity);
+        if (t_.position.x > 2530 && t_.position.x<2575 && t_.position.y>-27 && t_.position.y < 26)
+            t_.position = { 2160, 1175, 0.0f };
+        else if (EPSILON_NOT_ZERO(input_.Get("jump"))) GoTo(ECharacterStates::InAir, state_);
+        else if (EPSILON_NOT_ZERO(input_.Get("run"))) GoTo(ECharacterStates::Running, state_);
+        else GoTo(ECharacterStates::Idle, state_);
+    }
+    else if(EPSILON_NOT_ZERO(input_.Get("jump"))) GoTo(ECharacterStates::InAir, state_);
+    else if (EPSILON_NOT_ZERO(input_.Get("run"))) GoTo(ECharacterStates::Running, state_);
+    else GoTo(ECharacterStates::Idle, state_);
+
+}
+DEFAULT_EXIT(ControllerFSM, Interact);

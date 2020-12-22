@@ -10,7 +10,8 @@ namespace team_game {
 		InAir,
 		Attacking,
 		Hitted,
-		Dead
+		Dead,
+		Interact
 	};
 
 	struct ControllerFSM : public FSM<ECharacterStates>
@@ -22,6 +23,7 @@ namespace team_game {
 		DEFINE_STATE(ControllerFSM, ECharacterStates, Attacking);
 		DEFINE_STATE(ControllerFSM, ECharacterStates, Hitted);
 		DEFINE_STATE(ControllerFSM, ECharacterStates, Dead);
+		DEFINE_STATE(ControllerFSM, ECharacterStates, Interact);
 
 		ControllerFSM()
 		{
@@ -31,6 +33,7 @@ namespace team_game {
 			CONNECT_STATE(ECharacterStates, Attacking);
 			CONNECT_STATE(ECharacterStates, Hitted);
 			CONNECT_STATE(ECharacterStates, Dead);
+			CONNECT_STATE(ECharacterStates, Interact);
 		}
 		void Run(StateComponent& component_) override;
 
