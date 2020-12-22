@@ -35,6 +35,10 @@ void PlightCharacterControllerFSM::Idle::Run(PlightCharacterControllerFSM::State
 {
     auto&& [input, character, cstats] = Engine::Registry().get<InputReceiver, PlightCharacterController, CombatStats>(state_.entity);
 
+    if (character.dead) {
+        return;
+    }
+
     if (character.doubleTap) {
         character.currentDoubleTapDuration += Engine::DeltaTime();
         if (character.currentDoubleTapDuration >= character.doubleTapDurationWindow) {
@@ -128,6 +132,10 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
    
     auto&& [sprite, input, character,cstats,crosshair,transform] = Engine::Registry().get<Sprite, InputReceiver, PlightCharacterController,CombatStats,PlightCrosshair,Transform>(state_.entity);
 
+    if (character.dead) {
+        GoTo(PlightCharacterStates::Idle, state_);
+        return;
+    }
     if (character.doubleTap) {
         character.currentDoubleTapDuration += Engine::DeltaTime();
         if (character.currentDoubleTapDuration >= character.doubleTapDurationWindow) {
@@ -186,6 +194,11 @@ void PlightCharacterControllerFSM::Dashing::Enter(PlightCharacterControllerFSM::
 void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::StateComponent& state_)
 {
     auto&& [sprite, character, cstats, crosshair, transform] = Engine::Registry().get<Sprite,PlightCharacterController, CombatStats, PlightCrosshair, Transform>(state_.entity);
+   
+    if (character.dead) {
+        GoTo(PlightCharacterStates::Idle, state_);
+        return;
+    }
 
     if (character.hit) {
         GoTo(PlightCharacterStates::Hit, state_);

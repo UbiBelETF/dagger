@@ -11,7 +11,8 @@
 #include "core/graphics/window.h"
 
 #include "gameplay/plight/plight_collisions.h"
-
+#include "gameplay/plight/plight_particles.h"
+#include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/plight_controller.h"
 
 
@@ -36,18 +37,27 @@ void PlightCombatSystem::Run()
 
 			CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
 
-			cstats.currentTimer += Engine::DeltaTime();
-			if (cstats.currentTimer >= cstats.updateTimer) {
-				//Will add conditions based on the current character state (to be implemented in character controller system)
-				if (col.colided) {
-					auto it = col.colidedWith.begin();
-					while (it != col.colidedWith.end()) {
-						if (Engine::Registry().valid(*it)) {
-							if (Engine::Registry().has<PlightCharacterController>(*it)) {
+		if (character.dead) {
+			continue;
+		}
+
+
+		cstats.currentTimer += Engine::DeltaTime();
+		
+			//Will add conditions based on the current character state (to be implemented in character controller system)
+			if (col.colided) {
+				auto it = col.colidedWith.begin();
+				while (it != col.colidedWith.end()) {
+					if (Engine::Registry().valid(*it)) {
+						if (Engine::Registry().has<PlightCharacterController>(*it)) {
+							if (cstats.currentTimer >= cstats.updateTimer) {
 								auto& ch = Engine::Registry().get<CombatStats>(*it);
 								auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
 
-
+							if (pchar.dead) {
+								it++;
+								continue;
+							}
 								ch.currentHealth -= 0.1f;
 
 								if (ch.currentHealth <= 0.f) {
@@ -57,32 +67,37 @@ void PlightCombatSystem::Run()
 								auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);
 								ch.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (ch.currentHealth / ch.maxHealth))) / 2;
 								sprite.size.x = BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
+							}
+						}
+						if (Engine::Registry().has<Projectile>(*it)) {
+							auto& projectile = Engine::Registry().get<Projectile>(*it);				
+							auto& pspawner = Engine::Registry().get<PlightParticleSpawner>(entity);
+							pspawner.active = true;
+							projectile.destroy = true;
 
+						    cstats.currentHealth -= projectile.projectileDamage;	
 
+							if (cstats.currentHealth <= 0.f) {
+								cstats.currentHealth = 0.f;
 							}
 
+							auto& sprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+							cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
+							sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
 						}
-						it++;
 					}
+					it++;
 				}
+						
+			}
+		
 
-				//Stamina will not be affecting running , it will be used for special movement like dashing or rolling when it gets implemented (used on running for example here)
-
-				/*if (character.running) {
-
-					cstats.currentStamina -= STAMINA_FOR_RUNNING_FRAME;
-					if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
-						if (cstats.currentStamina < 0.f) {
-							cstats.currentStamina = 0.f;
-						}
-						character.running = false;
-						character.resting = true;
-
-					}
-					auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
-					cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
-					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
-				}*/
+			if (cstats.currentHealth <= 0.f) {
+				cstats.currentHealth = 0.f;
+				character.dead = true;
+			}
+			
+			if (cstats.currentTimer >= cstats.updateTimer) {
 				if (character.dashing) {
 					cstats.currentStamina -= STAMINA_FOR_DASHING_FRAME;
 					if (cstats.currentStamina < STAMINA_FOR_DASHING_FRAME) {
@@ -99,7 +114,6 @@ void PlightCombatSystem::Run()
 					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 				}
 				else {
-
 					cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME / 2;
 					if (cstats.currentStamina > 100) {
 						cstats.currentStamina = 100;
@@ -112,12 +126,12 @@ void PlightCombatSystem::Run()
 				}
 				cstats.currentTimer = 0.f;
 			}
-
-			auto& characterSprite = Engine::Registry().get<Transform>(entity);
-			auto& characterBackgroundHealthSprite = Engine::Registry().get<Sprite>(cstats.backgroundHealthBar);
-			auto& characterCurrentHealthSprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
-			auto& characterBackgroundStaminaSprite = Engine::Registry().get<Sprite>(cstats.backgroundStaminaBar);
-			auto& characterCurrentStaminaSprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+		
+		auto& characterSprite = Engine::Registry().get<Transform>(entity);
+		auto& characterBackgroundHealthSprite = Engine::Registry().get<Sprite>(cstats.backgroundHealthBar);
+		auto& characterCurrentHealthSprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+		auto& characterBackgroundStaminaSprite = Engine::Registry().get<Sprite>(cstats.backgroundStaminaBar);
+		auto& characterCurrentStaminaSprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
 
 			characterBackgroundHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
 			characterBackgroundHealthSprite.position.x = characterSprite.position.x;

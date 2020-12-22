@@ -12,6 +12,7 @@
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_particles.h"
 
 #include <algorithm>
 #include <execution>
@@ -39,13 +40,14 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
     auto& transform = reg.emplace<Transform>(entity);
     transform.position = pos_;
 
+    reg.emplace<PlightCollision>(entity);
+
     auto& projectile = reg.emplace<Projectile>(entity);
 
     projectile.projectileDamage = settings_.projectileDamage;
     projectile.projectileSpeed = settings_.projectileSpeed;
     projectile.angle = angle_;
 
-    reg.emplace<PlightCollision>(entity);
 }
 
 void ProjectileSystem::Run()
@@ -118,7 +120,7 @@ void ProjectileSystem::OnEndOfFrame()
     for (auto& entity : projectiles)
     {
         auto& p = projectiles.get<Projectile>(entity);
-        if (p.timeOfLiving <= 0)
+        if (p.destroy)
         {
             Engine::Registry().remove_all(entity);
         }
