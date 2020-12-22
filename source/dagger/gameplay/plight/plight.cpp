@@ -116,6 +116,15 @@ struct PlightCharacter
             { 1.f,0.f,0.f,1 }, { 1.f,0.f,0.f,1 }, "EmptyWhitePixel", false, .5f,0.5f);
         PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
 
+        chr.character.weaponSprite = reg.create();
+        auto& weapon_sprite = reg.emplace<Sprite>(chr.character.weaponSprite);
+        AssignSprite(weapon_sprite, "Plight:weapons:Bow_13");
+        weapon_sprite.scale = chr.sprite.scale;
+        weapon_sprite.position.x = chr.sprite.position.x + chr.character.weaponOffset * weapon_sprite.scale.x;
+        weapon_sprite.position.y = chr.sprite.position.y - 3.f;
+        weapon_sprite.position.z = chr.sprite.position.z;
+        weapon_sprite.rotation = 45;
+
         return chr;
     }
 };
@@ -193,6 +202,14 @@ void plight::ResetCharacters()
         character.character.running = false;
         character.character.resting = false;
         character.character.dead = false;
+
+        Float32 x_weapon = character.character.weaponOffset * cos(character.crosshair.angle);
+        Float32 y_weapon = character.character.weaponOffset * sin(character.crosshair.angle);
+
+        auto& weapon_sprite = Engine::Registry().get<Sprite>(character.character.weaponSprite);
+        weapon_sprite.position.x = character.transform.position.x + x_weapon;
+        weapon_sprite.position.y = character.transform.position.y - 3.f + y_weapon;
+        weapon_sprite.rotation = (character.crosshair.angle * 180.) / M_PI + 45;
         
         
     }
