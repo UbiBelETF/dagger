@@ -23,11 +23,13 @@
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_physics.h"
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/tilemaps.h"
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_particles.h"
+
 
 
 using namespace dagger;
@@ -42,6 +44,7 @@ struct PlightCharacter
     PlightCharacterController& character;
     PlightCollision& col;
     Transform& transform;
+    plight::PhysicsObject& physics;
     CombatStats& cstats;
     PlightCrosshair& crosshair;
 
@@ -56,10 +59,13 @@ struct PlightCharacter
         auto& character = reg.get_or_emplace<PlightCharacterController>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
+        auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
+        physics.my_groups.push_back(1);
+        physics.collision_groups.push_back(1);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
 
-        return PlightCharacter{ entity_, sprite, anim, input, character ,col,transform,cstats,crosshair};
+        return PlightCharacter{ entity_, sprite, anim, input, character, col, transform, physics, cstats, crosshair};
 
     }
 
@@ -125,6 +131,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
 
     engine_.AddSystem<PlightControllerSystem>();
     engine_.AddSystem<PlightCollisionsSystem>();
+    engine_.AddSystem<plight::PhysicsSystem>();
     engine_.AddSystem<PlightCombatSystem>();
     engine_.AddSystem<PlightAimingSystem>();
     engine_.AddSystem<TilemapSystem>();
@@ -132,6 +139,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightGameLogicSystem>();
     engine_.AddSystem<PlightSpikesSystem>();
     engine_.AddSystem<PlightParticleSystem>();
+
 }
 
 void Plight::WorldSetup(Engine &engine_)
@@ -274,6 +282,7 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 
 
     auto sndChar = PlightCharacter::Create("arrows_topdown", { 1, 0, 0 }, { 356,32 });
+
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();

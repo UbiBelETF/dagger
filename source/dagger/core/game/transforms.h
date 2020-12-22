@@ -8,6 +8,9 @@ using namespace dagger;
 struct Transform
 {
     Vector3 position{ 0, 0, 0 };
+
+    Transform() = default;
+    Transform(Vector3 pos_) :position(pos_) {}
 };
 
 class TransformSystem

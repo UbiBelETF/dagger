@@ -33,15 +33,6 @@ void plight::PlightAimingSystem::Run()
 					crosshair_.angle = 2 * M_PI - (-crosshair_.angle);
 				}
 
-				auto& sprite = Engine::Registry().get<Sprite>(crosshair_.crosshairSprite);
-
-				Float32 x = crosshair_.playerDistance * cos(crosshair_.angle);
-				Float32 y = crosshair_.playerDistance * sin(crosshair_.angle);
-
-
-				sprite.position.x = x + sprite_.position.x;
-				sprite.position.y = y + sprite_.position.y;
-
 				if (crosshair_.angle > 0.5 * M_PI && crosshair_.angle < 1.5 * M_PI) {
 					sprite_.scale = { -1,1 };
 				}
@@ -50,7 +41,16 @@ void plight::PlightAimingSystem::Run()
 				}
 
 			}
+            auto& sprite = Engine::Registry().get<Sprite>(crosshair_.crosshairSprite);
+
+            Float32 x = crosshair_.playerDistance * cos(crosshair_.angle);
+            Float32 y = crosshair_.playerDistance * sin(crosshair_.angle);
+
+
+            sprite.position.x = x + sprite_.position.x;
+            sprite.position.y = y + sprite_.position.y;
 
 		});
 	}
+
 }
