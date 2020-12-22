@@ -1,4 +1,5 @@
 #include "plight_combat.h"
+#include "plight_game_logic.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -21,111 +22,117 @@ using namespace plight;
 
 void PlightCombatSystem::Run()
 {
+	auto viewLS1 = Engine::Registry().view<PlightIntro>();
+	auto it = viewLS1.begin();
+	auto& pin = viewLS1.get<PlightIntro>(*it);
 
-	auto view = Engine::Registry().view <PlightCollision, Transform, PlightCharacterController, CombatStats >();
-	for (auto entity : view) {
-		PlightCollision& col = Engine::Registry().get<PlightCollision>(entity);
-		Transform& t = Engine::Registry().get<Transform>(entity);
-		PlightCharacterController& character = Engine::Registry().get<PlightCharacterController>(entity);
+	if (pin.IsFinished()) {
 
-		CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
+		auto view = Engine::Registry().view <PlightCollision, Transform, PlightCharacterController, CombatStats >();
+		for (auto entity : view) {
+			PlightCollision& col = Engine::Registry().get<PlightCollision>(entity);
+			Transform& t = Engine::Registry().get<Transform>(entity);
+			PlightCharacterController& character = Engine::Registry().get<PlightCharacterController>(entity);
 
-		cstats.currentTimer += Engine::DeltaTime();
-		if (cstats.currentTimer >= cstats.updateTimer) {
-			//Will add conditions based on the current character state (to be implemented in character controller system)
-			if (col.colided) {
-				auto it = col.colidedWith.begin();
-				while (it != col.colidedWith.end()) {
-					if (Engine::Registry().valid(*it)) {
-						if (Engine::Registry().has<PlightCharacterController>(*it)) {
-							auto& ch = Engine::Registry().get<CombatStats>(*it);
-							auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
+			CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
+
+			cstats.currentTimer += Engine::DeltaTime();
+			if (cstats.currentTimer >= cstats.updateTimer) {
+				//Will add conditions based on the current character state (to be implemented in character controller system)
+				if (col.colided) {
+					auto it = col.colidedWith.begin();
+					while (it != col.colidedWith.end()) {
+						if (Engine::Registry().valid(*it)) {
+							if (Engine::Registry().has<PlightCharacterController>(*it)) {
+								auto& ch = Engine::Registry().get<CombatStats>(*it);
+								auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
 
 
-							ch.currentHealth -= 0.1f;
+								ch.currentHealth -= 0.1f;
 
-							if (ch.currentHealth <= 0.f) {
-								ch.currentHealth = 0.f;
+								if (ch.currentHealth <= 0.f) {
+									ch.currentHealth = 0.f;
+								}
+
+								auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);
+								ch.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (ch.currentHealth / ch.maxHealth))) / 2;
+								sprite.size.x = BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
+
+
 							}
 
-							auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);
-							ch.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (ch.currentHealth / ch.maxHealth))) / 2;
-							sprite.size.x = BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
-
-
 						}
+						it++;
+					}
+				}
+
+				//Stamina will not be affecting running , it will be used for special movement like dashing or rolling when it gets implemented (used on running for example here)
+
+				/*if (character.running) {
+
+					cstats.currentStamina -= STAMINA_FOR_RUNNING_FRAME;
+					if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
+						if (cstats.currentStamina < 0.f) {
+							cstats.currentStamina = 0.f;
+						}
+						character.running = false;
+						character.resting = true;
 
 					}
-					it++;
-				}
-			}
-
-			//Stamina will not be affecting running , it will be used for special movement like dashing or rolling when it gets implemented (used on running for example here)
-
-			/*if (character.running) {
-
-				cstats.currentStamina -= STAMINA_FOR_RUNNING_FRAME;
-				if (cstats.currentStamina < STAMINA_FOR_RUNNING_FRAME) {
-					if (cstats.currentStamina < 0.f) {
-						cstats.currentStamina = 0.f;
-					}
-					character.running = false;
-					character.resting = true;
-
-				}
-				auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
-				cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
-				sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
-			}*/
-			if (character.dashing){
-				cstats.currentStamina -= STAMINA_FOR_DASHING_FRAME;
-				if (cstats.currentStamina < STAMINA_FOR_DASHING_FRAME) {
-					if (cstats.currentStamina < 0.f) {
-						cstats.currentStamina = 0.f;
-					}
-					character.running = false;
-					character.dashing = false;
-					character.resting = true;
-
-				}
-				auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
-				cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
-				sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
-			}
-			else {
-
-				cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME / 2;
-				if (cstats.currentStamina > 100) {
-					cstats.currentStamina = 100;
-				}
-				if (cstats.currentStamina < 100) {
 					auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
-					cstats.staminaBarOffset += std::abs((sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2);
+					cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+				}*/
+				if (character.dashing) {
+					cstats.currentStamina -= STAMINA_FOR_DASHING_FRAME;
+					if (cstats.currentStamina < STAMINA_FOR_DASHING_FRAME) {
+						if (cstats.currentStamina < 0.f) {
+							cstats.currentStamina = 0.f;
+						}
+						character.running = false;
+						character.dashing = false;
+						character.resting = true;
+
+					}
+					auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+					cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
 					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 				}
+				else {
+
+					cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME / 2;
+					if (cstats.currentStamina > 100) {
+						cstats.currentStamina = 100;
+					}
+					if (cstats.currentStamina < 100) {
+						auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+						cstats.staminaBarOffset += std::abs((sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2);
+						sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+					}
+				}
+				cstats.currentTimer = 0.f;
 			}
-			cstats.currentTimer = 0.f;
+
+			auto& characterSprite = Engine::Registry().get<Transform>(entity);
+			auto& characterBackgroundHealthSprite = Engine::Registry().get<Sprite>(cstats.backgroundHealthBar);
+			auto& characterCurrentHealthSprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+			auto& characterBackgroundStaminaSprite = Engine::Registry().get<Sprite>(cstats.backgroundStaminaBar);
+			auto& characterCurrentStaminaSprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+
+			characterBackgroundHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
+			characterBackgroundHealthSprite.position.x = characterSprite.position.x;
+
+			characterCurrentHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
+			characterCurrentHealthSprite.position.x = characterSprite.position.x;
+			characterCurrentHealthSprite.position.x -= cstats.healthBarOffset;
+
+			characterBackgroundStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
+			characterBackgroundStaminaSprite.position.x = characterSprite.position.x;
+
+			characterCurrentStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
+			characterCurrentStaminaSprite.position.x = characterSprite.position.x;
+			characterCurrentStaminaSprite.position.x += cstats.staminaBarOffset;
 		}
-
-		auto& characterSprite = Engine::Registry().get<Transform>(entity);
-		auto& characterBackgroundHealthSprite = Engine::Registry().get<Sprite>(cstats.backgroundHealthBar);
-		auto& characterCurrentHealthSprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
-		auto& characterBackgroundStaminaSprite = Engine::Registry().get<Sprite>(cstats.backgroundStaminaBar);
-		auto& characterCurrentStaminaSprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
-
-		characterBackgroundHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
-		characterBackgroundHealthSprite.position.x = characterSprite.position.x;
-
-		characterCurrentHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
-		characterCurrentHealthSprite.position.x = characterSprite.position.x;
-		characterCurrentHealthSprite.position.x -= cstats.healthBarOffset;
-
-		characterBackgroundStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
-		characterBackgroundStaminaSprite.position.x = characterSprite.position.x;
-
-		characterCurrentStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
-		characterCurrentStaminaSprite.position.x = characterSprite.position.x;
-		characterCurrentStaminaSprite.position.x += cstats.staminaBarOffset;
 	}
 
 }

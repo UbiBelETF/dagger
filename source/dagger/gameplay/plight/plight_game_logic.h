@@ -10,11 +10,18 @@ namespace plight
 	struct PlightIntro {
 		
 		bool loading_screen = true;
-		String introText = "Welcome warriors, press 'Enter' to battle";
-		String teamName = "by Team MorningAfternoon";
+		String introText = "Welcome  Warriors!";
+		String introText1 = "PRESS 'ENTER' TO BATTLE";
+		String teamName = "Presented by:";
+		String teamName1 = " Team  MorningAfternoon";
+
+		bool displaying = false;
 		
 		Entity team;
 		Entity message;
+		Entity team1;
+		Entity message1;
+
 
 		bool IsFinished() {
 			return (!loading_screen);

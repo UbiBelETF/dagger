@@ -30,7 +30,6 @@ void PlightGameLogicSystem::WindDown()
 void PlightGameLogicSystem::Run()
 {
 		auto viewLS = Engine::Registry().view<PlightIntro, InputReceiver>();
-		int i = 0;
 		for (auto entity : viewLS) 
 		{
 			auto& pintro = viewLS.get<PlightIntro>(entity);
@@ -39,14 +38,27 @@ void PlightGameLogicSystem::Run()
 				break;
 			}
 
-			pintro.team = Engine::Registry().create();
-			auto& teamTxt = Engine::Registry().emplace<Text>(pintro.team);
-			teamTxt.Set("pixel-font", pintro.teamName, { 0,-100,0 });
+			if (!pintro.displaying) {
+				pintro.team = Engine::Registry().create();
+				auto& teamTxt = Engine::Registry().emplace<Text>(pintro.team);
+				teamTxt.Set("pixel-font", pintro.teamName, {0, 230 ,0 });
 
+				pintro.team1 = Engine::Registry().create();
+				auto& teamTxt1 = Engine::Registry().emplace<Text>(pintro.team1);
+				teamTxt1.Set("pixel-font", pintro.teamName1, { 0, 180 ,0 });
 
-			pintro.message = Engine::Registry().create();
-			auto& msg = Engine::Registry().emplace<Text>(pintro.message);
-			msg.Set("pixel-font", pintro.introText, { 0,-100,0 });
+				pintro.message1 = Engine::Registry().create();
+				auto& msg1 = Engine::Registry().emplace<Text>(pintro.message1);
+				msg1.Set("pixel-font", pintro.introText1, { 0,-150,0 });
+
+				pintro.message = Engine::Registry().create();
+				auto& msg = Engine::Registry().emplace<Text>(pintro.message);
+				msg.Set("pixel-font", pintro.introText, { 0,-100,0 });
+
+				pintro.displaying = true;
+			}
+
+			
 
 
 			auto& input = viewLS.get<InputReceiver>(entity);
