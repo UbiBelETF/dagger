@@ -1,0 +1,11 @@
+{
+	"context-name": "mainmenu_input",
+	"commands": [
+	  {
+	    "command-name": "intro",
+		"trigger": "KeyEnter",
+		"event": "Released"	
+	  }
+	]
+}
+	

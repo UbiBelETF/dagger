@@ -60,6 +60,7 @@ struct PlightCharacter
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
+        physics.is_static = false;
         physics.my_groups.push_back(1);
         physics.collision_groups.push_back(1);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
@@ -154,6 +155,7 @@ void Plight::WorldSetup(Engine &engine_)
     camera->Update();
 
     srand(time(NULL));
+	plight::SetupMainManu(engine_);
     plight::SetupTilemaps();
     plight::SetupWorld_AimingSystem(engine_);
 
@@ -161,6 +163,7 @@ void Plight::WorldSetup(Engine &engine_)
 
 void plight::SetupWorld(Engine &engine_)
 {
+
 }
 
 void plight::ResetCharacters()
@@ -326,6 +329,24 @@ void plight::SetupWorld_CombatSystem(Engine& engine_){
 }
 
 
+void plight::SetupMainManu(Engine& engine_)
+{
+	auto entity = Engine::Registry().create();
+
+	auto& pintro = Engine::Registry().emplace<PlightIntro>(entity);
+	auto& Title = Engine::Registry().emplace<Sprite>(entity);
+	AssignSprite(Title, "Plight:logo:gametitle");
+	Title.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	Title.size = { 500, 200 };
+	Title.scale = { 1, 1 };
+	Title.position = { 0, 50, 0 };
+
+	auto& input = Engine::Registry().emplace<InputReceiver>(entity);
+	input.contexts.push_back("mainmenu_input");
+	
+}
+
+
 void plight::SetupWorld_AimingSystem(Engine& engine_)
 {
     auto entity = Engine::Registry().create();
@@ -352,7 +373,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite.color = { 0, 0, 0, 1 };
     backgroundSprite.size = { 50, 5 };
     backgroundSprite.scale = { 1, 1 };
-    backgroundSprite.position = { -100, 125, 82 };
+    backgroundSprite.position = { -356, 57, 2 };
+
 
     auto& frontSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentHealthBar);
 
@@ -360,7 +382,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontSprite.color = { 1, 0, 0, 1 };
     frontSprite.size = { 50, 5 };
     frontSprite.scale = { 1, 1 };
-    frontSprite.position = { -100, 125, 81 };
+    frontSprite.position = { -356, 57, 0 };
+
 
     auto& backgroundStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.backgroundStaminaBar);
 
@@ -368,7 +391,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite.size = { 50, 5 };
     backgroundStaminaSprite.scale = { 1, 1 };
-    backgroundStaminaSprite.position = { -100, 115, 82 };
+    backgroundStaminaSprite.position = { -356, 47, 2 };
+
 
     auto& frontStaminaSprite = Engine::Registry().emplace<Sprite>(mainChar.cstats.currentStaminaBar);
 
@@ -376,7 +400,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite.color = { 0, 1, 0, 1 };
     frontStaminaSprite.size = { 50, 5 };
     frontStaminaSprite.scale = { 1, 1 };
-    frontStaminaSprite.position = { -100, 115, 81 };
+    frontStaminaSprite.position = { -356, 47, 0 };
+
 
     auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 });
     sndChar.crosshair.angle = M_PI;
@@ -401,7 +426,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundSprite2.color = { 0, 0, 0, 1 };
     backgroundSprite2.size = { 50, 5 };
     backgroundSprite2.scale = { 1, 1 };
-    backgroundSprite2.position = { 100, 125, 82 };
+    backgroundSprite2.position = { 356, 57, 2 };
+
 
     auto& frontSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentHealthBar);
 
@@ -409,7 +435,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontSprite2.color = { 1, 0, 0, 1 };
     frontSprite2.size = { 50, 5 };
     frontSprite2.scale = { 1, 1 };
-    frontSprite2.position = { 100, 125, 81};
+    frontSprite2.position = { 356, 57, 0};
+
 
     auto& backgroundStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.backgroundStaminaBar);
 
@@ -417,7 +444,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     backgroundStaminaSprite2.color = { 0, 0, 0, 1 };
     backgroundStaminaSprite2.size = { 50, 5 };
     backgroundStaminaSprite2.scale = { 1, 1 };
-    backgroundStaminaSprite2.position = { 100, 115, 82 };
+    backgroundStaminaSprite2.position = { 356, 47, 2 };
+
 
     auto& frontStaminaSprite2 = Engine::Registry().emplace<Sprite>(sndChar.cstats.currentStaminaBar);
 
@@ -425,7 +453,8 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     frontStaminaSprite2.color = { 0, 1, 0, 1 };
     frontStaminaSprite2.size = { 50, 5 };
     frontStaminaSprite2.scale = { 1, 1 };
-    frontStaminaSprite2.position = { 100, 115, 81 };
+    frontStaminaSprite2.position = { 356, 47, 0 };
+
 }
 
 void plight::SetupTilemaps()
