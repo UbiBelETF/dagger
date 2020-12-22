@@ -40,6 +40,9 @@ namespace plight
 		Float32 currentHitTime{ 0.f };
 
 		String playerNumber = "";
+
+		Entity weaponSprite;
+		Float32 weaponOffset = 15.f;
 	};
 
 	class PlightControllerSystem
