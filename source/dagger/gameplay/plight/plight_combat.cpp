@@ -1,4 +1,5 @@
 #include "plight_combat.h"
+#include "plight_game_logic.h"
 
 #include "core/core.h"
 #include "core/engine.h"
@@ -22,14 +23,19 @@ using namespace plight;
 
 void PlightCombatSystem::Run()
 {
+	auto viewLS1 = Engine::Registry().view<PlightIntro>();
+	auto it = viewLS1.begin();
+	auto& pin = viewLS1.get<PlightIntro>(*it);
 
-	auto view = Engine::Registry().view <PlightCollision, Transform, PlightCharacterController, CombatStats >();
-	for (auto entity : view) {
-		PlightCollision& col = Engine::Registry().get<PlightCollision>(entity);
-		Transform& t = Engine::Registry().get<Transform>(entity);
-		PlightCharacterController& character = Engine::Registry().get<PlightCharacterController>(entity);
+	if (pin.IsFinished()) {
 
-		CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
+		auto view = Engine::Registry().view <PlightCollision, Transform, PlightCharacterController, CombatStats >();
+		for (auto entity : view) {
+			PlightCollision& col = Engine::Registry().get<PlightCollision>(entity);
+			Transform& t = Engine::Registry().get<Transform>(entity);
+			PlightCharacterController& character = Engine::Registry().get<PlightCharacterController>(entity);
+
+			CombatStats& cstats = Engine::Registry().get<CombatStats>(entity);
 
 		if (character.dead) {
 			continue;
@@ -79,11 +85,12 @@ void PlightCombatSystem::Run()
 							cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
 							sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
 						}
-
 					}
 					it++;
 				}
+						
 			}
+		
 
 			if (cstats.currentHealth <= 0.f) {
 				cstats.currentHealth = 0.f;
@@ -107,7 +114,6 @@ void PlightCombatSystem::Run()
 					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 				}
 				else {
-
 					cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME / 2;
 					if (cstats.currentStamina > 100) {
 						cstats.currentStamina = 100;
@@ -127,19 +133,20 @@ void PlightCombatSystem::Run()
 		auto& characterBackgroundStaminaSprite = Engine::Registry().get<Sprite>(cstats.backgroundStaminaBar);
 		auto& characterCurrentStaminaSprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
 
-		characterBackgroundHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
-		characterBackgroundHealthSprite.position.x = characterSprite.position.x;
+			characterBackgroundHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
+			characterBackgroundHealthSprite.position.x = characterSprite.position.x;
 
-		characterCurrentHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
-		characterCurrentHealthSprite.position.x = characterSprite.position.x;
-		characterCurrentHealthSprite.position.x -= cstats.healthBarOffset;
+			characterCurrentHealthSprite.position.y = characterSprite.position.y + cstats.playerDistance + 10.f;
+			characterCurrentHealthSprite.position.x = characterSprite.position.x;
+			characterCurrentHealthSprite.position.x -= cstats.healthBarOffset;
 
-		characterBackgroundStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
-		characterBackgroundStaminaSprite.position.x = characterSprite.position.x;
+			characterBackgroundStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
+			characterBackgroundStaminaSprite.position.x = characterSprite.position.x;
 
-		characterCurrentStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
-		characterCurrentStaminaSprite.position.x = characterSprite.position.x;
-		characterCurrentStaminaSprite.position.x += cstats.staminaBarOffset;
+			characterCurrentStaminaSprite.position.y = characterSprite.position.y + cstats.playerDistance;
+			characterCurrentStaminaSprite.position.x = characterSprite.position.x;
+			characterCurrentStaminaSprite.position.x += cstats.staminaBarOffset;
+		}
 	}
 
 }
