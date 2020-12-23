@@ -12,6 +12,8 @@
 #include "core/game/transforms.h"
 #include "gameplay/team_game/detection.h"
 #include "gameplay/team_game/character_controller.h"
+#include "gameplay/common/simple_collisions.h"
+#include "core/graphics/text.h"
 
 #include <glm/gtc/epsilon.hpp>
 
@@ -118,13 +120,14 @@ DEFAULT_ENTER(EnemyFSM,Chasing);
 
 void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 {
-	
+
 	auto& ctrl = Engine::Registry().get<EnemyDescription>(state_.entity);
 	auto& sprite = Engine::Registry().get<Sprite>(state_.entity);
 	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 	auto& det = Engine::Registry().get<Detection>(state_.entity);
 	auto& t = Engine::Registry().get<Transform>(state_.entity);
+	auto& col = Engine::Registry().get<SimpleCollision>(state_.entity);
 
 	auto& heroTransform = Engine::Registry().get<Transform>(det.who);
 	auto& heroDetection = Engine::Registry().get<Detection>(det.who);
@@ -150,6 +153,18 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 		}
 
 		body.movement = glm::normalize(direction) * ctrl.speed * Engine::DeltaTime();
+		if (col.colided)
+		{
+			if (Engine::Registry().has<CharacterController>(col.colidedWith))
+			{   
+			
+				auto ui = Engine::Registry().create();
+				auto& text = Engine::Registry().emplace<Text>(ui);
+				text.spacing = 0.6f;
+				text.Set("pixel-font", "You lose");
+			    	
+			}
+		}
 	}
 }
 

@@ -247,6 +247,9 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     auto& en = reg_.emplace<EnemyDescription>(enemy);
     en.shape = ECharacterShape::Goblin;
 
+    auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
+    enemyCollision.size = enemySprite.size;
+
     reg_.emplace<MovableBody>(enemy);
 
     auto& enDetection1 = reg_.emplace<Detection>(enemy);
@@ -277,6 +280,9 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
     auto& en2 = reg_.emplace<EnemyDescription>(enemy2);
     en2.shape = ECharacterShape::Bat;
+
+    auto& en2Collision = reg_.emplace<SimpleCollision>(enemy2);
+    en2Collision.size = enemy2Sprite.size;
 
     reg_.emplace<MovableBody>(enemy2);
 
