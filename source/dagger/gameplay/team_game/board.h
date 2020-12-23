@@ -32,3 +32,18 @@ struct Board
 		}
 	}
 };
+
+enum struct PeepState
+{
+	Dead,
+	Active,
+	Tired,
+};
+
+struct Peep
+{
+	Entity entity;
+	Occupacy side;
+
+	void SetState(PeepState state_);
+};

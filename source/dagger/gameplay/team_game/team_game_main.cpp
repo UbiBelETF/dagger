@@ -54,11 +54,10 @@ void MakeRandomGround(SInt32 x_, SInt32 y_)
     {
         sprite.color = { 1, 1, 1, 1 };
         Engine::GetDefaultResource<Board>()->space[x_][y_] = Occupacy::Neutral;
-        auto& transform = reg.emplace<Transform>(tile);
     }
 }
 
-Entity MakePeep(String name_, Occupacy side_, SInt32 x_, SInt32 y_)
+Peep MakePeep(String name_, Occupacy side_, SInt32 x_, SInt32 y_)
 {
     static std::unordered_map<String, UInt32> amounts{
         { "human-warrior", 3 },
@@ -100,7 +99,7 @@ Entity MakePeep(String name_, Occupacy side_, SInt32 x_, SInt32 y_)
     auto& anim = reg.emplace<Animator>(peep);
     AnimatorPlay(anim, fmt::format("tiny_heroes:{}-{}-side", name_, index), rand() % 3);
 
-    return peep;
+    return Peep{ peep, side_ };
 }
 
 void TeamGame::WorldSetup(Engine& engine_)
@@ -134,16 +133,16 @@ void TeamGame::WorldSetup(Engine& engine_)
     auto w4 = width / 4.0f;
     auto h2 = height / 2.0f;
 
-    Entity a = MakePeep("human-knight", Occupacy::Friend, 15, 10);
-    Entity b = MakePeep("human-warrior", Occupacy::Friend, 15, 12);
-    Entity c = MakePeep("elf-mage", Occupacy::Friend, 16, 10);
-    Entity d = MakePeep("human-mage", Occupacy::Friend, 16, 11);
-    Engine::Registry().get<Sprite>(d).grayscale = 1.0f;
+    auto a = MakePeep("human-knight", Occupacy::Friend, 15, 10);
+    auto b = MakePeep("human-warrior", Occupacy::Friend, 15, 12);
+    auto c = MakePeep("elf-mage", Occupacy::Friend, 16, 10);
+    auto d = MakePeep("human-mage", Occupacy::Friend, 16, 11);
+    d.SetState(PeepState::Tired);
 
-    Entity x = MakePeep("orc-knight", Occupacy::Foe, 25, 11);
-    Entity y = MakePeep("orc-knight", Occupacy::Foe, 26, 11);
-    Engine::Registry().get<Sprite>(y).grayscale = 1.0f;
-    Entity z = MakePeep("orc-warrior", Occupacy::Foe, 25, 12);
-    Engine::Registry().get<Sprite>(z).grayscale = 1.0f;
-    Entity v = MakePeep("orc-assassin", Occupacy::Foe, 27, 14);
+    auto x = MakePeep("orc-knight", Occupacy::Foe, 25, 11);
+    auto y = MakePeep("orc-knight", Occupacy::Foe, 26, 11);
+    y.SetState(PeepState::Tired);
+    auto z = MakePeep("orc-warrior", Occupacy::Foe, 25, 12);
+    z.SetState(PeepState::Tired);
+    auto v = MakePeep("orc-assassin", Occupacy::Foe, 27, 14);
 }
