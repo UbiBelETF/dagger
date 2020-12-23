@@ -33,7 +33,7 @@ namespace ancient_defenders {
         static UInt32 selectedSpot;
         static String selectedTower;
 
-        static SelectMode selectMode;
+        static ESelectMode selectMode;
 
         static Sequence<Vector2> spotCoordinates;
         static StaticArray<Bool, SPOT_COUNT> availableSpot;
