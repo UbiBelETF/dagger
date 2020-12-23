@@ -7,7 +7,7 @@ using namespace dagger;
 
 namespace lab
 {
-	enum Unit { player, skeleton, slime };
+	enum Unit { player, skeleton, slime, Boss };
 
 	struct Bullet {
 		Unit ownership;
@@ -15,6 +15,7 @@ namespace lab
 		Float32 speed = 100.f;
 		Float32 speedX = 100.f;
 		Float32 speedY = 100.f;
+		bool destroy = false;
 	};
 
 	struct Gun {
