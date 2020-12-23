@@ -94,7 +94,9 @@ struct Player
         chr.sprite.position = { position_, 1.0f };
         chr.sprite.color = { color_, 1.0f };
         
-        chr.transform.position = { position_,0.0f };
+        //chr.transform.position = {2160, 1175, 0.0f };
+        chr.transform.position = { 2550, 26, 0.0f };
+        //chr.transform.position = { position_, 0.0f };
 
         AssignSprite(chr.sprite, "Light:idle");
         AnimatorPlay(chr.animator, "character:IDLE");
@@ -227,8 +229,8 @@ struct Bubble
         auto& reg = Engine::Registry();
         auto entity = reg.create();
         auto chr = Bubble::Get(entity);
-        chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { 2350, 72, 0.0f };
+        chr.sprite.scale = { 0.8, 0.8 };
+        chr.sprite.position = { 2370, 67, 0.0f };
         chr.sprite.color = { color_, 1.0f };
         AssignSprite(chr.sprite, "team_game:Quotes:bubble1");
         AnimatorPlay(chr.animator, "quotes:talk");

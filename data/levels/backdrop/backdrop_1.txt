@@ -27,3 +27,19 @@ Background:Wall brick_pillar 1.0 44.0 480.0 1695.0 -172.0 1 2
 Background:Wall brick_pillar 1.0 44.0 480.0 1945.0 -172.0 1 2
 
 Props door 1 46.0 56.0 2530.0 11.0 1 1
+
+
+
+
+
+Background black 4.0 1000.0 600.0 1880.0 850.0 1 1
+
+Props door 4 46.0 56.0 2140.0 1161.0 1 1
+
+Background boss_room 4.0 573.0 250.0 2099.0 1019.0 1 1
+
+
+
+
+
+
