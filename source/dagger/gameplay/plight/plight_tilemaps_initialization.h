@@ -14,6 +14,7 @@ Entity CreateEmpty(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallSideTopLeft(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallSideTopRight(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallCornerBottomLeft(Registry& reg_, INT32 x_, INT32 y_);
+Entity CreateWallCornerBottomLeftFront(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallCornerBottomRight(Registry& reg_, INT32 x_, INT32 y_); 
 Entity CreateWallCornerBottomRightColumn(Registry& reg_, INT32 x_, INT32 y_);
 Entity CreateWallCornerMidRight(Registry& reg_, INT32 x_, INT32 y_);

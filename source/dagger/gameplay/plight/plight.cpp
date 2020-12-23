@@ -108,7 +108,7 @@ struct PlightCharacter
         AssignSprite(crosshairSprite, "Plight:crosshair:crosshair1");
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
         crosshairSprite.position.y = chr.sprite.position.y;
-        crosshairSprite.position.z = chr.sprite.position.z;
+        crosshairSprite.position.z = chr.sprite.position.z - 5.f;
 
         ProjectileSpawnerSettings projectile_settings;
         projectile_settings.projectileDamage = 5.f;
@@ -129,8 +129,9 @@ struct PlightCharacter
         weapon_sprite.scale = chr.sprite.scale;
         weapon_sprite.position.x = chr.sprite.position.x + chr.character.weaponOffset * weapon_sprite.scale.x;
         weapon_sprite.position.y = chr.sprite.position.y - 3.f;
-        weapon_sprite.position.z = chr.sprite.position.z;
+        weapon_sprite.position.z = chr.sprite.position.z - 5.f;
         weapon_sprite.rotation = 45;
+
 
         return chr;
     }
@@ -513,6 +514,7 @@ void plight::SetupTilemaps()
     wallLegend['1'] = &CreateWallSideTopLeft;
     wallLegend['2'] = &CreateWallSideTopRight;
     wallLegend['3'] = &CreateWallCornerBottomLeft;
+    wallLegend['7'] = &CreateWallCornerBottomLeftFront;
     wallLegend['4'] = &CreateWallCornerBottomRight;
     wallLegend['5'] = &CreateWallCornerBottomRightColumn;
     wallLegend['J'] = &CreateWallCornerMidRight;

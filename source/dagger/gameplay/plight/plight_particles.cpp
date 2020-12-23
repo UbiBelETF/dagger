@@ -30,6 +30,7 @@ void PlightParticleSystem::CreateParticle(const PlightParticleSpawnerSettings& s
     auto& sprite = reg.emplace<Sprite>(entity);
     AssignSprite(sprite, settings_.pSpriteName);
     sprite.size = settings_.pSize;
+    sprite.position = pos_;
 
     Vector4 randColorVal;
     randColorVal.r = glm::mix(settings_.pColorMin.r, settings_.pColorMax.r, PlightParticle_getRand());
@@ -77,7 +78,7 @@ void PlightParticleSystem::Run()
                 {
                     particleSys_.timer = particleSys_.settings.timeToNewParticle;
 
-                    CreateParticle(particleSys_.settings, t.position);
+                    CreateParticle(particleSys_.settings, t.position-5.f);
                 }
 
                 particleSys_.settings.currentSpawnDuration += Engine::DeltaTime();

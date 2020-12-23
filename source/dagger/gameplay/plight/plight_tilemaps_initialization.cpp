@@ -15,7 +15,7 @@ Entity CreateFloor(Registry& reg_, INT32 x_, INT32 y_)
 {
         Entity entity = reg_.create();
         auto& sprite = reg_.emplace<Sprite>(entity);
-        sprite.position = { x_ * 16, y_ * 16, 90 };
+        sprite.position = { x_ * 16, y_ * 16, 91};
         float mod = (float)rand() / RAND_MAX;
         if (mod <= 0.8) {
             AssignSprite(sprite, "spritesheets:dungeon:floor_1");
@@ -102,6 +102,15 @@ Entity CreateWallCornerBottomLeft(Registry& reg_, INT32 x_, INT32 y_)
     return entity;
 }
 
+Entity CreateWallCornerBottomLeftFront(Registry& reg_, INT32 x_, INT32 y_)
+{
+    Entity entity = reg_.create();
+    auto& sprite = reg_.emplace<Sprite>(entity);
+    sprite.position = { x_ * 16, y_ * 16, 79 };
+    AssignSprite(sprite, "spritesheets:dungeon:wall_corner_bottom_left");
+    return entity;
+}
+
 Entity CreateWallCornerBottomRight(Registry& reg_, INT32 x_, INT32 y_)
 {
     Entity entity = reg_.create();
@@ -123,7 +132,7 @@ Entity CreateWallCornerMidRight(Registry& reg_, INT32 x_, INT32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 89 };
+    sprite.position = { x_ * 16, y_ * 16, 79 };
     AssignSprite(sprite, "spritesheets:dungeon:wall_inner_corner_mid_rigth");
     return entity;
 }
@@ -149,7 +158,7 @@ Entity CreateWallCornerLeft(Registry& reg_, INT32 x_, INT32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 89 };
+    sprite.position = { x_ * 16, y_ * 16, 79 };
     AssignSprite(sprite, "spritesheets:dungeon:wall_corner_left");
     return entity;
 }

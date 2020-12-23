@@ -1,11 +1,13 @@
 #include "plight_collisions.h"
 
 #include "core/engine.h"
+#include "core/graphics/sprite.h"
 #include "core/game/transforms.h"
 
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/plight_physics.h"
+#include "gameplay/plight/plight_aiming.h"
 
 using namespace dagger;
 using namespace plight;
