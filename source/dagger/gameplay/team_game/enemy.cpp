@@ -73,34 +73,39 @@ void lab::EnemySystem::Run()
 			{
 				if (col.colided && !Engine::Registry().has<Bullet>(col.colidedWith) && !Engine::Registry().has<Heart>(col.colidedWith))
 				{
-					SimpleCollision& collision = Engine::Registry().get<SimpleCollision>(col.colidedWith);
-					Transform& transform = Engine::Registry().get<Transform>(col.colidedWith);
-
-					Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
-
-					do
+					if(Engine::Registry().valid(col.colidedWith) && Engine::Registry().has<Transform>(col.colidedWith))
 					{
-						Float32 dt = Engine::DeltaTime();
-						if (collisionSides.x > 0)
-						{
-							t.position.x -= ((skeleton.speed - 2) * dt);
-						}
+					
+						SimpleCollision& collision = Engine::Registry().get<SimpleCollision>(col.colidedWith);
+						
+						Transform& transform = Engine::Registry().get<Transform>(col.colidedWith);
 
-						if (collisionSides.y > 0)
-						{
-							t.position.y -= ((skeleton.speed - 2) * dt);
-						}
-						if (collisionSides.x < 0)
-						{
-							t.position.x += ((skeleton.speed - 2) * dt);
-						}
+						Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
 
-						if (collisionSides.y < 0)
+						do
 						{
-							t.position.y += ((skeleton.speed - 2) * dt);
-						}
-					} while (col.IsCollided(t.position, collision, transform.position));
+							Float32 dt = Engine::DeltaTime();
+							if (collisionSides.x > 0)
+							{
+								t.position.x -= ((skeleton.speed - 2) * dt);
+							}
 
+							if (collisionSides.y > 0)
+							{
+								t.position.y -= ((skeleton.speed - 2) * dt);
+							}
+							if (collisionSides.x < 0)
+							{
+								t.position.x += ((skeleton.speed - 2) * dt);
+							}
+
+							if (collisionSides.y < 0)
+							{
+								t.position.y += ((skeleton.speed - 2) * dt);
+							}
+						} while (col.IsCollided(t.position, collision, transform.position));
+					
+					}
 					col.colided = false;
 				}
 				else
@@ -289,34 +294,36 @@ void lab::EnemySystem::Run()
 		{
 			if (col.colided && !Engine::Registry().has<Bullet>(col.colidedWith))
 			{
-				SimpleCollision& collision = Engine::Registry().get<SimpleCollision>(col.colidedWith);
-				Transform& transform = Engine::Registry().get<Transform>(col.colidedWith);
-
-				Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
-
-				do
+				if(Engine::Registry().valid(col.colidedWith) && Engine::Registry().has<Transform>(col.colidedWith))
 				{
-					Float32 dt = Engine::DeltaTime();
-					if (collisionSides.x > 0)
-					{
-						t.position.x -= slime.speed * dt;
-					}
+					SimpleCollision& collision = Engine::Registry().get<SimpleCollision>(col.colidedWith);
+					Transform& transform = Engine::Registry().get<Transform>(col.colidedWith);
 
-					if (collisionSides.y > 0)
-					{
-						t.position.y -= slime.speed * dt;
-					}
-					if (collisionSides.x < 0)
-					{
-						t.position.x += slime.speed * dt;
-					}
+					Vector2 collisionSides = col.GetCollisionSides(t.position, collision, transform.position);
 
-					if (collisionSides.y < 0)
+					do
 					{
-						t.position.y += slime.speed * dt;
-					}
-				} while (col.IsCollided(t.position, collision, transform.position));
+						Float32 dt = Engine::DeltaTime();
+						if (collisionSides.x > 0)
+						{
+							t.position.x -= slime.speed * dt;
+						}
 
+						if (collisionSides.y > 0)
+						{
+							t.position.y -= slime.speed * dt;
+						}
+						if (collisionSides.x < 0)
+						{
+							t.position.x += slime.speed * dt;
+						}
+
+						if (collisionSides.y < 0)
+						{
+							t.position.y += slime.speed * dt;
+						}
+					} while (col.IsCollided(t.position, collision, transform.position));
+				}
 				col.colided = false;
 			}
 
