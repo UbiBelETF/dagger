@@ -53,7 +53,7 @@ void MakeRandomGround(SInt32 x_, SInt32 y_)
     if (!hit)
     {
         sprite.color = { 1, 1, 1, 1 };
-        Engine::GetDefaultResource<Board>()->space[x_][y_] = Occupacy::Neutral;
+        Engine::GetDefaultResource<Board>()->space[x_][y_] = (UInt32)Occupacy::Neutral;
     }
 }
 
@@ -99,7 +99,31 @@ Peep MakePeep(String name_, Occupacy side_, SInt32 x_, SInt32 y_)
     auto& anim = reg.emplace<Animator>(peep);
     AnimatorPlay(anim, fmt::format("tiny_heroes:{}-{}-side", name_, index), rand() % 3);
 
+    Engine::GetDefaultResource<Board>()->space[x_][y_] = (UInt32)side_;
+
     return Peep{ peep, side_ };
+}
+
+PeepGroup MakeGroup(String name_, Occupacy side_, std::initializer_list<Peep> peeps_)
+{
+    PeepGroup group;
+    group.name = name_;
+    group.side = side_;
+
+    for (auto peep : peeps_) group.peeps.push_back(peep);
+
+    return group;
+}
+
+PeepArmy MakeArmy(String name_, Occupacy side_, std::initializer_list<PeepGroup> groups_)
+{
+    PeepArmy army;
+    army.name = name_;
+    army.side = side_;
+    
+    for (auto group : groups_) army.groups.push_back(group);
+
+    return army;
 }
 
 void TeamGame::WorldSetup(Engine& engine_)
@@ -111,38 +135,69 @@ void TeamGame::WorldSetup(Engine& engine_)
     const Float32 chance = 0.82f;
 
     Engine::PutDefaultResource<Board>(new Board(width, height));
+    auto* board = Engine::GetDefaultResource<Board>();
 
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 1280, 800 };
-    camera->zoom = 4;
+    camera->zoom = 2;
     camera->position = { (Float32)width / 2.0f * 16, (Float32)height / 2.0f * 16, 0 };
     camera->Update();
+
+    auto a = MakePeep("human-knight", Occupacy::Friend, 15, 15);
+    auto b = MakePeep("human-knight", Occupacy::Friend, 15, 16);
+    auto knights = MakeGroup("Knights", Occupacy::Friend, { a, b });
+
+    auto c = MakePeep("elf-mage", Occupacy::Friend, 10, 10);
+    auto d = MakePeep("elf-mage", Occupacy::Friend, 10, 11);
+    auto e = MakePeep("elf-mage", Occupacy::Friend, 10, 10);
+    auto mages = MakeGroup("Mages", Occupacy::Friend, { c, d, e });
+
+    auto f = MakePeep("human-peasant", Occupacy::Friend, 15, 9);
+    auto g = MakePeep("human-peasant", Occupacy::Friend, 16, 10);
+    auto h = MakePeep("human-peasant", Occupacy::Friend, 15, 10);
+    auto j = MakePeep("human-peasant", Occupacy::Friend, 15, 11);
+    auto k = MakePeep("human-peasant", Occupacy::Friend, 14, 10);
+    auto peasants = MakeGroup("Mob", Occupacy::Friend, { f, g, h, j, k });
+
+    auto l = MakePeep("elf-assassin", Occupacy::Friend, 14, 13);
+    auto assassin = MakeGroup("Assassin", Occupacy::Friend, { l });
+
+    auto humans = MakeArmy("Humans", Occupacy::Friend, { knights, mages, peasants, assassin });
+
+    auto x = MakePeep("orc-knight", Occupacy::Foe, 30, 11);
+    auto y = MakePeep("orc-knight", Occupacy::Foe, 31, 11);
+    auto z = MakePeep("orc-knight", Occupacy::Foe, 30, 12);
+    auto guards = MakeGroup("Guards", Occupacy::Foe, { x, y, z });
+
+    auto u = MakePeep("orc-warrior", Occupacy::Foe, 30, 15);
+    auto s = MakePeep("orc-warrior", Occupacy::Foe, 31, 16);
+    auto t = MakePeep("orc-warrior", Occupacy::Foe, 30, 16);
+    auto band = MakeGroup("Warband", Occupacy::Foe, { u, s, t });
+
+    auto v = MakePeep("orc-assassin", Occupacy::Foe, 33, 12);
+    auto butcher = MakeGroup("Butcher", Occupacy::Foe, { v });
+
+    auto w = MakePeep("orc-assassin", Occupacy::Foe, 33, 15);
+    auto executioner = MakeGroup("Executioner", Occupacy::Foe, { w });
+
+    auto p = MakePeep("boar-warrior", Occupacy::Foe, 28, 13);
+    auto q = MakePeep("boar-warrior", Occupacy::Foe, 28, 14);
+    auto boars = MakeGroup("Boars", Occupacy::Foe, { p, q });
+
+    auto orcs = MakeArmy("Orcs", Occupacy::Foe, { guards, band, butcher, executioner, boars });
+
+    board->armies.push_back(humans);
+    board->armies.push_back(orcs);
 
     for (SInt32 i = 0; i < width; i++)
     {
         for (SInt32 j = 0; j < height; j++)
         {
-            if (Random::Uniform() > chance)
+            if (board->space[i][j] == (UInt32)Occupacy::Empty && Random::Uniform() > chance)
             {
                 MakeRandomGround(i, j);
             }
         }
     }
-
-    auto w4 = width / 4.0f;
-    auto h2 = height / 2.0f;
-
-    auto a = MakePeep("human-knight", Occupacy::Friend, 15, 10);
-    auto b = MakePeep("human-warrior", Occupacy::Friend, 15, 12);
-    auto c = MakePeep("elf-mage", Occupacy::Friend, 16, 10);
-    auto d = MakePeep("human-mage", Occupacy::Friend, 16, 11);
-    d.SetState(PeepState::Tired);
-
-    auto x = MakePeep("orc-knight", Occupacy::Foe, 25, 11);
-    auto y = MakePeep("orc-knight", Occupacy::Foe, 26, 11);
-    y.SetState(PeepState::Tired);
-    auto z = MakePeep("orc-warrior", Occupacy::Foe, 25, 12);
-    z.SetState(PeepState::Tired);
-    auto v = MakePeep("orc-assassin", Occupacy::Foe, 27, 14);
 }
