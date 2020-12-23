@@ -9,13 +9,16 @@
 // ----------------------------------------------------------
 // shortcuts
 #include "gameplay/team_game/movement.h"
+#include "core/game/transforms.h"
+#include "gameplay/team_game/detection.h"
+#include "gameplay/team_game/character_controller.h"
 
 #include <glm/gtc/epsilon.hpp>
-#include <core\game\transforms.h>
 
 using namespace team_game;
 
 String run = "among_them_animations:bat";
+String idle_ = "among_them_animations:goblin_idle";
 
 void EnemyControllerSystem::Run()
 {
@@ -23,9 +26,9 @@ void EnemyControllerSystem::Run()
 		[&](EnemyFSM::StateComponent& state_)
 	{   
 		auto& inputshape = Engine::Registry().get<InputEnemiesFile>(state_.entity);
-		if (inputshape.currentshape=="goblin") { run = "among_them_animations:goblin_run"; }
-		if (inputshape.currentshape == "slime") { run = "among_them_animations:slime_run"; }
-		if(inputshape.currentshape == "bat") { run = "among_them_animations:bat"; }
+		if (inputshape.currentshape == "goblin") { idle_ = "among_them_animations:goblin_idle"; run = "among_them_animations:goblin_run"; }
+		if (inputshape.currentshape == "slime") { idle_ = "among_them_animations:slime_idle"; run = "among_them_animations:slime_run"; }
+		if (inputshape.currentshape == "bat") { idle_ = "among_them_animations:bat";  run = "among_them_animations:bat"; }
 		m_EnemyStateMachine.Run(state_);
 	
 	});
@@ -42,6 +45,12 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
 	auto& path = Engine::Registry().get<InputEnemiesFile>(state_.entity);
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
+	auto& det = Engine::Registry().get<Detection>(state_.entity);
+
+	if (det.detected && Engine::Registry().has<CharacterController>(det.who)) {
+		ctrl.lastState = EEnemyState::Patrolling;
+		GoTo(EEnemyState::Chasing, state_);
+	}
 
 	
 	FileInputStream inFile{ path.pathname };
@@ -109,16 +118,66 @@ DEFAULT_ENTER(EnemyFSM,Chasing);
 
 void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 {
-	/*auto& ctrl = Engine::Registry().get<EnemyDescription>(state_.entity);
+	
+	auto& ctrl = Engine::Registry().get<EnemyDescription>(state_.entity);
 	auto& sprite = Engine::Registry().get<Sprite>(state_.entity);
 	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
-
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-	*/
+	auto& det = Engine::Registry().get<Detection>(state_.entity);
+	auto& t = Engine::Registry().get<Transform>(state_.entity);
 
-	
+	auto& heroTransform = Engine::Registry().get<Transform>(det.who);
+	auto& heroDetection = Engine::Registry().get<Detection>(det.who);
+	auto& hero = Engine::Registry().get<CharacterController>(det.who);
 
-	
+	if (!det.detected) {
+		EEnemyState currState = ctrl.lastState;
+		ctrl.lastState = EEnemyState::Chasing;
+		GoTo(currState, state_);
+	}
+
+	if (ctrl.shape != hero.shape)
+	{
+		Vector2 direction = { heroTransform.position.x - t.position.x, heroTransform.position.y - t.position.y };
+
+		if (direction.x > 0.0f)
+		{
+			sprite.scale.x = 1;
+		}
+		else if (direction.x < 0.0f)
+		{
+			sprite.scale.x = -1;
+		}
+
+		body.movement = glm::normalize(direction) * ctrl.speed * Engine::DeltaTime();
+	}
 }
 
 DEFAULT_EXIT(EnemyFSM, Chasing);
+
+DEFAULT_ENTER(EnemyFSM, Idle_);
+
+void EnemyFSM::Idle_::Run(EnemyFSM::StateComponent& state_) {
+
+	auto& det = Engine::Registry().get<Detection>(state_.entity);
+	auto& enemy = Engine::Registry().get<EnemyDescription>(state_.entity);
+
+	if (enemy.lastState == EEnemyState::Chasing) {
+		for (int i = 0; i < 10000; i++) {
+			auto& animator = Engine::Registry().get<Animator>(state_.entity);
+			AnimatorPlay(animator, idle_);
+		}
+		enemy.lastState = EEnemyState::Idle_;
+		GoTo(EEnemyState::Patrolling, state_);
+	}
+
+	while (!(det.detected==true && Engine::Registry().has<CharacterController>(det.who)))  {
+		auto& animator = Engine::Registry().get<Animator>(state_.entity);
+		AnimatorPlay(animator, idle_);
+	}
+
+	enemy.lastState = EEnemyState::Idle_;
+	GoTo(EEnemyState::Chasing, state_);
+}
+
+DEFAULT_EXIT(EnemyFSM, Idle_);
