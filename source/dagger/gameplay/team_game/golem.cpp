@@ -146,7 +146,7 @@ Entity ancient_defenders::Golem::Create()
 
 	golem.meleeDmg = 5.0f;
 
-	golem.speed = 200.0f;
+	golem.speed = 100.0f;
 	golem.direction = { -1,0 };
 
 	hitbox.size = sprite.size;

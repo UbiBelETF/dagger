@@ -120,7 +120,7 @@ void ancient_defenders::PlayerControlsSystem::Run()
 
     if (!found)
     {
-        menu.position = choice.position = build.position = buildIconTransform.position = { 10000, 10000, 10000 };
+        menu.position = choice.position = build.position = buildIconTransform.position = circle.position = { 10000, 10000, 10000 };
         buildTimeText.Set("pixel-font", "", { 10000, 10000, 10000 });
 
         TowerPlacementInfo::selectedSpot = TOWER_NONE;

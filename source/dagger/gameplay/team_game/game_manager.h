@@ -15,7 +15,7 @@ namespace ancient_defenders {
         static constexpr Float32 maxHealth = 100.0f;
 
         Float32 spawnTimer = 0.0f;
-        Float32 timeLeft = 180.0f;
+        Float32 timeLeft = 10.0f;
     };
 
     class GameManagerSystem

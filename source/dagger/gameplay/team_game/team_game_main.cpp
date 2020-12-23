@@ -74,7 +74,7 @@ void ancient_defenders::SetupWorld(Engine &engine_)
         auto& sprite = reg.emplace<Sprite>(entity);
 
         AssignSprite(sprite, "spritesheets:hp-bar:hp_BCK");
-        sprite.scale = { 10,10 };
+        sprite.scale = { 10,5 };
         
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { 0, -260, 99 };
@@ -87,14 +87,14 @@ void ancient_defenders::SetupWorld(Engine &engine_)
         auto& sprite = reg.emplace<Sprite>(player->hpSprite);
 
         AssignSprite(sprite, "spritesheets:hp-bar:hp_100");
-        sprite.scale = { 10,10 };
+        sprite.scale = { 10,5 };
 
         auto& transform = reg.emplace<Transform>(player->hpSprite);
         transform.position = { 0, -260, 98 };
 
         player->countdownTimer = reg.create();
         auto& sprite2 = reg.emplace<Sprite>(player->countdownTimer);
-
+        
         auto& text = reg.emplace<Text>(player->countdownTimer);
 
         text.alignment = TextAlignment::CENTER;
@@ -211,13 +211,13 @@ void ancient_defenders::SetupEndScreen(Engine & engine_, Bool goodEnd_)
 {
     auto& reg = engine_.Registry();
 
-    {
+    /*{
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
         AssignSprite(sprite, "ancient_defenders:level1-ground");
         
         sprite.position = { 0, 0, 50 };
-    }
+    }*/
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);
@@ -236,7 +236,7 @@ void ancient_defenders::SetupEndScreen(Engine & engine_, Bool goodEnd_)
         auto& text = reg.emplace<Text>(entity);
 
         text.alignment = TextAlignment::CENTER;
-        text.Set("pixel-font", "destroyed", { 0, 50, 10 });
+        text.Set("pixel-font", goodEnd_?"successfully defended":"destroyed", { 0, 50, 10 });
 
     }
 
@@ -248,7 +248,7 @@ void ancient_defenders::SetupEndScreen(Engine & engine_, Bool goodEnd_)
         auto& text = reg.emplace<Text>(entity);
 
         text.alignment = TextAlignment::CENTER;
-        text.Set("pixel-font", "better luck next time", { 0, -100, 10 });
+        text.Set("pixel-font", goodEnd_?"good work":"better luck next time", { 0, -100, 10 });
 
     }
 }

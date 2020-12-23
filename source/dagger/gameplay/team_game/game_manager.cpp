@@ -23,7 +23,6 @@ void ancient_defenders::GameManagerSystem::WindDown()
 
 void ancient_defenders::GameManagerSystem::Run()
 {
-
     auto player = Engine::GetDefaultResource<PlayerInfo>();
     if (player == nullptr) return;
 
@@ -39,8 +38,10 @@ void ancient_defenders::GameManagerSystem::Run()
 
     Engine::Registry().get<Sprite>(player->hpSprite).scale.x = percentage * 10.0f;
 
-    if (player->health < 0.0f) m_defeat = true;
-
+    if (player->health < 0.0f) {
+        m_defeat = true;
+        return;
+    }
     if ((player->spawnTimer -= Engine::DeltaTime()) > 0) return;
     else player->spawnTimer = 2.0f;
 
@@ -109,12 +110,22 @@ void ancient_defenders::GameManagerSystem::OnEndOfFrame()
 
     reg.destroy(toRemove.begin(), toRemove.end());
 
-    if (m_defeat) {
-        Engine::ToggleSystemsPause(true);
-        Engine::Registry().clear();
-        
 
-        ancient_defenders::SetupEndScreen(Engine::Instance(), false);
+    if (m_defeat || m_victory) {
+        Engine::ToggleSystemsPause(true);
+
+        auto viewA = reg.view<Animator>();
+        
+        auto itA = viewA.begin();
+        while (itA != viewA.end()) {
+            AnimatorStop(reg.get<Animator>(*itA));
+            itA++;
+        }
+
+        
+        ancient_defenders::SetupEndScreen(Engine::Instance(), m_victory?true:false);
+
+        m_victory = m_defeat = false;
         /*
         {
             auto entity = reg.create();
