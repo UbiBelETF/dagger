@@ -3,10 +3,13 @@
 #include <core/engine.h>
 #include <core/graphics/sprite.h>
 #include <core/game/transforms.h>
+#include<core/graphics/text.h>
 
 #include <gameplay/team_game/team_game_main.h>
 #include "gameplay/team_game/team_game_collisions.h"
+#include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/collectables.h"
+#include "gameplay/team_game/treasure.h"
 
 
 using namespace dagger;
@@ -15,25 +18,54 @@ using namespace team_game;
 void GameManagerSystem::SpinUp()
 {
     Engine::Dispatcher().sink<NextFrame>().connect<&GameManagerSystem::OnEndOfFrame>(this);
+    Engine::Dispatcher().sink<KeyboardEvent>().connect<&GameManagerSystem::OnKeyboardEvent>(this);
 }
 
 void GameManagerSystem::WindDown()
 {
     Engine::Dispatcher().sink<NextFrame>().disconnect<&GameManagerSystem::OnEndOfFrame>(this);
+    Engine::Dispatcher().sink<KeyboardEvent>().disconnect<&GameManagerSystem::OnKeyboardEvent>(this);
 }
 
 void GameManagerSystem::Run()
 {
+    if (!isGameOver)
+    {
+        auto& treasureView = Engine::Registry().view<TreasureChest>();
+        for (auto& entity : treasureView)
+        {
+            auto& chest = Engine::Registry().get<TreasureChest>(entity);
+            if (chest.hadCollisionWithPlayer)
+            {
+                isGameOver = true;
+                winnerId = chest.playerId;
+
+                Engine::Registry().destroy(entity);
+                return;
+            }
+        }
+    }
 }
+
+void GameManagerSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
+{
+    if (isGameOver)
+    {
+        if (kEvent_.key == nextLevelKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
+        {
+            restarted = true;    
+        }
+    }
+}
+
 
 void GameManagerSystem::LoadNextLevel()
 {
-    currentLevel++;
     LoadBackDrop();
     LoadPlatforms();
     LoadTraps();
     LoadCollectables();
-    completedObjective = false;
+    gameStarted = false;
 }
 
 void GameManagerSystem::LoadBackDrop()
@@ -161,11 +193,49 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
 
 void GameManagerSystem::OnEndOfFrame()
 {
-    if (completedObjective)
+    if (isGameOver)
+    {
+        {
+            auto ui1 = Engine::Registry().create();
+            auto& text1 = Engine::Registry().emplace<Text>(ui1);
+            text1.spacing = 0.6f;
+            text1.Set("pixel-font", "GAME OVER");
+
+            auto ui2 = Engine::Registry().create();
+            auto& text2 = Engine::Registry().emplace<Text>(ui2);
+            text2.spacing = 0.6f;
+            text2.Set("pixel-font", fmt::format("Player {} wins!", winnerId+1), { 0.0, -30.0, 0.0 });
+
+            auto ui3 = Engine::Registry().create();
+            auto& text3 = Engine::Registry().emplace<Text>(ui3);
+            text3.spacing = 0.6f;
+            text3.Set("pixel-font", "Press Y to restart the game :)", { 0.0, -65.0, 0.0 });
+        }
+
+        auto& playerView = Engine::Registry().view<PlayerCharacter>();
+        for (auto& entity : playerView)
+        {
+            Engine::Registry().remove(entity);
+            Engine::Registry().destroy(entity);
+        }
+    }
+
+    if (gameStarted)
     {
         Engine::Registry().clear();
 
         LoadNextLevel();
+        team_game::SetupWorld(Engine::Instance());
+    }
+
+    if (restarted)
+    {
+        restarted = false;
+        isGameOver = false;
+
+        Engine::Registry().clear();
+        LoadNextLevel();
+
         team_game::SetupWorld(Engine::Instance());
     }
 }
