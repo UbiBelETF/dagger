@@ -95,8 +95,8 @@ struct Player
         chr.sprite.color = { color_, 1.0f };
         
         //chr.transform.position = {2160, 1175, 0.0f };
-        chr.transform.position = { 2550, 26, 0.0f };
-        //chr.transform.position = { position_, 0.0f };
+        //chr.transform.position = { 2550, 26, 0.0f };
+        chr.transform.position = { position_, 0.0f };
 
         AssignSprite(chr.sprite, "Light:idle");
         AnimatorPlay(chr.animator, "character:IDLE");

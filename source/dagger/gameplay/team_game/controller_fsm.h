@@ -10,7 +10,7 @@ namespace team_game {
 		InAir,
 		Attacking,
 		Hitted,
-		Dead
+		Dead,
 		Interact
 
 	};
