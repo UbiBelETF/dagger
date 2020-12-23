@@ -9,7 +9,6 @@ using namespace ancient_defenders;
 
 UInt32 ancient_defenders::TowerPlacementInfo::selectedSpot = TOWER_NONE;
 String ancient_defenders::TowerPlacementInfo::selectedTower = "BLOOD";
-SelectMode ancient_defenders::TowerPlacementInfo::selectMode = SelectMode::Tower;
 
 Sequence<Vector2> ancient_defenders::TowerPlacementInfo::spotCoordinates = {};
 StaticArray<Bool, SPOT_COUNT> ancient_defenders::TowerPlacementInfo::availableSpot = { true, true, true, true, true, true, true, true };

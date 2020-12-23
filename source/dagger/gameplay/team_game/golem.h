@@ -22,6 +22,7 @@ namespace ancient_defenders {
 		SInt32 postition = (SInt32) WalkingPath::numberOfPoints - 1;
         Vector2 offset;
 		Vector2 direction = { -1, 0 };
+		String type;
 
 		EAction currentAction = EAction::Moving;
 	};
@@ -29,7 +30,7 @@ namespace ancient_defenders {
 	struct Golem {
 		Entity entity;
 
-		static Entity Create();
+		static Entity Create(String type_);
 	};
 
 	class EnemyBehaviorSystem
