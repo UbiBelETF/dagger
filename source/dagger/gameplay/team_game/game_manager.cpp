@@ -1,7 +1,12 @@
 #include "game_manager.h"
 #include "mage.h"
+#include "golem.h"
+#include "team_game_main.h"
 
+#include "core/graphics/text.h"
 #include "core/engine.h"
+
+#include <random>
 
 using namespace dagger;
 using namespace ancient_defenders;
@@ -18,41 +23,132 @@ void ancient_defenders::GameManagerSystem::WindDown()
 
 void ancient_defenders::GameManagerSystem::Run()
 {
-    // Spawn enemies
 
+    auto player = Engine::GetDefaultResource<PlayerInfo>();
+    if (player == nullptr) return;
+
+    if ((player->timeLeft -= Engine::DeltaTime()) < 0) {
+        m_victory = true;
+        return;
+    }
     
+    Engine::Registry().get<Text>(player->countdownTimer).Set("pixel-font", fmt::format("Raid: {}s left!", (UInt32)player->timeLeft), { 10, 260, 98 });
+
+    auto percentage = player->health / player->maxHealth;
+    if (percentage < 0.0f) percentage = 0.0f;
+
+    Engine::Registry().get<Sprite>(player->hpSprite).scale.x = percentage * 10.0f;
+
+    if (player->health < 0.0f) m_defeat = true;
+
+    if ((player->spawnTimer -= Engine::DeltaTime()) > 0) return;
+    else player->spawnTimer = 2.0f;
+
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+
+    std::uniform_int_distribution<std::mt19937::result_type> roll10(0, 9);
+
+    auto spawnCode = roll10(rng);
+
+    if (spawnCode < 4) { // 40% chance to spawn a little golem
+        for (auto i = spawnCode + 1; i > 0; i--) { // Create a random number of golems (based on the spawnCode)
+            Golem::Create();
+        }
+    }
+    else if (spawnCode < 6) { // 20% chance to spawn a middle golem
+      //  for (auto i = (spawnCode - 4) + 1; i > 0; i--) { // Create a random number of golems (based on the spawnCode)
+            // Create middle golem
+      //  }
+    }
+    else if (spawnCode < 7) { // 10% chance to spawn a big golem
+        // Crate big golem
+    }
+    else { // 30% chance to spawn a boar
+        // Create boar
+    }
 }
 
 void ancient_defenders::GameManagerSystem::OnEndOfFrame()
 {
     auto player = Engine::GetDefaultResource<PlayerInfo>();
+    if (player == nullptr) return;
+
     auto& reg = Engine::Registry();
 
-
-    auto view = Engine::Registry().view<MageStats>();
-
     Sequence<Entity> toRemove{};
-    auto it = view.begin();
-    while (it != view.end()) {
-        auto & en = view.get<MageStats>(*it);
-        if (en.postition == (WalkingPath::numberOfPoints-1)) {
-            player->health += reg.get<Health>(*it).currentHealth;
 
-            toRemove.push_back(entt::to_entity(reg, reg.get<Health>(*it).hpBar));
-            toRemove.push_back(*it);
+    auto viewM = reg.view<MageStats>();
+
+    auto itM = viewM.begin();
+    while (itM != viewM.end()) {
+        auto & en = viewM.get<MageStats>(*itM);
+        if (en.postition == (WalkingPath::numberOfPoints-1)) {
+            player->health += reg.get<Health>(*itM).currentHealth;
+
+            toRemove.push_back(entt::to_entity(reg, reg.get<Health>(*itM).hpBar));
+            toRemove.push_back(*itM);
         }
-        it++;
+        itM++;
+    }
+    
+    auto viewE = reg.view<Enemy>();
+
+    auto itE = viewE.begin();
+    while (itE != viewE.end()) {
+        auto & en = viewE.get<Enemy>(*itE);
+        if (en.postition == 1) {
+            player->health -= reg.get<Health>(*itE).currentHealth;
+
+            toRemove.push_back(entt::to_entity(reg, reg.get<Health>(*itE).hpBar));
+            toRemove.push_back(*itE);
+        }
+        itE++;
     }
 
-    // Remove health from enemies that walked all the way
+    reg.destroy(toRemove.begin(), toRemove.end());
 
-    Engine::Registry().destroy(toRemove.begin(), toRemove.end());
+    if (m_defeat) {
+        Engine::ToggleSystemsPause(true);
+        Engine::Registry().clear();
+        
 
-    auto percentage = player->health / player->maxHealth;
+        ancient_defenders::SetupEndScreen(Engine::Instance(), false);
+        /*
+        {
+            auto entity = reg.create();
+            auto& sprite = reg.emplace<Sprite>(entity);
 
-    reg.get<Sprite>(player->sprite).scale.x = percentage * 10.0f;
+            auto& text = reg.emplace<Text>(entity);
+
+            text.alignment = TextAlignment::CENTER;
+            text.Set("pixel-font", "Ancient has been", { 0, 100, 10 });
+
+        }
+
+        {
+            auto entity = reg.create();
+            auto& sprite = reg.emplace<Sprite>(entity);
+
+            auto& text = reg.emplace<Text>(entity);
+
+            text.alignment = TextAlignment::CENTER;
+            text.Set("pixel-font", "destroyed", { 0, 50, 10 });
+
+        }
 
 
-    // If the game ended display right screen
+        {
+            auto entity = reg.create();
+            auto& sprite = reg.emplace<Sprite>(entity);
+
+            auto& text = reg.emplace<Text>(entity);
+
+            text.alignment = TextAlignment::CENTER;
+            text.Set("pixel-font", "better luck next time", { 0, -100, 10 });
+
+        }*/
+    }
 
 }

@@ -8,10 +8,14 @@ using namespace dagger;
 namespace ancient_defenders {
 
     struct PlayerInfo {
-        Entity sprite;
+        Entity hpSprite;
+        Entity countdownTimer;
 
         Float32 health = maxHealth;
-        static constexpr Float32 maxHealth = 5000.0f;
+        static constexpr Float32 maxHealth = 100.0f;
+
+        Float32 spawnTimer = 0.0f;
+        Float32 timeLeft = 180.0f;
     };
 
     class GameManagerSystem
@@ -26,6 +30,10 @@ namespace ancient_defenders {
         void Run() override;
 
     private:
+        Bool m_victory = false;
+        Bool m_defeat = false;
+
+        
         void OnEndOfFrame();
     };
 
