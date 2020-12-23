@@ -201,7 +201,7 @@ void plight::ResetCharacters()
         auto& crosshairSprite = Engine::Registry().get<Sprite>(character.crosshair.crosshairSprite);
         crosshairSprite.position.x = character.transform.position.x + character.crosshair.playerDistance;
         crosshairSprite.position.y = character.transform.position.y;
-        crosshairSprite.position.z = character.transform.position.z;
+        crosshairSprite.position.z = character.transform.position.z -5.f;
 
         character.crosshair.angle = character.crosshair.startAngle;
         if (character.crosshair.angle > 0.f) {
@@ -221,6 +221,7 @@ void plight::ResetCharacters()
         auto& weapon_sprite = Engine::Registry().get<Sprite>(character.character.weaponSprite);
         weapon_sprite.position.x = character.transform.position.x + x_weapon;
         weapon_sprite.position.y = character.transform.position.y - 3.f + y_weapon;
+        weapon_sprite.position.z = character.transform.position.z - 5.f;
         weapon_sprite.rotation = (character.crosshair.angle * 180.) / M_PI + 45;
         
         
