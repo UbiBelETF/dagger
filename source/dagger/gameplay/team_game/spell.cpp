@@ -44,7 +44,6 @@ void ancient_defenders::SpellBehaviorSystem::Run()
 			for (auto target : range_.targets) {
 				Engine::Registry().get<Health>(target).currentHealth -= spell_.dmg * Engine::DeltaTime();
 			}
-				
 		});
 
 }
