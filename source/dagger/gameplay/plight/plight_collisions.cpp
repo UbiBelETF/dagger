@@ -5,6 +5,7 @@
 
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_projectiles.h"
+#include "gameplay/plight/plight_physics.h"
 
 using namespace dagger;
 using namespace plight;
@@ -37,11 +38,12 @@ void PlightCollisionsSystem::Run()
         auto& transform = view.get<Transform>(*it);
         
         for (auto entity : view2) {
-            if (entity == *it) {
+            if (entity == *it || (Engine::Registry().has<Projectile>(*it) && !Engine::Registry().has<PhysicsObject>(entity))) {
                 continue;
             }
             auto& col = view2.get<PlightCollision>(entity);
             auto& tr = view2.get<Transform>(entity);
+            
 
             // processing one collision per frame for each colider
             if (collision.IsCollidedSAT(transform.position, col, tr.position))
