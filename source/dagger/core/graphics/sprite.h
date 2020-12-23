@@ -31,6 +31,7 @@ namespace dagger
 		Vector2 scale{ 1.0f, 1.0f };					// 2
 		Float32 rotation{ 0.0f };						// 1
 		Float32 isUI{ 0.0f };							// 1
+		Float32 grayscale{ 0.0f };						// 1
 
 		inline void UseAsUI()
 		{

@@ -13,6 +13,7 @@ layout (location = 7) in vec4 ai_QuadColor;
 layout (location = 8) in vec2 ai_Scale;
 layout (location = 9) in float ai_Rotation;
 layout (location = 10) in float ai_IsUI;
+layout (location = 11) in float ai_Grayscale;
 
 uniform mat4 u_Projection;
 uniform mat4 u_Viewport;
@@ -22,6 +23,7 @@ out highp vec2 v_TextureCoord;
 out highp vec2 v_SubTexSize;
 out highp vec2 v_SubTexOrigin;
 out highp vec4 v_QuadColor;
+out highp float v_Grayscale;
 
 void main()
 {
@@ -32,8 +34,8 @@ void main()
 	v_TextureCoord = a_TextureCoord;
 	v_SubTexSize = ai_SubTexSize;
 	v_SubTexOrigin = ai_SubTexOrigin;
-
 	v_QuadColor = ai_QuadColor;
+	v_Grayscale = ai_Grayscale;
 
 	vec2 recenteredVertexPosition = a_VertexPosition.xy + ai_QuadPivot.xy;
 	recenteredVertexPosition.x *= ai_ImageDimensions.x * ai_Scale.x;

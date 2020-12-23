@@ -222,7 +222,7 @@ void WindowSystem::Run()
 
 	glViewport(0, 0, m_Config.windowWidth, m_Config.windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.39f, 0.58f, 0.92f, 1.0f);
+	glClearColor(0.39f, 0.51f, 0.36f, 1.0f);
 
 	Engine::Dispatcher().trigger<Render>();
 	Engine::Dispatcher().trigger<ToolRender>();

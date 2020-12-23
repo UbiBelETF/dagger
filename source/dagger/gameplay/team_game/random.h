@@ -9,10 +9,68 @@
 
 namespace Random
 {
+    template<typename T>
+    class Sequence
+    {
+        ::Sequence<T> choices;
+        UInt32 repeats = 2;
+
+    public:
+        Sequence(UInt32 repeats_, ::Sequence<T> choices_)
+            : choices{ choices }
+            , repeats{ repeats_ }
+        {
+            assert(choices.size() > 0);
+        }
+
+        Sequence(UInt32 repeats_, std::initializer_list<T>&& choices_)
+            : choices{ std::move(choices_) }
+            , repeats{ repeats_ }
+        {
+            assert(choices.size() > 0);
+        }
+
+        Sequence(::Sequence<T> choices_)
+            : choices{ choices }
+            , repeats{ 2 }
+        {
+            assert(choices.size() > 0);
+        }
+
+        Sequence(std::initializer_list<T>&& choices_)
+            : choices{ std::move(choices_) }
+            , repeats{ 2 }
+        {
+            assert(choices.size() > 0);
+        }
+
+        ~Sequence() = default;
+
+    public:
+        inline T Get()
+        {
+            static auto rng = std::default_random_engine{};
+            static ::Sequence<T> gen{};
+
+            if (gen.size() < repeats)
+            {
+                for (int i = 0; i < repeats; i++)
+                    for (auto element : choices) gen.push_back(element);
+
+                std::shuffle(std::begin(gen), std::end(gen), rng);
+            }
+
+            auto rnd = gen.back();
+            gen.pop_back();
+
+            return rnd;
+        }
+    };
+
     Float32 Uniform()
     {
         static auto rng = std::default_random_engine{};
-        static Sequence<Float32> gen{};
+        static ::Sequence<Float32> gen{};
 
         if (gen.size() < 3)
         {
