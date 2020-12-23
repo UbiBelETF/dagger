@@ -146,7 +146,7 @@ void ancient_defenders::MageBehaviorSystem::OnEndOfFrame()
 {
 }
 
-Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool offset_)
+Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool offset_, UInt32 spot_)
 {
     auto& reg = Engine::Registry();
     auto entity = reg.create();
@@ -163,7 +163,11 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
     
     mage.meleeDmg = 1.0f;
 
-    mage.chantingSpot = TowerPlacementInfo::selectedSpot; // Used for Chanting state
+    mage.chantingSpot = spot_; // Used for Chanting state
+    if (spot_ != TOWER_NONE)
+    {
+        TowerPlacementInfo::chantingMages[spot_]++;
+    }
 
     mage.currentAction = action_;
 
