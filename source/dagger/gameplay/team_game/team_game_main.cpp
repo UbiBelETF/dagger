@@ -13,6 +13,7 @@
 #include "core/graphics/animation.h"
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
+#include "core/graphics/text.h"
 #include "core/game/transforms.h"
 
 #include "gameplay/common/simple_collisions.h"
@@ -62,6 +63,71 @@ void ancient_defenders::SetupWorld(Engine &engine_)
 
         auto& transform = reg.emplace<Transform>(entity);
         transform.position = { 0, 0, 100 };
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "ancient_defenders:icons:spells");
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { 0, 0, 0 };
+
+        Engine::GetDefaultResource<TowerMenuState>()->towerMenuEntity = entity;
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "ancient_defenders:icons:build");
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { 10000, 10000, 10000 };
+
+        Engine::GetDefaultResource<TowerMenuState>()->buildEntity = entity;
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "ancient_defenders:BLOOD");
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { 10000, 10000, 10000 };
+
+        Engine::GetDefaultResource<TowerMenuState>()->buildImageEntity = entity;
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "ancient_defenders:icons:pointer");
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { 10000, 10000, 10000 };
+
+        Engine::GetDefaultResource<TowerMenuState>()->towerMenuChoiceEntity = entity;
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        auto& text = reg.emplace<Text>(entity);
+
+        text.alignment = TextAlignment::CENTER;
+        text.Set("pixel-font", "1");
+        Engine::GetDefaultResource<TowerMenuState>()->buildTimeTextEntity = entity;
+    }
+
+    {
+        auto entity = reg.create();
+        auto& sprite = reg.emplace<Sprite>(entity);
+        AssignSprite(sprite, "ancient_defenders:selector");
+
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position = { 10000, 10000, 10000 };
+
+        Engine::GetDefaultResource<TowerMenuState>()->towerSelectionEntity = entity;
     }
 }
 

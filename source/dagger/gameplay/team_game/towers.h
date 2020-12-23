@@ -1,31 +1,49 @@
 #pragma once
 
-#include "mage.h"
-
 #include "core/core.h"
 #include "core/system.h"
 
+#include "mage.h"
+
 using namespace dagger;
 
-namespace ancient_defenders {
+#define TOWER_NONE 101
+#define TOWER_COUNT 6
+#define SPOT_COUNT  8
 
-    enum class SelectMode {
+namespace ancient_defenders {
+    struct TowerMenuState
+    {
+        Entity towerMenuEntity;
+        Entity towerMenuChoiceEntity;
+        Entity towerSelectionEntity;
+        Entity buildEntity;
+        Entity buildImageEntity;
+        Entity buildTimeTextEntity;
+    };
+    
+    enum class SelectMode 
+    {
         Spot = 1,
         Tower = 2,
     };
 
-    struct TowerPlacementInfo {
+    struct TowerPlacementInfo 
+    {
         static UInt32 selectedSpot;
         static String selectedTower;
 
         static SelectMode selectMode;
 
         static Sequence<Vector2> spotCoordinates;
-        static Sequence<Bool> availableSpot;
-        static Sequence<String> towerNames;
+        static StaticArray<Bool, SPOT_COUNT> availableSpot;
+        static StaticArray<UInt32, SPOT_COUNT> chantingMages;
+        static StaticArray<String, SPOT_COUNT> spotTowerNames;
+        static StaticArray<String, TOWER_COUNT> towerNames;
     };
 
-    struct TowerStats {
+    struct TowerStats 
+    {
         UInt32 address = TowerPlacementInfo::selectedSpot;
 
         Bool constructed = false;
@@ -37,7 +55,8 @@ namespace ancient_defenders {
     };
 
 
-    struct Tower {
+    struct Tower 
+    {
         Entity entity;
 
         static Entity Create(String type_);
