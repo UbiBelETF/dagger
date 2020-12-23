@@ -15,7 +15,7 @@ void PhysicsSystem::Run()
 	{
 		auto& movableBody = characters.get<MovableBody>(character);
 		auto& movablePos = characters.get<Transform>(character);
-
+		
 		SInt32 x = ((SInt32) movablePos.position.x + 8) / 16;
 		SInt32 y = ((SInt32) movablePos.position.y - 8) / 16;
 
