@@ -33,7 +33,7 @@ void team_game::CollisionSystem::Run()
                     Vector3 temp_t = { 0,0,0 };
                     temp_t.x = t.position.x + physics.velocity.x * Engine::DeltaTime();
                     temp_t.y = t.position.y + physics.velocity.y * Engine::DeltaTime();
-                    temp_t.z = 1;
+                    temp_t.z = 0;
                     SimpleCollision& collision = viewCollisions.get<SimpleCollision>(entity2);
                     Transform& transform = viewCollisions.get<Transform>(entity2);
                     Physics& phy_ = viewCollisions.get<Physics>(entity2);
@@ -74,12 +74,13 @@ void team_game::CollisionSystem::Run()
                     }*/
                     if (col.IsCollided(temp_t, collision, transform.position) )
                     {
-
+                        UInt32 cnt = 0;
                         Vector2 collisionSides = col.GetCollisionSides(temp_t, collision, transform.position);
+                        Float32 dt = Engine::DeltaTime();
                         do
                         {
+                             collisionSides = col.GetCollisionSides(temp_t, collision, transform.position);
                             // get back for 1 frame 
-                            Float32 dt = Engine::DeltaTime();
                             if (std::abs(collisionSides.x) > 0)
                             {
                                 if (phy_.nonStatic) {
@@ -88,19 +89,45 @@ void team_game::CollisionSystem::Run()
                                     if (physics.velocity.x < 0 && phy_.velocity.x < 0 && collisionSides.x < 0) break;
                                     else temp_t.x -= physics.velocity.x * dt;
                                 }
-                                else {
-                                    temp_t.x -= (physics.velocity.x * dt);
+                                else
+                                {
+                                    if (collisionSides.x == 1)
+                                    {
+                                        cnt++;
+                                        if (physics.velocity.x > 0)
+                                         temp_t.x -= physics.velocity.x * dt; 
+                                        else temp_t.y -= physics.velocity.y * dt;
+                                    }
+                                    else
+                                    {
+                                        if (physics.velocity.x < 0) temp_t.x -= physics.velocity.x * dt;
+                                        else temp_t.y -= physics.velocity.y * dt;
+                                    }
                                 }
                             }
-                            else if (collisionSides.y != 0 )
+                            else 
                             {
-                                if (phy_.nonStatic && physics.velocity.y == GetGravity()*dt) break ;
-                                if (physics.velocity.x != 0 && physics.velocity.y != GetGravity() * dt) {
-                                    temp_t.x -= physics.velocity.x * dt; physics.velocity.x = 0;
+                                if (phy_.nonStatic) {
+                                    if (physics.velocity.x == 0)break;
+                                    if (physics.velocity.x > 0 && phy_.velocity.x > 0 && collisionSides.x > 0) break;
+                                    if (physics.velocity.x < 0 && phy_.velocity.x < 0 && collisionSides.x < 0) break;
+                                    else temp_t.x -= physics.velocity.x * dt;
                                 }
-                                else
-                                    temp_t.y -= physics.velocity.y * dt;
-
+                                else {
+                                    if (collisionSides.y == 1)
+                                    {
+                                        if (physics.velocity.y > 0) temp_t.y -= physics.velocity.y * dt;
+                                        else temp_t.x -= physics.velocity.x * dt;
+                                    }
+                                    else
+                                    {
+                                        if (physics.velocity.y < 0) temp_t.y -= physics.velocity.y * dt;
+                                        else temp_t.x -= physics.velocity.x * dt;
+                                        auto& b = Engine::Registry().get<BrawlerCharacter>(entity);
+                                        b.doubleJump = false;
+                                        b.jump = false;
+                                    }
+                                }
                             }
 
                         } while (col.IsCollided(temp_t, collision, transform.position));
@@ -113,6 +140,8 @@ void team_game::CollisionSystem::Run()
                         {
                             physics.velocity.y = (temp_t.y - t.position.y) / Engine::DeltaTime();
                         }
+                        
+                        
 
                     }
                 }

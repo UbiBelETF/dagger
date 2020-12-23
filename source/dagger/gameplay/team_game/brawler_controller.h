@@ -17,11 +17,13 @@ namespace team_game
 		Float32 attackSize = 50;
 		UInt32 healthHearts = 3;
 		Bool doubleJump = false;
+
 		Bool hittedEnemy = false;
 		Bool dead = false;
 		UInt32 hitSize = 10;
 		Float32 gotHit = 0.f;
 		 
+		Bool jump = false;
 	};
 
 	class BrawlerControllerSystem : public System
