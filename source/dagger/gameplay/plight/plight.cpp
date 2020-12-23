@@ -58,6 +58,7 @@ struct PlightCharacter
 
         auto& character = reg.get_or_emplace<PlightCharacterController>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
+        auto& colInit = reg.get_or_emplace<PlightCollisionInitiator>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
         physics.is_static = false;

@@ -31,6 +31,9 @@ namespace plight {
 
         Vector3 GetCollisionCenter(const Vector3& pos_, const PlightCollision& other_, const Vector3& posOther_);
     };
+    struct PlightCollisionInitiator{
+        bool active = true;
+    };
 
     class PlightCollisionsSystem : public System
     {

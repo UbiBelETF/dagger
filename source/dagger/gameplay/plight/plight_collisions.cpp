@@ -3,53 +3,57 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
+#include "gameplay/plight/plight_controller.h"
+#include "gameplay/plight/plight_projectiles.h"
+
 using namespace dagger;
 using namespace plight;
 
 void PlightCollisionsSystem::Run()
 {
-    auto view = Engine::Registry().view<PlightCollision, Transform>();
-    auto it = view.begin();
+    auto viewClear = Engine::Registry().view<PlightCollision, Transform>();
+    auto itClear = viewClear.begin();
 
-    while (it != view.end()) {
-        auto& collision = view.get<PlightCollision>(*it);
+    while (itClear != viewClear.end())
+    {
+        auto& collision = viewClear.get<PlightCollision>(*itClear);
         collision.colidedWith.clear();
         collision.colided = false;
         if (collision.last_pos.position.x == -999) {
-            auto& transform = view.get<Transform>(*it);
+            auto& transform = viewClear.get<Transform>(*itClear);
             collision.last_pos = transform.position;
         }
-        it++;
+        itClear++;
     }
-    it = view.begin();
 
+    auto view = Engine::Registry().view<PlightCollision, Transform, PlightCollisionInitiator>();
+    auto it = view.begin();
+
+    auto view2 = Engine::Registry().view<PlightCollision, Transform>();
 
     while (it != view.end())
     {
         auto& collision = view.get<PlightCollision>(*it);
         auto& transform = view.get<Transform>(*it);
-
-        auto it2 = it;
-        it2++;
-        while (it2 != view.end())
-        {
-            auto& col = view.get<PlightCollision>(*it2);
-            auto& tr = view.get<Transform>(*it2);
+        
+        for (auto entity : view2) {
+            if (entity == *it) {
+                continue;
+            }
+            auto& col = view2.get<PlightCollision>(entity);
+            auto& tr = view2.get<Transform>(entity);
 
             // processing one collision per frame for each colider
             if (collision.IsCollidedSAT(transform.position, col, tr.position))
             {
                 collision.colided = true;
-                collision.colidedWith.push_back(*it2);
+                collision.colidedWith.push_back(entity);
 
                 col.colided = true;
                 col.colidedWith.push_back(*it);
             }
-            it2++;
         }
-
         collision.last_pos = transform;
-
         it++;
     }
 }
