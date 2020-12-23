@@ -9,11 +9,11 @@
 // ----------------------------------------------------------
 // shortcuts
 #include "gameplay/team_game/movement.h"
+#include "core/game/transforms.h"
+#include "gameplay/team_game/detection.h"
+#include "gameplay/team_game/character_controller.h"
 
 #include <glm/gtc/epsilon.hpp>
-#include <core\game\transforms.h>
-#include <gameplay\team_game\detection.h>
-#include <gameplay\team_game\character_controller.h>
 
 using namespace team_game;
 
@@ -130,71 +130,27 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 	auto& heroDetection = Engine::Registry().get<Detection>(det.who);
 	auto& hero = Engine::Registry().get<CharacterController>(det.who);
 
-	if (ctrl.shape != hero.shape) {
-
-		Vector2 detectionSides = det.GetDetectionSides(t.position, heroDetection, heroTransform.position);
-		Vector3 lastSeen;
-		Float32 dt = Engine::DeltaTime();
-
-
-		int counter = 0;
-
-		lastSeen = det.where;
-	
-		do
-		{
-			/*if (detectionSides.x > 0)
-			{
-				t.position.x -= ((ctrl.speed - 2) * dt);
-			}
-			if (detectionSides.x < 0)
-			{
-				t.position.x += ((ctrl.speed - 2) * dt);
-			}
-			if (detectionSides.y > 0);
-			{
-				t.position.y -= ((ctrl.speed - 2) * dt);
-			}
-			if (detectionSides.y < 0)
-			{
-				t.position.y += ((ctrl.speed - 2) * dt);
-			}*/
-			lastSeen = det.where;
-			if (det.where.x > t.position.x) t.position.x += (ctrl.speed * dt);
-			if (det.where.x < t.position.x) t.position.x -= (ctrl.speed * dt);
-			if (det.where.y > t.position.y) t.position.y += (ctrl.speed * dt);
-			if (det.where.y < t.position.y) t.position.y -= (ctrl.speed * dt);
-			//counter++;
-			//Logger::critical("infinite loop");
-		} while (!(glm::distance(glm::abs(det.where), glm::abs(t.position)) >= 0 && glm::distance(glm::abs(det.where), glm::abs(t.position)) < 0.5));
-		//while (det.IsDetected(heroTransform.position, det, t.position));
-
-		//if (hero.shape == ctrl.shape) GoTo(EEnemyState::Patrolling, state_);
-
-
-		/*do
-		{
-			if (lastSeen.x > t.position.x) t.position.x += ((ctrl.speed - 2) * dt);
-			if (lastSeen.x < t.position.x) t.position.x -= ((ctrl.speed - 2) * dt);
-			if (lastSeen.y > t.position.y) t.position.y += ((ctrl.speed - 2) * dt);
-			if (lastSeen.y < t.position.y) t.position.y -= ((ctrl.speed - 2) * dt);
-
-			//std::cout << counter << std::endl
-			//counter++;
-			//	Logger::critical("infinite loop");
-		} while (!(glm::distance(glm::abs(det.where), glm::abs(t.position)) >= 0 && glm::distance(glm::abs(det.where), glm::abs(t.position)) < 1));
-
-		det.detected = false;
-
-
-		GoTo(EEnemyState::Idle_, state_);
-
-		//for (int i = 0; i < 10000; i++);
-		//GoTo(EEnemyState::Patrolling, state_);*/
+	if (!det.detected || !Engine::Registry().has<CharacterController>(det.who)) {
+		ctrl.lastState = EEnemyState::Chasing;
+		GoTo(ctrl.lastState, state_);
+		// For now, return to this state
 	}
-	if (ctrl.lastState == EEnemyState::Idle_) { ctrl.lastState = EEnemyState::Chasing; GoTo(EEnemyState::Idle_, state_); }
-	else { ctrl.lastState = EEnemyState::Chasing; GoTo(EEnemyState::Patrolling, state_); }
-	
+
+	if (ctrl.shape != hero.shape)
+	{
+		Vector2 direction = { heroTransform.position.x - t.position.x, heroTransform.position.y - t.position.y };
+
+		if (direction.x > 0.0f)
+		{
+			sprite.scale.x = 1;
+		}
+		else if (direction.x < 0.0f)
+		{
+			sprite.scale.x = -1;
+		}
+
+		body.movement = glm::normalize(direction) * ctrl.speed * Engine::DeltaTime();
+	}
 }
 
 DEFAULT_EXIT(EnemyFSM, Chasing);

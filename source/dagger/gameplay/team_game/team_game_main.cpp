@@ -25,8 +25,7 @@
 #include "gameplay/team_game/physics.h"
 #include "gameplay/team_game/follow.h""
 #include "gameplay/team_game/remote_animation.h"
-#include <gameplay\team_game\detection.h>
-#include <gameplay\team_game\chasing.h>
+#include <gameplay/team_game/detection.h>
 
 using namespace dagger;
 using namespace team_game;
