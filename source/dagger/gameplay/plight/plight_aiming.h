@@ -10,7 +10,7 @@ namespace plight {
     {
         Entity crosshairSprite;
         Float32 angle { 0.f };
-        Float32 playerDistance{ 20.f };
+        Float32 playerDistance{ 30.f };
 
         Float32 rotationSpeed{ 3.5f };
 

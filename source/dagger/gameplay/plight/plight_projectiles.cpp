@@ -36,11 +36,14 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
     auto& sprite = reg.emplace<Sprite>(entity);
     sprite.rotation = (angle_ * 180.) / M_PI - 45;
     AssignSprite(sprite, settings_.pSpriteName);
+    sprite.position = pos_;
 
     auto& transform = reg.emplace<Transform>(entity);
     transform.position = pos_;
 
+
     reg.emplace<PlightCollision>(entity);
+	reg.emplace<PlightCollisionInitiator>(entity);
 
     auto& projectile = reg.emplace<Projectile>(entity);
 
@@ -91,6 +94,9 @@ void ProjectileSystem::Run()
 		Engine::Registry().view<Projectile, Transform, Sprite>().each([&](Projectile& projectile_, Transform& transform_, Sprite& sprite_)
 		{
 			projectile_.timeOfLiving -= Engine::DeltaTime();
+			if (projectile_.timeOfLiving <= 0) {
+				projectile_.destroy = true;
+			}
 			Float32 dx = projectile_.projectileSpeed * cos(projectile_.angle) * Engine::DeltaTime();
 			Float32 dy = projectile_.projectileSpeed * sin(projectile_.angle) * Engine::DeltaTime();
 

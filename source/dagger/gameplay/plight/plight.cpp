@@ -58,6 +58,7 @@ struct PlightCharacter
 
         auto& character = reg.get_or_emplace<PlightCharacterController>(entity_);
         auto& col = reg.get_or_emplace<PlightCollision>(entity_);
+        auto& colInit = reg.get_or_emplace<PlightCollisionInitiator>(entity_);
         auto& transform = reg.get_or_emplace<Transform>(entity_);
         auto& physics = reg.get_or_emplace<plight::PhysicsObject>(entity_);
         physics.is_static = false;
@@ -103,7 +104,6 @@ struct PlightCharacter
 
         chr.crosshair.crosshairSprite = reg.create();
         chr.crosshair.angle = 0.f;
-        chr.crosshair.playerDistance = 20.f;
         auto& crosshairSprite = reg.emplace<Sprite>(chr.crosshair.crosshairSprite);
         AssignSprite(crosshairSprite, "Plight:crosshair:crosshair1");
         crosshairSprite.position.x = chr.sprite.position.x + chr.crosshair.playerDistance;
@@ -113,7 +113,7 @@ struct PlightCharacter
         ProjectileSpawnerSettings projectile_settings;
         projectile_settings.projectileDamage = 5.f;
         projectile_settings.projectileSpeed = 175.f;
-        projectile_settings.pSpriteName = "Plight:projectiles:Arrow_1";
+        projectile_settings.pSpriteName = "EmptyWhitePixel";
 
         ProjectileSystem::SetupProjectileSystem(entity, projectile_settings);
 
@@ -122,6 +122,15 @@ struct PlightCharacter
         particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.35f, -0.30f }, { 0.35f, 0.f },
             { 1.f,0.f,0.f,1 }, { 1.f,0.f,0.f,1 }, "EmptyWhitePixel", false, .5f,0.5f);
         PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
+
+        chr.character.weaponSprite = reg.create();
+        auto& weapon_sprite = reg.emplace<Sprite>(chr.character.weaponSprite);
+        AssignSprite(weapon_sprite, "EmptyWhitePixel");
+        weapon_sprite.scale = chr.sprite.scale;
+        weapon_sprite.position.x = chr.sprite.position.x + chr.character.weaponOffset * weapon_sprite.scale.x;
+        weapon_sprite.position.y = chr.sprite.position.y - 3.f;
+        weapon_sprite.position.z = chr.sprite.position.z;
+        weapon_sprite.rotation = 45;
 
         return chr;
     }
@@ -204,6 +213,14 @@ void plight::ResetCharacters()
         character.character.running = false;
         character.character.resting = false;
         character.character.dead = false;
+
+        Float32 x_weapon = character.character.weaponOffset * cos(character.crosshair.angle);
+        Float32 y_weapon = character.character.weaponOffset * sin(character.crosshair.angle);
+
+        auto& weapon_sprite = Engine::Registry().get<Sprite>(character.character.weaponSprite);
+        weapon_sprite.position.x = character.transform.position.x + x_weapon;
+        weapon_sprite.position.y = character.transform.position.y - 3.f + y_weapon;
+        weapon_sprite.rotation = (character.crosshair.angle * 180.) / M_PI + 45;
         
         
     }
@@ -355,6 +372,18 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
     mainChar.crosshair.startAngle = 0.f;
     mainChar.character.playerNumber = "Player 1";
+    auto& weapon_sprite1 = Engine::Registry().get<Sprite>(mainChar.character.weaponSprite);
+    AssignSprite(weapon_sprite1, "Plight:weapons:Bow_13");
+    auto& projectile_spawner1 = Engine::Registry().get<ProjectileSpawner>(mainChar.entity);
+    projectile_spawner1.settings.pSpriteName = "Plight:projectiles:Arrow_2";
+
+
+    Float32 x_weapon1 = mainChar.character.weaponOffset * cos(mainChar.crosshair.angle);
+    Float32 y_weapon1 = mainChar.character.weaponOffset * sin(mainChar.crosshair.angle);
+
+    weapon_sprite1.position.x = mainChar.sprite.position.x + x_weapon1;
+    weapon_sprite1.position.y = mainChar.sprite.position.y - 3.f + y_weapon1;
+    weapon_sprite1.rotation = (mainChar.crosshair.angle * 180.) / M_PI + 45;
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -409,6 +438,17 @@ void plight::SetupWorld_AimingSystem(Engine& engine_)
     auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
     sndChar.character.playerNumber = "Player 2";
+    auto& weapon_sprite2 = Engine::Registry().get<Sprite>(sndChar.character.weaponSprite);
+    AssignSprite(weapon_sprite2, "Plight:weapons:Crossbow_6");
+    auto& projectile_spawner2 = Engine::Registry().get<ProjectileSpawner>(sndChar.entity);
+    projectile_spawner2.settings.pSpriteName = "Plight:projectiles:Arrow_3";
+
+    Float32 x_weapon2 = sndChar.character.weaponOffset * cos(sndChar.crosshair.angle);
+    Float32 y_weapon2 = sndChar.character.weaponOffset * sin(sndChar.crosshair.angle);
+
+    weapon_sprite2.position.x = sndChar.sprite.position.x + x_weapon2;
+    weapon_sprite2.position.y = sndChar.sprite.position.y - 3.f + y_weapon2;
+    weapon_sprite2.rotation = (sndChar.crosshair.angle * 180.) / M_PI + 45;
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
