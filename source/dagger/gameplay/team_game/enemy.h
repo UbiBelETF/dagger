@@ -7,7 +7,7 @@ using namespace dagger;
 
 namespace lab
 {
-	enum enemyType { null, follower, vertical, horizontal };
+	enum enemyType { null, follower, vertical, horizontal, boss1, boss2 };
 
 	struct Skeleton {
 		enemyType type;
@@ -20,7 +20,10 @@ namespace lab
 		int maxMeleeCooldown = 300;
 		Float32 meleeDamage = 0.5f;
 		int health = 100;
+		int bossHealth = 250;
 		Float32 deathTimer = 125;
+		int bossCooldown = 60;
+		int bossMaxCooldown = 60;
 	};
 
 	struct Slime {

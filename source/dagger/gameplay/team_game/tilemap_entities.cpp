@@ -33,15 +33,15 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         if(includeCollision_)
         {
             auto& col=reg_.emplace<SimpleCollision>(entity);
-            if (enemy_ < 4 && enemy_ > 0)
+            if (enemy_ <= 5 && enemy_ > 0)
             {
-                col.size = { 18, 18 };
+                col.size = { 17, 18 };
                 col.pivot.y += 0.35f;
                 col.pivot.x += 0.1;
             }
-            else if (enemy_ == 4)
+            else if (enemy_ == 6)
             {
-                col.size = { 20, 20 };
+                col.size = { 20, 15 };
                 col.pivot.y -= 0.1;
             }
             else
@@ -66,7 +66,7 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
         }
         if(enemy_)
         {
-            if (enemy_ < 4)
+            if (enemy_ <= 5)
             {
                 auto& skeleton = reg_.emplace<Skeleton>(entity);
                 switch (enemy_)
@@ -74,6 +74,8 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
                 case 1: skeleton.type = horizontal; break;
                 case 2: skeleton.type = vertical; break;
                 case 3: skeleton.type = follower; break;
+                case 4: skeleton.type = boss1; break;
+                case 5: skeleton.type = boss2; break;
                 }
             }
             else

@@ -28,9 +28,10 @@ void lab::CreateBullet(Vector2 position, Vector2 target, Unit owner, String spri
 
 	switch (owner)
 	{
-	case player: bullet.damage = 15; break;
+	case player: bullet.damage = 20; break;
 	case skeleton: bullet.damage = 5; break;
 	case slime: bullet.damage = 15; break;
+	case Boss: bullet.damage = 10; break;
 	}
 
 	Vector2 directions = { 1, 1 };
@@ -55,7 +56,10 @@ void lab::CreateBullet(Vector2 position, Vector2 target, Unit owner, String spri
 
 	auto& sprite = reg.emplace<Sprite>(entity);
 	AssignSprite(sprite, spritename);
-	sprite.size = { 30.f, 30.f };
+	if (bullet.ownership == Boss)
+		sprite.size = { 90.f, 90.f };
+	else
+		sprite.size = { 30.f, 30.f };
 
 	auto& transform = reg.emplace<Transform>(entity);
 	Float32 distance = sqrt((15 * 15) / (1 + ratio * ratio));
@@ -64,8 +68,8 @@ void lab::CreateBullet(Vector2 position, Vector2 target, Unit owner, String spri
 	transform.position.z = 0.0f;
 
 	auto& collision = reg.emplace<SimpleCollision>(entity);
-	collision.size.x = 1;
-	collision.size.y = 1;
+	collision.size.x = 6;
+	collision.size.y = 6;
 }
 
 void lab::ShootingSystem::Run()
@@ -86,9 +90,12 @@ void lab::ShootingSystem::Run()
 			auto& reg = Engine::Instance().Registry();
 			if (!reg.has<Bullet>(col.colidedWith) && !reg.has<Heart>(col.colidedWith))
 			{
-				Engine::Registry().remove_all(entity);
+				bullet.destroy = true;
 			}
 		}
+
+		if (bullet.destroy)
+			Engine::Registry().remove_all(entity);
 	}
 
 	auto gunView = Engine::Registry().view<Transform, Sprite, Gun>();

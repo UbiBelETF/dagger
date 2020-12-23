@@ -164,7 +164,9 @@ struct Player
         chr.currentLvl.legend['H'] = CreateObjectFunction("Skeleton",20,true,-1,100.0f,"skeleton:run",false,1);//enemy horizontal
         chr.currentLvl.legend['V'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run",false, 2);//enemy vertical
         chr.currentLvl.legend['L'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run",false, 3);//enemy follow
-        chr.currentLvl.legend['M'] = CreateObjectFunction("Slime", 20, true, -1, 100.0f, "slime:run", false, 4);//slime
+        chr.currentLvl.legend['b'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run", false, 4);//boss1
+        chr.currentLvl.legend['v'] = CreateObjectFunction("Skeleton", 20, true, -1, 100.0f, "skeleton:run", false, 5);//boss1
+        chr.currentLvl.legend['M'] = CreateObjectFunction("Slime", 20, true, -1, 100.0f, "slime:run", false, 6);//slime
 
         //collectable
         chr.currentLvl.legend['h'] = CreateObjectFunction("Heart", 20, true, -1, 100.0f, "", false, 0);//heart

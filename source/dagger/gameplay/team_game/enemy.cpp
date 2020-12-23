@@ -36,7 +36,7 @@ void lab::EnemySystem::Run()
 
 		auto& reg = Engine::Instance().Registry();
 
-		if (skeleton.health <= 0)
+		if ((skeleton.type != boss1 && skeleton.type != boss2 && skeleton.health <= 0) || ((skeleton.type == boss1 || skeleton.type == boss2) && skeleton.bossHealth <= 0))
 		{
 			AnimatorPlay(animator, "skeleton:death");
 			skeleton.deathTimer--;
@@ -58,7 +58,7 @@ void lab::EnemySystem::Run()
 					t.position.x += skeleton.speed * Engine::DeltaTime();
 			}
 
-			if (skeleton.type == vertical)
+			else if (skeleton.type == vertical)
 			{
 				if (col.colided && reg.has<Wall>(col.colidedWith))
 				{
@@ -69,7 +69,7 @@ void lab::EnemySystem::Run()
 					t.position.y -= skeleton.speed * Engine::DeltaTime();
 			}
 
-			if (skeleton.type == follower)
+			else if (skeleton.type == follower)
 			{
 				if (col.colided && !Engine::Registry().has<Bullet>(col.colidedWith) && !Engine::Registry().has<Heart>(col.colidedWith))
 				{
@@ -121,6 +121,33 @@ void lab::EnemySystem::Run()
 				}
 			}
 
+			else if (skeleton.type == boss1)
+			{
+				if (col.colided && reg.has<Wall>(col.colidedWith))
+				{
+					col.colided = false;
+					skeleton.speed *= -1;
+					sprite.scale.x *= -1;
+				}
+				if (skeleton.health > 0)
+					t.position.x += 4 * skeleton.speed * Engine::DeltaTime();
+			}
+
+			else if (skeleton.type == boss2)
+			{
+				if (col.colided && reg.has<Wall>(col.colidedWith))
+				{
+					col.colided = false;
+					skeleton.speed *= -1;
+				}
+				if (skeleton.health > 0)
+					t.position.y -= 2 * skeleton.speed * Engine::DeltaTime();
+				if (t.position.x > playerPosition.x)
+					sprite.scale.x = -1;
+				else
+					sprite.scale.x = 1;
+			}
+
 			if (col.colided)
 			{
 				auto view2 = reg.view<Bullet, Sprite, Transform, SimpleCollision>();
@@ -129,8 +156,10 @@ void lab::EnemySystem::Run()
 					if (entity == col.colidedWith)
 					{
 						Bullet bullet = view2.get<Bullet>(entity);
-						if (bullet.ownership != Unit::skeleton)
+						if (bullet.ownership != Unit::skeleton && skeleton.type != boss1 && skeleton.type != boss2)
 							skeleton.health -= bullet.damage;
+						if (bullet.ownership == Unit::player && (skeleton.type == boss1 || skeleton.type == boss2))
+							skeleton.bossHealth -= bullet.damage;
 						col.colided = false;
 					}
 				}
@@ -138,8 +167,65 @@ void lab::EnemySystem::Run()
 
 			if (skeleton.cooldown <= 0)
 			{
-				if (skeleton.type != follower)
+				if (skeleton.type == horizontal || skeleton.type == vertical)
 					CreateBullet(t.position, playerPosition, Unit::skeleton, "Bullet");
+				else if (skeleton.type == boss1)
+				{
+					for (int i = 0; i < 10; i++)
+					{
+						switch (i)
+						{
+						case 0: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+						case 1: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+						case 2: CreateBullet(t.position, { -rand(), -rand() }, Unit::Boss, "Bullet"); break;
+						case 3: CreateBullet(t.position, { rand(), rand() }, Unit::Boss, "Bullet"); break;
+						case 4: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+						case 5: CreateBullet(t.position, { rand(), rand() }, Unit::Boss, "Bullet"); break;
+						case 6: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+						case 7: CreateBullet(t.position, { -rand(), -rand() }, Unit::Boss, "Bullet"); break;
+						case 8: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+						case 9: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+						}
+					}
+				}
+				else if (skeleton.type == boss2)
+				{
+					for (int i = 0; i < 10; i++)
+					{
+						if (t.position.x < 0)
+						{
+							switch (i)
+							{
+							case 0: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 1: CreateBullet(t.position, { rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 2: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 3: CreateBullet(t.position, { rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 4: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 5: CreateBullet(t.position, { rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 6: CreateBullet(t.position, { rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 7: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 8: CreateBullet(t.position, { rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 9: CreateBullet(t.position, { rand(), rand() }, Unit::Boss, "Bullet"); break;
+							}
+						}
+						else
+						{
+							switch (i)
+							{
+							case 0: CreateBullet(t.position, { -rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 1: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 2: CreateBullet(t.position, { -rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 3: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 4: CreateBullet(t.position, { -rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 5: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 6: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+							case 7: CreateBullet(t.position, { -rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 8: CreateBullet(t.position, { -rand(), -rand() }, Unit::Boss, "Bullet"); break;
+							case 9: CreateBullet(t.position, { -rand(), rand() }, Unit::Boss, "Bullet"); break;
+							}
+						}
+					}
+				}
 				skeleton.cooldown = skeleton.maxCooldown;
 			}
 			else
