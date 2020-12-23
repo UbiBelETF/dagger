@@ -130,10 +130,10 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 	auto& heroDetection = Engine::Registry().get<Detection>(det.who);
 	auto& hero = Engine::Registry().get<CharacterController>(det.who);
 
-	if (!det.detected || !Engine::Registry().has<CharacterController>(det.who)) {
+	if (!det.detected) {
+		EEnemyState currState = ctrl.lastState;
 		ctrl.lastState = EEnemyState::Chasing;
-		GoTo(ctrl.lastState, state_);
-		// For now, return to this state
+		GoTo(currState, state_);
 	}
 
 	if (ctrl.shape != hero.shape)
