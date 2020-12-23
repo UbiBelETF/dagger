@@ -8,6 +8,7 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
+#include "core/graphics/text.h"
 
 
 #include "gameplay/team_game/brawler_controller.h"
@@ -344,7 +345,7 @@ void CreateBackground()
         transform.position.y =-400;
         transform.position.z = 1;
     }
-
+    
 }
 
 void team_game::SetupWorld(Engine& engine_)
@@ -376,11 +377,37 @@ void team_game::SetupWorld_Demo(Engine& engine_)
         transform.position.y = -400;
         transform.position.z = 1;
     }
+    
     auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,100});
     auto boss = Boss::Create("Arrows", { 1,1,1 }, { 2630, 1100 });
     auto guide = Guide::Create( { 1,1,1 }, { 50,100 });
     auto bubble = Bubble::Create({ 1,1,1 }, { 50,100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);
+    {
+        auto deathsLogo = reg.create();
+        auto& sprite = reg.get_or_emplace<Sprite>(deathsLogo);
+        AssignSprite(sprite, "team_game:death_logo");
+        sprite.color = { 1, 1, 1, 1.0f };
+        sprite.scale = { 1, 1 };
+        sprite.position = { -375, 265, 0 };
+        sprite.UseAsUI();
+
+        auto ui = reg.create();
+        auto& text = reg.emplace<Text>(ui);
+        text.spacing = 0.6f;
+        text.Set("pixel-font", fmt::format("x {}", mainChar.character.deaths), { -300, 262,0 });
+        {
+            auto lives = reg.create();
+            auto& sprite = reg.get_or_emplace<Sprite>(lives);
+            auto& anim = reg.get_or_emplace<Animator>(lives);
+            AssignSprite(sprite, "spritesheets:team_game:lives:heart_idle");
+            AnimatorPlay(anim, "lives:heart_idle");
+            sprite.color = { 1, 1, 1, 1.0f };
+            sprite.scale = { 3, 3 };
+            sprite.position = { -385, 225, 0 };
+            sprite.UseAsUI();
+        }
+    }
 }
 void TeamGame::WorldSetup(Engine& engine_)
 {

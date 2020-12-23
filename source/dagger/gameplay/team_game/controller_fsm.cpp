@@ -179,7 +179,11 @@ void ControllerFSM::Hitted::Run(ControllerFSM::StateComponent& state_)
 
     if (char_.gotHit <= 0) {
         char_.gotHit = 0.f;
-        if (char_.healthHearts == 0) GoTo(ECharacterStates::Dead, state_);
+        if (char_.healthHearts == 0) { 
+            GoTo(ECharacterStates::Dead, state_);
+            char_.deaths++;
+
+        }
         else if (input_.Get("light")) GoTo(ECharacterStates::Attacking, state_);
         else if (input_.Get("run"))GoTo(ECharacterStates::Running, state_);
         else GoTo(ECharacterStates::Idle, state_);
