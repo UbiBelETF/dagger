@@ -504,6 +504,7 @@ void plight::SetupTilemaps()
     floorLegend[','] = &CreateBlackBackground;
     floorLegend['S'] = &CreateFloorSpikes;
     floorLegend['R'] = &CreateWallMid;
+    floorLegend['F'] = &CreateWallMidFront;
     floorLegend['C'] = &CreateRoof;
     floorLegend['P'] = &CreateWallColumn;
 
@@ -518,8 +519,10 @@ void plight::SetupTilemaps()
     wallLegend['|'] = &CreateWallSideMidLeft;
     wallLegend['}'] = &CreateSideWallMidRight;
     wallLegend['#'] = &CreateWallMid;
+    wallLegend['$'] = &CreateWallMidFront;
     wallLegend['L'] = &CreateWallSideFrontLeft;
     wallLegend['_'] = &CreateFrontWall;
+    wallLegend['='] = &CreateFrontWallFront;
     wallLegend['6'] = &CreateFrontWallColumn;
     wallLegend['-'] = &CreateWallCornerRight;
     wallLegend['R'] = &CreateWallSideFrontRight;
