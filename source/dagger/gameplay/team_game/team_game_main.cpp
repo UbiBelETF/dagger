@@ -211,13 +211,6 @@ void ancient_defenders::SetupEndScreen(Engine & engine_, Bool goodEnd_)
 {
     auto& reg = engine_.Registry();
 
-    /*{
-        auto entity = reg.create();
-        auto& sprite = reg.emplace<Sprite>(entity);
-        AssignSprite(sprite, "ancient_defenders:level1-ground");
-        
-        sprite.position = { 0, 0, 50 };
-    }*/
     {
         auto entity = reg.create();
         auto& sprite = reg.emplace<Sprite>(entity);

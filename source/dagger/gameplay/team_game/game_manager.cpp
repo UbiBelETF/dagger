@@ -118,7 +118,7 @@ void ancient_defenders::GameManagerSystem::OnEndOfFrame()
         
         auto itA = viewA.begin();
         while (itA != viewA.end()) {
-            AnimatorStop(reg.get<Animator>(*itA));
+            AnimatorStop(reg.get<Animator>(*itA)); // Freeze everything
             itA++;
         }
 
@@ -126,40 +126,6 @@ void ancient_defenders::GameManagerSystem::OnEndOfFrame()
         ancient_defenders::SetupEndScreen(Engine::Instance(), m_victory?true:false);
 
         m_victory = m_defeat = false;
-        /*
-        {
-            auto entity = reg.create();
-            auto& sprite = reg.emplace<Sprite>(entity);
-
-            auto& text = reg.emplace<Text>(entity);
-
-            text.alignment = TextAlignment::CENTER;
-            text.Set("pixel-font", "Ancient has been", { 0, 100, 10 });
-
-        }
-
-        {
-            auto entity = reg.create();
-            auto& sprite = reg.emplace<Sprite>(entity);
-
-            auto& text = reg.emplace<Text>(entity);
-
-            text.alignment = TextAlignment::CENTER;
-            text.Set("pixel-font", "destroyed", { 0, 50, 10 });
-
-        }
-
-
-        {
-            auto entity = reg.create();
-            auto& sprite = reg.emplace<Sprite>(entity);
-
-            auto& text = reg.emplace<Text>(entity);
-
-            text.alignment = TextAlignment::CENTER;
-            text.Set("pixel-font", "better luck next time", { 0, -100, 10 });
-
-        }*/
     }
 
 }
