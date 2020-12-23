@@ -54,8 +54,8 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
 
 	//Particle spawner for colliding with walls
 	PlightParticleSpawnerSettings particle_settings;
-	particle_settings.Setup(0.075f, { 6.f, 6.f }, { -0.5f, -0.40f }, { 0.50f, 0.15f },
-		{ 0.7f,0.7f,0.7f,1 }, { 0.7f,0.7f,0.7f,1 }, "EmptyWhitePixel", false, .5f, 0.3f);
+	particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.25f, -0.25f }, { 0.25f, 0.15f },
+		{ 1.f,1.f,1.f,1 }, { 1.f,1.f,1.f,1 }, "dust", 0.02f, 0.4f, 0.4f);
 	PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
 
 }

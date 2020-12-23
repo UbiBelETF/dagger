@@ -50,13 +50,10 @@ void PlightParticleSystem::CreateParticle(const PlightParticleSpawnerSettings& s
     particle.positionSpeed = {randSpeedVal.x, randSpeedVal.y, 0.f};
 
     particle.colorSpeed = {0.f,0.f,0.f,-0.005f};
-    if (settings_.includeScaleSpeed) {
-        Float32 randAddition = 0.1f * (1 - 2 * (rand() % 2));
-        particle.scaleSpeed = settings_.pSize * randAddition;
-    }
-    else {
-        particle.scaleSpeed = {0.f,0.f};
-    }
+    Float32 randAddition = settings_.pScaleSpeed * (1 - 2 * (rand() % 2));
+    particle.scaleSpeed = settings_.pSize * randAddition;
+    
+   
     particle.timeOfLiving = settings_.pTimeOfLiving;
     
 }

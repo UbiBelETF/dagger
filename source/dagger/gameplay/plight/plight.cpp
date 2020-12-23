@@ -119,8 +119,8 @@ struct PlightCharacter
 
         //Particle spawner for taking damage
         PlightParticleSpawnerSettings particle_settings;
-        particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.35f, -0.30f }, { 0.35f, 0.f },
-            { 1.f,0.f,0.f,1 }, { 1.f,0.f,0.f,1 }, "EmptyWhitePixel", false, .5f,0.5f);
+        particle_settings.Setup(0.05f, { 10.f, 10.f }, { -0.35f, -0.30f }, { 0.35f, 0.f },
+            { 1.f,0.f,0.f,1 }, { 1.f,0.f,0.f,1 }, "blood", 0.01f, .5f,0.5f);
         PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
 
         chr.character.weaponSprite = reg.create();
@@ -131,7 +131,15 @@ struct PlightCharacter
         weapon_sprite.position.y = chr.sprite.position.y - 3.f;
         weapon_sprite.position.z = chr.sprite.position.z - 5.f;
         weapon_sprite.rotation = 45;
-
+        
+        chr.character.dashingParticleSpawner = reg.create();
+        //Particle spawner for dashing 
+        PlightParticleSpawnerSettings particle_settings2;
+        auto& dashingTransform = reg.emplace<Transform>(chr.character.dashingParticleSpawner);
+        dashingTransform.position = chr.transform.position;
+        particle_settings2.Setup(0.025f, { 6.f, 6.f }, { -0.10f, -0.10f }, { 0.10f, 0.1f },
+            { 0.9f,0.9f,0.9f,1 }, { 0.9f,0.9f,0.9f,1 }, "smoke", 0.05f, .5f, 0.5f);
+        PlightParticleSystem::SetupParticleSystem(chr.character.dashingParticleSpawner, particle_settings2);
 
         return chr;
     }

@@ -43,6 +43,9 @@ namespace plight
 
 		Entity weaponSprite;
 		Float32 weaponOffset = 15.f;
+        
+		//Dashing particles
+		Entity dashingParticleSpawner;
 	};
 
 	class PlightControllerSystem

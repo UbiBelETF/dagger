@@ -13,6 +13,7 @@
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_particles.h"
 
 using namespace dagger;
 using namespace plight;
@@ -105,6 +106,8 @@ void PlightCharacterControllerFSM::Running::Enter(PlightCharacterControllerFSM::
 
     transform.position.x += dx;
     transform.position.y += dy;
+    auto& dashingTransform = Engine::Registry().get<Transform>(character.dashingParticleSpawner);
+    dashingTransform.position = transform.position;
 }
 
 // same as: DEFAULT_EXIT(CharacterControllerFSM, Running);
@@ -144,6 +147,9 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
 
         transform.position.x += dx;
         transform.position.y += dy;
+        
+        auto& dashingTransform = Engine::Registry().get<Transform>(character.dashingParticleSpawner);
+        dashingTransform.position = transform.position;
     }
 }
 
@@ -156,6 +162,9 @@ void PlightCharacterControllerFSM::Dashing::Enter(PlightCharacterControllerFSM::
     character.resting = false; 
     character.running = false;
 
+    auto& particle_spawner = Engine::Registry().get<PlightParticleSpawner>(character.dashingParticleSpawner);
+    particle_spawner.active = true;
+
 
 }
 
@@ -163,17 +172,21 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
 {
     auto&& [sprite, character, cstats, crosshair, transform] = Engine::Registry().get<Sprite,PlightCharacterController, CombatStats, PlightCrosshair, Transform>(state_.entity);
    
+    auto& particle_spawner = Engine::Registry().get<PlightParticleSpawner>(character.dashingParticleSpawner);
     if (character.dead) {
+        particle_spawner.active = false;
         GoTo(PlightCharacterStates::Idle, state_);
         return;
     }
 
     if (character.hit) {
+        particle_spawner.active = false;
         GoTo(PlightCharacterStates::Hit, state_);
     }
 
     if (!character.dashing || cstats.currentStamina < STAMINA_FOR_DASHING_FRAME)
     {
+        particle_spawner.active = false;
         GoTo(PlightCharacterStates::Idle, state_);
     }
     else {
@@ -182,12 +195,16 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
 
         transform.position.x += dx;
         transform.position.y += dy;
+
+        auto& dashingTransform = Engine::Registry().get<Transform>(character.dashingParticleSpawner);
+        dashingTransform.position = transform.position;
     }
 
     character.currentDashingTime += Engine::DeltaTime();
     if (character.currentDashingTime >= character.dashingTime) {
         character.dashing = false;
         character.currentDashingTime = 0.f;
+        particle_spawner.active = false;
         GoTo(PlightCharacterStates::Idle, state_);
     }
 }
