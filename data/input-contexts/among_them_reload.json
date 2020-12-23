@@ -1,9 +1,6 @@
 {
 	"context-name": "AmongThemReload",
 	"commands": [
-		{ "command-name": "reload", 
-		  "actions": [
-			{ "trigger": "KeyR", "value": 1 }
-		] }
+		{ "command-name": "reload", "trigger": "KeyR", "event": "Pressed" }
 	]
 }

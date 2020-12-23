@@ -17,6 +17,7 @@ void GameControllerSystem::Run()
 			{
 				Engine::Registry().clear();
 				SetupWorld(Engine::Instance());
+				Logger::info("RELOADING");
 			}
 		});
 }
