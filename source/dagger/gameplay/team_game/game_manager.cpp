@@ -195,6 +195,7 @@ void GameManagerSystem::OnEndOfFrame()
 {
     if (isGameOver)
     {
+        if (!messageDisplayed)
         {
             auto ui1 = Engine::Registry().create();
             auto& text1 = Engine::Registry().emplace<Text>(ui1);
@@ -204,14 +205,16 @@ void GameManagerSystem::OnEndOfFrame()
             auto ui2 = Engine::Registry().create();
             auto& text2 = Engine::Registry().emplace<Text>(ui2);
             text2.spacing = 0.6f;
-            text2.Set("pixel-font", fmt::format("Player {} wins!", winnerId+1), { 0.0, -30.0, 0.0 });
+            text2.Set("pixel-font", fmt::format("Player {} wins!", winnerId + 1), { 0.0, -30.0, 0.0 });
 
             auto ui3 = Engine::Registry().create();
             auto& text3 = Engine::Registry().emplace<Text>(ui3);
             text3.spacing = 0.6f;
             text3.Set("pixel-font", "Press Y to restart the game :)", { 0.0, -65.0, 0.0 });
-        }
 
+            messageDisplayed = true;
+        }
+        
         auto& playerView = Engine::Registry().view<PlayerCharacter>();
         for (auto& entity : playerView)
         {
@@ -232,6 +235,7 @@ void GameManagerSystem::OnEndOfFrame()
     {
         restarted = false;
         isGameOver = false;
+        messageDisplayed = false;
 
         Engine::Registry().clear();
         LoadNextLevel();

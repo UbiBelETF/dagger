@@ -20,6 +20,8 @@ namespace team_game
         inline static UInt8 currentLevel{ 0 };
         inline static Bool gameStarted{ true };
 
+        inline static Bool messageDisplayed{ false };
+
         void OnEndOfFrame();
     public:
         Bool restarted{ false };
