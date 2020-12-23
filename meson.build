@@ -44,6 +44,7 @@ sources = [
     'source/dagger/core/engine.cpp',
     'source/dagger/core/game.cpp',
     'source/dagger/gameplay/common/jiggle.cpp',
+    'source/dagger/gameplay/common/particles.cpp',
     'source/dagger/gameplay/common/simple_collisions.cpp',
     'source/dagger/gameplay/ping_pong/ping_pong_main.cpp',
     'source/dagger/gameplay/ping_pong/pingpong_ball.cpp',

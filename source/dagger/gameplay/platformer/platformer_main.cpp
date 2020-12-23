@@ -12,6 +12,8 @@
 #include "core/graphics/textures.h"
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
+#include "core/graphics/text.h"
+
 #include "tools/diagnostics.h"
 
 #include "gameplay/platformer/platformer_controller.h"
@@ -140,6 +142,7 @@ void CreateBackdrop()
         sprite.position = { 0, 30, 7 };
     }
 
+<<<<<<< HEAD
     /*Put white block*/ {
         auto entity = reg.create();
         auto& sprite = reg.get_or_emplace<Sprite>(entity);
@@ -156,6 +159,13 @@ void CreateBackdrop()
         transform.position = { 0.0f, -32.0f, 1 };
 
         auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
+=======
+    {
+        auto ui = reg.create();
+        auto& text = reg.emplace<Text>(ui);
+        text.spacing = 0.6f;
+        text.Set("pixel-font", "hello world");
+>>>>>>> main
     }
 }
 

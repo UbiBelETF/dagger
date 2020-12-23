@@ -271,7 +271,7 @@ Vector2 Camera::WindowToWorld(Vector2 windowCoord_)
 	auto pos = glm::unProject(Vector3{ windowCoord_ - config->viewOffset, 0 },
 		config->camera, config->projection, config->viewBounds);
 	cursorInWorld.x = pos.x;
-	cursorInWorld.y = pos.y;
+	cursorInWorld.y = -pos.y;
 	return cursorInWorld;
 }
 
@@ -285,6 +285,6 @@ Vector2 Camera::WorldToWindow(Vector2 worldCoord_)
 		config->camera, config->projection, config->viewBounds);
 
 	cursorInWindow.x = pos.x;
-	cursorInWindow.y = pos.y;
+	cursorInWindow.y = config->windowHeight - pos.y;
 	return cursorInWindow;
 }
