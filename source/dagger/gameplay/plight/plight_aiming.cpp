@@ -6,20 +6,23 @@
 #include "core/graphics/sprite.h"
 #include "core/input/inputs.h"
 
+#include "gameplay/plight/plight_controller.h"
+
 #include <cmath>
 #include <math.h>
 
 
 void plight::PlightAimingSystem::Run()
 {
+
 	auto viewLS1 = Engine::Registry().view<PlightIntro>();
 	auto it = viewLS1.begin();
 	auto& pin = viewLS1.get<PlightIntro>(*it);
 
 	if (pin.IsFinished()) {
 
-		Engine::Registry().view<InputReceiver, Sprite, PlightCrosshair>().each(
-			[](InputReceiver input_, Sprite& sprite_, PlightCrosshair& crosshair_)
+		Engine::Registry().view<InputReceiver, Sprite, PlightCrosshair,PlightCharacterController>().each(
+			[](InputReceiver input_, Sprite& sprite_, PlightCrosshair& crosshair_,PlightCharacterController& character_)
 		{
 
 			Float32 rotate = input_.Get("rotate");
@@ -50,7 +53,16 @@ void plight::PlightAimingSystem::Run()
             sprite.position.x = x + sprite_.position.x;
             sprite.position.y = y + sprite_.position.y;
 
-		});
+
+            Float32 x_weapon = character_.weaponOffset * cos(crosshair_.angle);
+            Float32 y_weapon = character_.weaponOffset * sin(crosshair_.angle);
+
+            auto& weapon_sprite = Engine::Registry().get<Sprite>(character_.weaponSprite);
+            weapon_sprite.position.x = sprite_.position.x + x_weapon;
+            weapon_sprite.position.y = sprite_.position.y - 3.f + y_weapon;
+            weapon_sprite.rotation = (crosshair_.angle * 180.) / M_PI + 45;
+
+		    });
 	}
 
 }

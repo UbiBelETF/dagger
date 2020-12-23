@@ -105,22 +105,6 @@ void PlightCharacterControllerFSM::Running::Enter(PlightCharacterControllerFSM::
 
     transform.position.x += dx;
     transform.position.y += dy;
-
-    auto& csprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
-
-    Float32 x = crosshair.playerDistance * cos(crosshair.angle);
-    Float32 y = crosshair.playerDistance * sin(crosshair.angle);
-
-
-    csprite.position.x = x + sprite.position.x;
-    csprite.position.y = y + sprite.position.y;
-
-    if (crosshair.angle > 0.5 * M_PI && crosshair.angle < 1.5 * M_PI) {
-        sprite.scale = { -1,1 };
-    }
-    else {
-        sprite.scale = { 1,1 };
-    }
 }
 
 // same as: DEFAULT_EXIT(CharacterControllerFSM, Running);
@@ -160,22 +144,6 @@ void PlightCharacterControllerFSM::Running::Run(PlightCharacterControllerFSM::St
 
         transform.position.x += dx;
         transform.position.y += dy;
-
-        auto& csprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
-
-        Float32 x = crosshair.playerDistance * cos(crosshair.angle);
-        Float32 y = crosshair.playerDistance * sin(crosshair.angle);
-
-
-        csprite.position.x = x + sprite.position.x;
-        csprite.position.y = y + sprite.position.y;
-
-        if (crosshair.angle > 0.5 * M_PI && crosshair.angle < 1.5 * M_PI) {
-            sprite.scale = { -1,1 };
-        }
-        else {
-            sprite.scale = { 1,1 };
-        }
     }
 }
 
@@ -214,22 +182,6 @@ void PlightCharacterControllerFSM::Dashing::Run(PlightCharacterControllerFSM::St
 
         transform.position.x += dx;
         transform.position.y += dy;
-
-        auto& csprite = Engine::Registry().get<Sprite>(crosshair.crosshairSprite);
-
-        Float32 x = crosshair.playerDistance * cos(crosshair.angle);
-        Float32 y = crosshair.playerDistance * sin(crosshair.angle);
-
-
-        csprite.position.x = x + sprite.position.x;
-        csprite.position.y = y + sprite.position.y;
-
-        if (crosshair.angle > 0.5 * M_PI && crosshair.angle < 1.5 * M_PI) {
-            sprite.scale = { -1,1 };
-        }
-        else {
-            sprite.scale = { 1,1 };
-        }
     }
 
     character.currentDashingTime += Engine::DeltaTime();
