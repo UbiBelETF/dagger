@@ -31,7 +31,7 @@ void lab::EnemySystem::Run()
 			txt.position = { 50, 0, 0 };
 			txt.spacing = 0.8f;
 			txt.alignment = { TextAlignment::CENTER };
-			txt.Set("pixel-font", "VICTORY!", { 30,30 });
+			txt.Set("pixel-font", " VICTORY!", { 30,30 });
 		}
 	}
 

@@ -86,12 +86,18 @@ void lab::ShootingSystem::Run()
 
 		if (col.colided)
 		{
-			col.colided = false;
-			auto& reg = Engine::Instance().Registry();
-			if (!reg.has<Bullet>(col.colidedWith) && !reg.has<Heart>(col.colidedWith))
+			if (Engine::Registry().valid(col.colidedWith))
 			{
-				bullet.destroy = true;
+
+				auto& reg = Engine::Instance().Registry();
+
+				if (!reg.has<Bullet>(col.colidedWith) && !reg.has<Heart>(col.colidedWith))
+				{
+					bullet.destroy = true;
+				}
 			}
+			
+			col.colided = false;
 		}
 
 		if (bullet.destroy)

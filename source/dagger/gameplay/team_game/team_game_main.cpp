@@ -152,11 +152,11 @@ struct Player
         
 
         chr.currentLvl.legend['Z'] = CreateObjectFunction("spritesheets:lab:wall_bottom_5_blank",30,false,-1,100.0f,"",true,0); //BlankWall
-        chr.currentLvl.legend['T'] = CreateObjectFunction("spritesheets:lab:tank_classic",20,true,-1,100.0f,"",false,0);//Tank
-        chr.currentLvl.legend['R'] = CreateObjectFunction("spritesheets:lab:tank_broken",20,true,-1,100.0f,"",false,0);//TankBroken
-        chr.currentLvl.legend['U'] = CreateObjectFunction("spritesheets:lab:tank_classic",15,true,-1,100.0f,"lab:tank",false,0);//TankBubbling
-        chr.currentLvl.legend['K'] = CreateObjectFunction("spritesheets:lab:acid_tenk",10,true,-1,100.0f,"",false,0); //Acid tank
-        chr.currentLvl.legend['Y'] = CreateObjectFunction("spritesheets:lab:acid_tenk_spill",15,true,-1,100.0f,"",false,0); //Acid tank spill
+        chr.currentLvl.legend['T'] = CreateObjectFunction("spritesheets:lab:tank_classic",5,true,-1,100.0f,"",false,0);//Tank
+        chr.currentLvl.legend['R'] = CreateObjectFunction("spritesheets:lab:tank_broken",10,true,-1,100.0f,"",false,0);//TankBroken
+        chr.currentLvl.legend['U'] = CreateObjectFunction("spritesheets:lab:tank_classic",5,true,-1,100.0f,"lab:tank",false,0);//TankBubbling
+        chr.currentLvl.legend['K'] = CreateObjectFunction("spritesheets:lab:acid_tenk",0,true,-1,100.0f,"",true,0); //Acid tank
+        chr.currentLvl.legend['Y'] = CreateObjectFunction("spritesheets:lab:acid_tenk_spill",5,true,-1,100.0f,"",true,0); //Acid tank spill
         chr.currentLvl.legend['S'] = CreateObjectFunction("spritesheets:lab:slime",25,false,-1,100.0f,"",true,0); //Slime
         chr.currentLvl.legend['G'] = CreateObjectFunction("lab:puddle:lab anims_green puddle_0",25,false,-1,100.0f,"",true,0); //Slime
 
@@ -202,7 +202,7 @@ void lab::SetupWorld(Engine &engine_)
     auto& reg = engine_.Registry();
        Vector2 scale(1, 1);    
 
-     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, 0 });
+     auto mainChar = Player::Create("ASDW", { 1, 1, 1 }, { -100, -60 });
      //Engine::Registry().destroy(mainChar.entity);
 
 }

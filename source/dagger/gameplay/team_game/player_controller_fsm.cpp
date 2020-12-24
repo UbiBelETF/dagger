@@ -83,7 +83,8 @@ void PlayerControllerSystem::Run()
                 Engine::Registry().remove<Sprite>(entity);
                 Engine::Registry().remove<Transform>(entity);
                 tex.alignment={ TextAlignment::CENTER };
-                tex.Set("pixel-font", "GAME OVER",{30,30});    
+                tex.Set("pixel-font", " GAME OVER",{30,30});  
+                col.colided=false;  
             }                                     
         }else
         {
