@@ -2,13 +2,15 @@
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
+#include "character_controller.h"
 
 using namespace dagger;
 using namespace team_game;
 
 void CollisionSystem::Run()
 {
-    auto view = Engine::Registry().view<Collider, Transform>();
+    auto view = Engine::Registry().view<Collider, Transform, PlayerCharacter>();
+    auto view2 = Engine::Registry().view<Collider, Transform, StaticCollider>();
     auto iterator = view.begin();
 
     while (iterator != view.end())//this for loop clears all previous collision data
@@ -33,12 +35,11 @@ void CollisionSystem::Run()
 
         Vector2 p{};
 
-        auto it2 = it;
-        it2++;
-        while (it2 != view.end())
+        auto it2 = view2.begin();
+        while (it2 != view2.end())
         {
-            auto& col = view.get<Collider>(*it2);
-            auto& tr = view.get<Transform>(*it2);
+            auto& col = view2.get<Collider>(*it2);
+            auto& tr = view2.get<Transform>(*it2);
 
             if (collision.collidesWith[(int)col.entityType])
             {

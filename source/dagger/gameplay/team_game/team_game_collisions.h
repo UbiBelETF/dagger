@@ -20,6 +20,11 @@ namespace team_game
         CollisionSide collisionSide = CollisionSide::NONE, collisionSideOther = CollisionSide::NONE;
     };
 
+    struct StaticCollider
+    {
+        UInt8 a;
+    };
+
     struct Collider
     {
         CollisionID entityType = CollisionID::PLAYER;//this is a placeholder and should be changed to not be automatically player

@@ -101,6 +101,7 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
             auto bigBlock = reg.create();
             auto& collider = reg.get_or_emplace<Collider>(bigBlock);
             auto& transform = reg.get_or_emplace<Transform>(bigBlock);
+            auto& staticCollider = reg.get_or_emplace<StaticCollider>(bigBlock);
             
             collider.entityType = CollisionID::TERRAIN;
             collider.state = MovementState::IMMOBILE;
