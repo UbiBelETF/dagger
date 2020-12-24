@@ -89,7 +89,7 @@ struct MainCharacter
         chr.character.speed = 100;
 
         //Collision setup:        
-        chr.col.size = { 25, 28 };
+        chr.col.size = { 16, 16 };
         chr.tm.position = { position_ , 0.0f };
         reg.emplace<CollisionType::Character>(entity);
 
