@@ -165,6 +165,7 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
     String baseDir, textureName;
     Float32 zPos, horizontalBlocks, verticalBlocks;
     Vector2 spriteSize, scale, pos;
+    Bool addCollision = addCollision_;
 
     auto& reg = Engine::Registry();
 
@@ -192,24 +193,35 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
 
                 spriteBlock.scale = scale;
 
-                if (addCollision_)
-                {                  
-                    auto& collider = reg.get_or_emplace<Collider>(block);
-
-                    if (isTrap_)
-                    {
-                        collider.entityType = CollisionID::TRAP;
-                        reg.get_or_emplace<Trap>(block);
-                    }
-                    else
-                    {
-                        collider.entityType = CollisionID::TERRAIN;
-                    }
-                    collider.state = MovementState::IMMOBILE;
-                    collider.size = spriteBlock.size * spriteBlock.scale;
-                }
-            }
+        if (textureName == "BricksN")
+        {
+            addCollision = false;
         }
+
+        if (addCollision)
+        {
+            auto bigBlock = reg.create();
+            auto& collider = reg.get_or_emplace<Collider>(bigBlock);
+            auto& transform = reg.get_or_emplace<Transform>(bigBlock);
+            
+            if (isTrap_)
+            {
+                collider.entityType = CollisionID::TRAP;
+                reg.get_or_emplace<Trap>(block);
+            }
+            else
+            {
+                collider.entityType = CollisionID::TERRAIN;
+            }
+
+            collider.state = MovementState::IMMOBILE;
+            collider.size.x = spriteSize.x * horizontalBlocks;
+            collider.size.y = spriteSize.y * verticalBlocks;
+
+            transform.position = { pos.x + collider.size.x / 2, pos.y + collider.size.y / 2, zPos };
+        }
+
+        addCollision = addCollision_;
     }
 }
 
