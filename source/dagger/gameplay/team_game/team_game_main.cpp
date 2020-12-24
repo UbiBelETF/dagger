@@ -23,8 +23,11 @@
 #include "gameplay/team_game/level_generator.h"
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
+#include "gameplay/team_game/game_controller.h"
 #include "gameplay/team_game/follow.h""
 #include "gameplay/team_game/remote_animation.h"
+#include <gameplay/team_game/detection.h>
+
 using namespace dagger;
 using namespace team_game;
 void TeamGame::GameplaySystemsSetup(Engine& engine_)
@@ -40,7 +43,9 @@ void TeamGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<KeySystem>();
     engine_.AddSystem<FollowSystem>();
     engine_.AddSystem<RemoteAnimationSystem>();
-}
+    engine_.AddSystem<GameControllerSystem>();
+    engine_.AddSystem<DetectionSystem>();
+
 void TeamGame::WorldSetup(Engine& engine_)
 {
     ShaderSystem::Use("standard");
@@ -110,60 +115,98 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 }
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
+/*
 
-    TilemapLegend legend;
-    legend['.'] = &level_generator::smiljana::CreateFloor;
-    legend['#'] = &level_generator::smiljana::CreateWall;
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
+  
+
+
+    
+        TilemapLegend legend;
+        legend['.'] = &level_generator::smiljana::CreateFloor;
+        legend['#'] = &level_generator::smiljana::CreateWall;
+
+
+       
+
+
+       
+*/
+      
     // PLAYER
-    auto player = reg_.create();
-    auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
-    playerState.currentState = ECharacterState::Idle;
+        auto player = reg_.create();
+        
+		auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+        playerState.currentState = ECharacterState::Idle;
 
-    auto& playerSprite = reg_.emplace<Sprite>(player);
-    AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-    playerSprite.scale = { 1, 1 };
-    auto& playerAnimator = reg_.emplace<Animator>(player);
-    AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
-    auto& playerTransform = reg_.emplace<Transform>(player);
-    playerTransform.position = { 0, 0, 1 };
-    auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
-    playerInput.contexts.push_back("AmongThemInput");
-    auto& playerCollision = reg_.emplace<SimpleCollision>(player);
-    playerCollision.size = playerSprite.size;
-    reg_.emplace<CharacterController>(player);
-    auto& movable = reg_.emplace<MovableBody>(player);
-    movable.size = playerSprite.size;
-    //DOOR
-    auto door = reg_.create();
-    auto& doorSprite = reg_.emplace<Sprite>(door);
-    AssignSprite(doorSprite, "spritesheets:among_them_spritesheet:door_open_anim:1");
-    doorSprite.scale = { 1, 1 };
-    auto& doorAnimator = reg_.emplace<Animator>(door);
+        auto& playerSprite = reg_.emplace<Sprite>(player);
+        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+        playerSprite.scale = { 1, 1 };
 
-    auto& doorTransform = reg_.emplace<Transform>(door);
-    doorTransform.position = { 40, 20, 1 };
-    auto& doorCollision = reg_.emplace<SimpleCollision>(door);
-    doorCollision.size = doorSprite.size;
+ 
+        auto& playerAnimator = reg_.emplace<Animator>(player);
+        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
-    SInt32 x = ((SInt32)doorTransform.position.x + 8) / 16;
-    SInt32 y = ((SInt32)doorTransform.position.y - 8) / 16;
-    auto& collider = reg_.emplace<StaticBody>(door);
-    collider.size = doorSprite.size;
-    Engine::GetDefaultResource<StaticBodyMap>()->put(x, y, door);
-    reg_.emplace<Door>(door);
+        auto& playerTransform = reg_.emplace<Transform>(player);
+        playerTransform.position = { 0, 0, 1 };
 
-    //KEY
-    auto key = reg_.create();
-    auto& keySprite = reg_.emplace<Sprite>(key);
-    AssignSprite(keySprite, "spritesheets:among_them_tilemap:key");
-    keySprite.scale = { 1, 1 };
-    auto& keyTransform = reg_.emplace<Transform>(key);
-    keyTransform.position = { 45, -40, 1 };
-    auto& keyCollision = reg_.emplace<SimpleCollision>(key);
-    keyCollision.size = keySprite.size;
-    reg_.emplace<Key>(key);
+        auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
+        playerInput.contexts.push_back("AmongThemInput");
 
+        auto& playerCollision = reg_.emplace<SimpleCollision>(player);
+        playerCollision.size = playerSprite.size;
+
+        reg_.emplace<CharacterController>(player);
+
+        auto& movable = reg_.emplace<MovableBody>(player);
+        movable.size = playerSprite.size;
+        auto& detection = reg_.emplace<Detection>(player);
+        detection.SetSize({ 2,2 });
+      
+
+	  //DOOR
+
+        auto door = reg_.create();
+
+        auto& doorSprite = reg_.emplace<Sprite>(door);
+        AssignSprite(doorSprite, "spritesheets:among_them_spritesheet:door_open_anim:1");
+        doorSprite.scale = { 1, 1 };
+
+        auto& doorAnimator = reg_.emplace<Animator>(door);
+        
+        auto& doorTransform = reg_.emplace<Transform>(door);
+        doorTransform.position = { 40, 20, 1 };
+
+        auto& doorCollision = reg_.emplace<SimpleCollision>(door);
+        doorCollision.size = doorSprite.size;
+        
+        SInt32 x = ((SInt32)doorTransform.position.x + 8) / 16;
+        SInt32 y = ((SInt32)doorTransform.position.y - 8) / 16;
+
+        auto& collider = reg_.emplace<StaticBody>(door);
+        collider.size = doorSprite.size;
+        Engine::GetDefaultResource<StaticBodyMap>()->put(x,y, door);
+
+        reg_.emplace<Door>(door);
+
+       
+       //KEY
+
+       auto key = reg_.create();
+
+       auto& keySprite = reg_.emplace<Sprite>(key);
+       AssignSprite(keySprite, "spritesheets:among_them_tilemap:key");
+       keySprite.scale = { 1, 1 };
+
+       auto& keyTransform = reg_.emplace<Transform>(key);
+       keyTransform.position = { 45, -40, 1 };
+
+       auto& keyCollision = reg_.emplace<SimpleCollision>(key);
+       keyCollision.size = keySprite.size;
+
+       reg_.emplace<Key>(key);
+       
+    
 
     //ENEMY 
     auto enemy = reg_.create();
@@ -179,7 +222,13 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
     enemyInput.pathname = "path.txt";
     enemyInput.currentshape = "goblin";
-    reg_.emplace<EnemyDescription>(enemy);
+
+    auto& en = reg_.emplace<EnemyDescription>(enemy);
+    en.shape = ECharacterShape::Goblin;
+
+    auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
+    enemyCollision.size = enemySprite.size;
+
     reg_.emplace<MovableBody>(enemy);
     //ENEMY NO.2
     //ENEMY 
@@ -196,19 +245,37 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     auto& enemy2Input = reg_.emplace<InputEnemiesFile>(enemy2);
     enemy2Input.pathname = "pathbat.txt";
     enemy2Input.currentshape = "bat";
-    reg_.emplace<EnemyDescription>(enemy2);
+
+    auto& en2 = reg_.emplace<EnemyDescription>(enemy2);
+    en2.shape = ECharacterShape::Bat;
+
+    auto& en2Collision = reg_.emplace<SimpleCollision>(enemy2);
+    en2Collision.size = enemy2Sprite.size;
+
     reg_.emplace<MovableBody>(enemy2);
 }
-void team_game::SetupWorld(Engine& engine_)
+
+void team_game::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
-    float zPos = 1.f;
+
+    auto gameCtrl = reg.create();
+
+    auto& ctrlInput = reg.emplace<InputReceiver>(gameCtrl);
+    ctrlInput.contexts.push_back("AmongThemReload");
+
+    reg.emplace<GameController>(gameCtrl);
+
     // STATIC BODIES MAP
     auto mapEnt = reg.create();
-    auto& map = reg.emplace<StaticBodyMap>(mapEnt);
-    Engine::PutDefaultResource<StaticBodyMap>(&map);
-
+	auto& map = reg.emplace<StaticBodyMap>(mapEnt);
+	Engine::PutDefaultResource<StaticBodyMap>(&map);
+	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-    //SetupWorldJovica(engine_, reg);
+
+   // SetupWorldJovica(engine_, reg);
+    //SetupWorldKosta(engine_, reg);
     SetupWorldSmiljana(engine_, reg);
+
 }
+

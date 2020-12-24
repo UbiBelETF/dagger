@@ -23,6 +23,7 @@ struct CharacterController
 	Float32 speed{ 70 };
 	ECharacterShape shape{ ECharacterShape::Hero };
 	Bool animationTrigger{ false };
+	Bool canMove{ true };
 
 	void SetShape(ECharacterShape shape_)
 	{

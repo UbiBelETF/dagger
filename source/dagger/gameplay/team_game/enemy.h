@@ -10,7 +10,8 @@ enum struct EEnemyState
 {
 	Patrolling,
 	Chasing,
-	Idle_
+	Idle_,
+	NoMore
 };
 
 
@@ -37,11 +38,13 @@ struct EnemyFSM : public FSM<EEnemyState>
 	DEFINE_STATE(EnemyFSM, EEnemyState, Chasing);
 	DEFINE_STATE(EnemyFSM, EEnemyState, Idle_);
 
+
 	EnemyFSM()
 	{
 		CONNECT_STATE(EEnemyState, Patrolling);
 		CONNECT_STATE(EEnemyState, Chasing);
 		CONNECT_STATE(EEnemyState, Idle_);
+	
 	}
 };
 

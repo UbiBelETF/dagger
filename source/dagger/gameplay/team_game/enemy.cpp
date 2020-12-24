@@ -9,30 +9,43 @@
 // ----------------------------------------------------------
 // shortcuts
 #include "gameplay/team_game/movement.h"
+#include "core/game/transforms.h"
+#include "gameplay/team_game/detection.h"
+#include "gameplay/team_game/character_controller.h"
+#include "gameplay/common/simple_collisions.h"
+#include "core/graphics/text.h"
+#include "core/input/inputs.h"
 
 #include <glm/gtc/epsilon.hpp>
-#include <core\game\transforms.h>
-#include <gameplay\team_game\detection.h>
-#include <gameplay\team_game\character_controller.h>
 
 using namespace team_game;
 
 String run = "among_them_animations:bat";
 String idle_ = "among_them_animations:goblin_idle";
-
+Bool stopenemies = false;
 void EnemyControllerSystem::Run()
 {
-	Engine::Registry().view<EnemyFSM::StateComponent>().each(
-		[&](EnemyFSM::StateComponent& state_)
-	{   
-		auto& inputshape = Engine::Registry().get<InputEnemiesFile>(state_.entity);
-		if (inputshape.currentshape == "goblin") { idle_ = "among_them_animations:goblin_idle"; run = "among_them_animations:goblin_run"; }
-		if (inputshape.currentshape == "slime") { idle_ = "among_them_animations:slime_idle"; run = "among_them_animations:slime_run"; }
-		if (inputshape.currentshape == "bat") { idle_ = "among_them_animations:bat";  run = "among_them_animations:bat"; }
-		m_EnemyStateMachine.Run(state_);
-	
-	});
+	if (stopenemies) {
+		Engine::Registry().view<EnemyFSM::StateComponent>().each(
+			[&](EnemyFSM::StateComponent& state_)
+		{
+			auto& body = Engine::Registry().get<MovableBody>(state_.entity);
+			body.allowed = false;
 
+		});
+	}
+	else {
+		Engine::Registry().view<EnemyFSM::StateComponent>().each(
+			[&](EnemyFSM::StateComponent& state_)
+		{
+			auto& inputshape = Engine::Registry().get<InputEnemiesFile>(state_.entity);
+			if (inputshape.currentshape == "goblin") { idle_ = "among_them_animations:goblin_idle"; run = "among_them_animations:goblin_run"; }
+			if (inputshape.currentshape == "slime") { idle_ = "among_them_animations:slime_idle"; run = "among_them_animations:slime_run"; }
+			if (inputshape.currentshape == "bat") { idle_ = "among_them_animations:bat";  run = "among_them_animations:bat"; }
+			m_EnemyStateMachine.Run(state_);
+
+		});
+	}
 }
 
 DEFAULT_ENTER(EnemyFSM, Patrolling);
@@ -118,83 +131,61 @@ DEFAULT_ENTER(EnemyFSM,Chasing);
 
 void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 {
-	
+
 	auto& ctrl = Engine::Registry().get<EnemyDescription>(state_.entity);
 	auto& sprite = Engine::Registry().get<Sprite>(state_.entity);
 	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 	auto& det = Engine::Registry().get<Detection>(state_.entity);
 	auto& t = Engine::Registry().get<Transform>(state_.entity);
+	auto& col = Engine::Registry().get<SimpleCollision>(state_.entity);
 
 	auto& heroTransform = Engine::Registry().get<Transform>(det.who);
 	auto& heroDetection = Engine::Registry().get<Detection>(det.who);
 	auto& hero = Engine::Registry().get<CharacterController>(det.who);
 
-	if (ctrl.shape != hero.shape) {
-
-		Vector2 detectionSides = det.GetDetectionSides(t.position, heroDetection, heroTransform.position);
-		Vector3 lastSeen;
-		Float32 dt = Engine::DeltaTime();
-
-
-		int counter = 0;
-
-		lastSeen = det.where;
-	
-		do
-		{
-			/*if (detectionSides.x > 0)
-			{
-				t.position.x -= ((ctrl.speed - 2) * dt);
-			}
-			if (detectionSides.x < 0)
-			{
-				t.position.x += ((ctrl.speed - 2) * dt);
-			}
-			if (detectionSides.y > 0);
-			{
-				t.position.y -= ((ctrl.speed - 2) * dt);
-			}
-			if (detectionSides.y < 0)
-			{
-				t.position.y += ((ctrl.speed - 2) * dt);
-			}*/
-			lastSeen = det.where;
-			if (det.where.x > t.position.x) t.position.x += (ctrl.speed * dt);
-			if (det.where.x < t.position.x) t.position.x -= (ctrl.speed * dt);
-			if (det.where.y > t.position.y) t.position.y += (ctrl.speed * dt);
-			if (det.where.y < t.position.y) t.position.y -= (ctrl.speed * dt);
-			//counter++;
-			//Logger::critical("infinite loop");
-		} while (!(glm::distance(glm::abs(det.where), glm::abs(t.position)) >= 0 && glm::distance(glm::abs(det.where), glm::abs(t.position)) < 0.5));
-		//while (det.IsDetected(heroTransform.position, det, t.position));
-
-		//if (hero.shape == ctrl.shape) GoTo(EEnemyState::Patrolling, state_);
-
-
-		/*do
-		{
-			if (lastSeen.x > t.position.x) t.position.x += ((ctrl.speed - 2) * dt);
-			if (lastSeen.x < t.position.x) t.position.x -= ((ctrl.speed - 2) * dt);
-			if (lastSeen.y > t.position.y) t.position.y += ((ctrl.speed - 2) * dt);
-			if (lastSeen.y < t.position.y) t.position.y -= ((ctrl.speed - 2) * dt);
-
-			//std::cout << counter << std::endl
-			//counter++;
-			//	Logger::critical("infinite loop");
-		} while (!(glm::distance(glm::abs(det.where), glm::abs(t.position)) >= 0 && glm::distance(glm::abs(det.where), glm::abs(t.position)) < 1));
-
-		det.detected = false;
-
-
-		GoTo(EEnemyState::Idle_, state_);
-
-		//for (int i = 0; i < 10000; i++);
-		//GoTo(EEnemyState::Patrolling, state_);*/
+	if (!det.detected) {
+		EEnemyState currState = ctrl.lastState;
+		ctrl.lastState = EEnemyState::Chasing;
+		GoTo(currState, state_);
 	}
-	if (ctrl.lastState == EEnemyState::Idle_) { ctrl.lastState = EEnemyState::Chasing; GoTo(EEnemyState::Idle_, state_); }
-	else { ctrl.lastState = EEnemyState::Chasing; GoTo(EEnemyState::Patrolling, state_); }
-	
+
+	if (ctrl.shape != hero.shape)
+	{
+		Vector2 direction = { heroTransform.position.x - t.position.x, heroTransform.position.y - t.position.y };
+
+		if (direction.x > 0.0f)
+		{
+			sprite.scale.x = 1;
+		}
+		else if (direction.x < 0.0f)
+		{
+			sprite.scale.x = -1;
+		}
+
+		body.movement = glm::normalize(direction) * ctrl.speed * Engine::DeltaTime();
+		if (col.colided)
+		{
+			if (Engine::Registry().has<CharacterController>(col.colidedWith))
+			{   
+			    
+				
+				auto ui = Engine::Registry().create();
+				auto& text = Engine::Registry().emplace<Text>(ui);
+				text.spacing = 0.6f;
+				text.Set("pixel-font", "You lose");
+				auto ui2 = Engine::Registry().create();
+				auto& text2 = Engine::Registry().emplace<Text>(ui2);
+				text2.spacing = 0.6f;
+				text2.position = { 0,-50,0 };
+				text2.Set("pixel-font", "Press R to restart");
+				hero.canMove = false;
+				stopenemies = true;
+			}
+			col.colided = false;
+		}
+		
+	}
 }
 
 DEFAULT_EXIT(EnemyFSM, Chasing);
