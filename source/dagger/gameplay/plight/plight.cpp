@@ -261,7 +261,7 @@ void plight::SetupWorld(Engine& engine_)
     mainChar.crosshair.startAngle = 0.f;
     mainChar.character.playerNumber = "Player 1";
     auto& weapon_sprite1 = Engine::Registry().get<Sprite>(mainChar.character.weaponSprite);
-    AssignSprite(weapon_sprite1, "Plight:weapons:Sword");
+    AssignSprite(weapon_sprite1, "Plight:weapons:SWORD:Sword");
     auto& animator_sword = Engine::Registry().get<Animator>(mainChar.character.weaponSprite);
     AnimatorPlay(animator_sword, "Plight:weapons:SWORD");
     auto& projectile_spawner1 = Engine::Registry().get<ProjectileSpawner>(mainChar.entity);
@@ -273,7 +273,7 @@ void plight::SetupWorld(Engine& engine_)
 
     weapon_sprite1.position.x = mainChar.sprite.position.x + x_weapon1;
     weapon_sprite1.position.y = mainChar.sprite.position.y - 3.f + y_weapon1;
-    weapon_sprite1.rotation = (mainChar.crosshair.angle * 180.) / M_PI + 45;
+    weapon_sprite1.rotation = (mainChar.crosshair.angle * 180.) / M_PI - 45;
 
     auto backgroundHealthBar1 = Engine::Registry().create();
     auto currentHealthBar1 = Engine::Registry().create();
@@ -329,7 +329,9 @@ void plight::SetupWorld(Engine& engine_)
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
     sndChar.character.playerNumber = "Player 2";
     auto& weapon_sprite2 = Engine::Registry().get<Sprite>(sndChar.character.weaponSprite);
-    AssignSprite(weapon_sprite2, "Plight:weapons:Axe");
+    AssignSprite(weapon_sprite2, "Plight:weapons:AXE:Axe");
+    auto& animator_axe = Engine::Registry().get<Animator>(sndChar.character.weaponSprite);
+    AnimatorPlay(animator_axe, "Plight:weapons:AXE");
     auto& projectile_spawner2 = Engine::Registry().get<ProjectileSpawner>(sndChar.entity);
     projectile_spawner2.settings.pSpriteName = "Plight:projectiles:Arrow_3";
 
@@ -338,7 +340,7 @@ void plight::SetupWorld(Engine& engine_)
 
     weapon_sprite2.position.x = sndChar.sprite.position.x + x_weapon2;
     weapon_sprite2.position.y = sndChar.sprite.position.y - 3.f + y_weapon2;
-    weapon_sprite2.rotation = (sndChar.crosshair.angle * 180.) / M_PI + 45;
+    weapon_sprite2.rotation = (sndChar.crosshair.angle * 180.) / M_PI - 45;
 
     auto backgroundHealthBar2 = Engine::Registry().create();
     auto currentHealthBar2 = Engine::Registry().create();
