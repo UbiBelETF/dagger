@@ -45,6 +45,7 @@ void TeamGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<RemoteAnimationSystem>();
     engine_.AddSystem<GameControllerSystem>();
     engine_.AddSystem<DetectionSystem>();
+}
 
 void TeamGame::WorldSetup(Engine& engine_)
 {
@@ -218,7 +219,7 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     auto& enemyAnimator = reg_.emplace<Animator>(enemy);
     AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
     auto& enemyTransform = reg_.emplace<Transform>(enemy);
-    enemyTransform.position = { 0, 25, 1 };
+    enemyTransform.position = { 0, 70, 1 };
     auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
     enemyInput.pathname = "path.txt";
     enemyInput.currentshape = "goblin";
@@ -229,29 +230,40 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
     enemyCollision.size = enemySprite.size;
 
+    auto& det = reg_.emplace<Detection>(enemy);
+    det.SetSize(en.detectionArea);
+
     reg_.emplace<MovableBody>(enemy);
     //ENEMY NO.2
     //ENEMY 
     auto enemy2 = reg_.create();
     auto& enemy2State = ATTACH_TO_FSM(EnemyFSM, enemy2);
     enemy2State.currentState = EEnemyState::Patrolling;
+
     auto& enemy2Sprite = reg_.emplace<Sprite>(enemy2);
     AssignSprite(enemy2Sprite, "spritesheets:among_them_spritesheet:bat_anim:1");
     enemy2Sprite.scale = { 1, 1 };
+
     auto& enemy2Animator = reg_.emplace<Animator>(enemy2);
     AnimatorPlay(enemy2Animator, "among_them_animations:bat");
+
     auto& enemy2Transform = reg_.emplace<Transform>(enemy2);
-    enemy2Transform.position = { 0, 60, 1 };
+    enemy2Transform.position = { 0, 90, 1 };
+
     auto& enemy2Input = reg_.emplace<InputEnemiesFile>(enemy2);
-    enemy2Input.pathname = "pathbat.txt";
+    enemy2Input.pathname = "pathidlebat.txt";
     enemy2Input.currentshape = "bat";
 
     auto& en2 = reg_.emplace<EnemyDescription>(enemy2);
     en2.shape = ECharacterShape::Bat;
 
+
     auto& en2Collision = reg_.emplace<SimpleCollision>(enemy2);
     en2Collision.size = enemy2Sprite.size;
 
+    auto& det2 = reg_.emplace<Detection>(enemy2);
+    det2.SetSize(en2.detectionArea);
+    
     reg_.emplace<MovableBody>(enemy2);
 }
 

@@ -17,6 +17,7 @@
 #include "core/input/inputs.h"
 
 #include <glm/gtc/epsilon.hpp>
+#include<iostream>
 
 using namespace team_game;
 
@@ -190,29 +191,4 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 
 DEFAULT_EXIT(EnemyFSM, Chasing);
 
-DEFAULT_ENTER(EnemyFSM, Idle_);
 
-void EnemyFSM::Idle_::Run(EnemyFSM::StateComponent& state_) {
-
-	auto& det = Engine::Registry().get<Detection>(state_.entity);
-	auto& enemy = Engine::Registry().get<EnemyDescription>(state_.entity);
-
-	if (enemy.lastState == EEnemyState::Chasing) {
-		for (int i = 0; i < 10000; i++) {
-			auto& animator = Engine::Registry().get<Animator>(state_.entity);
-			AnimatorPlay(animator, idle_);
-		}
-		enemy.lastState = EEnemyState::Idle_;
-		GoTo(EEnemyState::Patrolling, state_);
-	}
-
-	while (!(det.detected==true && Engine::Registry().has<CharacterController>(det.who)))  {
-		auto& animator = Engine::Registry().get<Animator>(state_.entity);
-		AnimatorPlay(animator, idle_);
-	}
-
-	enemy.lastState = EEnemyState::Idle_;
-	GoTo(EEnemyState::Chasing, state_);
-}
-
-DEFAULT_EXIT(EnemyFSM, Idle_);
