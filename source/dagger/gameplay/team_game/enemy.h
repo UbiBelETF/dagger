@@ -37,14 +37,14 @@ struct EnemyFSM : public FSM<EEnemyState>
 	DEFINE_STATE(EnemyFSM, EEnemyState, Patrolling);
 	DEFINE_STATE(EnemyFSM, EEnemyState, Chasing);
 	DEFINE_STATE(EnemyFSM, EEnemyState, Idle_);
-	DEFINE_STATE(EnemyFSM, EEnemyState, NoMore);
+
 
 	EnemyFSM()
 	{
 		CONNECT_STATE(EEnemyState, Patrolling);
 		CONNECT_STATE(EEnemyState, Chasing);
 		CONNECT_STATE(EEnemyState, Idle_);
-		CONNECT_STATE(EEnemyState, NoMore);
+	
 	}
 };
 

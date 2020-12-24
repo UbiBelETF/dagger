@@ -10,6 +10,7 @@ namespace team_game
 	{
 		Vector2 movement{ 0, 0 };
 		Vector2 size;
+		Bool allowed{ true };
 
 		void reset()
 		{
