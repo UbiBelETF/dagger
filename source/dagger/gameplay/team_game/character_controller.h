@@ -24,6 +24,8 @@ struct CharacterController
 	ECharacterShape shape{ ECharacterShape::Hero };
 	Bool animationTrigger{ false };
 	Bool canMove{ true };
+	String idle { "among_them_animations:knight_idle" };
+	String running{ "among_them_animations:knight_run" };
 
 	void SetShape(ECharacterShape shape_)
 	{

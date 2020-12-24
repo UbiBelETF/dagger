@@ -8,8 +8,7 @@
 #include <glm/gtc/epsilon.hpp>
 
 //useful strings
-String idle = "among_them_animations:knight_idle";
-String running = "among_them_animations:knight_run";
+
 
 // ----------------------------------------------------------
 // shortcuts
@@ -28,10 +27,10 @@ void CharacterControllerSystem::Run()
 			[&](CharacterFSM::StateComponent& state_)
 		{   if (chController.canMove) {
 			auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
-			if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; chController.SetShape(ECharacterShape::Goblin); }
-			if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; chController.SetShape(ECharacterShape::Slime); }
-			if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; chController.SetShape(ECharacterShape::Bat); }
-			if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; chController.SetShape(ECharacterShape::Hero); }
+			if (input.Get("goblinTransform") == 1) { chController.idle = "among_them_animations:goblin_idle"; chController.running = "among_them_animations:goblin_run"; chController.SetShape(ECharacterShape::Goblin); }
+			if (input.Get("slimeTransform") == 1) { chController.idle = "among_them_animations:slime_idle"; chController.running = "among_them_animations:slime_run"; chController.SetShape(ECharacterShape::Slime); }
+			if (input.Get("batTransform") == 1) { chController.idle = "among_them_animations:bat"; chController.running = "among_them_animations:bat"; chController.SetShape(ECharacterShape::Bat); }
+			if (input.Get("knightTransform") == 1) { chController.idle = "among_them_animations:knight_idle"; chController.running = "among_them_animations:knight_run"; chController.SetShape(ECharacterShape::Hero); }
 			m_CharStateMachine.Run(state_);
 		}
 			});
@@ -42,6 +41,7 @@ DEFAULT_ENTER(CharacterFSM, Idle);
 
 void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 {  
+	auto& chController = Engine::Registry().get<CharacterController>(state_.entity);
 	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
 	
 	if (EPSILON_NOT_ZERO(input.Get("horizontalRun")) || EPSILON_NOT_ZERO(input.Get("verticalRun")))
@@ -49,7 +49,7 @@ void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 		GoTo(ECharacterState::Running, state_);
 	}
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-	AnimatorPlay(animator, idle);
+	AnimatorPlay(animator,chController.idle);
 }
 
 DEFAULT_EXIT(CharacterFSM, Idle);
@@ -64,7 +64,7 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
 
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-	AnimatorPlay(animator, running);
+	AnimatorPlay(animator, ctrl.running);
 
 	float runX = input.Get("horizontalRun");
 	float runY = input.Get("verticalRun");
