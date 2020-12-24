@@ -88,23 +88,29 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
                 scale.y = spriteSize.y / spriteBlock.size.y;
 
                 spriteBlock.scale = scale;
-
-                if (textureName == "BricksN")
-                {
-                    addCollision = false;
-                }
-
-                if (addCollision)
-                {                  
-                    auto& collider = reg.get_or_emplace<Collider>(block);
-                    collider.entityType = CollisionID::TERRAIN;
-                    collider.state = MovementState::IMMOBILE;
-                    collider.size = spriteBlock.size * spriteBlock.scale;
-                }
-
-                addCollision = addCollision_;
             }
         }
+
+        if (textureName == "BricksN")
+        {
+            addCollision = false;
+        }
+
+        if (addCollision)
+        {
+            auto bigBlock = reg.create();
+            auto& collider = reg.get_or_emplace<Collider>(bigBlock);
+            auto& transform = reg.get_or_emplace<Transform>(bigBlock);
+            
+            collider.entityType = CollisionID::TERRAIN;
+            collider.state = MovementState::IMMOBILE;
+            collider.size.x = spriteSize.x * horizontalBlocks;
+            collider.size.y = spriteSize.y * verticalBlocks;
+
+            transform.position = { pos.x + collider.size.x / 2, pos.y + collider.size.y / 2, zPos };
+        }
+
+        addCollision = addCollision_;
     }
 }
 
