@@ -22,6 +22,8 @@ struct Peep
 	Entity entity;
 	Occupacy side;
 
+	int health{ 1 };
+
 	void SetState(PeepState state_);
 };
 
@@ -30,6 +32,17 @@ struct PeepGroup
 	String name;
 	Occupacy side;
 	Sequence<Peep> peeps;
+
+	inline Sequence<Peep> GetAllAlive() const
+	{
+		Sequence<Peep> alive{};
+		for (auto peep : peeps)
+		{
+			if (peep.health > 0) alive.push_back(peep);
+		}
+
+		return alive;
+	}
 };
 
 struct PeepArmy
@@ -37,6 +50,17 @@ struct PeepArmy
 	String name;
 	Occupacy side;
 	Sequence<PeepGroup> groups;
+
+	inline Sequence<PeepGroup> GetAllAlive() const
+	{
+		Sequence<PeepGroup> alive{};
+		for (auto group : groups)
+		{
+			if (group.GetAllAlive().size() > 0) alive.push_back(group);
+		}
+
+		return alive;
+	}
 };
 
 struct Board
