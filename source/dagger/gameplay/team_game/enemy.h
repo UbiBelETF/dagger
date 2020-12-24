@@ -27,6 +27,7 @@ struct EnemyDescription {
 	ECharacterShape shape;
 	EEnemyState lastState;
 	Vector2 detectionArea{ 60,60 };
+	Bool stopenemies{ false };
 
 };
 
