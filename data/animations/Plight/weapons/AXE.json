@@ -1,0 +1,19 @@
+{
+  "animation-name": "Plight:weapons:AXE",
+  "animation-length-ms": 600,
+  "animation-frames": [
+    { "texture-name": "Plight:weapons:AXE:Axe" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Up_Up_1" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Up_Up_2" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Up_Up" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Up_Down_1" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Up_Down_2" },
+    { "texture-name": "Plight:weapons:AXE:Axe" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Down_Down_1" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Down_Down_2" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Down_Down" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Down_Up_1" },
+    { "texture-name": "Plight:weapons:AXE:Axe_Down_Up_2" },
+    { "texture-name": "Plight:weapons:AXE:Axe" }
+  ]
+}
