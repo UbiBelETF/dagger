@@ -22,6 +22,8 @@ void Text::Set(String font_, String message_, Vector3 pos_, Bool ui_)
 		entities.clear();
 	}
 
+	position = pos_;
+
 	SInt32 positionX = position.x;
 	auto& sheets = Engine::Res<SpriteFrame>();
 

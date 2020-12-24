@@ -10,6 +10,7 @@
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/collectables.h"
 #include "gameplay/team_game/treasure.h"
+#include "gameplay/team_game/traps_collision.h"
 
 
 using namespace dagger;
@@ -41,6 +42,18 @@ void GameManagerSystem::Run()
                 winnerId = chest.playerId;
 
                 Engine::Registry().destroy(entity);
+                return;
+            }
+        }
+
+        auto& trapsView = Engine::Registry().view<Trap>();
+        for (auto& entity : trapsView)
+        {
+            auto& trap = Engine::Registry().get<Trap>(entity);
+            if (trap.hadCollisionWithPlayer)
+            {
+                isGameOver = true;
+                winnerId = (1 - trap.collisionId);
                 return;
             }
         }
@@ -83,7 +96,7 @@ void GameManagerSystem::LoadPlatforms()
 void GameManagerSystem::LoadTraps()
 {
     String filePath = fmt::format("levels/traps/traps_{}.txt", currentLevel);
-    LoadTextures(filePath, true);
+    LoadTextures(filePath, true, true);
 }
 
 void GameManagerSystem::LoadCollectables()
@@ -143,7 +156,7 @@ void GameManagerSystem::LoadCollectables()
     }
 }
 
-void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
+void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool isTrap_)
 {
     
     FilePath path{ filePath_ };
@@ -152,6 +165,7 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
     String baseDir, textureName;
     Float32 zPos, horizontalBlocks, verticalBlocks;
     Vector2 spriteSize, scale, pos;
+    Bool addCollision = addCollision_;
 
     auto& reg = Engine::Registry();
 
@@ -178,16 +192,38 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
                 scale.y = spriteSize.y / spriteBlock.size.y;
 
                 spriteBlock.scale = scale;
-
-                if (addCollision_)
-                {                  
-                    auto& collider = reg.get_or_emplace<Collider>(block);
-                    collider.entityType = CollisionID::TERRAIN;
-                    collider.state = MovementState::IMMOBILE;
-                    collider.size = spriteBlock.size * spriteBlock.scale;
-                }
             }
         }
+
+        if (textureName == "BricksN")
+        {
+            addCollision = false;
+        }
+
+        if (addCollision)
+        {
+            auto bigBlock = reg.create();
+            auto& collider = reg.get_or_emplace<Collider>(bigBlock);
+            auto& transform = reg.get_or_emplace<Transform>(bigBlock);
+
+            if (isTrap_)
+            {
+                collider.entityType = CollisionID::TRAP;
+                reg.get_or_emplace<Trap>(bigBlock);
+            }
+            else
+            {
+                collider.entityType = CollisionID::TERRAIN;
+            }
+
+            collider.state = MovementState::IMMOBILE;
+            collider.size.x = spriteSize.x * horizontalBlocks;
+            collider.size.y = spriteSize.y * verticalBlocks;
+
+            transform.position = { pos.x + collider.size.x / 2, pos.y + collider.size.y / 2, zPos };
+        }
+
+        addCollision = addCollision_;
     }
 }
 
@@ -210,7 +246,7 @@ void GameManagerSystem::OnEndOfFrame()
             auto ui3 = Engine::Registry().create();
             auto& text3 = Engine::Registry().emplace<Text>(ui3);
             text3.spacing = 0.6f;
-            text3.Set("pixel-font", "Press Y to restart the game :)", { 0.0, -65.0, 0.0 });
+            text3.Set("pixel-font", "Press Y to restart the game :)", { 0.0, -90.0, 0.0 });
 
             messageDisplayed = true;
         }
