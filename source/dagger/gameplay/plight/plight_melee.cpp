@@ -68,6 +68,12 @@ void MeleeSystem::SpinUp()
 
 }
 
+void MeleeSystem::WindDown()
+{
+	Engine::Dispatcher().sink<NextFrame>().disconnect<&MeleeSystem::OnEndOfFrame>(this);
+}
+
+
 void MeleeSystem::OnEndOfFrame() {
 
 }
