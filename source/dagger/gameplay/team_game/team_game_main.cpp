@@ -26,6 +26,7 @@
 #include "gameplay/team_game/game_controller.h"
 #include "gameplay/team_game/follow.h""
 #include "gameplay/team_game/remote_animation.h"
+#include <gameplay/team_game/detection.h>
 
 using namespace dagger;
 using namespace team_game;
@@ -44,6 +45,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<FollowSystem>();
     engine_.AddSystem<RemoteAnimationSystem>();
     engine_.AddSystem<GameControllerSystem>();
+    engine_.AddSystem<DetectionSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -131,26 +133,36 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
+    
+/*
+
+    Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
+  
+
+
+    
         TilemapLegend legend;
         legend['.'] = &level_generator::smiljana::CreateFloor;
         legend['#'] = &level_generator::smiljana::CreateWall;
 
 
-        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
+       
 
-        // PLAYER
+
+       
+*/
+      
+    // PLAYER
         auto player = reg_.create();
-
-        auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+        
+		auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
         playerState.currentState = ECharacterState::Idle;
-
-
-    
 
         auto& playerSprite = reg_.emplace<Sprite>(player);
         AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
         playerSprite.scale = { 1, 1 };
 
+ 
         auto& playerAnimator = reg_.emplace<Animator>(player);
         AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
@@ -167,8 +179,11 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
         auto& movable = reg_.emplace<MovableBody>(player);
         movable.size = playerSprite.size;
+        auto& detection = reg_.emplace<Detection>(player);
+        detection.SetSize({ 2,2 });
+      
 
-        //DOOR
+	  //DOOR
 
         auto door = reg_.create();
 
@@ -192,8 +207,8 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
         Engine::GetDefaultResource<StaticBodyMap>()->put(x,y, door);
 
         reg_.emplace<Door>(door);
-       
 
+       
        //KEY
 
        auto key = reg_.create();
@@ -211,8 +226,6 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
        reg_.emplace<Key>(key);
        
     
-
-
     //ENEMY 
     auto enemy = reg_.create();
 
@@ -233,9 +246,17 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     enemyInput.pathname = "path.txt";
     enemyInput.currentshape = "goblin";
 
-    reg_.emplace<EnemyDescription>(enemy);
+    auto& en = reg_.emplace<EnemyDescription>(enemy);
+    en.shape = ECharacterShape::Goblin;
+
+    auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
+    enemyCollision.size = enemySprite.size;
 
     reg_.emplace<MovableBody>(enemy);
+
+    auto& enDetection1 = reg_.emplace<Detection>(enemy);
+    enDetection1.SetSize(en.detectionArea);
+
 
     //ENEMY NO.2
 
@@ -259,9 +280,17 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     enemy2Input.pathname = "pathbat.txt";
     enemy2Input.currentshape = "bat";
 
-    reg_.emplace<EnemyDescription>(enemy2);
+    auto& en2 = reg_.emplace<EnemyDescription>(enemy2);
+    en2.shape = ECharacterShape::Bat;
+
+    auto& en2Collision = reg_.emplace<SimpleCollision>(enemy2);
+    en2Collision.size = enemy2Sprite.size;
 
     reg_.emplace<MovableBody>(enemy2);
+
+    auto& det2 = reg_.emplace<Detection>(enemy2);
+    det2.SetSize(en2.detectionArea);
+
 }
 
 void team_game::SetupWorld(Engine &engine_)
@@ -281,8 +310,10 @@ void team_game::SetupWorld(Engine &engine_)
 	Engine::PutDefaultResource<StaticBodyMap>(&map);
 	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-    SetupWorldJovica(engine_, reg);
+
+   // SetupWorldJovica(engine_, reg);
     //SetupWorldKosta(engine_, reg);
-    //SetupWorldSmiljana(engine_, reg);
+    SetupWorldSmiljana(engine_, reg);
+
 }
 
