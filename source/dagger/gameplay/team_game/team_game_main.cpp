@@ -95,28 +95,6 @@ void team_game::SetupWorld(Engine& engine_)
         auto& character = reg1.emplace<PlayerCharacter>(entity);
         character.id = 0;
         ATTACH_TO_FSM(team_game::CharacterControllerFSM, entity);
-
-        
-        // Add a trap
-        auto entity2 = reg.create();
-        auto& sprite2 = reg.get_or_emplace<Sprite>(entity2);
-        AssignSprite(sprite2, "TeamGame:Other:Spikes");
-
-        auto& transform2 = reg.get_or_emplace<Transform>(entity2);
-
-        Vector2 newSize = { 64.0, 64.0 };
-        Vector2 scale;
-        scale.x = newSize.x / sprite2.size.x;
-        scale.y = newSize.y / sprite2.size.y;
-        sprite2.scale = scale;
-
-        transform2.position = { 175.0 + newSize.x/2, -108.0 + newSize.y/2, 4.0 };
-
-        auto& collider2 = reg.get_or_emplace<Collider>(entity2);
-        collider2.size = sprite2.size;
-        collider2.entityType = CollisionID::TRAP;
-        collider2.hasGravity = true;
-        //Other Spikes 4.0 64.0 64.0 175.0 -108.0 1 1
     }
 
     auto& reg2 = engine_.Registry();
