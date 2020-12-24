@@ -13,6 +13,9 @@
 
 using namespace tank_warfare;
 
+bool GameMenuSystem::s_GameOver = false;
+String GameMenuSystem::s_Winner = "";
+
 void GameMenuSystem::Run()
 {
     auto& view = Engine::Registry().view<GameMenuButton, Sprite, InputReceiver>();
@@ -73,6 +76,13 @@ void GameMenuSystem::OnEndOfFrame()
 
         tank_warfare::SetupTestWorld(Engine::Instance());
     }
+    if (s_GameOver)
+    {
+        s_GameOver = false;
+        Engine::Registry().clear();
+
+        tank_warfare::SetupRestartScreen(Engine::Instance(), s_Winner);
+    }
 }
 
 bool GameMenuSystem::IsMouseOver(GameMenuButton gmb_)
@@ -89,4 +99,10 @@ bool GameMenuSystem::IsMouseOver(GameMenuButton gmb_)
     }
 
     return false;
+}
+
+void GameMenuSystem::EndOfGame(String winner_)
+{
+    s_GameOver = true;
+    s_Winner = winner_;
 }

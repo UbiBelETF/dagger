@@ -24,7 +24,8 @@ namespace tank_warfare
         : public System
     {
         bool m_LoadGame = false;
-        bool m_GameOver = false;
+        static bool s_GameOver;
+        static String s_Winner;
 
     public:
         inline String SystemName() { return "Game Menu System"; }
@@ -34,6 +35,7 @@ namespace tank_warfare
         void Run() override;
 
         bool IsMouseOver(GameMenuButton gmb_);
+        static void EndOfGame(String winner_);
 
     private:
         void OnEndOfFrame();
