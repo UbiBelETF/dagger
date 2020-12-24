@@ -38,7 +38,7 @@ namespace team_game
 
         void LoadNextLevel();
 
-        void LoadTextures(String filePath_, Bool addCollision_);
+        void LoadTextures(String filePath_, Bool addCollision_, Bool isTrap_ = false);
         void LoadBackDrop();
         void LoadPlatforms();
         void LoadTraps();

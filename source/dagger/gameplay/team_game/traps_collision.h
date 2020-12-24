@@ -7,21 +7,20 @@ using namespace dagger;
 
 namespace team_game
 {
+    struct Trap
+    {
+        Bool hadCollisionWithPlayer{ false };
+        UInt8 collisionId{ 0 };
+    };
+
     class TrapsCollisionSystem
         : public System
     {
-        StaticArray<Bool, 2> collided{ false, false };
 
         inline String SystemName() override {
             return "Traps collision System";
         };
 
         void Run() override;
-
-        void SpinUp() override;
-        void WindDown() override;
-
-    private:
-        void OnEndOfFrame();
     };
 }
