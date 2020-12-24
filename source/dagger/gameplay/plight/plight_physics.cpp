@@ -2,9 +2,11 @@
 #include "plight_collisions.h"
 
 #include "core/engine.h"
+#include "core/graphics/sprite.h"
 #include "core/game/transforms.h"
 
 #include "gameplay/plight/plight_controller.h"
+#include "gameplay/plight/plight_aiming.h"
 
 #include <algorithm>    
 
@@ -37,7 +39,6 @@ void plight::PhysicsSystem::Run()
                             break;
                         }
                     }
-
                     if (has) {
                         auto& other_transform = view.get<Transform>(*it2);
                         auto& other_collision = view.get<PlightCollision>(*it2);

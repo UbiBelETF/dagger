@@ -13,6 +13,7 @@
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_aiming.h"
 #include "gameplay/plight/plight_particles.h"
+#include "gameplay/plight/plight_physics.h"
 
 #include <algorithm>
 #include <execution>
@@ -43,12 +44,19 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
 
 
     reg.emplace<PlightCollision>(entity);
+	reg.emplace<PlightCollisionInitiator>(entity);
 
     auto& projectile = reg.emplace<Projectile>(entity);
 
     projectile.projectileDamage = settings_.projectileDamage;
     projectile.projectileSpeed = settings_.projectileSpeed;
     projectile.angle = angle_;
+
+	//Particle spawner for colliding with walls
+	PlightParticleSpawnerSettings particle_settings;
+	particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.25f, -0.25f }, { 0.25f, 0.15f },
+		{ 1.f,1.f,1.f,1 }, { 1.f,1.f,1.f,1 }, "dust", 0.02f, 0.4f, 0.4f);
+	PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
 
 }
 
@@ -90,9 +98,26 @@ void ProjectileSystem::Run()
 		}
 
 		// update all projectiles
-		Engine::Registry().view<Projectile, Transform, Sprite>().each([&](Projectile& projectile_, Transform& transform_, Sprite& sprite_)
+		Engine::Registry().view<Projectile, Transform, Sprite,PlightCollision,PlightParticleSpawner>().each([&](Projectile& projectile_, Transform& transform_, Sprite& sprite_,PlightCollision& col_,PlightParticleSpawner& pspawner_)
 		{
 			projectile_.timeOfLiving -= Engine::DeltaTime();
+			if (projectile_.timeOfLiving <= 0) {
+				projectile_.destroy = true;
+			}
+			if (col_.colided) {
+				auto it = col_.colidedWith.begin();
+				while (it != col_.colidedWith.end()) {
+					if (Engine::Registry().has<PhysicsObject>(*it)) {
+						auto& physics_object = Engine::Registry().get<PhysicsObject>(*it);
+						if (physics_object.is_static) {
+							pspawner_.active = true;
+							projectile_.displayingParticles = true;
+						}
+					}
+					it++;
+				}
+			}
+
 			Float32 dx = projectile_.projectileSpeed * cos(projectile_.angle) * Engine::DeltaTime();
 			Float32 dy = projectile_.projectileSpeed * sin(projectile_.angle) * Engine::DeltaTime();
 
@@ -122,6 +147,13 @@ void ProjectileSystem::OnEndOfFrame()
     for (auto& entity : projectiles)
     {
         auto& p = projectiles.get<Projectile>(entity);
+		if (p.displayingParticles) {
+			Engine::Registry().remove_if_exists<Sprite>(entity);
+			auto& particle_spawner = Engine::Registry().get<PlightParticleSpawner>(entity);
+			if (!particle_spawner.active) {
+				p.destroy = true;
+			}
+		}
         if (p.destroy)
         {
             Engine::Registry().remove_all(entity);

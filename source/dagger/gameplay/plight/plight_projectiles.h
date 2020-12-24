@@ -19,6 +19,7 @@ namespace plight
         Float32 timeOfLiving = 2.f;
 
         bool destroy = false;
+        bool displayingParticles = false;
     };
 
     struct ProjectileSpawnerSettings

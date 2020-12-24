@@ -1,57 +1,107 @@
 #include "plight_collisions.h"
 
 #include "core/engine.h"
+#include "core/graphics/sprite.h"
 #include "core/game/transforms.h"
+
+#include "gameplay/plight/plight_controller.h"
+#include "gameplay/plight/plight_projectiles.h"
+#include "gameplay/plight/plight_physics.h"
+#include "gameplay/plight/plight_aiming.h"
 
 using namespace dagger;
 using namespace plight;
 
 void PlightCollisionsSystem::Run()
 {
-    auto view = Engine::Registry().view<PlightCollision, Transform>();
-    auto it = view.begin();
+    auto viewClear = Engine::Registry().view<PlightCollision, Transform>();
+    auto itClear = viewClear.begin();
 
-    while (it != view.end()) {
-        auto& collision = view.get<PlightCollision>(*it);
+    while (itClear != viewClear.end())
+    {
+        auto& collision = viewClear.get<PlightCollision>(*itClear);
         collision.colidedWith.clear();
         collision.colided = false;
         if (collision.last_pos.position.x == -999) {
-            auto& transform = view.get<Transform>(*it);
+            auto& transform = viewClear.get<Transform>(*itClear);
             collision.last_pos = transform.position;
         }
-        it++;
+        itClear++;
     }
-    it = view.begin();
+    //Collisions for characters
+    auto view = Engine::Registry().view<PlightCollision, Transform, PlightCharacterController>();
+    auto it = view.begin();
 
-
+    
+    auto view2 = Engine::Registry().view<PlightCollision, Transform>();
     while (it != view.end())
     {
         auto& collision = view.get<PlightCollision>(*it);
         auto& transform = view.get<Transform>(*it);
-
-        auto it2 = it;
-        it2++;
-        while (it2 != view.end())
-        {
-            auto& col = view.get<PlightCollision>(*it2);
-            auto& tr = view.get<Transform>(*it2);
+        
+        for (auto entity : view2) {
+            if (entity == *it) {
+                continue;
+            }
+            auto& col = view2.get<PlightCollision>(entity);
+            auto& tr = view2.get<Transform>(entity);
+            //Don't check collisions for distant objects (They aren't colided for sure)
+            if (abs(transform.position.x - tr.position.x) > 32 && abs(transform.position.y - tr.position.y) > 32) {
+                continue;
+            }
 
             // processing one collision per frame for each colider
             if (collision.IsCollidedSAT(transform.position, col, tr.position))
             {
                 collision.colided = true;
-                collision.colidedWith.push_back(*it2);
+                collision.colidedWith.push_back(entity);
 
                 col.colided = true;
                 col.colidedWith.push_back(*it);
             }
-            it2++;
         }
-
         collision.last_pos = transform;
-
         it++;
     }
+
+    //Collisions for projectiles 
+    auto viewProjectile = Engine::Registry().view<PlightCollision, Transform, Projectile>();
+    auto it2 = viewProjectile.begin();
+
+
+    auto view2Projectile = Engine::Registry().view<PlightCollision, Transform , PhysicsObject>();
+    while (it2 != viewProjectile.end())
+    {
+        auto view2 = Engine::Registry().view<PlightCollision, Transform>();
+
+        auto& collision = viewProjectile.get<PlightCollision>(*it2);
+        auto& transform = viewProjectile.get<Transform>(*it2);
+
+        for (auto entity : view2Projectile) {
+            if (entity == *it2) {
+                continue;
+            }
+            auto& col = view2.get<PlightCollision>(entity);
+            auto& tr = view2.get<Transform>(entity);
+            //Don't check collisions for distant objects (They aren't colided for sure)
+            if (abs(transform.position.x - tr.position.x) > 32 && abs(transform.position.y - tr.position.y) > 32) {
+                continue;
+            }
+
+            // processing one collision per frame for each colider
+            if (collision.IsCollidedSAT(transform.position, col, tr.position))
+            {
+                collision.colided = true;
+                collision.colidedWith.push_back(entity);
+
+                col.colided = true;
+                col.colidedWith.push_back(*it2);
+            }
+        }
+        collision.last_pos = transform;
+        it2++;
+    }
+
 }
 
 
