@@ -23,30 +23,27 @@ using namespace team_game;
 
 String run = "among_them_animations:bat";
 String idle_ = "among_them_animations:goblin_idle";
-Bool stopenemies = false;
+
 void EnemyControllerSystem::Run()
 {
-	if (stopenemies) {
 		Engine::Registry().view<EnemyFSM::StateComponent>().each(
 			[&](EnemyFSM::StateComponent& state_)
-		{
+		{   auto& ctrl = Engine::Registry().get<EnemyDescription>(state_.entity); 
+		    if (ctrl.stopenemies) {
 			auto& body = Engine::Registry().get<MovableBody>(state_.entity);
 			body.allowed = false;
+			}
+			else {
+				auto& inputshape = Engine::Registry().get<InputEnemiesFile>(state_.entity);
+				if (inputshape.currentshape == "goblin") { idle_ = "among_them_animations:goblin_idle"; run = "among_them_animations:goblin_run"; }
+				if (inputshape.currentshape == "slime") { idle_ = "among_them_animations:slime_idle"; run = "among_them_animations:slime_run"; }
+				if (inputshape.currentshape == "bat") { idle_ = "among_them_animations:bat";  run = "among_them_animations:bat"; }
+				m_EnemyStateMachine.Run(state_);
+			}
+			
 
 		});
-	}
-	else {
-		Engine::Registry().view<EnemyFSM::StateComponent>().each(
-			[&](EnemyFSM::StateComponent& state_)
-		{
-			auto& inputshape = Engine::Registry().get<InputEnemiesFile>(state_.entity);
-			if (inputshape.currentshape == "goblin") { idle_ = "among_them_animations:goblin_idle"; run = "among_them_animations:goblin_run"; }
-			if (inputshape.currentshape == "slime") { idle_ = "among_them_animations:slime_idle"; run = "among_them_animations:slime_run"; }
-			if (inputshape.currentshape == "bat") { idle_ = "among_them_animations:bat";  run = "among_them_animations:bat"; }
-			m_EnemyStateMachine.Run(state_);
-
-		});
-	}
+	
 }
 
 DEFAULT_ENTER(EnemyFSM, Patrolling);
@@ -181,7 +178,7 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 				text2.position = { 0,-50,0 };
 				text2.Set("pixel-font", "Press R to restart");
 				hero.canMove = false;
-				stopenemies = true;
+				ctrl.stopenemies = true;
 			}
 			col.colided = false;
 		}
