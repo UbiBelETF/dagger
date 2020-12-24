@@ -299,7 +299,7 @@ Entity CreateRoof(Registry& reg_, INT32 x_, INT32 y_)
 {
     Entity entity = reg_.create();
     auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 78 };
+    sprite.position = { x_ * 16, y_ * 16, 75 };
     float mod = (float)rand() / RAND_MAX;
     if (mod <= 0.33) {
         AssignSprite(sprite, "spritesheets:dungeon:wall_left");
