@@ -61,6 +61,7 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
     String baseDir, textureName;
     Float32 zPos, horizontalBlocks, verticalBlocks;
     Vector2 spriteSize, scale, pos;
+    Bool addCollision = addCollision_;
 
     auto& reg = Engine::Registry();
 
@@ -88,13 +89,20 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_)
 
                 spriteBlock.scale = scale;
 
-                if (addCollision_)
+                if (textureName == "BricksN")
+                {
+                    addCollision = false;
+                }
+
+                if (addCollision)
                 {                  
                     auto& collider = reg.get_or_emplace<Collider>(block);
                     collider.entityType = CollisionID::TERRAIN;
                     collider.state = MovementState::IMMOBILE;
                     collider.size = spriteBlock.size * spriteBlock.scale;
                 }
+
+                addCollision = addCollision_;
             }
         }
     }
