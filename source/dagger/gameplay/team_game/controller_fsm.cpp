@@ -8,6 +8,8 @@
 #include "gameplay/team_game/brawler_controller.h"
 #include "gameplay/team_game/physics.h"
 #include "gameplay/team_game/animations_fsm.h"
+#include "gameplay/team_game/player_camera_focus.h"
+#include "gameplay/team_game/team_game_main.h"
 using namespace dagger;
 using namespace team_game;
 
@@ -186,9 +188,16 @@ void ControllerFSM::Dead::Enter(ControllerFSM::StateComponent& state_)
 }
 void ControllerFSM::Dead::Run(ControllerFSM::StateComponent& state_)
 {
+    /*Engine::Registry().clear();
+    team_game::SetupWorld_Demo(Engine::Instance());*/
+
     auto& char_ = Engine::Registry().get<BrawlerCharacter>(state_.entity);
     auto& sprite_ = Engine::Registry().get<Sprite>(state_.entity);
-    if (!char_.dead)
+    auto& transform_ = Engine::Registry().get<Transform>(state_.entity);
+    transform_.position = { 2550,26,0 };
+    char_.healthHearts = 3;
+    GoTo(ECharacterStates::Idle, state_);
+    /*if (!char_.dead)
     {
         if (EPSILON_ZERO(char_.gotHit))
         {
@@ -204,7 +213,7 @@ void ControllerFSM::Dead::Run(ControllerFSM::StateComponent& state_)
             }
 
         }
-    }
+    }*/
 }
 DEFAULT_EXIT(ControllerFSM, Dead);
 
@@ -217,7 +226,17 @@ void ControllerFSM::Interact::Run(ControllerFSM::StateComponent& state_)
     {
         auto& t_ = Engine::Registry().get<Transform>(state_.entity);
         if (t_.position.x > 2530 && t_.position.x<2575 && t_.position.y>-27 && t_.position.y < 26)
+        {
             t_.position = { 2160, 1175, 0.0f };
+            auto view = Engine::Registry().view<BrawlerCharacter>();
+            for (auto entity : view)
+            {
+                //THIS IS IN CASE WE WANT THE CAMERA TO FOLLOW THE BOSS AND OUR CHARACTER
+                //if(entity!=state_.entity)  Engine::Registry().emplace<team_game::CameraFollow>(entity);
+                auto& brawler = Engine::Registry().get<BrawlerCharacter>(entity);
+                brawler.inRoom = true;
+            }
+        }
         else if (EPSILON_NOT_ZERO(input_.Get("jump"))) GoTo(ECharacterStates::InAir, state_);
         else if (EPSILON_NOT_ZERO(input_.Get("run"))) GoTo(ECharacterStates::Running, state_);
         else GoTo(ECharacterStates::Idle, state_);

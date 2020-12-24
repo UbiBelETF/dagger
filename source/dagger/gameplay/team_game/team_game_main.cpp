@@ -18,6 +18,7 @@
 #include "gameplay/team_game/collisions.h"
 #include "gameplay/team_game/boss_fsm.h"
 #include "gameplay/team_game/combat.h"
+#include "gameplay/team_game/boss_ai.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -27,6 +28,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddPausableSystem<CameraFollowSystem>();
     engine_.AddPausableSystem<PhysicsSystem>();
     engine_.AddPausableSystem<GameManagerSystem>();
+    engine_.AddPausableSystem<BossAISystem>();
     engine_.AddPausableSystem<BrawlerControllerSystem>();
     //engine_.AddPausableSystem<SimpleCollisionsSystem>();
     engine_.AddPausableSystem<CombatSystem>();
@@ -138,6 +140,7 @@ struct Boss
         auto& transform = reg.get_or_emplace<Transform>(entity);
         auto& physics = reg.get_or_emplace<Physics>(entity);
         auto& col = reg.get_or_emplace<SimpleCollision>(entity);
+        auto& bossAI = reg.get_or_emplace<BossAI>(entity);
         ATTACH_TO_FSM(BossFSM, entity);
         character.attackSize = 120;
         col.size.x = 20;
@@ -145,11 +148,13 @@ struct Boss
         col.pivot = { -0.5f, -1.85f };
         sprite.pivot = { 0.2f, 0.0f };
         physics.nonStatic = true;
+        character.isEnemy = true;
+        character.healthHearts = 9;
         return Boss{ entity, sprite, anim, input, character,transform,physics,col };
     }
 
     static Boss Create(
-        String input_ = "",
+        //String input_ = "",
         ColorRGB color_ = { 1, 1, 1 },
         Vector2 position_ = { 100, 100 })
     {
@@ -167,8 +172,8 @@ struct Boss
         AnimatorPlay(chr.animator, "boss:boss_idle");
 
 
-        if (input_ != "")
-            chr.input.contexts.push_back(input_);
+        /*if (input_ != "")
+            chr.input.contexts.push_back(input_);*/
 
         chr.character.speed.x = 100;
         chr.character.speed.y = 250;
@@ -377,8 +382,8 @@ void team_game::SetupWorld_Demo(Engine& engine_)
         transform.position.y = -400;
         transform.position.z = 1;
     }
-    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,100});
-    auto boss = Boss::Create("Arrows", { 1,1,1 }, { 2630, 1100 });
+    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 2550, 26/*0,100*/ });
+    auto boss = Boss::Create(/*"Arrows",*/ { 1,1,1 }, { 2475, 1125 });
     auto guide = Guide::Create( { 1,1,1 }, { 50,100 });
     auto bubble = Bubble::Create({ 1,1,1 }, { 50,100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);

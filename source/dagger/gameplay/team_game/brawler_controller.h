@@ -22,6 +22,8 @@ namespace team_game
 		UInt32 hitSize = 10;
 		Float32 gotHit = 0.f;
 		Bool jump = false;
+		Bool inRoom = false;
+		Bool isEnemy = false;
 	};
 
 	class BrawlerControllerSystem : public System

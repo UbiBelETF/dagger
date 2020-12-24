@@ -29,10 +29,13 @@ void team_game::CombatSystem::Run()
             Float32 proc_ = (int)(brawler_.attacking * 100);
             Vector3 temp_t = { 0,0,0 };
             temp_t.x = t_.position.x;
-            temp_t.x+=(brawler_.attackSize/(2*brawler_.hitSize) * sprite_.scale.x);
+            if (brawler_.isEnemy)temp_t.x += (brawler_.attackSize / (2 * brawler_.hitSize) * sprite_.scale.x);
+            else temp_t.x += brawler_.attackSize / 2 * sprite_.scale.x;
             temp_t.y = t_.position.y;
             temp_t.z = t_.position.z;
-            col_.size.x += brawler_.attackSize / (2 * brawler_.hitSize);
+            SimpleCollision col = col_;
+            if (brawler_.isEnemy) col.size.x += brawler_.attackSize / (2 * brawler_.hitSize);
+            else col.size += brawler_.attackSize / 2;
             for (auto entity2 : viewCollisions)
             {
                 if (entity2 != entity)
@@ -40,7 +43,7 @@ void team_game::CombatSystem::Run()
                     BrawlerCharacter& braw_ = Engine::Registry().get<BrawlerCharacter>(entity2);
                     SimpleCollision& collision = viewCollisions.get<SimpleCollision>(entity2);
                     Transform& transform = viewCollisions.get<Transform>(entity2);
-                    if (col_.IsCollided(temp_t, collision, transform.position) && !brawler_.hittedEnemy)
+                    if (col.IsCollided(temp_t, collision, transform.position) && !brawler_.hittedEnemy)
                     {
                         braw_.healthHearts--;
                         brawler_.hittedEnemy = true;
@@ -49,7 +52,8 @@ void team_game::CombatSystem::Run()
                     }
                 }
             }
-            col_.size.x -= brawler_.attackSize/(2*brawler_.hitSize);
+            if (brawler_.isEnemy)col.size.x -= brawler_.attackSize / (2 * brawler_.hitSize);
+            else col.size -= brawler_.attackSize / 2;
            
         }
     }
