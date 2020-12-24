@@ -139,7 +139,9 @@ void ancient_defenders::PlayerControlsSystem::Run()
 
         if (EPSILON_NOT_ZERO(input_.Get("enemy")))
         {
-            Golem::Create();
+			Golem::Create("LITTLE");
+            Golem::Create("MIDDLE");
+			Golem::Create("BIG");
 
             m_controlData.timeout = ControlData::maxTimeout;
         }

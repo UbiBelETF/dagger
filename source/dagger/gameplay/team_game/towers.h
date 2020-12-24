@@ -33,8 +33,6 @@ namespace ancient_defenders {
         static UInt32 selectedSpot;
         static String selectedTower;
 
-        static ESelectMode selectMode;
-
         static Sequence<Vector2> spotCoordinates;
         static StaticArray<Bool, SPOT_COUNT> availableSpot;
         static StaticArray<UInt32, SPOT_COUNT> chantingMages;
