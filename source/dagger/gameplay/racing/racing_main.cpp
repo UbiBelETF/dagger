@@ -10,6 +10,9 @@
 #include "core/game/transforms.h"
 
 #include "gameplay/racing/racing_simple_collision.h"
+#include "gameplay/common/simple_collisions.h"
+#include "gameplay/common/particles.h"
+
 #include "gameplay/racing/racing_game_logic.h"
 #include "gameplay/racing/racing_player_car.h"
 #include "gameplay/racing/racing_car.h"
@@ -25,6 +28,8 @@ void RacingGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<RacingCollisionsLogicSystem>();
     engine_.AddSystem<RacingSimpleCollisionSystem>();
     engine_.AddSystem<BigLaserSystem>();
+    engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<common_res::ParticleSystem>();
 }
 
 void RacingGame::WorldSetup(Engine &engine_)
@@ -138,6 +143,11 @@ void racing_game::SetupWorld(Engine &engine_)
         col.size = sprite.size;
         col.identifier = 2;
         col.isColisionOn = false;
+
+        common_res::ParticleSpawnerSettings settings;
+        settings.Setup(0.05f, {4.f, 4.f}, {-0.2f, -1.4f}, {0.2f, -0.6f}, 
+                        {0.6f,0.6f,0.6f,1}, {1,1,1,1}, "EmptyWhitePixel");
+        common_res::ParticleSystem::SetupParticleSystem(entity, settings);
     }
 
     zPos = 5.f;
@@ -167,5 +177,10 @@ void racing_game::SetupWorld(Engine &engine_)
         auto& col = reg.emplace<RacingSimpleCollision>(entity);
         col.size = sprite.size;
         col.identifier = 0;
+
+        common_res::ParticleSpawnerSettings settings;
+        settings.Setup(0.1f, {4.f, 4.f}, {-0.2f, 0.4f}, {0.2f, 1.2f}, 
+                        {0.6f,0.6f,0.6f,1}, {1,1,1,1}, "EmptyWhitePixel");
+        common_res::ParticleSystem::SetupParticleSystem(entity, settings);
     }
 }

@@ -1,0 +1,11 @@
+{
+	"animation-name": "TeamGame:Enemy-Bald_Pirate:JUMP",
+	"animation-length-ms": 600,
+	"animation-frames": 
+	[
+		{ "texture-name": "TeamGame:Characters:Enemy-Bald_Pirate:Jump:1" },
+		{ "texture-name": "TeamGame:Characters:Enemy-Bald_Pirate:Jump:2" },
+		{ "texture-name": "TeamGame:Characters:Enemy-Bald_Pirate:Jump:3" },
+		{ "texture-name": "TeamGame:Characters:Enemy-Bald_Pirate:Jump:4" }
+	]
+}

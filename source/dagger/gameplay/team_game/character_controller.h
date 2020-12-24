@@ -12,7 +12,8 @@ namespace team_game
 	struct PlayerCharacter
 	{
 		UInt8 id;
-		Float32 speed{ 140.f };
+		Float32 speed{ 200.f };
+		Float32 health{ 100.0f };
 	};
 
 	class CharacterControllerSystem

@@ -1,11 +1,17 @@
-BACKGROUND SkyAndOcean 5.0 768.0 964.0 -1200.0 -120.0 5 1
-BACKGROUND SmallCloud_1 5.0 142.0 48.0 -125.0 0.0 1 1
-BACKGROUND SmallCloud_3 5.0 210.0 57.0 -350.0 0.0 1 1
-BACKGROUND SmallCloud_2 5.0 199.5 52.5 200.0 100.0 1 1
-BACKGROUND PalmTreeRegular 4.0 128.0 128.0 -325.0 -115.0 1 1
-BACKGROUND PalmTreeRegular 4.0 128.0 128.0 -285.0 -115.0 1 1
+BACKGROUND OverlayedWall 5.0 140.0 140.0 -650.0 -300.0 30 9
+BACKGROUND MapEdge 6.0 150.0 50.0 -950.0 -1000.0 40 40
 
-Other ShipHelm 4.0 48.0 48.0 -360.0 183.0 1 1
-Other Flag 5.0 34.0 75.0 315.0 190.0 1 1
-Other Cannon 4.0 62.0 46.0 -40.0 -61.0 1 1
-Other DiamondRed 4.0 36.0 36.0 236.0 132.0 1 1
+Other Barrel 4.0 48.0 48.0 0.0 50.0 2 1
+Other Barrel 4.0 48.0 48.0 1350.0 250.0 2 1
+Other Barrel 4.0 48.0 48.0 1475.0 250.0 1 1
+
+Other Candle 4.0 16.0 32.0 66.0 98.0 1 1
+
+Other Chain_1 4.0 18.0 200.0 366.0 298.0 1 1
+Other Chain_1 4.0 18.0 200.0 2100 275.0 1 1
+
+Other Skull 4.0 20.0 20.0 -225.0 -70.0 1 1
+Other Skull 4.0 20.0 20.0 -185.0 -200.0 2 1
+Other Skull 4.0 20.0 20.0 1845.0 130.0 1 1
+
+Other Window 4.0 50.0 50.0 710.0 420.0 2 1
