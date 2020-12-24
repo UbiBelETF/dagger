@@ -23,6 +23,7 @@
 #include "gameplay/team_game/level_generator.h"
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
+#include "gameplay/team_game/game_controller.h"
 #include "gameplay/team_game/follow.h""
 #include "gameplay/team_game/remote_animation.h"
 
@@ -42,6 +43,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<KeySystem>();
     engine_.AddSystem<FollowSystem>();
     engine_.AddSystem<RemoteAnimationSystem>();
+    engine_.AddSystem<GameControllerSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -129,11 +131,6 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
-    
-
-
-
-    
         TilemapLegend legend;
         legend['.'] = &level_generator::smiljana::CreateFloor;
         legend['#'] = &level_generator::smiljana::CreateWall;
@@ -266,20 +263,26 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
     reg_.emplace<MovableBody>(enemy2);
 }
+
 void team_game::SetupWorld(Engine &engine_)
 {
     auto& reg = engine_.Registry();
 
-    float zPos = 1.f;
+    auto gameCtrl = reg.create();
+
+    auto& ctrlInput = reg.emplace<InputReceiver>(gameCtrl);
+    ctrlInput.contexts.push_back("AmongThemReload");
+
+    reg.emplace<GameController>(gameCtrl);
 
     // STATIC BODIES MAP
     auto mapEnt = reg.create();
-	  auto& map = reg.emplace<StaticBodyMap>(mapEnt);
-	  Engine::PutDefaultResource<StaticBodyMap>(&map);
+	auto& map = reg.emplace<StaticBodyMap>(mapEnt);
+	Engine::PutDefaultResource<StaticBodyMap>(&map);
 	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
-    //SetupWorldJovica(engine_, reg);
-      SetupWorldSmiljana(engine_, reg);
-
+    SetupWorldJovica(engine_, reg);
+    //SetupWorldKosta(engine_, reg);
+    //SetupWorldSmiljana(engine_, reg);
 }
 
