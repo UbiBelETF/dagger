@@ -118,7 +118,6 @@ Entity tank_warfare::CreateGroupTrees(Registry& reg_, SInt32 x_, SInt32 y_)
 	AssignSprite(sprite, fmt::format("jovanovici:tree:tree{}", (rand() % 2) + 1));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.3;
-	col.size = sprite.size;
 	return entity;
 }
 
@@ -132,7 +131,6 @@ Entity tank_warfare::CreateTree(Registry& reg_, SInt32 x_, SInt32 y_)
 	AssignSprite(sprite, fmt::format("jovanovici:tree:tree{}", (rand() % 2) + 3));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
-	col.size = sprite.size;
 	return entity;
 }
 
@@ -220,6 +218,29 @@ Entity tank_warfare::CreateCarBack(Registry& reg_, SInt32 x_, SInt32 y_)
 	return entity;
 }
 
+Entity tank_warfare::FullCollisionTrees(Registry& reg_, SInt32 x_, SInt32 y_)
+{
+	auto entity = reg_.create();
+	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& tra = reg_.emplace<Transform>(entity);
+	tra.position = { x_ * 48, y_ * 48, 1.5 };
+	auto& col = reg_.emplace<SimpleCollision>(entity);
+	AssignSprite(sprite, fmt::format("jovanovici:tree:tree{}", (rand() % 2) + 1));
+	sprite.position = { x_ * 48, y_ * 48, 1.5 };
+	sprite.size *= 1.3;
+	col.size = sprite.size;
+	return entity;
+}
+
+Entity tank_warfare::EmptyCollision(Registry& reg_, SInt32 x_, SInt32 y_)
+{
+	auto entity = reg_.create();
+	auto& tra = reg_.emplace<Transform>(entity);
+	tra.position = { x_ * 48, y_ * 48, 1.5 };
+	auto& col = reg_.emplace<SimpleCollision>(entity);
+	col.size = { 18, 64 };
+	return entity;
+}
 
 void tank_warfare::TilemapSystem::SpinUp()
 {

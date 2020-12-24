@@ -95,6 +95,8 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
 	Tilemap::legend['f'] = &CreateSideFence;
 	Tilemap::legend['F'] = &CreateFrontFence;
 	Tilemap::legend['c'] = &CreateCarBack;
+	Tilemap::legend['X'] = &FullCollisionTrees;
+	Tilemap::legend['E'] = &EmptyCollision;
 	Tilemap::legend['~'] = nullptr;
 
 	for (auto& entry : Files::recursive_directory_iterator("textures\\jovanovici\\maps"))

@@ -10,6 +10,8 @@ namespace tank_warfare
 	using TileProcessor = std::function<Entity(Registry&, SInt32, SInt32)>;
 	using TilemapLegend = std::map<Char, TileProcessor>;
 
+	Entity EmptyCollision(Registry&, SInt32, SInt32);
+	Entity FullCollisionTrees(Registry&, SInt32, SInt32);
 	Entity CreateGrass(Registry&, SInt32, SInt32);
 	Entity CreateDirt(Registry&, SInt32, SInt32);
 	Entity CreateBiggestBuilding(Registry&, SInt32, SInt32);
