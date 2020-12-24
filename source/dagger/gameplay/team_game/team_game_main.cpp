@@ -10,7 +10,7 @@
 #include "core/game/transforms.h"
 #include "core/graphics/text.h"
 
-
+#include "gameplay/team_game/death_counter.h"
 #include "gameplay/team_game/brawler_controller.h"
 #include "gameplay/team_game/game_manager.h"
 #include "gameplay/team_game/player_camera_focus.h"
@@ -32,6 +32,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     //engine_.AddPausableSystem<SimpleCollisionsSystem>();
     engine_.AddPausableSystem<CombatSystem>();
     engine_.AddPausableSystem<CollisionSystem>();
+    engine_.AddPausableSystem<DeathsCounterSystem>();
     engine_.AddPausableSystem<TransformSystem>();
 }
 
@@ -79,6 +80,7 @@ struct Player
         col.size.x = 5;
         col.size.y = 15;
         physics.nonStatic = true;
+        character.player = true;
         return Player{ entity, sprite, anim, input, character,transform,physics,col };
     }
 
@@ -364,19 +366,7 @@ void team_game::SetupWorld_Demo(Engine& engine_)
     SetupCamera();
     auto& reg = Engine::Registry();
     auto* camera = Engine::GetDefaultResource<Camera>();
-    {
-        auto entity = reg.create();
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size.x = 3000;
-        col.size.y = 200;
-        auto& physics = reg.emplace<Physics>(entity);
-        physics.nonStatic = false;
-        physics.deathFloor = true;
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position.x = 1250;
-        transform.position.y = -400;
-        transform.position.z = 1;
-    }
+   
     
     auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,100});
     auto boss = Boss::Create("Arrows", { 1,1,1 }, { 2630, 1100 });
@@ -391,11 +381,13 @@ void team_game::SetupWorld_Demo(Engine& engine_)
         sprite.scale = { 1, 1 };
         sprite.position = { -375, 265, 0 };
         sprite.UseAsUI();
-
+        
         auto ui = reg.create();
         auto& text = reg.emplace<Text>(ui);
+        auto& ct = reg.emplace<CounterType>(ui);
         text.spacing = 0.6f;
         text.Set("pixel-font", fmt::format("x {}", mainChar.character.deaths), { -300, 262,0 });
+        //Engine::Registry().emplace<DeathCounter>(ui);
         {
             auto lives = reg.create();
             auto& sprite = reg.get_or_emplace<Sprite>(lives);

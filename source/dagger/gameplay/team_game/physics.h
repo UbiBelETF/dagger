@@ -11,6 +11,7 @@ namespace team_game {
         bool deathFloor = false;
     };
     static Float32 GetGravity() { return -500; }
+    
     class PhysicsSystem : public System
     {
     public:

@@ -17,15 +17,20 @@
 void team_game::CollisionSystem::Run()
 {
     auto viewCollisions = Engine::Registry().view<Physics,Transform, SimpleCollision>();
-    auto view = Engine::Registry().view< Physics, Transform, SimpleCollision>();
+    auto view = Engine::Registry().view< Physics, Transform, SimpleCollision, BrawlerCharacter>();
     
     
     for (auto entity : view)
     {
         auto& t = view.get<Transform>(entity);
+        auto& ch = view.get<BrawlerCharacter>(entity);
         auto& col = view.get<SimpleCollision>(entity);
         auto& physics = view.get<Physics>(entity);
         if (physics.nonStatic) {
+            if (t.position.y < -280) {
+                t.position = { 0, 100, 0.0f };
+                ch.deaths++;
+            }
             for (auto entity2 : viewCollisions)
             {
                 if (entity2 != entity)
