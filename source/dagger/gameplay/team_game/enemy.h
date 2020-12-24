@@ -10,7 +10,6 @@ enum struct EEnemyState
 {
 	Patrolling,
 	Chasing,
-	Idle_,
 	NoMore
 };
 
@@ -18,7 +17,7 @@ enum struct EEnemyState
 
 struct EnemyDescription {
 
-	Float32 speed{ 50 };
+	Float32 speed{ 40 };
 	UInt32 numberOfPoints=0;
 	Sequence<Vector2> path = {};
 	SInt32 postition = 0;
@@ -26,7 +25,7 @@ struct EnemyDescription {
 	Vector2 offset = { 0,0 };
 	ECharacterShape shape;
 	EEnemyState lastState;
-	Vector2 detectionArea{ 60,60 };
+	Vector2 detectionArea{ 80,80 };
 	Bool stopenemies{ false };
 
 };
@@ -37,14 +36,12 @@ struct EnemyFSM : public FSM<EEnemyState>
 {
 	DEFINE_STATE(EnemyFSM, EEnemyState, Patrolling);
 	DEFINE_STATE(EnemyFSM, EEnemyState, Chasing);
-	DEFINE_STATE(EnemyFSM, EEnemyState, Idle_);
 
 
 	EnemyFSM()
 	{
 		CONNECT_STATE(EEnemyState, Patrolling);
 		CONNECT_STATE(EEnemyState, Chasing);
-		CONNECT_STATE(EEnemyState, Idle_);
 	
 	}
 };
