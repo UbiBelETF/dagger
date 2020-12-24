@@ -18,6 +18,8 @@ using namespace team_game;
 
 void GameManagerSystem::SpinUp()
 {
+    Engine::PutDefaultResource<Map<SInt32, Sequence<Entity>>>(new Map<SInt32, Sequence<Entity>>{});
+
     Engine::Dispatcher().sink<NextFrame>().connect<&GameManagerSystem::OnEndOfFrame>(this);
     Engine::Dispatcher().sink<KeyboardEvent>().connect<&GameManagerSystem::OnKeyboardEvent>(this);
 }
@@ -159,7 +161,7 @@ void GameManagerSystem::LoadCollectables()
 
 void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool isTrap_)
 {
-    
+    auto* board = Engine::GetDefaultResource<Map<SInt32, Sequence<Entity>>>();
     FilePath path{ filePath_ };
     std::ifstream fin(Files::absolute(path).string().c_str());
 
@@ -208,8 +210,6 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
             auto& transform = reg.get_or_emplace<Transform>(bigBlock);
             auto& staticCollider = reg.get_or_emplace<StaticCollider>(bigBlock);
 
-            board[Neighborhood(transform.position.x)].push_back(bigBlock);
-
             if (isTrap_)
             {
                 collider.entityType = CollisionID::TRAP;
@@ -225,6 +225,10 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
             collider.size.y = spriteSize.y * verticalBlocks;
 
             transform.position = { pos.x + collider.size.x / 2, pos.y + collider.size.y / 2, zPos };
+
+            auto neighborhood = Neighborhood(transform.position.x);
+            (*board)[neighborhood].push_back(bigBlock);
+            Logger::critical("Adding {} to neighborhood {}", bigBlock, neighborhood);
         }
 
         addCollision = addCollision_;

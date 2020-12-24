@@ -13,8 +13,6 @@ namespace team_game
 
     enum class MovementState { IMMOBILE, UNSTOPPABLE, MOVEABLE };
 
-    Map<SInt32, Sequence<Entity>> board;
-
     struct CollisionInfo
     {
         Bool hasCollided{ false };
@@ -55,10 +53,13 @@ namespace team_game
 
     class CollisionSystem : public System
     {
+        Map<SInt32, Sequence<Entity>> cachedStatics{};
+
     public:
 
         inline String SystemName() { return "Platformer Collisions System"; }
 
+        void SpinUp() override;
         void Run() override;
 
         void LimitPlayerMovement(Collider& collision_);
