@@ -69,13 +69,17 @@ void ProjectileSystem::Run()
 	if (pin.IsFinished()) 
 	{
 		//Check for fire input 
-		auto projectileSpawners = Engine::Registry().view<ProjectileSpawner, Transform, InputReceiver, PlightCrosshair, CombatStats>();
+		auto projectileSpawners = Engine::Registry().view<ProjectileSpawner, Transform, InputReceiver, PlightCrosshair, CombatStats,PlightCharacterController>();
 		for (auto& entity : projectileSpawners) {
 			auto& projectileSys = projectileSpawners.get<ProjectileSpawner>(entity);
 			auto& t = projectileSpawners.get<Transform>(entity);
 			auto& input = projectileSpawners.get<InputReceiver>(entity);
+			auto& character = projectileSpawners.get<PlightCharacterController>(entity);
 			auto& crosshair = projectileSpawners.get<PlightCrosshair>(entity);
 			auto& cstats = projectileSpawners.get<CombatStats>(entity);
+			if (character.dead) {
+				continue;
+			}
 
 			if (projectileSys.active) {
 				Float32 fire = input.Get("fire");
