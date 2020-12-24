@@ -190,7 +190,7 @@ struct Player
         auto& hl = Engine::Registry().emplace<Text>(entity);
         hl.alignment={ TextAlignment::RIGHT };
         hl.spacing = 0.5f;
-        hl.Set("pixel-font", "100/100",{10,-95,0},{10,10});
+        hl.Set("pixel-font", "150/150",{10,-95,0},{10,10});
 
         return chr;
     }

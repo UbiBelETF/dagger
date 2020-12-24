@@ -88,7 +88,7 @@ void PlayerControllerSystem::Run()
         }else
         {
             tex.alignment={ TextAlignment::RIGHT };
-            tex.Set("pixel-font", std::to_string(player.health) + "/100", { 10,-95,0 }, { 10,10 });
+            tex.Set("pixel-font", std::to_string(player.health) + "/" + std::to_string(player.maxHealth), { 10,-95,0 }, { 10,10 });
         }
         
 
@@ -105,9 +105,9 @@ void PlayerControllerSystem::Run()
                 if (Engine::Registry().has<Heart>(col.colidedWith))
                 {
                     Engine::Registry().remove_all(col.colidedWith);
-                    player.health += 40;
-                    if (player.health > 100)
-                        player.health = 100;
+                    player.health += 30;
+                    if (player.health > player.maxHealth)
+                        player.health = player.maxHealth;
                     col.colided = false;
                 }
 

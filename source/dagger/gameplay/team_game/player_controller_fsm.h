@@ -28,9 +28,10 @@ namespace lab
 	struct PlayerCharacter
 	{
 		int speed{ 1 };
-		int maxCooldown = 20;
-		int cooldown = 20;
-		int health = 100;
+		int maxCooldown = 35;
+		int cooldown = 35;
+		int health = 150;
+		int maxHealth = 150;
 		int deathCooldown=200;
 		int hitCooldown=30;
 	};
