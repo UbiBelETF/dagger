@@ -110,6 +110,12 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(player);
 
+    auto& playerCollision = reg_.emplace<SimpleCollision>(player);
+    playerCollision.size = playerSprite.size;
+
+    auto& detection = reg_.emplace<Detection>(player);
+    detection.SetSize({ 2,2 });
+
     // POOF
     auto poofEntity = reg_.create();
     
@@ -130,6 +136,50 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     exec.source = &controller.animationTrigger;
     exec.animationName = "among_them_animations:poof";
     exec.startingSpriteName = "spritesheets:among_them_spritesheet:poof_anim:1";
+
+    // ENEMY 
+    auto enemy = reg_.create();
+
+    auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
+    enemyState.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite = reg_.emplace<Sprite>(enemy);
+    AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite.scale = { 1, 1 };
+
+    auto& enemyAnimator = reg_.emplace<Animator>(enemy);
+    AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform = reg_.emplace<Transform>(enemy);
+    enemyTransform.position = { 0, 25, 1 };
+
+    auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
+    enemyInput.pathname = "path.txt";
+    enemyInput.currentshape = "goblin";
+
+    auto& en = reg_.emplace<EnemyDescription>(enemy);
+    en.shape = ECharacterShape::Goblin;
+
+    auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
+    enemyCollision.size = enemySprite.size;
+
+    reg_.emplace<MovableBody>(enemy);
+
+    auto& enDetection1 = reg_.emplace<Detection>(enemy);
+    enDetection1.SetSize(en.detectionArea);
+
+    // VISION CONE
+    auto visionCone = reg_.create();
+
+    reg_.emplace<Transform>(visionCone);
+
+    auto& vcSprite = reg_.emplace<Sprite>(visionCone);
+    AssignSprite(vcSprite, "AmongThem:circle");
+    vcSprite.size = enDetection1.size;
+
+    auto& vcFollow = reg_.emplace<Follow>(visionCone);
+    vcFollow.target = enemy;
+    vcFollow.offset.z = 25;
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
@@ -311,9 +361,9 @@ void team_game::SetupWorld(Engine &engine_)
 	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
 
-   // SetupWorldJovica(engine_, reg);
+    SetupWorldJovica(engine_, reg);
     //SetupWorldKosta(engine_, reg);
-    SetupWorldSmiljana(engine_, reg);
+    //SetupWorldSmiljana(engine_, reg);
 
 }
 
