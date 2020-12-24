@@ -1,0 +1,9 @@
+{
+  "animation-name": "Plight:weapons:SWORD",
+  "animation-length-ms": 600,
+  "animation-frames": [
+    { "texture-name": "Plight:weapons:Sword" },
+    { "texture-name": "Plight:weapons:Sword_Attack_1" },
+    { "texture-name": "Plight:weapons:Sword_Attack_2" }
+  ]
+}

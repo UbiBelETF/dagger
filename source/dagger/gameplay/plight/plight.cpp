@@ -127,6 +127,7 @@ struct PlightCharacter
 
         chr.character.weaponSprite = reg.create();
         auto& weapon_sprite = reg.emplace<Sprite>(chr.character.weaponSprite);
+        auto& animator = reg.emplace<Animator>(chr.character.weaponSprite);
         AssignSprite(weapon_sprite, "EmptyWhitePixel");
         weapon_sprite.scale = chr.sprite.scale;
         weapon_sprite.position.x = chr.sprite.position.x + chr.character.weaponOffset * weapon_sprite.scale.x;
@@ -260,7 +261,9 @@ void plight::SetupWorld(Engine& engine_)
     mainChar.crosshair.startAngle = 0.f;
     mainChar.character.playerNumber = "Player 1";
     auto& weapon_sprite1 = Engine::Registry().get<Sprite>(mainChar.character.weaponSprite);
-    AssignSprite(weapon_sprite1, "Plight:weapons:Bow_13");
+    AssignSprite(weapon_sprite1, "Plight:weapons:Sword");
+    auto& animator_sword = Engine::Registry().get<Animator>(mainChar.character.weaponSprite);
+    AnimatorPlay(animator_sword, "Plight:weapons:SWORD");
     auto& projectile_spawner1 = Engine::Registry().get<ProjectileSpawner>(mainChar.entity);
     projectile_spawner1.settings.pSpriteName = "Plight:projectiles:Arrow_2";
 
@@ -326,7 +329,7 @@ void plight::SetupWorld(Engine& engine_)
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
     sndChar.character.playerNumber = "Player 2";
     auto& weapon_sprite2 = Engine::Registry().get<Sprite>(sndChar.character.weaponSprite);
-    AssignSprite(weapon_sprite2, "Plight:weapons:Crossbow_4");
+    AssignSprite(weapon_sprite2, "Plight:weapons:Axe");
     auto& projectile_spawner2 = Engine::Registry().get<ProjectileSpawner>(sndChar.entity);
     projectile_spawner2.settings.pSpriteName = "Plight:projectiles:Arrow_3";
 
