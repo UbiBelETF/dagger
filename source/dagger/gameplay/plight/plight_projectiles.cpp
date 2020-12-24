@@ -135,7 +135,7 @@ void ProjectileSystem::Run()
 			if (projectile_.timeOfLiving <= 0) {
 				if (projectile_.isBomb) {
 					pspawner_.active = true;
-					projectile_.displayingParticles = true;
+					projectile_.activated = true;
 					col_.size.x = projectile_.bombRadius;
 					col_.size.y = projectile_.bombRadius;
 				}
@@ -154,8 +154,12 @@ void ProjectileSystem::Run()
 							if (projectile_.isBomb) {
 								col_.size.x = projectile_.bombRadius;
 								col_.size.y = projectile_.bombRadius;
-							}						
-							projectile_.displayingParticles = true;
+								projectile_.activated = true;
+							}	
+							else {
+								projectile_.displayingParticles = true;
+							}
+
 						}
 					}
 					it++;
@@ -193,9 +197,6 @@ void ProjectileSystem::OnEndOfFrame()
         auto& p = projectiles.get<Projectile>(entity);
 		if (p.displayingParticles) {
 			Engine::Registry().remove_if_exists<Sprite>(entity);	
-			if (p.bombCollisionDetected) {
-				Engine::Registry().remove_if_exists<PlightCollision>(entity);
-			}
 			auto& particle_spawner = Engine::Registry().get<PlightParticleSpawner>(entity);
 			if (!particle_spawner.active) {
 				p.destroy = true;

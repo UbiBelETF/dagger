@@ -25,6 +25,7 @@ namespace plight
         bool destroy = false;
         bool displayingParticles = false;
         bool bombCollisionDetected = false;
+        bool activated = false;
     };
 
     struct ProjectileSpawnerSettings

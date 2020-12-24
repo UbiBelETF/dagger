@@ -77,24 +77,32 @@ void PlightCombatSystem::Run()
 							auto& pspawner = Engine::Registry().get<PlightParticleSpawner>(entity);
 							pspawner.active = true;
 
-							if (!projectile.destroy && !projectile.bombCollisionDetected) {
-
-								
-
-								if (projectile.isBomb) {
+							if (projectile.isBomb) {
+								if (!projectile.displayingParticles) {
+									if (!projectile.activated) {
+										auto& bomb_particles = Engine::Registry().get<PlightParticleSpawner>(*it);
+										bomb_particles.active = true;
+										otherCol.size.x = projectile.bombRadius;
+										otherCol.size.y = projectile.bombRadius;
+										projectile.activated = true;
+									}									
+								}
+								else {
 									Float32 dmg = projectile.projectileDamage;
 									Float32 dist = getDistance(t.position.x, t.position.y, otherTransform.position.x, otherTransform.position.y);
 									if (dist > 0) {
-										dmg = projectile.projectileDamage * 1 / (dist/10);
+										dmg = projectile.projectileDamage * 1 / (dist / 15);
 										if (dmg > projectile.projectileDamage) {
 											dmg = projectile.projectileDamage;
-										}										
+										}
 									}
 									cstats.currentHealth -= dmg;
 								}
-								else {
-									cstats.currentHealth -= projectile.projectileDamage;
-								}
+							}
+							else if(!projectile.destroy){
+								cstats.currentHealth -= projectile.projectileDamage;
+								projectile.destroy = true;
+							}
 
 
 								if (cstats.currentHealth <= 0.f) {
@@ -103,18 +111,7 @@ void PlightCombatSystem::Run()
 
 								auto& sprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
 								cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
-								sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
-							}
-
-							if (projectile.isBomb) {
-								auto& bomb_particles = Engine::Registry().get<PlightParticleSpawner>(*it);
-								bomb_particles.active = true;
-								projectile.displayingParticles = true;
-								projectile.bombCollisionDetected = true;
-							}
-							else {
-								projectile.destroy = true;
-							}				
+								sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);				
 						}
 					}
 					it++;
@@ -180,6 +177,34 @@ void PlightCombatSystem::Run()
 		}
 	}
 
+}
+
+void plight::PlightCombatSystem::WindDown()
+{
+	Engine::Dispatcher().sink<NextFrame>().disconnect<&PlightCombatSystem::OnEndOfFrame>(this);
+}
+
+void plight::PlightCombatSystem::SpinUp()
+{
+	Engine::Dispatcher().sink<NextFrame>().connect<&PlightCombatSystem::OnEndOfFrame>(this);
+}
+
+void plight::PlightCombatSystem::OnEndOfFrame()
+{
+	auto view = Engine::Registry().view<Projectile>();
+	for (auto entity : view) {
+		auto& projectile = Engine::Registry().get<Projectile>(entity);
+		if (projectile.isBomb) {
+			if (projectile.activated) {
+				if (!projectile.displayingParticles) {
+					projectile.displayingParticles = true;
+				}
+				else {
+					Engine::Registry().remove_if_exists<PlightCollision>(entity);
+				}
+			}
+		}
+	}
 }
 
 Float32 plight::PlightCombatSystem::getDistance(Float32 x1, Float32 y1, Float32 x2, Float32 y2)

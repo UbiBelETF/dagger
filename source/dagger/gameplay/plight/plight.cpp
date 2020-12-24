@@ -118,7 +118,7 @@ struct PlightCharacter
         projectile_settings.pSpriteName = "EmptyWhitePixel";
 
         ProjectileSpawnerSettings bomb_settings;
-        bomb_settings.projectileDamage = 70.f;
+        bomb_settings.projectileDamage = 35.f;
         bomb_settings.projectileSpeed = 150.f;
         bomb_settings.bombSpawner = true;
         bomb_settings.pSpriteName = "Plight:projectiles:bomb";
