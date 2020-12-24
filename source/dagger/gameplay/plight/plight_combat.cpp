@@ -14,6 +14,7 @@
 #include "gameplay/plight/plight_particles.h"
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/plight_controller.h"
+#include "gameplay/plight/plight_melee.h"
 
 
 
@@ -49,7 +50,7 @@ void PlightCombatSystem::Run()
 				auto it = col.colidedWith.begin();
 				while (it != col.colidedWith.end()) {
 					if (Engine::Registry().valid(*it)) {
-						if (Engine::Registry().has<PlightCharacterController>(*it)) {
+						if (Engine::Registry().has<Weapon>(*it)) {
 							if (cstats.currentTimer >= cstats.updateTimer) {
 								auto& ch = Engine::Registry().get<CombatStats>(*it);
 								auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);

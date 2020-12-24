@@ -32,6 +32,11 @@
       "trigger": "KeyL",
       "event": "Released"
     },
+	{
+      "command-name": "attack",
+      "trigger": "KeyK",
+      "event": "Released"
+    },
     {
       "command-name": "use",
       "trigger": "KeyO"

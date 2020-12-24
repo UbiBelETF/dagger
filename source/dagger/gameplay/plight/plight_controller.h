@@ -17,6 +17,7 @@ namespace plight
 		bool doubleTap{ false }; // Waiting for a double tap to perform dash animation
 		bool resting{ false };
 		bool dead{ false };
+		bool attacking{ false };
 
 		Float32 speed{ 100.f };
 
@@ -42,6 +43,8 @@ namespace plight
 		String playerNumber = "";
 
 		Entity weaponSprite;
+		String weaponSpriteName;
+		String weaponAnimationName;
 		Float32 weaponOffset = 15.f;
         
 		//Dashing particles

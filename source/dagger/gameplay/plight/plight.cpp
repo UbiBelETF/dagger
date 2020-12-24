@@ -18,6 +18,7 @@
 #include <time.h>
 #include <math.h>
 
+#include "gameplay/plight/plight_melee.h"
 #include "gameplay/plight/plight_tilemaps_initialization.h"
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
@@ -29,6 +30,7 @@
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_particles.h"
+
 
 
 
@@ -74,7 +76,7 @@ struct PlightCharacter
     static PlightCharacter Create(
         String input_ = "",
         ColorRGB color_ = { 1, 1, 1 },
-        Vector2 position_ = { 0, 0 })
+        Vector2 position_ = { 0, 0 }, int num = 1)
     {
         auto& reg = Engine::Registry();
         auto entity = reg.create();
@@ -127,12 +129,15 @@ struct PlightCharacter
 
         chr.character.weaponSprite = reg.create();
         auto& weapon_sprite = reg.emplace<Sprite>(chr.character.weaponSprite);
+		auto& col = reg.get_or_emplace<PlightCollision>(chr.character.weaponSprite);
+		auto& wep = reg.get_or_emplace<Weapon>(chr.character.weaponSprite);
         AssignSprite(weapon_sprite, "EmptyWhitePixel");
         weapon_sprite.scale = chr.sprite.scale;
         weapon_sprite.position.x = chr.sprite.position.x + chr.character.weaponOffset * weapon_sprite.scale.x;
         weapon_sprite.position.y = chr.sprite.position.y - 3.f;
         weapon_sprite.position.z = chr.sprite.position.z - 5.f;
         weapon_sprite.rotation = 45;
+		num == 1 ? chr.character.weaponSpriteName = "Plight:weapons:Sword" : chr.character.weaponSpriteName = "Plight:weapons:Axe";
         
         chr.character.dashingParticleSpawner = reg.create();
         //Particle spawner for dashing 
@@ -160,6 +165,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightGameLogicSystem>();
     engine_.AddSystem<PlightSpikesSystem>();
     engine_.AddSystem<PlightParticleSystem>();
+	engine_.AddSystem<MeleeSystem>();
 
 }
 
@@ -256,7 +262,7 @@ void plight::SetupWorld(Engine& engine_)
     auto entity = Engine::Registry().create();
     auto& pgInfo = Engine::Registry().emplace<PlightGameInfo>(entity);
 
-    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
+    auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 },1);
     mainChar.crosshair.startAngle = 0.f;
     mainChar.character.playerNumber = "Player 1";
     auto& weapon_sprite1 = Engine::Registry().get<Sprite>(mainChar.character.weaponSprite);
@@ -319,7 +325,7 @@ void plight::SetupWorld(Engine& engine_)
     frontStaminaSprite.position = { -356, 47, 0 };
 
 
-    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 });
+    auto sndChar = PlightCharacter::Create("arrows_circular", { 1, 0, 0 }, { 356, 32 },2);
     sndChar.crosshair.angle = M_PI;
     sndChar.crosshair.startAngle = M_PI;
     auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
