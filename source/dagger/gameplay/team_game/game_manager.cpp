@@ -207,6 +207,9 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
             auto& collider = reg.get_or_emplace<Collider>(bigBlock);
             auto& transform = reg.get_or_emplace<Transform>(bigBlock);
             auto& staticCollider = reg.get_or_emplace<StaticCollider>(bigBlock);
+
+            board[Neighborhood(transform.position.x)].push_back(bigBlock);
+
             if (isTrap_)
             {
                 collider.entityType = CollisionID::TRAP;

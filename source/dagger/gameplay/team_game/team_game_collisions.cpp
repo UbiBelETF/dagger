@@ -7,6 +7,11 @@
 using namespace dagger;
 using namespace team_game;
 
+SInt32 team_game::Neighborhood(Float32 x_coord)
+{
+    return (SInt32)x_coord;
+}
+
 void CollisionSystem::Run()
 {
     auto view = Engine::Registry().view<Collider, Transform, PlayerCharacter>();

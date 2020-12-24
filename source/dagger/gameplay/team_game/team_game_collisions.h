@@ -13,6 +13,8 @@ namespace team_game
 
     enum class MovementState { IMMOBILE, UNSTOPPABLE, MOVEABLE };
 
+    Map<SInt32, Sequence<Entity>> board;
+
     struct CollisionInfo
     {
         Bool hasCollided{ false };
@@ -23,7 +25,7 @@ namespace team_game
     struct StaticCollider
     {
         UInt8 a;
-    };
+    }; 
 
     struct Collider
     {
@@ -61,4 +63,6 @@ namespace team_game
 
         void LimitPlayerMovement(Collider& collision_);
     };
+
+    SInt32 Neighborhood(Float32 x_coord);
 }
