@@ -14,6 +14,7 @@
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/common/simple_collisions.h"
 #include "core/graphics/text.h"
+#include "core/input/inputs.h"
 
 #include <glm/gtc/epsilon.hpp>
 
@@ -157,14 +158,25 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 		{
 			if (Engine::Registry().has<CharacterController>(col.colidedWith))
 			{   
-			
+			    
+				
 				auto ui = Engine::Registry().create();
 				auto& text = Engine::Registry().emplace<Text>(ui);
 				text.spacing = 0.6f;
 				text.Set("pixel-font", "You lose");
-			    	
+				auto ui2 = Engine::Registry().create();
+				auto& text2 = Engine::Registry().emplace<Text>(ui2);
+				text2.spacing = 0.6f;
+				text2.position = { 0,-50,0 };
+				text2.Set("pixel-font", "Press R to restart");
+				hero.canMove = false;
+				ctrl.lastState = EEnemyState::Chasing;
+				GoTo(EEnemyState::NoMore, state_);
+				
 			}
+			col.colided = false;
 		}
+		
 	}
 }
 
@@ -196,3 +208,16 @@ void EnemyFSM::Idle_::Run(EnemyFSM::StateComponent& state_) {
 }
 
 DEFAULT_EXIT(EnemyFSM, Idle_);
+
+DEFAULT_ENTER(EnemyFSM, NoMore);
+
+void EnemyFSM::NoMore::Run(EnemyFSM::StateComponent& state_) {
+
+	
+	
+	
+
+}
+
+
+DEFAULT_EXIT(EnemyFSM, NoMore);

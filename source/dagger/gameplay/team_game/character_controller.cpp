@@ -26,13 +26,14 @@ void CharacterControllerSystem::Run()
 		auto& chController = view.get<CharacterController>(entity);
 		Engine::Registry().view<CharacterFSM::StateComponent>().each(
 			[&](CharacterFSM::StateComponent& state_)
-			{
-				auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
-				if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; chController.SetShape(ECharacterShape::Goblin); }
-				if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; chController.SetShape(ECharacterShape::Slime); }
-				if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; chController.SetShape(ECharacterShape::Bat); }
-				if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; chController.SetShape(ECharacterShape::Hero); }
-				m_CharStateMachine.Run(state_);
+		{   if (chController.canMove) {
+			auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
+			if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; chController.SetShape(ECharacterShape::Goblin); }
+			if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; chController.SetShape(ECharacterShape::Slime); }
+			if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; chController.SetShape(ECharacterShape::Bat); }
+			if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; chController.SetShape(ECharacterShape::Hero); }
+			m_CharStateMachine.Run(state_);
+		}
 			});
 	}
 }
@@ -40,7 +41,7 @@ void CharacterControllerSystem::Run()
 DEFAULT_ENTER(CharacterFSM, Idle);
 
 void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
-{
+{  
 	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
 	
 	if (EPSILON_NOT_ZERO(input.Get("horizontalRun")) || EPSILON_NOT_ZERO(input.Get("verticalRun")))
