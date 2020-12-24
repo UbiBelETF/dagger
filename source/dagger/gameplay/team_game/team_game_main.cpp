@@ -14,8 +14,8 @@
 
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/enemy.h"
-
-
+#include "gameplay/team_game/door_interaction.h"
+#include "gameplay/team_game/key.h"
 
 
 #include "gameplay/team_game/camera.h"
@@ -24,6 +24,8 @@
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
 #include "gameplay/team_game/game_controller.h"
+#include "gameplay/team_game/follow.h""
+#include "gameplay/team_game/remote_animation.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -37,6 +39,10 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<SimpleCollisionsSystem>();
     engine_.AddSystem<PhysicsSystem>();
     engine_.AddSystem<MovementSystem>();
+    engine_.AddSystem<DoorSystem>();
+    engine_.AddSystem<KeySystem>();
+    engine_.AddSystem<FollowSystem>();
+    engine_.AddSystem<RemoteAnimationSystem>();
     engine_.AddSystem<GameControllerSystem>();
 }
 
@@ -75,7 +81,7 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
     legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
     legend['t'] = &level_generator::jovica::CreateTopLeftConcWallS;
-    legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
+    legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;  
 
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
@@ -98,135 +104,164 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
     playerInput.contexts.push_back("AmongThemInput");
 
-    reg_.emplace<CharacterController>(player);
+    auto& controller = reg_.emplace<CharacterController>(player);
 
     reg_.emplace<MovableBody>(player);
+
+    // POOF
+    auto poofEntity = reg_.create();
+    
+    reg_.emplace<Transform>(poofEntity);
+
+    auto& poofSprite = reg_.emplace<Sprite>(poofEntity);
+    AssignSprite(poofSprite, "spritesheets:among_them_spritesheet:poof_anim:5");
+    poofSprite.scale = { 0.5, 0.5 };
+
+    auto& poofFollow = reg_.emplace<Follow>(poofEntity);
+    poofFollow.target = player;
+    poofFollow.offset.z = -1;
+
+    auto& poofAnimator = reg_.emplace<Animator>(poofEntity);
+    poofAnimator.isLooping = false;
+
+    auto& exec = reg_.emplace<AnimationExecutor>(poofEntity);
+    exec.source = &controller.animationTrigger;
+    exec.animationName = "among_them_animations:poof";
+    exec.startingSpriteName = "spritesheets:among_them_spritesheet:poof_anim:1";
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
-    TilemapLegend legend;
-    legend['.'] = &level_generator::smiljana::CreateFloor;
-    legend['#'] = &level_generator::smiljana::CreateWall;
+        TilemapLegend legend;
+        legend['.'] = &level_generator::smiljana::CreateFloor;
+        legend['#'] = &level_generator::smiljana::CreateWall;
 
-    Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
-  
- // Wall
-        auto wall = reg_.create();
 
-    auto& wallTransform = reg_.emplace<Transform>(wall);
-    wallTransform.position = { 0, 0, 0 };
+        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
 
-    auto& wallSprite = reg_.emplace<Sprite>(wall);
-    AssignSprite(wallSprite, "EmptyWhitePixel");
-    wallSprite.color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    wallSprite.size = { 30, 30 };
+        // PLAYER
+        auto player = reg_.create();
 
-    auto& st = reg_.emplace<StaticBody>(wall);
-    st.size = wallSprite.size;
+        auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+        playerState.currentState = ECharacterState::Idle;
 
-    auto wall1 = reg_.create();
 
-    auto& wallTransform1 = reg_.emplace<Transform>(wall1);
-    wallTransform1.position = { 30, 0, 0 };
+    
 
-    auto& wallSprite1 = reg_.emplace<Sprite>(wall1);
-    AssignSprite(wallSprite1, "EmptyWhitePixel");
-    wallSprite1.color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    wallSprite1.size = { 30, 30 };
+        auto& playerSprite = reg_.emplace<Sprite>(player);
+        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+        playerSprite.scale = { 1, 1 };
 
-    auto& st1 = reg_.emplace<StaticBody>(wall1);
-    st1.size = wallSprite1.size;
+        auto& playerAnimator = reg_.emplace<Animator>(player);
+        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
-    auto wall2 = reg_.create();
+        auto& playerTransform = reg_.emplace<Transform>(player);
+        playerTransform.position = { 0, 0, 1 };
 
-    auto& wallTransform2 = reg_.emplace<Transform>(wall2);
-    wallTransform2.position = { 0, 30, 0 };
+        auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
+        playerInput.contexts.push_back("AmongThemInput");
 
-    auto& wallSprite2 = reg_.emplace<Sprite>(wall2);
-    AssignSprite(wallSprite2, "EmptyWhitePixel");
-    wallSprite2.color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    wallSprite2.size = { 30, 30 };
-        auto& st2 = reg_.emplace<StaticBody>(wall2);
-        st2.size = wallSprite2.size;
-      
-            // PLAYER
-            auto player = reg_.create();
-
-            auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
-            playerState.currentState = ECharacterState::Idle;
-          
-            auto& playerSprite = reg_.emplace<Sprite>(player);
-            AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-            playerSprite.scale = { 1, 1 };
-
-            auto& playerAnimator = reg_.emplace<Animator>(player);
-            AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
-
-            auto& playerTransform = reg_.emplace<Transform>(player);
-            playerTransform.position = { 0, 0, 1 };
-            
-            auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
-            playerInput.contexts.push_back("AmongThemInput");
+        auto& playerCollision = reg_.emplace<SimpleCollision>(player);
+        playerCollision.size = playerSprite.size;
 
         reg_.emplace<CharacterController>(player);
 
         auto& movable = reg_.emplace<MovableBody>(player);
         movable.size = playerSprite.size;
 
+        //DOOR
+
+        auto door = reg_.create();
+
+        auto& doorSprite = reg_.emplace<Sprite>(door);
+        AssignSprite(doorSprite, "spritesheets:among_them_spritesheet:door_open_anim:1");
+        doorSprite.scale = { 1, 1 };
+
+        auto& doorAnimator = reg_.emplace<Animator>(door);
+        
+        auto& doorTransform = reg_.emplace<Transform>(door);
+        doorTransform.position = { 40, 20, 1 };
+
+        auto& doorCollision = reg_.emplace<SimpleCollision>(door);
+        doorCollision.size = doorSprite.size;
+        
+        SInt32 x = ((SInt32)doorTransform.position.x + 8) / 16;
+        SInt32 y = ((SInt32)doorTransform.position.y - 8) / 16;
+
+        auto& collider = reg_.emplace<StaticBody>(door);
+        collider.size = doorSprite.size;
+        Engine::GetDefaultResource<StaticBodyMap>()->put(x,y, door);
+
+        reg_.emplace<Door>(door);
        
 
-        //ENEMY 
-        auto enemy = reg_.create();
+       //KEY
 
-        auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
-        enemyState.currentState = EEnemyState::Patrolling;
+       auto key = reg_.create();
 
-        auto& enemySprite = reg_.emplace<Sprite>(enemy);
-        AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
-        enemySprite.scale = { 1, 1 };
+       auto& keySprite = reg_.emplace<Sprite>(key);
+       AssignSprite(keySprite, "spritesheets:among_them_tilemap:key");
+       keySprite.scale = { 1, 1 };
 
-        auto& enemyAnimator = reg_.emplace<Animator>(enemy);
-        AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
+       auto& keyTransform = reg_.emplace<Transform>(key);
+       keyTransform.position = { 45, -40, 1 };
 
-        auto& enemyTransform = reg_.emplace<Transform>(enemy);
-        enemyTransform.position = { 0, 25, 1 };
+       auto& keyCollision = reg_.emplace<SimpleCollision>(key);
+       keyCollision.size = keySprite.size;
 
-        auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
-        enemyInput.pathname = "path.txt";
-        enemyInput.currentshape = "goblin";
-
-        reg_.emplace<EnemyDescription>(enemy);
-
-        reg_.emplace<MovableBody>(enemy);
-
-        //ENEMY NO.2
-
-        //ENEMY 
-        auto enemy2 = reg_.create();
-
-        auto& enemy2State = ATTACH_TO_FSM(EnemyFSM, enemy2);
-        enemy2State.currentState = EEnemyState::Patrolling;
-
-        auto& enemy2Sprite = reg_.emplace<Sprite>(enemy2);
-        AssignSprite(enemy2Sprite, "spritesheets:among_them_spritesheet:bat_anim:1");
-        enemy2Sprite.scale = { 1, 1 };
-
-        auto& enemy2Animator = reg_.emplace<Animator>(enemy2);
-        AnimatorPlay(enemy2Animator, "among_them_animations:bat");
-
-        auto& enemy2Transform = reg_.emplace<Transform>(enemy2);
-        enemy2Transform.position = { 0, 60, 1 };
-
-        auto& enemy2Input = reg_.emplace<InputEnemiesFile>(enemy2);
-        enemy2Input.pathname = "pathbat.txt";
-        enemy2Input.currentshape = "bat";
-
-        reg_.emplace<EnemyDescription>(enemy2);
-
-        reg_.emplace<MovableBody>(enemy2);
+       reg_.emplace<Key>(key);
+       
+    
 
 
+    //ENEMY 
+    auto enemy = reg_.create();
 
+    auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
+    enemyState.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite = reg_.emplace<Sprite>(enemy);
+    AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite.scale = { 1, 1 };
+
+    auto& enemyAnimator = reg_.emplace<Animator>(enemy);
+    AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform = reg_.emplace<Transform>(enemy);
+    enemyTransform.position = { 0, 25, 1 };
+
+    auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
+    enemyInput.pathname = "path.txt";
+    enemyInput.currentshape = "goblin";
+
+    reg_.emplace<EnemyDescription>(enemy);
+
+    reg_.emplace<MovableBody>(enemy);
+
+    //ENEMY NO.2
+
+    //ENEMY 
+    auto enemy2 = reg_.create();
+
+    auto& enemy2State = ATTACH_TO_FSM(EnemyFSM, enemy2);
+    enemy2State.currentState = EEnemyState::Patrolling;
+
+    auto& enemy2Sprite = reg_.emplace<Sprite>(enemy2);
+    AssignSprite(enemy2Sprite, "spritesheets:among_them_spritesheet:bat_anim:1");
+    enemy2Sprite.scale = { 1, 1 };
+
+    auto& enemy2Animator = reg_.emplace<Animator>(enemy2);
+    AnimatorPlay(enemy2Animator, "among_them_animations:bat");
+
+    auto& enemy2Transform = reg_.emplace<Transform>(enemy2);
+    enemy2Transform.position = { 0, 60, 1 };
+
+    auto& enemy2Input = reg_.emplace<InputEnemiesFile>(enemy2);
+    enemy2Input.pathname = "pathbat.txt";
+    enemy2Input.currentshape = "bat";
+
+    reg_.emplace<EnemyDescription>(enemy2);
+
+    reg_.emplace<MovableBody>(enemy2);
 }
 
 void team_game::SetupWorld(Engine &engine_)
@@ -250,5 +285,4 @@ void team_game::SetupWorld(Engine &engine_)
     //SetupWorldKosta(engine_, reg);
     //SetupWorldSmiljana(engine_, reg);
 }
-
 

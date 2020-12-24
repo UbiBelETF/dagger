@@ -36,7 +36,7 @@ void RacingCollisionsLogicSystem::Run()
             auto &t = view.get<Transform>(entity);
             auto &player = view.get<RacingPlayerCar>(entity);
             auto &col = view.get<SimpleCollision>(entity);
-
+            
             if (col.colided)
             {
                 m_Restart = true;
