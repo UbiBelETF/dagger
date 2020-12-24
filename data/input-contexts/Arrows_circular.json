@@ -33,6 +33,11 @@
       "event": "Released"
     },
     {
+      "command-name": "bomb",
+      "trigger": "KeyL",
+      "duration": 2000
+    },
+    {
       "command-name": "use",
       "trigger": "KeyO"
     }

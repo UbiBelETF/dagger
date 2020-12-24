@@ -117,7 +117,13 @@ struct PlightCharacter
         projectile_settings.projectileSpeed = 175.f;
         projectile_settings.pSpriteName = "EmptyWhitePixel";
 
-        ProjectileSystem::SetupProjectileSystem(entity, projectile_settings);
+        ProjectileSpawnerSettings bomb_settings;
+        bomb_settings.projectileDamage = 70.f;
+        bomb_settings.projectileSpeed = 150.f;
+        bomb_settings.bombSpawner = true;
+        bomb_settings.pSpriteName = "Plight:projectiles:bomb";
+
+        ProjectileSystem::SetupProjectileSystem(entity, projectile_settings, bomb_settings);
 
         //Particle spawner for taking damage
         PlightParticleSpawnerSettings particle_settings;

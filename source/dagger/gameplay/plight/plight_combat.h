@@ -40,5 +40,7 @@ namespace plight {
         inline String SystemName() { return "Plight Combat System"; }
 
         void Run() override;
+    private:
+        Float32 getDistance(Float32 x1, Float32 y1, Float32 x2, Float32 y2);
     };
 }
