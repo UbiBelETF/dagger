@@ -192,6 +192,8 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
                 scale.y = spriteSize.y / spriteBlock.size.y;
 
                 spriteBlock.scale = scale;
+            }
+        }
 
         if (textureName == "BricksN")
         {
@@ -203,11 +205,11 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
             auto bigBlock = reg.create();
             auto& collider = reg.get_or_emplace<Collider>(bigBlock);
             auto& transform = reg.get_or_emplace<Transform>(bigBlock);
-            
+
             if (isTrap_)
             {
                 collider.entityType = CollisionID::TRAP;
-                reg.get_or_emplace<Trap>(block);
+                reg.get_or_emplace<Trap>(bigBlock);
             }
             else
             {
