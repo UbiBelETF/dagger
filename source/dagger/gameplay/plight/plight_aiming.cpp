@@ -60,7 +60,7 @@ void plight::PlightAimingSystem::Run()
             auto& weapon_sprite = Engine::Registry().get<Sprite>(character_.weaponSprite);
             weapon_sprite.position.x = sprite_.position.x + x_weapon;
             weapon_sprite.position.y = sprite_.position.y - 3.f + y_weapon;
-            weapon_sprite.rotation = (crosshair_.angle * 180.) / M_PI - 45;
+            weapon_sprite.rotation = (crosshair_.angle * 180.) / M_PI + 45;
 
 		    });
 	}

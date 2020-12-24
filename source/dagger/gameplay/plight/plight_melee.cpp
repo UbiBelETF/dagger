@@ -50,7 +50,7 @@ void MeleeSystem::Run()
 				}
 				else {
 					auto weapon_sprt = Engine::Registry().get<Sprite>(chr.weaponSprite);
-					AssignSprite(weapon_sprt, "Plight::weapons::Sword");
+					AssignSprite(weapon_sprt, chr.meleeWeaponSpriteName);
 
 				}
 

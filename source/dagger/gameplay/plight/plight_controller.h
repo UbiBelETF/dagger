@@ -44,7 +44,9 @@ namespace plight
 
 		Entity weaponSprite;
 		String weaponSpriteName;
+		String meleeWeaponSpriteName;
 		String weaponAnimationName;
+		bool meleeActive = false;
 		Float32 weaponOffset = 15.f;
         
 		//Dashing particles

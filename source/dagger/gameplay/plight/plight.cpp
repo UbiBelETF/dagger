@@ -265,6 +265,8 @@ void plight::SetupWorld(Engine& engine_)
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
     mainChar.crosshair.startAngle = 0.f;
     mainChar.character.playerNumber = "Player 1";
+    mainChar.character.meleeWeaponSpriteName = "Plight:weapons:SWORD:Sword";
+    mainChar.character.weaponAnimationName = "Plight:weapons:SWORD";
     auto& weapon_sprite1 = Engine::Registry().get<Sprite>(mainChar.character.weaponSprite);
     AssignSprite(weapon_sprite1, "Plight:weapons:Bow_13");
     auto& projectile_spawner1 = Engine::Registry().get<ProjectileSpawner>(mainChar.entity);
@@ -331,6 +333,8 @@ void plight::SetupWorld(Engine& engine_)
     auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
     sndChar.character.playerNumber = "Player 2";
+    sndChar.character.meleeWeaponSpriteName = "Plight:weapons:AXE:Axe";
+    sndChar.character.weaponAnimationName = "Plight:weapons:AXE";
     auto& weapon_sprite2 = Engine::Registry().get<Sprite>(sndChar.character.weaponSprite);
     AssignSprite(weapon_sprite2, "Plight:weapons:Crossbow_4");
     auto& projectile_spawner2 = Engine::Registry().get<ProjectileSpawner>(sndChar.entity);
