@@ -24,9 +24,10 @@
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
 #include "gameplay/team_game/game_controller.h"
-#include "gameplay/team_game/follow.h""
+#include "gameplay/team_game/follow.h"
 #include "gameplay/team_game/remote_animation.h"
-#include <gameplay/team_game/detection.h>
+#include "gameplay/team_game/detection.h"
+#include "gameplay//team_game/vision_cone.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -36,16 +37,17 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<EnemyControllerSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<TilemapSystem>();
-    engine_.AddSystem<CameraSystem>();
     engine_.AddSystem<SimpleCollisionsSystem>();
-    engine_.AddSystem<PhysicsSystem>();
-    engine_.AddSystem<MovementSystem>();
     engine_.AddSystem<DoorSystem>();
     engine_.AddSystem<KeySystem>();
-    engine_.AddSystem<FollowSystem>();
     engine_.AddSystem<RemoteAnimationSystem>();
-    engine_.AddSystem<GameControllerSystem>();
     engine_.AddSystem<DetectionSystem>();
+    engine_.AddSystem<VisionConeSystem>();
+    engine_.AddSystem<PhysicsSystem>();
+    engine_.AddSystem<MovementSystem>();
+    engine_.AddSystem<FollowSystem>();
+    engine_.AddSystem<CameraSystem>();
+    engine_.AddSystem<GameControllerSystem>();
 }
 
 void TeamGame::WorldSetup(Engine &engine_)
@@ -180,6 +182,9 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     auto& vcFollow = reg_.emplace<Follow>(visionCone);
     vcFollow.target = enemy;
     vcFollow.offset.z = 25;
+
+    auto& vcCone = reg_.emplace<VisionCone>(visionCone);
+    vcCone.shape = ECharacterShape::Goblin;
 }
 
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
