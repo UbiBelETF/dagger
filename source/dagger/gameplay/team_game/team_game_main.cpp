@@ -19,6 +19,7 @@
 #include "tilemap_legends.h"
 
 #include "gameplay/team_game/collision.h"
+#include "gameplay/team_game/camera_follow.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -29,15 +30,16 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<TeamGameControllerSystem>();
+    engine_.AddSystem<TeamCameraFollowSystem>();
     
 }
 void SetCameraTeam()
 {
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
-    camera->size = { 1920, 1080 };
-    camera->zoom = 1.2;
-    camera->position = { 300,300, 0 };
+    camera->size = { 800, 600 };
+    camera->zoom = 3;
+    camera->position = { 0, 0, 0 };
     camera->Update();
 }
 struct MainCharacter
@@ -91,6 +93,8 @@ struct MainCharacter
         chr.tm.position = { position_ , 0.0f };
         reg.emplace<CollisionType::Character>(entity);
 
+        reg.emplace<TeamCameraFollowFocus>(entity);
+
         return chr;
     }
 };
@@ -119,18 +123,6 @@ void TeamGame::WorldSetup(Engine &engine_)
 void team_game::SetupWorld(Engine &engine_)
 {
    
-
-  
-
-   
-
-
-    auto* camera = Engine::GetDefaultResource<Camera>();
-    camera->mode = ECameraMode::FixedResolution;
-    camera->size = { 800, 600 };
-    camera->zoom = 0.5;
-    camera->position = { 0, 0, 0 };
-    camera->Update();
 }
 
 
