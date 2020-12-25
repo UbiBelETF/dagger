@@ -168,43 +168,64 @@ void tank_warfare::CreateUIBars(Vector3 pos_, int id_)
 {
     auto& reg = Engine::Registry();
 
-  /*  auto entHBB = reg.create();
+    auto entHBB = reg.create();
     auto& sprHBB = reg.emplace<Sprite>(entHBB);
     auto& traHBB = reg.emplace<Transform>(entHBB);
-    AssignSprite(sprHBB, "jovanovici:health_bar2");
-    sprHBB.UseAsUI();
+    AssignSprite(sprHBB, "jovanovici:stat_bar");
+    if (id_ == 2) sprHBB.scale.x = -1;
     traHBB.position = pos_;
-    traHBB.position.z += 2;
+    traHBB.position.z = 1;
+    sprHBB.UseAsUI();
 
     auto entH = reg.create();
     auto& sprH = reg.emplace<Sprite>(entH);
     auto& traH = reg.emplace<Transform>(entH);
-    AssignSprite(sprH, "jovanovici:health_bar1");
+    AssignSprite(sprH, "jovanovici:heart");
+    if (id_ == 2) sprH.scale.x = -1;
     sprH.UseAsUI();
     traH.position = pos_;
-    traH.position.x -= 100;
-    */
+    traH.position.x -= 100 * sprH.scale.x;
+    
     auto entityH = reg.create();
     auto& spriteH = reg.emplace<Sprite>(entityH);
     auto& transformH = reg.emplace<Transform>(entityH);
     auto& statsH = reg.emplace<TankStats>(entityH);
     AssignSprite(spriteH, "EmptyWhitePixel");
-    spriteH.size = { 200, 20 };
+    spriteH.size = { 200, 14 };
     spriteH.color = { 1, 0, 0, 1 };
     spriteH.UseAsUI();
     transformH.position = pos_;
-    //transformH.position.z += 1;
     statsH.startingPosition = pos_;
     statsH.id = id_;
     statsH.barWidth = 200;
     statsH.type = EStatType::Health;
+
+    auto entSBB = reg.create();
+    auto& sprSBB = reg.emplace<Sprite>(entSBB);
+    auto& traSBB = reg.emplace<Transform>(entSBB);
+    AssignSprite(sprSBB, "jovanovici:stat_bar");
+    if (id_ == 2) sprSBB.scale.x = -1;
+    traSBB.position = pos_;
+    traSBB.position.y -= 25;
+    traSBB.position.z = 1;
+    sprSBB.UseAsUI();
+
+    auto entS = reg.create();
+    auto& sprS = reg.emplace<Sprite>(entS);
+    auto& traS = reg.emplace<Transform>(entS);
+    AssignSprite(sprS, "jovanovici:shield");
+    if (id_ == 2) sprS.scale.x = -1;
+    sprS.UseAsUI();
+    traS.position = pos_;
+    traS.position.y -= 25;
+    traS.position.x -= 100 * sprS.scale.x;
 
     auto entityS = reg.create();
     auto& spriteS = reg.emplace<Sprite>(entityS);
     auto& transformS = reg.emplace<Transform>(entityS);
     auto& statsS = reg.emplace<TankStats>(entityS);
     AssignSprite(spriteS, "EmptyWhitePixel");
-    spriteS.size = { 0, 20 };
+    spriteS.size = { 0, 14 };
     spriteS.color = { 0, 0, 1, 1 };
     spriteS.UseAsUI();
     transformS.position = pos_;
@@ -223,14 +244,13 @@ void tank_warfare::AddHeart(Vector3 pos_, int id_, int lives_)
     auto entityL = reg.create();
     auto& spriteL = reg.emplace<Sprite>(entityL);
     auto& statsL = reg.emplace<TankStats>(entityL);
-    AssignSprite(spriteL, "jovanovici:powerup:heart");
+    AssignSprite(spriteL, "jovanovici:heart");
     spriteL.UseAsUI();
-    spriteL.size *= 1.5;
     auto& transformL = reg.emplace<Transform>(entityL);
     transformL.position = pos_;
     transformL.position.y -= 50;
-    if (id_ == 1) transformL.position.x -= 89 - ((lives_ - 1) * 31);
-    if (id_ == 2) transformL.position.x += 89 - ((lives_ - 1) * 31);
+    if (id_ == 1) transformL.position.x -= 100 - ((lives_ - 1) * 33);
+    if (id_ == 2) transformL.position.x += 100 - ((lives_ - 1) * 33);
     statsL.life = lives_;
     statsL.id = id_;
     statsL.type = EStatType::Life;

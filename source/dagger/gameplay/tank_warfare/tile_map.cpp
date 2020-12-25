@@ -97,10 +97,10 @@ Entity tank_warfare::CreateGroupTrees(Registry& reg_, SInt32 x_, SInt32 y_)
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:tree:tree{}", (rand() % 2) + 1));
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
+	sprite.position = { x_ * 48, y_ * 48, 2 };
 	sprite.size *= 1.3;
 	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
+	tra.position = { x_ * 48, y_ * 48, 2 };
 	return entity;
 }
 
