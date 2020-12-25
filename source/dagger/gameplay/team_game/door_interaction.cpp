@@ -1,7 +1,7 @@
 
 #include "door_interaction.h"
 #include "core/engine.h"
-#include "core/game/transforms.h"
+#include "gameplay/team_game/detection.h"
 #include "gameplay/team_game/key.h"
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/character_controller.h"
@@ -15,52 +15,58 @@ using namespace team_game;
 
 using namespace dagger;
 
-bool keytaken = false;
 
+Bool pickedup = false;
 void DoorSystem::Run()
 {
+
 	
 	
-	auto viewkey= Engine::Registry().view<Transform, SimpleCollision, Key>();
+	auto view = Engine::Registry().view<Detection, SimpleCollision,StaticBody,Door>();
+
+	auto viewkey = Engine::Registry().view<Key>();
 	for (auto keyentity : viewkey)
 	{
 		auto& key = viewkey.get<Key>(keyentity);
 		if (key.GetPickedUp() == true) {
-			keytaken = true;
+			pickedup = true;
 			Engine::Registry().destroy(keyentity);
 		}
+		else { pickedup = false; }
 
 	}
-	auto view = Engine::Registry().view<Transform, SimpleCollision,StaticBody,Door>();
-
 	for (auto entity : view)
-	{
+	{   
+
 		auto& col = view.get<SimpleCollision>(entity);
-		auto& transform = view.get<Transform>(entity);
+		auto& detect = view.get<Detection>(entity);
 		auto& statbody = view.get<StaticBody>(entity);
 
+	     	if (Engine::Registry().has<CharacterController>(detect.who)) {
 
-		if (keytaken == true) {
-			statbody.enabled = false;
-		}
-		if (col.colided)
-		{
-			if (Engine::Registry().has<CharacterController>(col.colidedWith))
+			
+			if (col.colided)
+			{
+
+				if (Engine::Registry().has<CharacterController>(col.colidedWith))
 				{
-					    
-						if(keytaken==true) {
+
+					    if (pickedup == true) {
+						statbody.enabled = false;
+					    auto& hero = Engine::Registry().get<CharacterController>(detect.who);
 						auto ui = Engine::Registry().create();
 						auto& text = Engine::Registry().emplace<Text>(ui);
 						text.spacing = 0.6f;
 						text.Set("pixel-font", "You win");
 						auto& animator = Engine::Registry().get<Animator>(entity);
 						AnimatorPlay(animator, "among_them_animations:door_open");
+						hero.canMove = false;
 					}
-			
+
 				}
-			col.colided = false;
+				col.colided = false;
+			}
 		}
-	
 
 	}
 }
