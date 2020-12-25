@@ -32,7 +32,7 @@
       "trigger": "KeyL",
       "event": "Released"
     },
-	{
+    {
       "command-name": "attack",
       "trigger": "KeyK",
       "event": "Released"
@@ -41,6 +41,11 @@
       "command-name": "bomb",
       "trigger": "KeyL",
       "duration": 2000
+    },
+    {
+      "command-name": "defense_field",
+      "trigger": "KeyJ",
+      "event": "Released"
     },
     {
       "command-name": "use",

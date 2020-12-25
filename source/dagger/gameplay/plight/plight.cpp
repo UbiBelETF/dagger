@@ -30,6 +30,7 @@
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_particles.h"
+#include "gameplay/plight/plight_fields.h"
 
 
 
@@ -158,6 +159,10 @@ struct PlightCharacter
             { 0.9f,0.9f,0.9f,1 }, { 0.9f,0.9f,0.9f,1 }, "smoke", 0.05f, .5f, 0.5f);
         PlightParticleSystem::SetupParticleSystem(chr.character.dashingParticleSpawner, particle_settings2);
 
+        auto& defenseField = reg.emplace<DefenseField>(chr.entity);
+        defenseField.defenseFieldE = reg.create();
+        defenseField.holder = chr.entity;
+
         return chr;
     }
 };
@@ -176,6 +181,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightSpikesSystem>();
     engine_.AddSystem<PlightParticleSystem>();
 	engine_.AddSystem<MeleeSystem>();
+    engine_.AddSystem<FieldsSystem>();
 
 }
 
