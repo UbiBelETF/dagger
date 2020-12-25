@@ -51,7 +51,7 @@ Entity CreateBlackBackground(Registry& reg_, INT32 x_, INT32 y_)
     auto& sprite = reg_.emplace<Sprite>(entity);
     sprite.position = { x_ * 16, y_ * 16, 90 };
     AssignSprite(sprite, "EmptyWhitePixel");
-    sprite.color = { 0.f,0.f,0.f,1.f };
+    sprite.color = { 0.133f,0.133f,0.133f,1.f };
     sprite.size = { 16,16 };
     return entity;
 }
