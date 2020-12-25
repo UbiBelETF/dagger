@@ -39,23 +39,25 @@ void CameraFollowSystem::DistributeCameraWeight()
 
         it1 = view1.begin();
 
-        Float32 minDistance = Engine::Registry().get<PlayerCharacter>(*it1).distanceToChest;
-        entt::entity entity = *it1;
-
-        while (it1 != view1.end())
+        if (it1 != view1.end())
         {
-            auto& player = Engine::Registry().get<PlayerCharacter>(*it1);
+            Float32 minDistance = Engine::Registry().get<PlayerCharacter>(*it1).distanceToChest;
+            entt::entity entity = *it1;
 
-            if (player.distanceToChest < minDistance)
+            while (it1 != view1.end())
             {
-                minDistance = player.distanceToChest;
-                entity = *it1;
+                auto& player = Engine::Registry().get<PlayerCharacter>(*it1);
+
+                if (player.distanceToChest < minDistance)
+                {
+                    minDistance = player.distanceToChest;
+                    entity = *it1;
+                }
+                it1++;
             }
-            it1++;
+
+            Engine::Registry().get<CameraFollowFocus>(entity).weight = 2;
         }
-
-        Engine::Registry().get<CameraFollowFocus>(entity).weight = 2;
-
         iterator++;
     }
 }
