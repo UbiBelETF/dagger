@@ -91,7 +91,7 @@ void DeathsCounterSystem::Run()
                                 auto& text = reg.emplace<Text>(ui);
                                 
                                 text.spacing = 0.6f;
-                                text.Set("pixel-font", fmt::format("x {}", score), { 0, 0,0 });
+                                text.Set("pixel-font", fmt::format("You died {} times", score), { 0, 0,0 });
                                 ty.once = false;
                             }
                         }else ty.timer -= Engine::DeltaTime();

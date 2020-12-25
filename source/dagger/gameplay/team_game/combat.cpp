@@ -48,7 +48,8 @@ void team_game::CombatSystem::Run()
                         braw_.healthHearts--;
                         brawler_.hittedEnemy = true;
                         braw_.gotHit = 0.2f;
-                        if (braw_.healthHearts == 0);
+                        if (braw_.healthHearts < 0)braw_.healthHearts = 0;
+                        if (braw_.healthHearts > 9)braw_.healthHearts = 0;
                     }
                 }
             }
