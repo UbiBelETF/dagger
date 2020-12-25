@@ -115,7 +115,6 @@ void CameraFollowSystem::AdjustCameraZoom()
                 if (distance > maxDistance)
                 {
                     maxDistance = distance;
-                    Logger::trace("Max distance is {}", maxDistance);
                 }
                 iterator2++;
             }
