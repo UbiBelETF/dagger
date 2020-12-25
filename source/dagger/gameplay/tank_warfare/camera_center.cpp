@@ -32,13 +32,15 @@ void CameraCenterSystem::Run()
 
     distance = abs(distance);
 
-    if ((distance.x > (camXY.x / camera->zoom) || distance.x < -(camXY.x / camera->zoom))
-        || (distance.y > (camXY.y / camera->zoom) || distance.y < -(camXY.y / camera->zoom)))
+    while (((distance.x > (camXY.x / camera->zoom))
+        || (distance.y > (camXY.y / camera->zoom)))
+        && (camera->zoom > 0.85))
     {
         camera->zoom -= 0.001f;
     }
-    if ((distance.x < ((camXY.x / camera->zoom)) && (distance.x > camXY.x / camZoom))
-        || (distance.y < ((camXY.y / camera->zoom)) && (distance.y > camXY.y / camZoom))) 
+    while (((distance.x < (camXY.x / camera->zoom))
+        && (distance.y < (camXY.y / camera->zoom)))
+        && (camera->zoom < camZoom))
     {
         camera->zoom += 0.001f;
     }
