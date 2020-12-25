@@ -66,37 +66,37 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
     // TILEMAP
     TilemapLegend legend;
 	
-    legend[' '] = &level_generator::jovica::Nothing;
-    legend['.'] = &level_generator::jovica::CreateFloor;
-    legend['_'] = &level_generator::jovica::CreateTopWall;
-    legend['-'] = &level_generator::jovica::CreateBottomWall;
-    legend['/'] = &level_generator::jovica::CreateLeftWall;
-    legend['\\'] = &level_generator::jovica::CreateRightWall;
-    legend['E'] = &level_generator::jovica::CreateTopLeftWall;
-    legend['Y'] = &level_generator::jovica::CreateTopRightWall;
-    legend['L'] = &level_generator::jovica::CreateBottomLeftWall;
-    legend['J'] = &level_generator::jovica::CreateBottomRightWall;
-    legend['q'] = &level_generator::jovica::CreateBottomLeftConcWall;
-    legend['p'] = &level_generator::jovica::CreateBottomRightConcWall;
-    legend['h'] = &level_generator::jovica::CreateTopLeftConcWall;
-    legend['!'] = &level_generator::jovica::CreateTopRightConcWall;
-    legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
-    legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
-    legend['e'] = &level_generator::jovica::CreateTopLeftConcWallS;
-    legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
-    legend['g'] = &level_generator::jovica::CreateIdleGoblin; 
-    legend['k'] = &level_generator::jovica::CreateKey;
-    legend['T'] = &level_generator::jovica::CreateBigTable;
-    legend['b'] = &level_generator::jovica::CreateBookShelfOnTopWall;
-    legend['P'] = &level_generator::jovica::CreatePrisonerOnTopWall;
-    legend['c'] = &level_generator::jovica::CreateChest;
-    legend['i'] = &level_generator::jovica::CreateGreenBanner;
-    legend['r'] = &level_generator::jovica::CreateRedBanner;
-    legend['f'] = &level_generator::jovica::CreateTorch;
-    legend['o'] = &level_generator::jovica::CreateBarrel;
-    legend['s'] = &level_generator::jovica::CreateSmallTable;
-    legend['|'] = &level_generator::jovica::TopLeftSide;
-    Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
+    legend[' '] = &level_generator::Nothing;
+    legend['.'] = &level_generator::CreateFloor;
+    legend['_'] = &level_generator::CreateTopWall;
+    legend['-'] = &level_generator::CreateBottomWall;
+    legend['/'] = &level_generator::CreateLeftWall;
+    legend['\\'] = &level_generator::CreateRightWall;
+    legend['E'] = &level_generator::CreateTopLeftWall;
+    legend['Y'] = &level_generator::CreateTopRightWall;
+    legend['L'] = &level_generator::CreateBottomLeftWall;
+    legend['J'] = &level_generator::CreateBottomRightWall;
+    legend['q'] = &level_generator::CreateBottomLeftConcWall;
+    legend['p'] = &level_generator::CreateBottomRightConcWall;
+    legend['h'] = &level_generator::CreateTopLeftConcWall;
+    legend['!'] = &level_generator::CreateTopRightConcWall;
+    legend['l'] = &level_generator::CreateBottomLeftConcWallS;
+    legend['j'] = &level_generator::CreateBottomRightConcWallS;
+    legend['e'] = &level_generator::CreateTopLeftConcWallS;
+    legend['y'] = &level_generator::CreateTopRightConcWallS;
+    legend['g'] = &level_generator::CreateIdleGoblin; 
+    legend['k'] = &level_generator::CreateKey;
+    legend['T'] = &level_generator::CreateBigTable;
+    legend['b'] = &level_generator::CreateBookShelfOnTopWall;
+    legend['P'] = &level_generator::CreatePrisonerOnTopWall;
+    legend['c'] = &level_generator::CreateChest;
+    legend['i'] = &level_generator::CreateGreenBanner;
+    legend['r'] = &level_generator::CreateRedBanner;
+    legend['f'] = &level_generator::CreateTorch;
+    legend['o'] = &level_generator::CreateBarrel;
+    legend['s'] = &level_generator::CreateSmallTable;
+    legend['|'] = &level_generator::TopLeftSide;
+    Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/team_level.map", &legend });
 
     //PLAYER
     auto player = reg_.create();
@@ -161,6 +161,7 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
     auto& doorDetection = reg_.emplace<Detection>(door);
     doorDetection.who = player;
     doorDetection.SetSize({ 2,2 });
+
     reg_.emplace<Door>(door);
     
    //slime1

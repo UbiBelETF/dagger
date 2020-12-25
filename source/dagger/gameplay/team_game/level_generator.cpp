@@ -24,30 +24,9 @@
 using namespace dagger;
 using namespace team_game;
 
-Sequence<Entity> level_generator::smiljana::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-    Entity entity = reg_.create();
-    auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 30};
-    AssignSprite(sprite, "spritesheets:among_them_tilemap:floor_1");
-    auto& entityAnimator = reg_.emplace<Animator>(entity);
-   
-    return { entity };
-}
-
-Sequence<Entity> level_generator::smiljana::CreateWall(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-    Entity entity = reg_.create();
-    auto& sprite = reg_.emplace<Sprite>(entity);
-    sprite.position = { x_ * 16, y_ * 16, 30};
-    AssignSprite(sprite, "spritesheets:among_them_tilemap:wall_1");
-    jovica::EmplaceCollider(reg_, entity, x_, y_);
-
-    return { entity };
-}
 
  
-Entity level_generator::jovica::CreateTile(Registry& reg_, SInt32 x_, SInt32 y_, SInt32 z_, String name_)
+Entity level_generator::CreateTile(Registry& reg_, SInt32 x_, SInt32 y_, SInt32 z_, String name_)
 {
     Entity entity = reg_.create();
 
@@ -60,7 +39,7 @@ Entity level_generator::jovica::CreateTile(Registry& reg_, SInt32 x_, SInt32 y_,
     return entity;
 }
 
-void level_generator::jovica::EmplaceCollider(Registry& reg_, Entity entity_, SInt32 x_, SInt32 y_)
+void level_generator::EmplaceCollider(Registry& reg_, Entity entity_, SInt32 x_, SInt32 y_)
 {
     auto& collider = reg_.emplace<StaticBody>(entity_);
     collider.size = { 32, 32 };
@@ -68,7 +47,7 @@ void level_generator::jovica::EmplaceCollider(Registry& reg_, Entity entity_, SI
     Logger::info("Inserted into map on [{}, {}]", x_, y_);
 }
 
-void level_generator::jovica::CreateCollider(Registry& reg_, SInt32 x_, SInt32 y_)
+void level_generator::CreateCollider(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = reg_.create();
 
@@ -78,7 +57,7 @@ void level_generator::jovica::CreateCollider(Registry& reg_, SInt32 x_, SInt32 y
     EmplaceCollider(reg_, entity, x_, y_);
 }
 
-Sequence<Entity> level_generator::jovica::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     UInt32 type = 1 + rand() % 10;
     Entity entity = CreateTile(reg_, x_, y_, 30, fmt::format("spritesheets:among_them_tilemap:floor_{}", type));
@@ -86,12 +65,12 @@ Sequence<Entity> level_generator::jovica::CreateFloor(Registry& reg_, SInt32 x_,
     return { entity };
 }
 
-Sequence<Entity> level_generator::jovica::Nothing(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::Nothing(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     return {};
 }
 
-Sequence<Entity> level_generator::jovica::CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 
     UInt32 type = 1 + rand() % 6;
@@ -102,7 +81,7 @@ Sequence<Entity> level_generator::jovica::CreateTopWall(Registry& reg_, SInt32 x
     return { entity, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBottomWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBottomWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = CreateTile(reg_, x_, y_ + 1, 0, "spritesheets:among_them_tilemap:wall_bottom");
     CreateCollider(reg_, x_, y_);
@@ -110,7 +89,7 @@ Sequence<Entity> level_generator::jovica::CreateBottomWall(Registry& reg_, SInt3
     return { entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_left");
     EmplaceCollider(reg_, entity, x_, y_);
@@ -118,7 +97,7 @@ Sequence<Entity> level_generator::jovica::CreateLeftWall(Registry& reg_, SInt32 
     return { entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_right");
     EmplaceCollider(reg_, entity, x_, y_);
@@ -126,7 +105,7 @@ Sequence<Entity> level_generator::jovica::CreateRightWall(Registry& reg_, SInt32
     return { entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateTopLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTopLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_left");
     EmplaceCollider(reg_, entity, x_, y_);
@@ -136,7 +115,7 @@ Sequence<Entity> level_generator::jovica::CreateTopLeftWall(Registry& reg_, SInt
     return { entity, top, peak };
 }
 
-Sequence<Entity> level_generator::jovica::CreateTopRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTopRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_right");
     EmplaceCollider(reg_, entity, x_, y_);
@@ -146,7 +125,7 @@ Sequence<Entity> level_generator::jovica::CreateTopRightWall(Registry& reg_, SIn
     return { entity, top, peak };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBottomLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBottomLeftWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_bottom_inner_left");
     EmplaceCollider(reg_, entity, x_, y_);
@@ -154,7 +133,7 @@ Sequence<Entity> level_generator::jovica::CreateBottomLeftWall(Registry& reg_, S
     return { entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBottomRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBottomRightWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity entity = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_bottom_inner_right");
     EmplaceCollider(reg_, entity, x_, y_);
@@ -162,7 +141,7 @@ Sequence<Entity> level_generator::jovica::CreateBottomRightWall(Registry& reg_, 
     return { entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBottomLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBottomLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity right = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_left");
     EmplaceCollider(reg_, right, x_, y_);
@@ -171,7 +150,7 @@ Sequence<Entity> level_generator::jovica::CreateBottomLeftConcWall(Registry& reg
     return { right, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBottomRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBottomRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity left = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_right");
     EmplaceCollider(reg_, left, x_, y_);
@@ -180,7 +159,7 @@ Sequence<Entity> level_generator::jovica::CreateBottomRightConcWall(Registry& re
     return { left, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreateTopLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTopLeftConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     UInt32 type = 1 + rand() % 6;
     Entity entity = CreateTile(reg_, x_, y_, 20, fmt::format("spritesheets:among_them_tilemap:wall_{}", type));
@@ -190,7 +169,7 @@ Sequence<Entity> level_generator::jovica::CreateTopLeftConcWall(Registry& reg_, 
     return { entity, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTopRightConcWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     UInt32 type = 1 + rand() % 6;
     Entity entity = CreateTile(reg_, x_, y_, 20, fmt::format("spritesheets:among_them_tilemap:wall_{}", type));
@@ -200,7 +179,7 @@ Sequence<Entity> level_generator::jovica::CreateTopRightConcWall(Registry& reg_,
     return { entity, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBottomLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBottomLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
 {
     Entity right = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_bottom_inner_left");
     EmplaceCollider(reg_, right, x_, y_);
@@ -209,7 +188,7 @@ Sequence<Entity> level_generator::jovica::CreateBottomLeftConcWallS(Registry & r
     return { right, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBottomRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBottomRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
 {
     Entity left = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_bottom_inner_right");
     EmplaceCollider(reg_, left, x_, y_);
@@ -218,7 +197,7 @@ Sequence<Entity> level_generator::jovica::CreateBottomRightConcWallS(Registry & 
     return { left, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreateTopLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTopLeftConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
 {
     UInt32 type = 1 + rand() % 6;
     Entity entity = CreateTile(reg_, x_, y_, 20, fmt::format("spritesheets:among_them_tilemap:wall_{}", type));
@@ -229,7 +208,7 @@ Sequence<Entity> level_generator::jovica::CreateTopLeftConcWallS(Registry & reg_
     return { entity, top, peak };
 }
 
-Sequence<Entity> level_generator::jovica::CreateTopRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTopRightConcWallS(Registry & reg_, SInt32 x_, SInt32 y_)
 {
     UInt32 type = 1 + rand() % 6;
     Entity entity = CreateTile(reg_, x_, y_, 20, fmt::format("spritesheets:among_them_tilemap:wall_{}", type));
@@ -241,7 +220,7 @@ Sequence<Entity> level_generator::jovica::CreateTopRightConcWallS(Registry & reg
 }
 
 
-Sequence<Entity> level_generator::jovica::CreateIdleGoblin(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateIdleGoblin(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto enemy = reg_.create();
     auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
@@ -295,7 +274,7 @@ Sequence<Entity> level_generator::jovica::CreateIdleGoblin(Registry& reg_, SInt3
     return {enemy, entity};
 }
 
-Sequence<Entity> level_generator::jovica::CreateKey(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateKey(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto key = reg_.create();
 
@@ -316,7 +295,7 @@ Sequence<Entity> level_generator::jovica::CreateKey(Registry& reg_, SInt32 x_, S
     return { key , entity};
 }
 
-Sequence<Entity> level_generator::jovica::CreateBigTable(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBigTable(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto bigTable = reg_.create();
 
@@ -336,7 +315,7 @@ Sequence<Entity> level_generator::jovica::CreateBigTable(Registry& reg_, SInt32 
     return { bigTable, entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateBookShelfOnTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBookShelfOnTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto bookShelf = reg_.create();
 
@@ -354,7 +333,7 @@ Sequence<Entity> level_generator::jovica::CreateBookShelfOnTopWall(Registry& reg
     return { bookShelf, top };
 }
 
-Sequence<Entity> level_generator::jovica::CreatePrisonerOnTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreatePrisonerOnTopWall(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto prisoner = reg_.create();
 
@@ -374,7 +353,7 @@ Sequence<Entity> level_generator::jovica::CreatePrisonerOnTopWall(Registry& reg_
     return ent;
 }
 
-Sequence<Entity> level_generator::jovica::CreateChest(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateChest(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto chest = reg_.create();
 
@@ -393,7 +372,7 @@ Sequence<Entity> level_generator::jovica::CreateChest(Registry& reg_, SInt32 x_,
     return { chest, entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateGreenBanner(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateGreenBanner(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto gBanner = reg_.create();
 
@@ -409,7 +388,7 @@ Sequence<Entity> level_generator::jovica::CreateGreenBanner(Registry& reg_, SInt
     return ent;
 }
 
-Sequence<Entity> level_generator::jovica::CreateRedBanner(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateRedBanner(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto rBanner = reg_.create();
 
@@ -425,7 +404,7 @@ Sequence<Entity> level_generator::jovica::CreateRedBanner(Registry& reg_, SInt32
     return ent;
 }
 
-Sequence<Entity> level_generator::jovica::CreateTorch(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateTorch(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto torch = reg_.create();
 
@@ -444,7 +423,7 @@ Sequence<Entity> level_generator::jovica::CreateTorch(Registry& reg_, SInt32 x_,
     return ent;
 }
 
-Sequence<Entity> level_generator::jovica::CreateBarrel(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateBarrel(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto barrel = reg_.create();
 
@@ -463,7 +442,7 @@ Sequence<Entity> level_generator::jovica::CreateBarrel(Registry& reg_, SInt32 x_
     return { barrel, entity };
 }
 
-Sequence<Entity> level_generator::jovica::CreateSmallTable(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::CreateSmallTable(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     auto smallTable = reg_.create();
 
@@ -482,7 +461,7 @@ Sequence<Entity> level_generator::jovica::CreateSmallTable(Registry& reg_, SInt3
     return { smallTable, entity };
 }
 
-Sequence<Entity> level_generator::jovica::TopLeftSide(Registry& reg_, SInt32 x_, SInt32 y_)
+Sequence<Entity> level_generator::TopLeftSide(Registry& reg_, SInt32 x_, SInt32 y_)
 {
     Entity top = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_left");
     Entity peak = CreateTile(reg_, x_, y_ + 1, 0, "spritesheets:among_them_tilemap:wall_top_inner_left");

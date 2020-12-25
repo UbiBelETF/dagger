@@ -269,7 +269,7 @@ Vector2 Camera::WindowToWorld(Vector2 windowCoord_)
 	auto* config = Engine::GetDefaultResource<RenderConfig>();
 
 	auto pos = glm::unProject(Vector3{ windowCoord_ - config->viewOffset, 0 },
-		config->camera, config->projection, config->viewBounds);
+	config->camera, config->projection, config->viewBounds);
 	cursorInWorld.x = pos.x;
 	cursorInWorld.y = -pos.y;
 	return cursorInWorld;

@@ -4,14 +4,8 @@
 
 namespace level_generator
 {
-    namespace smiljana
-    {
-        Sequence<Entity> CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_);
-        Sequence<Entity> CreateWall(Registry& reg_, SInt32 x_, SInt32 y_);
-    }
 
-	namespace jovica
-	{
+	
         Entity CreateTile(Registry& reg_, SInt32 x_, SInt32 y_, SInt32 z_, String name_);
 
         void EmplaceCollider(Registry& reg_, Entity entity_, SInt32 x_, SInt32 y_);
@@ -35,8 +29,6 @@ namespace level_generator
         Sequence<Entity> CreateBottomRightConcWallS(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateTopLeftConcWallS(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateTopRightConcWallS(Registry& reg_, SInt32 x_, SInt32 y_);
-        Sequence<Entity> CreatePlayer(Registry& reg_, SInt32 x_, SInt32 y_);
-        Sequence<Entity> CreateDoor(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateIdleGoblin(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateKey(Registry& reg_, SInt32 x_, SInt32 y_); 
         Sequence<Entity> CreateBigTable(Registry& reg_, SInt32 x_, SInt32 y_);
@@ -50,4 +42,4 @@ namespace level_generator
         Sequence<Entity> CreateSmallTable(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> TopLeftSide(Registry& reg_, SInt32 x_, SInt32 y_);
 	}
-}
+
