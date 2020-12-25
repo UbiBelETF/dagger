@@ -47,12 +47,12 @@ void FieldsSystem::Run()
 			if (defenseField.fieldActive) {
 				defenseField.currendDurationTime += Engine::DeltaTime();
 				if (defenseField.currendDurationTime > defenseField.fieldDurationTime / 15 && defenseField.currendDurationTime < (defenseField.fieldDurationTime/15)*14) {
-					auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
-					AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
+					//auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
+					//AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
 				}
 				else if (defenseField.currendDurationTime >= (defenseField.fieldDurationTime / 15) * 14 && defenseField.currendDurationTime < defenseField.fieldDurationTime) {
-						auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
-						AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
+						//auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
+						//AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
 				}
 				else if(defenseField.currendDurationTime > defenseField.fieldDurationTime){
 						defenseField.destroy = true;
@@ -70,23 +70,21 @@ void FieldsSystem::Run()
 					auto& defSprite = Engine::Registry().emplace<Sprite>(defenseField.defenseFieldE);
 					AssignSprite(defSprite, "Plight:fields:defensefield");
 					defSprite.scale = { 0.4f,0.4f };
-					auto& defTransform = Engine::Registry().emplace<Transform>(defenseField.defenseFieldE);
-					auto& defPhysics = Engine::Registry().emplace<PhysicsObject>(defenseField.defenseFieldE);
-					auto& defCollision = Engine::Registry().emplace<PlightCollision>(defenseField.defenseFieldE);
-					defCollision.size = { 32,32 };
-					printf("%f", defCollision.pivot.x);
-					printf("%f", defCollision.pivot.y);
-					auto& anim = Engine::Registry().emplace<Animator>(defenseField.defenseFieldE);
+					//auto& defTransform = Engine::Registry().emplace<Transform>(defenseField.defenseFieldE);
+					//auto& defPhysics = Engine::Registry().emplace<PhysicsObject>(defenseField.defenseFieldE);
+					//auto& defCollision = Engine::Registry().emplace<PlightCollision>(defenseField.defenseFieldE);
+					//defCollision.size = { 32,32 };
+					//auto& anim = Engine::Registry().emplace<Animator>(defenseField.defenseFieldE);
 
 					
 					defSprite.position = t.position;
 					defSprite.position.z = 70.f;
-					defTransform.position = t.position;
-					defTransform.position.z = 70.f;
-					defPhysics.my_groups.push_back(1);
-					defPhysics.collision_groups.push_back(1);
-					defCollision.size = { defenseField.fieldSize,defenseField.fieldSize };
-					AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
+					//defTransform.position = t.position;
+					//defTransform.position.z = 70.f;
+					//defPhysics.my_groups.push_back(1);
+					//defPhysics.collision_groups.push_back(1);
+					//defCollision.size = { defenseField.fieldSize,defenseField.fieldSize };
+					//AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
 					cstats.healing = true;
 				}
 			}
