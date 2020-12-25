@@ -48,5 +48,6 @@ namespace level_generator
         Sequence<Entity> CreateTorch(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateBarrel(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateSmallTable(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> TopLeftSide(Registry& reg_, SInt32 x_, SInt32 y_);
 	}
 }

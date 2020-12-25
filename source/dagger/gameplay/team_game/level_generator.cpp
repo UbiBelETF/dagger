@@ -296,7 +296,7 @@ Sequence<Entity> level_generator::jovica::CreateDoor(Registry& reg_, SInt32 x_, 
     auto& doorAnimator = reg_.emplace<Animator>(door);
 
     auto& doorTransform = reg_.emplace<Transform>(door);
-    doorTransform.position = { x_ * 16, y_ * 16, 1 };
+    doorTransform.position = { x_ * 16, y_ * 16 + 8, 1 };
 
     auto& doorCollision = reg_.emplace<SimpleCollision>(door);
     doorCollision.size = doorSprite.size;
@@ -306,7 +306,7 @@ Sequence<Entity> level_generator::jovica::CreateDoor(Registry& reg_, SInt32 x_, 
 
     auto& collider = reg_.emplace<StaticBody>(door);
     collider.size = doorSprite.size;
-    Engine::GetDefaultResource<StaticBodyMap>()->put(x, y, door);
+    Engine::GetDefaultResource<StaticBodyMap>()->put(x_, y_, door);
 
     reg_.emplace<Door>(door);
     return { door };
@@ -452,7 +452,6 @@ Sequence<Entity> level_generator::jovica::CreateChest(Registry& reg_, SInt32 x_,
     auto& sprite = reg_.emplace<Sprite>(chest);
     AssignSprite(sprite, "spritesheets:among_them_spritesheet:chest_shine_anim:1");
     sprite.scale = { 1,1 };
-    sprite.rotation = 270;
 
     auto& transform = reg_.emplace<Transform>(chest);
     transform.position = { x_ * 16, y_ * 16, 1 };
@@ -554,3 +553,10 @@ Sequence<Entity> level_generator::jovica::CreateSmallTable(Registry& reg_, SInt3
     return { smallTable, entity };
 }
 
+Sequence<Entity> level_generator::jovica::TopLeftSide(Registry& reg_, SInt32 x_, SInt32 y_)
+{
+    Entity top = CreateTile(reg_, x_, y_, 0, "spritesheets:among_them_tilemap:wall_top_left");
+    Entity peak = CreateTile(reg_, x_, y_ + 1, 0, "spritesheets:among_them_tilemap:wall_top_inner_left");
+
+    return { top, peak };
+}

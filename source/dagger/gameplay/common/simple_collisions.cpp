@@ -10,6 +10,14 @@ void SimpleCollisionsSystem::Run()
     auto view = Engine::Registry().view<SimpleCollision, Transform>();
 
     auto it = view.begin();
+    while (it != view.end())
+    {
+        auto& collision = view.get<SimpleCollision>(*it);
+        collision.colided = false;
+        it++;
+    }
+
+    it = view.begin();
     while(it != view.end())
     {
         auto &collision = view.get<SimpleCollision>(*it);
