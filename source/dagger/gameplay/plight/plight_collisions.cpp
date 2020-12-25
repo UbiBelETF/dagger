@@ -46,19 +46,22 @@ void PlightCollisionsSystem::Run()
             auto& col = view2.get<PlightCollision>(entity);
             auto& tr = view2.get<Transform>(entity);
             //Don't check collisions for distant objects (They aren't colided for sure)
-            if (abs(transform.position.x - tr.position.x) > 32 && abs(transform.position.y - tr.position.y) > 32) {
+            if (abs(transform.position.x - tr.position.x) > 150 && abs(transform.position.y - tr.position.y) > 150) {
                 continue;
             }
 
-            // processing one collision per frame for each colider
-            if (collision.IsCollidedSAT(transform.position, col, tr.position))
-            {
-                collision.colided = true;
-                collision.colidedWith.push_back(entity);
+           
+                // processing one collision per frame for each colider
+                if (collision.IsCollidedSAT(transform.position, col, tr.position))
+                {
+                    collision.colided = true;
+                    collision.colidedWith.push_back(entity);
 
-                col.colided = true;
-                col.colidedWith.push_back(*it);
-            }
+                    col.colided = true;
+                    col.colidedWith.push_back(*it);
+                }
+
+           
         }
         collision.last_pos = transform;
         it++;
