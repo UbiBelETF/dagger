@@ -16,12 +16,10 @@ using namespace team_game;
 using namespace dagger;
 
 
-Bool pickedup = false;
+
 void DoorSystem::Run()
 {
 
-	
-	
 	auto view = Engine::Registry().view<Detection, SimpleCollision,StaticBody,Door>();
 
 	auto viewkey = Engine::Registry().view<Key>();
@@ -29,12 +27,14 @@ void DoorSystem::Run()
 	{
 		auto& key = viewkey.get<Key>(keyentity);
 		if (key.GetPickedUp() == true) {
-			pickedup = true;
+			SetPickedUp(true);
 			Engine::Registry().destroy(keyentity);
 		}
-		else { pickedup = false; }
-
+		else {
+			SetPickedUp(false);
+		}
 	}
+
 	for (auto entity : view)
 	{   
 
@@ -45,15 +45,15 @@ void DoorSystem::Run()
 	     	if (Engine::Registry().has<CharacterController>(detect.who)) {
 
 			
-			if (col.colided)
-			{
+			if (col.colided) {
 
-				if (Engine::Registry().has<CharacterController>(col.colidedWith))
-				{
-
-					    if (pickedup == true) {
-						statbody.enabled = false;
+				if (Engine::Registry().has<CharacterController>(col.colidedWith)) {
+				       
 					    auto& hero = Engine::Registry().get<CharacterController>(detect.who);
+
+					    if ((GetPickedUpp() == true) && (hero.GetShape()==ECharacterShape::Hero))
+						{
+						statbody.enabled = false;
 						auto ui = Engine::Registry().create();
 						auto& text = Engine::Registry().emplace<Text>(ui);
 						text.spacing = 0.6f;

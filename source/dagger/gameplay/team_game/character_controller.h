@@ -33,6 +33,10 @@ struct CharacterController
 		animationTrigger = true;
 		shape = shape_;
 	}
+	ECharacterShape GetShape()
+	{
+		return shape;
+	}
 };
 
 struct CharacterFSM : public FSM<ECharacterState>

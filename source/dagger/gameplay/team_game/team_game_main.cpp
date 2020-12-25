@@ -116,24 +116,6 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 }
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
-    /*
-
-        Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
-
-
-
-
-            TilemapLegend legend;
-            legend['.'] = &level_generator::smiljana::CreateFloor;
-            legend['#'] = &level_generator::smiljana::CreateWall;
-
-
-
-
-
-
-    */
-
     // PLAYER
     auto player = reg_.create();
 
