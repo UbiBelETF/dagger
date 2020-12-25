@@ -1,0 +1,15 @@
+{
+	"animation-name": "lives:heart_idle",
+	"animation-length-ms": 2400,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:1" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:2" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:3" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:4" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:5" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:6" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:7" },
+		{ "texture-name": "spritesheets:team_game:lives:heart_idle:heart_idle:8" }
+	]
+}

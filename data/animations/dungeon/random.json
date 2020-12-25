@@ -1,11 +1,29 @@
 {
 	"animation-name": "dungeon:goblin_idle",
-	"animation-length-ms": 400,
+	"animation-length-ms": 1100,
 	"animation-frames": 
 	[
-		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:1" },
-		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:2" },
-		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:3" },
-		{ "texture-name": "spritesheets:dungeon:goblin_idle_anim:4" }
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:1" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:2" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:3" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:4" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:5" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:6" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:7" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:8" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:9" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:10" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:11" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:12" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:13" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:14" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:15" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:16" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:17" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:18" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:19" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:20" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:21" },
+		{ "texture-name": "spritesheets:team_game:boss:attack:boss_attack:22" }
 	]
 }

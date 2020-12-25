@@ -1,6 +1,6 @@
 {
 	"animation-name": "character:RUN",
-	"animation-length-ms": 750,
+	"animation-length-ms": 500,
 	"animation-frames": [
 		{ "texture-name": "Light:run:run0" },
 		{ "texture-name": "Light:run:run1" },

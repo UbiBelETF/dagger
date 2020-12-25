@@ -1,0 +1,18 @@
+{
+	"animation-name": "boss:boss_attack2",
+	"animation-length-ms": 500,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:1" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:2" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:3" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:4" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:5" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:6" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:7" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:8" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:9" },
+		{ "texture-name": "spritesheets:team_game:boss:attack2:boss_attack2:10" },
+		{ "texture-name": "spritesheets:team_game:boss:idle:boss_idle" }
+	]
+}

@@ -1,0 +1,45 @@
+Background Bridge 3 214.0 163.0 -400.0 -26.0 60 1
+Background Background_Fog1 4 600.0 220.0 -400.0 -26.0 6 1
+Background Background_Color1 5 296.0 440.0 -450.0 -26.0 5 1
+Background Background_Color1 5 296.0 440.0 -400.0 -466.0 12 1
+Background Background_Shadow1 5 400.0 220.0 -400.0 -246.0 9 1
+Background Background_Color1 5 296.0 440.0 1945.0 -26.0 4 2
+
+Background Wallbgnd 2 1200.0 800.0 2399.0 -400.0 1 1
+
+Props Pillar 0.0 47.0 146.0 -60.0 -172.0 1 1
+Props Pillar 0.0 47.0 146.0 166.0 -172.0 1 1
+
+Props Pillar 0.0 47.0 146.0 361.0 -172.0 1 1
+
+Props Pillar 0.0 47.0 146.0 521.0 -172.0 1 1
+
+Props Pillar 0.0 47.0 146.0 814.0 -172.0 1 1
+
+Background:Wall brick_pillar 1.0 44.0 480.0 1015.0 -172.0 1 2
+
+Background:Wall brick_pillar 1.0 44.0 480.0 1215.0 -172.0 1 2
+
+Background:Wall brick_pillar 1.0 44.0 480.0 1415.0 -172.0 1 2
+
+Background:Wall brick_pillar 1.0 44.0 480.0 1695.0 -172.0 1 2
+
+Background:Wall brick_pillar 1.0 44.0 480.0 1945.0 -172.0 1 2
+
+Props door 1 46.0 56.0 2530.0 11.0 1 1
+
+
+
+
+
+Background black 4.0 1000.0 600.0 1880.0 850.0 1 1
+
+Props door 4 46.0 56.0 2140.0 1161.0 1 1
+
+Background boss_room 4.0 573.0 250.0 2099.0 1019.0 1 1
+
+
+
+
+
+

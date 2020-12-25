@@ -1,4 +1,7 @@
 # Dagger
+tired_bunch:
+Dimitrije Ivković		dimiivko@gmail.com 
+Ranko Damnjanović	rankodamnjanovic@gmail.com 
 
 A fully-featured, modern game engine made for educational purposes.
 

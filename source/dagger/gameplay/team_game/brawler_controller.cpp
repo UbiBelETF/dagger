@@ -10,33 +10,32 @@
 
 
 
-#include "gameplay/team_game/physics.h"
+#include "gameplay/team_game/team_game_main.h"
+#include "gameplay/team_game/boss_ai.h"
+#include "core/game/transforms.h"
+#include "gameplay/team_game/game_manager.h"
 using namespace team_game;
 
 
 void BrawlerControllerSystem::Run()
 {
+
     Engine::Registry().view<ControllerFSM::StateComponent>()
         .each([&](ControllerFSM::StateComponent& state_)
             {
-                m_ControllerFSM.Run(state_);
-                auto& [astate_, physics_] = Engine::Registry().get<AnimationsFSM::StateComponent, Physics>(state_.entity);
-                /*switch (state_.currentState)
+                auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
+                if (input_.Get("reset"))
                 {
-                case ECharacterStates::Idle:m_AnimatorFSM.GoTo(EAnimationsState::Idle, astate_); break;
-                case ECharacterStates::Running: m_AnimatorFSM.GoTo(EAnimationsState::Running, astate_); break;
-                case ECharacterStates::InAir: {
-                    if (physics_.velocity.y > 0) m_AnimatorFSM.GoTo(EAnimationsState::Jumping, astate_);
-                    else  m_AnimatorFSM.GoTo(EAnimationsState::Falling, astate_);
-                    break;
+                    GameManagerSystem::completedObjective = true;
+                    
                 }
-
-                }*/
+                m_ControllerFSM.Run(state_);
             });
-    //THIS IS LEFT FOR THE SOLUTION IF WE HAVE SOMETHING IN RUN FUNCTIONS OF THE STATES
-    /*Engine::Registry().view<AnimationsFSM::StateComponent>()
-        .each([&](AnimationsFSM::StateComponent& state_)
+    Engine::Registry().view<BossFSM::StateComponent>()
+        .each([&](BossFSM::StateComponent& state_)
             {
-                FSManimator.Run(state_);
-            });*/ 
+                m_BossFSM.Run(state_);
+            });
+
+    
 }
