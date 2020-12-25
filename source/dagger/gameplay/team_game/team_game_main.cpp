@@ -31,7 +31,6 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddPausableSystem<GameManagerSystem>();
     engine_.AddPausableSystem<BossAISystem>();
     engine_.AddPausableSystem<BrawlerControllerSystem>();
-    //engine_.AddPausableSystem<SimpleCollisionsSystem>();
     engine_.AddPausableSystem<CombatSystem>();
     engine_.AddPausableSystem<CollisionSystem>();
     engine_.AddPausableSystem<DeathsCounterSystem>();
@@ -173,10 +172,6 @@ struct Boss
         AssignSprite(chr.sprite, "spritesheets:team_game:boss:idle:boss_idle");
         AnimatorPlay(chr.animator, "boss:boss_idle");
 
-
-        /*if (input_ != "")
-            chr.input.contexts.push_back(input_);*/
-
         chr.character.speed.x = 100;
         chr.character.speed.y = 250;
 
@@ -245,115 +240,7 @@ struct Bubble
         return chr;
     }
 };
-//bacckground
-void CreateBackground()
-{
-   /* auto& reg = Engine::Registry();
-    auto* camera = Engine::GetDefaultResource<Camera>();
-    
-    //Create terrain 
-    {
-        auto back = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(back);
-        AssignSprite(sprite, "EmptyWhitePixel");
-        sprite.color = { 0, 0, 0, 1 };
-        sprite.size = { 200, 200 };
-        sprite.scale = { 10, 1 };
-        sprite.position = { 0, -125, 1 };
-        
-       
-    }
 
-    // down(ground) platfrom
-    {
-        auto entity = reg.create();
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size.x =  800;
-        col.size.y = 200;
-
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position.x = 0;
-        transform.position.y = -125;
-        transform.position.z = 1;
-    }
-
-    // left wall
-    {
-        auto back = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(back);
-        AssignSprite(sprite, "EmptyWhitePixel");
-        sprite.color = { 0, 0, 0, 1 };
-        sprite.size = { 100, 200 };
-        sprite.scale = { 1, 1 };
-        sprite.position = { -200, -75, 1 };
-        auto& col = reg.emplace<SimpleCollision>(back);
-        col.size.x = 100;
-        col.size.y = 200;
-
-        auto& transform = reg.emplace<Transform>(back);
-        transform.position.x =-200;
-        transform.position.y = -75;
-        transform.position.z = 1;
-    }
-
-    //platform
-    {
-        auto back = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(back);
-        AssignSprite(sprite, "EmptyWhitePixel");
-        sprite.color = { 0, 0, 0, 1 };
-        sprite.size = { 50, 20 };
-        sprite.scale = { 1, 1 };
-        sprite.position = { 200, 25, 1 };
-        auto& col = reg.emplace<SimpleCollision>(back);
-        col.size.x = 50;
-        col.size.y = 20;
-        auto& transform = reg.emplace<Transform>(back);
-        transform.position.x = 200;
-        transform.position.y = 25;
-        transform.position.z = 1;
-    }
-
-    // Put background image 
-    {
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-
-        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Background");
-        sprite.position.z = 10;
-    }
-    
-    // Put grass  {
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-
-        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Grass");
-        sprite.position = { 0, -25, 5 };
-    }
-
-    // Put trees 
-    {
-        auto entity = reg.create();
-        auto& sprite = reg.get_or_emplace<Sprite>(entity);
-
-        AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Tree");
-        sprite.position = { 0, 30, 7 };
-    }*/
-    auto& reg = Engine::Registry();
-    auto* camera = Engine::GetDefaultResource<Camera>();
-    {
-        auto entity = reg.create();
-        auto& col = reg.emplace<SimpleCollision>(entity);
-        col.size.x = 3000;
-        col.size.y = 200;
-
-        auto& transform = reg.emplace<Transform>(entity);
-        transform.position.x = 1250;
-        transform.position.y =-400;
-        transform.position.z = 1;
-    }
-    
-}
 
 void team_game::SetupWorld(Engine& engine_)
 {
@@ -371,12 +258,21 @@ void team_game::SetupWorld_Demo(Engine& engine_)
     SetupCamera();
     auto& reg = Engine::Registry();
     auto* camera = Engine::GetDefaultResource<Camera>();
-
-   
-    
-    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,100});
-    auto boss = Boss::Create(/*"Arrows",*/ { 1,1,1 }, { 2475, 1125 });
-
+    {
+        auto entity = reg.create();
+        auto& col = reg.emplace<SimpleCollision>(entity);
+        col.size.x = 3000;
+        col.size.y = 200;
+        auto& physics = reg.emplace<Physics>(entity);
+        physics.nonStatic = false;
+        physics.deathFloor = true;
+        auto& transform = reg.emplace<Transform>(entity);
+        transform.position.x = 1250;
+        transform.position.y = -400;
+        transform.position.z = 1;
+    }
+    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,100 });
+    auto boss = Boss::Create( { 1,1,1 }, { 2475, 1125 });
     auto guide = Guide::Create( { 1,1,1 }, { 50,100 });
     auto bubble = Bubble::Create({ 1,1,1 }, { 50,100 });
     Engine::Registry().emplace<CameraFollow>(mainChar.entity);

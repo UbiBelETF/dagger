@@ -15,7 +15,6 @@ void BossFSM::Idle::Enter(BossFSM::StateComponent& state_) {
 	auto& sprite_ = Engine::Registry().get<Sprite>(state_.entity);
     auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
     AnimatorPlay(animator_, "boss:boss_idle");
-	//sprite_.scale.x *= -1;
 }
 void BossFSM::Idle::Run(BossFSM::StateComponent& state_) {
 	auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
@@ -24,7 +23,6 @@ void BossFSM::Idle::Run(BossFSM::StateComponent& state_) {
 	if (EPSILON_NOT_ZERO(char_.gotHit)) GoTo(EBossState::Hitted, state_);
 	else if (bossAI.attack) GoTo(EBossState::Attack, state_);
 	else if (bossAI.run!=0) GoTo(EBossState::Running, state_);
-
 }
 DEFAULT_EXIT(BossFSM, Idle);
 
@@ -102,8 +100,8 @@ void BossFSM::Hitted::Run(BossFSM::StateComponent& state_)
 
 	if (char_.gotHit <= 0) {
 		char_.gotHit = 0.f;
-		transform.position.x= rand()%300+2275;
-		bossAI.delay = 0;
+		if(char_.healthHearts!=0)transform.position.x= rand()%350+2275;
+		bossAI.delay = 0.5;
 		if (char_.healthHearts==0) GoTo(EBossState::Dead, state_);
 		else if (bossAI.attack) GoTo(EBossState::Attack, state_);
 		else if (bossAI.run!=0)GoTo(EBossState::Running, state_);
@@ -116,12 +114,10 @@ DEFAULT_EXIT(BossFSM, Hitted);
 void BossFSM::Dead::Enter(BossFSM::StateComponent& state_)
 {
 	auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
-	AnimatorPlay(animator_, "boss:boss_death");
-	
+	AnimatorPlay(animator_, "boss:boss_death");	
 }
 void BossFSM::Dead::Run(BossFSM::StateComponent& state_)
 {
-
 	auto& char_ = Engine::Registry().get<BrawlerCharacter>(state_.entity);
 	auto& sprite_ = Engine::Registry().get<Sprite>(state_.entity);
 	if (!char_.dead)
@@ -138,8 +134,8 @@ void BossFSM::Dead::Run(BossFSM::StateComponent& state_)
 				auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
 				AnimatorStop(animator_);
 			}
-
 		}
 	}
+	if (char_.healthHearts != 0) GoTo(EBossState::Idle, state_);
 }
 DEFAULT_EXIT(BossFSM, Dead);
