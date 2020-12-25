@@ -11,6 +11,7 @@
 
 #include "gameplay/tank_warfare/rocket.h"
 #include "gameplay/common/simple_collisions.h"
+#include "gameplay/tank_warfare/tank_stats.h"
 
 using namespace tank_warfare;
 
@@ -61,6 +62,10 @@ void TankControllerSystem::Run()
 					rocketSpeed = { 0, -200 }; 
 					break;
 				}
+				case ETankOrientation::TankDestroyed:
+				{
+					break;
+				}
 				}
 				if (tank_.reloadTime >= 0)
 				{
@@ -69,7 +74,7 @@ void TankControllerSystem::Run()
 				else if (fire != 0)
 				{
 					CreateRocket(rocketPos, rocketSpeed, tank_.id, tank_.lastOrientation);
-					tank_.reloadTime = 1;
+					tank_.reloadTime = 1.f / tank_.fireRate;
 				}
 			}
 			if (driveLR != 0)

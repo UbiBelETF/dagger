@@ -1,0 +1,15 @@
+{
+	"animation-name": "logo:tankwarfare",
+	"animation-length-ms": 800,
+	"animation-frames": 
+	[
+		{ "texture-name": "jovanovici:logoJov:logo1", "relative-length": 1 },
+		{ "texture-name": "jovanovici:logoJov:logo2", "relative-length": 1 },
+		{ "texture-name": "jovanovici:logoJov:logo3", "relative-length": 1 },
+		{ "texture-name": "jovanovici:logoJov:logo4", "relative-length": 1 },
+		{ "texture-name": "jovanovici:logoJov:logo5", "relative-length": 1 },
+		{ "texture-name": "jovanovici:logoJov:logo6", "relative-length": 1 },
+		{ "texture-name": "jovanovici:logoJov:logo7", "relative-length": 1 },
+		{ "texture-name": "jovanovici:logoJov:logo8", "relative-length": 1 }
+	]
+}
