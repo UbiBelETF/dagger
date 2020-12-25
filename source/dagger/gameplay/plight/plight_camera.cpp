@@ -4,6 +4,7 @@
 #include "core/engine.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/window.h"
+#include "gameplay/plight/plight_game_logic.h"
 
 using namespace dagger;
 using namespace plight;
@@ -20,7 +21,7 @@ void CameraCenterSystem::Run()
     auto camParams = Engine::Registry().get<CameraParams>(camEnt);
     Float32 newZoom = camera->zoom;
     Vector2 camXY = camParams.camXY;
-    float distanceFact = 1.3;
+    float distanceFact = 1.6;
 
     float maxZoom = 1.85;
     float minZoom = 1;
@@ -29,6 +30,14 @@ void CameraCenterSystem::Run()
     UInt32 count{ 0 };
     Vector2 distance{ 0, 0 };
     Vector2 s{ 1, 1 };
+
+    auto gameInfoEnt = Engine::Registry().view<PlightGameInfo>().front();
+    PlightGameInfo gameInfo = Engine::Registry().get<PlightGameInfo>(gameInfoEnt);
+    if (gameInfo.displayingMessageEndGame) {
+        camera->position = { 0.0f,0.0f,0.0f };
+        camera->zoom = camParams.camZoom;
+        return;
+    }
 
     Engine::Registry().view<CameraCenter, Sprite>().each([&](const CameraCenter& focus_, const Sprite& sprite_)
         {
