@@ -11,7 +11,7 @@ namespace plight {
 	struct Weapon {
 		Float32 currentTimer = 0.f;
 		Float32 animTimer = 1.f;
-		Float32 weaponDamage = 1.f;
+		Float32 weaponDamage = .4f;
 
 		bool attacking = false;
 
