@@ -14,7 +14,7 @@
 
 using namespace tank_warfare;
 
-int CollectibleSystem::s_NumCoins = 20;
+int CollectibleSystem::s_NumCoins = 15;
 int CollectibleSystem::s_NumPowers = 3;
 
 void CollectibleSystem::Run()
@@ -69,10 +69,11 @@ void CollectibleSystem::Run()
 		s_NumPowers++;
 	}
 
-	while (s_NumCoins < m_MaxCoins)
+	while (s_NumCoins < m_MaxCoins && m_ReachedMax != m_MaxCoins)
 	{
 		AddCollectible(false);
 		s_NumCoins++;
+		m_ReachedMax++;
 	}
 
 }
@@ -134,8 +135,8 @@ void tank_warfare::AddCollectible(bool isPower_)
 	}
 
 	auto& transform = reg.emplace<Transform>(entity);
-	int i = rand() % 20 - 10;
-	int j = rand() % 20 - 10;
+	int i = rand() % 15 - 6;
+	int j = rand() % 17 - 7;
 	transform.position = { 48 * i, 48 * j, 2 };
 	
 	auto& col = reg.emplace<SimpleCollision>(entity);
