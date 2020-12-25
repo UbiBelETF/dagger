@@ -19,6 +19,7 @@ void DeathsCounterSystem::Run()
     for (auto entity : view)
     {
         auto& ty = view.get<CounterType>(entity);
+        if (ty.visible) {
             if (ty.type) {
                 auto& t = view.get<Text>(entity);
                 for (auto entity2 : viewCharacter)
@@ -33,10 +34,13 @@ void DeathsCounterSystem::Run()
                 for (auto entity2 : viewCharacter)
                 {
                     auto& c = viewCharacter.get<BrawlerCharacter>(entity2);
-                    if (c.player)
+                    if (c.player) {
                         t.Set("pixel-font", fmt::format("x {}", c.deaths), { -300, 262,0 });
+                        score = c.deaths;
+                    }
                 }
             }
+        }
     }
     auto viewCharacterc = Engine::Registry().view<BrawlerCharacter>();
     auto views = Engine::Registry().view< Sprite, BarOrCredits>();
@@ -62,8 +66,35 @@ void DeathsCounterSystem::Run()
             {
                 auto& c = viewCharacterc.get<BrawlerCharacter>(entity2);
                 if (!c.player) {
-                    if (c.healthHearts==0) {
-                        AssignSprite(t, "team_game:End");
+                    if (c.healthHearts==0) {                        
+                        if (ty.timer < 0) {
+                            if (ty.once) {
+                                auto viewspr = Engine::Registry().view< Sprite>();
+                                for (auto entity : viewspr) {
+                                    auto& spr = viewspr.get<Sprite>(entity);
+                                    spr.color= { 1, 1, 1, 0 };
+                                }
+                                auto viewscores = Engine::Registry().view< Text, CounterType>();
+                                for (auto entity : viewscores) {
+                                    auto& scoresrend = viewscores.get<CounterType>(entity);
+                                    auto& scorestext = viewscores.get<Text>(entity);
+                                    scoresrend.visible = false;
+                                    scorestext.Set("pixel-font", "off", { -300, 262, 3 });
+                                }
+
+
+                                t.color = { 1, 1, 1, 1 };                                
+                                AssignSprite(t, "team_game:End");
+
+                                auto& reg = Engine::Registry();
+                                auto ui = reg.create();
+                                auto& text = reg.emplace<Text>(ui);
+                                
+                                text.spacing = 0.6f;
+                                text.Set("pixel-font", fmt::format("x {}", score), { 0, 0,0 });
+                                ty.once = false;
+                            }
+                        }else ty.timer -= Engine::DeltaTime();
                     }
                 }
             }
