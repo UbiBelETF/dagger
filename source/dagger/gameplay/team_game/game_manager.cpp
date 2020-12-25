@@ -1,9 +1,10 @@
 #include "game_manager.h"
 
 #include <core/engine.h>
+#include <core/graphics/window.h>
 #include <core/graphics/sprite.h>
 #include <core/game/transforms.h>
-#include<core/graphics/text.h>
+#include <core/graphics/text.h>
 
 #include <gameplay/team_game/team_game_main.h>
 #include "gameplay/team_game/team_game_collisions.h"
@@ -58,6 +59,43 @@ void GameManagerSystem::Run()
                 isGameOver = true;
                 winnerId = (1 - trap.collisionId);
                 return;
+            }
+        }
+
+        if (!restarted)
+        {
+            auto& playerView = Engine::Registry().view<PlayerCharacter, Transform>();
+            auto* camera = Engine::GetDefaultResource<Camera>();
+
+            for (auto& entity : playerView)
+            {
+                auto& player = Engine::Registry().get<PlayerCharacter>(entity);
+                auto& transform = Engine::Registry().get<Transform>(entity);
+
+                if (camera->position.x - transform.position.x < -500)
+                {
+                    isGameOver = true;
+                    winnerId = 1;
+                    return;
+                }
+                else if (camera->position.x - transform.position.x > 500)
+                {
+                    isGameOver = true;
+                    winnerId = 1;
+                    return;
+                }
+                else if (camera->position.y - transform.position.y < -350)
+                {
+                    isGameOver = true;
+                    winnerId = 1;
+                    return;
+                }
+                else if (camera->position.y - transform.position.y > 350)
+                {
+                    isGameOver = true;
+                    winnerId = 1;
+                    return;
+                }
             }
         }
     }
