@@ -56,8 +56,12 @@ void DoorSystem::Run()
 						statbody.enabled = false;
 						auto ui = Engine::Registry().create();
 						auto& text = Engine::Registry().emplace<Text>(ui);
-						text.spacing = 0.6f;
+						text.spacing = 1.0f;
 						text.Set("pixel-font", "You win");
+						auto ui2 = Engine::Registry().create();
+						auto& text2 = Engine::Registry().emplace<Text>(ui2);
+						text2.spacing = 1.0f;
+						text2.Set("pixel-font", "Press R to restart", { 0.0f,-100.0f,0.0f });
 						auto& animator = Engine::Registry().get<Animator>(entity);
 						AnimatorPlay(animator, "among_them_animations:door_open");
 						hero.canMove = false;
