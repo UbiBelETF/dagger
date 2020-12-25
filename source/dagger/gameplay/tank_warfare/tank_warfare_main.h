@@ -9,7 +9,9 @@ using namespace dagger;
 
 namespace tank_warfare
 {
-    void SetupCamera(Engine& engine_);
+    void SetupCamera(Engine& engine_, UInt32 zoom_ = 1);
+    void SetupStartScreen(Engine& engine_);
+    void SetupRestartScreen(Engine& engine_, String winner_);
     void SetupWorld(Engine& engine_);
     void SetupTestWorld(Engine& engine_);
 

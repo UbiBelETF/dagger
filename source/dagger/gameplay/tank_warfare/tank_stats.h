@@ -8,7 +8,8 @@ using namespace dagger;
 
 namespace tank_warfare
 {
-	void CreateTankCharacter(Vector3 pos_, String input_, int id_);
+
+	void CreateTankCharacter(int playerNo_, Vector3 pos_, String input_);
 	void CreateUIBars(Vector3 pos_, int id_);
 	void AddHeart(Vector3 pos_, int id_, int lives_);
 
@@ -30,7 +31,7 @@ namespace tank_warfare
 
 	struct TankCharacter
 	{
-		int id{ rand() };
+		int id{ 1 };
 		int speed{ 50 };
 		bool toBeDestroyed{ false };
 		ETankOrientation lastOrientation{ ETankOrientation::TankLeft };

@@ -28,8 +28,8 @@ namespace tank_warfare
         : public System
     {
     public:
-        int m_NumCoins = 0;
-        int m_NumPowers = 0;
+        static int s_NumCoins;
+        static int s_NumPowers;
         const int m_MaxCoins = 20;
         const int m_MaxPowers = 3;
         const int m_PowerDuration = 4;
@@ -41,6 +41,8 @@ namespace tank_warfare
         void Run() override;
         void SpinUp() override;
         void WindDown() override;
+
+        static void ResetNumCoinsPowers();
 
     private:
         void OnEndOfFrame();

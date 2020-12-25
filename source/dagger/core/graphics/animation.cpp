@@ -2,7 +2,7 @@
 
 #include "core/graphics/animations.h"
 
-void dagger::AnimatorPlay(Animator& animator_, String animationName_)
+void dagger::AnimatorPlay(Animator& animator_, String animationName_, UInt32 size_)
 {
 	if (animationName_ == animator_.currentAnimation) return;
 
@@ -10,6 +10,7 @@ void dagger::AnimatorPlay(Animator& animator_, String animationName_)
 	animator_.currentFrame = 0;
 	animator_.currentFrameTime = 0;
 	animator_.animationPlaying = true;
+	animator_.size = size_;
 }
 
 void dagger::AnimatorStop(Animator& animator_)

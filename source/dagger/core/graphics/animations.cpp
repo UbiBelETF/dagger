@@ -38,7 +38,7 @@ void AnimationSystem::Run()
                     animator_.currentFrame = (animator_.currentFrame + 1) % count;
                     animator_.currentFrameTime = 0.0;
                     
-                    AssignSprite(sprite_, currentAnimation->frames[animator_.currentFrame].textureName);
+                    AssignSprite(sprite_, currentAnimation->frames[animator_.currentFrame].textureName, animator_.size);
                 }
             }
         });
