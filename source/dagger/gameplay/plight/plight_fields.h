@@ -8,7 +8,7 @@ namespace plight {
 	struct DefenseField {
 		UINT32 fieldsLeft = 2;
 
-		Float32 fieldSize = 50.f;
+		Float32 fieldSize = 100.f;
 
 		Float32 initialStaminaCost = 20.f;
 		Float32 initialHealthReturn = 20.f;

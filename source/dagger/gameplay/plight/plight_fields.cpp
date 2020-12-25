@@ -44,15 +44,16 @@ void FieldsSystem::Run()
 			auto& input = view.get<InputReceiver>(entity);
 			auto& defenseField = view.get<DefenseField>(entity);
 
+			if(defenseField.fieldsLeft > 0){
 			if (defenseField.fieldActive) {
 				defenseField.currendDurationTime += Engine::DeltaTime();
 				if (defenseField.currendDurationTime > defenseField.fieldDurationTime / 15 && defenseField.currendDurationTime < (defenseField.fieldDurationTime/15)*14) {
-					//auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
-					//AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
+					auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
+					AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
 				}
 				else if (defenseField.currendDurationTime >= (defenseField.fieldDurationTime / 15) * 14 && defenseField.currendDurationTime < defenseField.fieldDurationTime) {
-						//auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
-						//AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
+						auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
+						AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD_DESPAWN");
 				}
 				else if(defenseField.currendDurationTime > defenseField.fieldDurationTime){
 						defenseField.destroy = true;
@@ -67,26 +68,26 @@ void FieldsSystem::Run()
 			if (EPSILON_NOT_ZERO(defend)) {
 				if (cstats.currentStamina > defenseField.initialStaminaCost) {
 					defenseField.fieldActive = true;
-					auto& defSprite = Engine::Registry().emplace<Sprite>(defenseField.defenseFieldE);
-					AssignSprite(defSprite, "Plight:fields:defensefield");
+					auto& defSprite = Engine::Registry().get_or_emplace<Sprite>(defenseField.defenseFieldE);
+					AssignSprite(defSprite, "Plight:fields:SPAWN:defensefield_spawn_1");
 					defSprite.scale = { 0.4f,0.4f };
-					//auto& defTransform = Engine::Registry().emplace<Transform>(defenseField.defenseFieldE);
-					//auto& defPhysics = Engine::Registry().emplace<PhysicsObject>(defenseField.defenseFieldE);
-					//auto& defCollision = Engine::Registry().emplace<PlightCollision>(defenseField.defenseFieldE);
-					//defCollision.size = { 32,32 };
-					//auto& anim = Engine::Registry().emplace<Animator>(defenseField.defenseFieldE);
+					auto& defTransform = Engine::Registry().get_or_emplace<Transform>(defenseField.defenseFieldE);
+					auto& defPhysics = Engine::Registry().emplace<PhysicsObject>(defenseField.defenseFieldE);
+					auto& defCollision = Engine::Registry().emplace<PlightCollision>(defenseField.defenseFieldE);
+					auto& anim = Engine::Registry().emplace<Animator>(defenseField.defenseFieldE);
 
 					
 					defSprite.position = t.position;
+					defTransform.position = t.position;
 					defSprite.position.z = 70.f;
-					//defTransform.position = t.position;
-					//defTransform.position.z = 70.f;
-					//defPhysics.my_groups.push_back(1);
-					//defPhysics.collision_groups.push_back(1);
-					//defCollision.size = { defenseField.fieldSize,defenseField.fieldSize };
-					//AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD");
+					defTransform.position.z = 70.f;
+					defPhysics.my_groups.push_back(1);
+					defPhysics.collision_groups.push_back(1);
+					defCollision.size = { defenseField.fieldSize,defenseField.fieldSize };
+					AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD_SPAWN");
 					cstats.healing = true;
 				}
+			}
 			}
 		}
 	}
@@ -105,11 +106,10 @@ void FieldsSystem::OnEndOfFrame() {
 		if (defenseField.destroy) {
 			defenseField.fieldActive = false;
 			defenseField.destroy = false;
+			auto& anim = Engine::Registry().get<Animator>(defenseField.defenseFieldE);
+			AnimatorStop(anim);
 			Engine::Registry().remove_all(defenseField.defenseFieldE);
 
-			if (defenseField.fieldsLeft == 0) {
-				Engine::Registry().remove_if_exists<DefenseField>(defenseField.holder);
-			}
 		}
 	}
 }
