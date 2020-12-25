@@ -6,15 +6,11 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 
+#include "gameplay/team_game/treasure.h"
 using namespace dagger;
 
 namespace team_game
 {
-    struct TreasureChest
-    {
-        Bool hadCollisionWithPlayer = false;
-    };
-
     class GameManagerSystem : public System
     {
     private:
