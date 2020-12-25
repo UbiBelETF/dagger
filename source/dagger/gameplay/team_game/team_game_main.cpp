@@ -31,8 +31,7 @@
 
 using namespace dagger;
 using namespace team_game;
-
-void TeamGame::GameplaySystemsSetup(Engine &engine_)
+void TeamGame::GameplaySystemsSetup(Engine& engine_)
 {
     engine_.AddSystem<EnemyControllerSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
@@ -50,24 +49,23 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<GameControllerSystem>();
 }
 
-void TeamGame::WorldSetup(Engine &engine_)
+void TeamGame::WorldSetup(Engine& engine_)
 {
     ShaderSystem::Use("standard");
-
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
     camera->zoom = 3;
     camera->position = { 0, 0, 0 };
     camera->Update();
-    
+
     team_game::SetupWorld(engine_);
 }
-
 void SetupWorldJovica(Engine& engine_, Registry& reg_)
 {
     // TILEMAP
     TilemapLegend legend;
+	
     legend[' '] = &level_generator::jovica::Nothing;
     legend['.'] = &level_generator::jovica::CreateFloor;
     legend['_'] = &level_generator::jovica::CreateTopWall;
@@ -85,31 +83,24 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
     legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
     legend['t'] = &level_generator::jovica::CreateTopLeftConcWallS;
-    legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;  
-
+    legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
+	
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
-
+	
     // PLAYER
     auto player = reg_.create();
-
     auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
     playerState.currentState = ECharacterState::Idle;
-
     auto& playerSprite = reg_.emplace<Sprite>(player);
     AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
     playerSprite.scale = { 1, 1 };
-
     auto& playerAnimator = reg_.emplace<Animator>(player);
     AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
-
     auto& playerTransform = reg_.emplace<Transform>(player);
     playerTransform.position = { 50, -50, 1 };
-
     auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
     playerInput.contexts.push_back("AmongThemInput");
-
     auto& controller = reg_.emplace<CharacterController>(player);
-
     reg_.emplace<MovableBody>(player);
 
     auto& playerCollision = reg_.emplace<SimpleCollision>(player);
@@ -120,20 +111,16 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     // POOF
     auto poofEntity = reg_.create();
-    
-    reg_.emplace<Transform>(poofEntity);
 
+    reg_.emplace<Transform>(poofEntity);
     auto& poofSprite = reg_.emplace<Sprite>(poofEntity);
     AssignSprite(poofSprite, "spritesheets:among_them_spritesheet:poof_anim:5");
     poofSprite.scale = { 0.5, 0.5 };
-
     auto& poofFollow = reg_.emplace<Follow>(poofEntity);
     poofFollow.target = player;
     poofFollow.offset.z = -1;
-
     auto& poofAnimator = reg_.emplace<Animator>(poofEntity);
     poofAnimator.isLooping = false;
-
     auto& exec = reg_.emplace<AnimationExecutor>(poofEntity);
     exec.source = &controller.animationTrigger;
     exec.animationName = "among_them_animations:poof";
@@ -186,9 +173,8 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     auto& vcCone = reg_.emplace<VisionCone>(visionCone);
     vcCone.shape = ECharacterShape::Goblin;
 }
-
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
-    
+
 /*
 
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
@@ -281,22 +267,18 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
        reg_.emplace<Key>(key);
        
     
+
     //ENEMY 
     auto enemy = reg_.create();
-
     auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
     enemyState.currentState = EEnemyState::Patrolling;
-
     auto& enemySprite = reg_.emplace<Sprite>(enemy);
     AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
     enemySprite.scale = { 1, 1 };
-
     auto& enemyAnimator = reg_.emplace<Animator>(enemy);
     AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
-
     auto& enemyTransform = reg_.emplace<Transform>(enemy);
-    enemyTransform.position = { 0, 25, 1 };
-
+    enemyTransform.position = { 0, 70, 1 };
     auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
     enemyInput.pathname = "path.txt";
     enemyInput.currentshape = "goblin";
@@ -307,17 +289,13 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
     enemyCollision.size = enemySprite.size;
 
+    auto& det = reg_.emplace<Detection>(enemy);
+    det.SetSize(en.detectionArea);
+
     reg_.emplace<MovableBody>(enemy);
-
-    auto& enDetection1 = reg_.emplace<Detection>(enemy);
-    enDetection1.SetSize(en.detectionArea);
-
-
     //ENEMY NO.2
-
     //ENEMY 
     auto enemy2 = reg_.create();
-
     auto& enemy2State = ATTACH_TO_FSM(EnemyFSM, enemy2);
     enemy2State.currentState = EEnemyState::Patrolling;
 
@@ -329,23 +307,23 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     AnimatorPlay(enemy2Animator, "among_them_animations:bat");
 
     auto& enemy2Transform = reg_.emplace<Transform>(enemy2);
-    enemy2Transform.position = { 0, 60, 1 };
+    enemy2Transform.position = { 0, 90, 1 };
 
     auto& enemy2Input = reg_.emplace<InputEnemiesFile>(enemy2);
-    enemy2Input.pathname = "pathbat.txt";
+    enemy2Input.pathname = "pathidlebat.txt";
     enemy2Input.currentshape = "bat";
 
     auto& en2 = reg_.emplace<EnemyDescription>(enemy2);
     en2.shape = ECharacterShape::Bat;
 
+
     auto& en2Collision = reg_.emplace<SimpleCollision>(enemy2);
     en2Collision.size = enemy2Sprite.size;
 
-    reg_.emplace<MovableBody>(enemy2);
-
     auto& det2 = reg_.emplace<Detection>(enemy2);
     det2.SetSize(en2.detectionArea);
-
+    
+    reg_.emplace<MovableBody>(enemy2);
 }
 
 void team_game::SetupWorld(Engine &engine_)
