@@ -24,9 +24,10 @@
 #include "gameplay/team_game/movement.h"
 #include "gameplay/team_game/physics.h"
 #include "gameplay/team_game/game_controller.h"
-#include "gameplay/team_game/follow.h""
+#include "gameplay/team_game/follow.h"
 #include "gameplay/team_game/remote_animation.h"
-#include <gameplay/team_game/detection.h>
+#include "gameplay/team_game/detection.h"
+#include "gameplay//team_game/vision_cone.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -35,16 +36,17 @@ void TeamGame::GameplaySystemsSetup(Engine& engine_)
     engine_.AddSystem<EnemyControllerSystem>();
     engine_.AddSystem<CharacterControllerSystem>();
     engine_.AddSystem<TilemapSystem>();
-    engine_.AddSystem<CameraSystem>();
     engine_.AddSystem<SimpleCollisionsSystem>();
-    engine_.AddSystem<PhysicsSystem>();
-    engine_.AddSystem<MovementSystem>();
     engine_.AddSystem<DoorSystem>();
     engine_.AddSystem<KeySystem>();
-    engine_.AddSystem<FollowSystem>();
     engine_.AddSystem<RemoteAnimationSystem>();
-    engine_.AddSystem<GameControllerSystem>();
     engine_.AddSystem<DetectionSystem>();
+    engine_.AddSystem<VisionConeSystem>();
+    engine_.AddSystem<PhysicsSystem>();
+    engine_.AddSystem<MovementSystem>();
+    engine_.AddSystem<FollowSystem>();
+    engine_.AddSystem<CameraSystem>();
+    engine_.AddSystem<GameControllerSystem>();
 }
 
 void TeamGame::WorldSetup(Engine& engine_)
@@ -63,6 +65,7 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 {
     // TILEMAP
     TilemapLegend legend;
+	
     legend[' '] = &level_generator::jovica::Nothing;
     legend['.'] = &level_generator::jovica::CreateFloor;
     legend['_'] = &level_generator::jovica::CreateTopWall;
@@ -81,7 +84,9 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
     legend['t'] = &level_generator::jovica::CreateTopLeftConcWallS;
     legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
+	
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
+	
     // PLAYER
     auto player = reg_.create();
     auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
@@ -97,6 +102,13 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     playerInput.contexts.push_back("AmongThemInput");
     auto& controller = reg_.emplace<CharacterController>(player);
     reg_.emplace<MovableBody>(player);
+
+    auto& playerCollision = reg_.emplace<SimpleCollision>(player);
+    playerCollision.size = playerSprite.size;
+
+    auto& detection = reg_.emplace<Detection>(player);
+    detection.SetSize({ 2,2 });
+
     // POOF
     auto poofEntity = reg_.create();
 
@@ -113,6 +125,53 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     exec.source = &controller.animationTrigger;
     exec.animationName = "among_them_animations:poof";
     exec.startingSpriteName = "spritesheets:among_them_spritesheet:poof_anim:1";
+
+    // ENEMY 
+    auto enemy = reg_.create();
+
+    auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
+    enemyState.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite = reg_.emplace<Sprite>(enemy);
+    AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite.scale = { 1, 1 };
+
+    auto& enemyAnimator = reg_.emplace<Animator>(enemy);
+    AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform = reg_.emplace<Transform>(enemy);
+    enemyTransform.position = { 0, 25, 1 };
+
+    auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
+    enemyInput.pathname = "path.txt";
+    enemyInput.currentshape = "goblin";
+
+    auto& en = reg_.emplace<EnemyDescription>(enemy);
+    en.shape = ECharacterShape::Goblin;
+
+    auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
+    enemyCollision.size = enemySprite.size;
+
+    reg_.emplace<MovableBody>(enemy);
+
+    auto& enDetection1 = reg_.emplace<Detection>(enemy);
+    enDetection1.SetSize(en.detectionArea);
+
+    // VISION CONE
+    auto visionCone = reg_.create();
+
+    reg_.emplace<Transform>(visionCone);
+
+    auto& vcSprite = reg_.emplace<Sprite>(visionCone);
+    AssignSprite(vcSprite, "AmongThem:circle");
+    vcSprite.size = enDetection1.size;
+
+    auto& vcFollow = reg_.emplace<Follow>(visionCone);
+    vcFollow.target = enemy;
+    vcFollow.offset.z = 25;
+
+    auto& vcCone = reg_.emplace<VisionCone>(visionCone);
+    vcCone.shape = ECharacterShape::Goblin;
 }
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
@@ -285,9 +344,9 @@ void team_game::SetupWorld(Engine &engine_)
 	
     // You can add your own WorldSetup functions when testing, call them here and comment out mine
 
-   // SetupWorldJovica(engine_, reg);
+    SetupWorldJovica(engine_, reg);
     //SetupWorldKosta(engine_, reg);
-    SetupWorldSmiljana(engine_, reg);
+    //SetupWorldSmiljana(engine_, reg);
 
 }
 

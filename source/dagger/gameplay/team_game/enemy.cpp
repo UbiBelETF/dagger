@@ -98,7 +98,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	else { ctrl.direction.y = 0; }
 
 	AnimatorPlay(animator, run);
-	transform.position.x += ctrl.direction.x * ctrl.speed * Engine::DeltaTime();
+	/*transform.position.x += ctrl.direction.x * ctrl.speed * Engine::DeltaTime();
 	transform.position.y += ctrl.direction.y * ctrl.speed * Engine::DeltaTime();
 
 	if ((transform.position.x < destinationX && ctrl.direction.x == -1) ||
@@ -118,9 +118,13 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 			return;
 		}
 		
+	}*/
+	if (glm::abs(destinationX - transform.position.x) < 0.1f && glm::abs(destinationY - transform.position.y) < 0.1f)
+	{
+		ctrl.postition = (ctrl.postition + 1) % ctrl.numberOfPoints;
 	}
-
-	
+	Vector2 direction = { destinationX - transform.position.x, destinationY - transform.position.y };
+	body.movement = glm::normalize(direction) * ctrl.speed * Engine::DeltaTime();
 }
 
 DEFAULT_EXIT(EnemyFSM, Patrolling);
