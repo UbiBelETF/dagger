@@ -7,6 +7,8 @@
 #define STAMINA_FOR_RUNNING_FRAME 0.f
 #define STAMINA_FOR_REGENERATING_FRAME 0.2f
 #define STAMINA_FOR_DASHING_FRAME 1.f
+#define STAMINA_FOR_ATTACKING 50.f
+#define STAMINA_FOR_HEALING_FRAME 0.05f
 #define BAR_START_SIZE 50.f
 
 using namespace dagger;
@@ -32,6 +34,8 @@ namespace plight {
         
         Float32 updateTimer{ 0.01f };
         Float32 currentTimer{ 0.f };
+
+        bool healing = false;
     };
 
     class PlightCombatSystem : public System
@@ -40,5 +44,11 @@ namespace plight {
         inline String SystemName() { return "Plight Combat System"; }
 
         void Run() override;
+        void WindDown() override;
+        void SpinUp() override;
+    private:
+        void OnEndOfFrame();
+
+        Float32 getDistance(Float32 x1, Float32 y1, Float32 x2, Float32 y2);
     };
 }

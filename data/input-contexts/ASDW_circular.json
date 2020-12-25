@@ -33,6 +33,21 @@
       "event": "Released"
     },
     {
+      "command-name": "attack",
+      "trigger": "KeyG",
+      "event": "Released"
+    },
+    {
+      "command-name": "bomb",
+      "trigger": "KeyF",
+      "duration": 2000
+    },
+    {
+      "command-name": "defense_field",
+      "trigger": "KeyH",
+      "event": "Released"
+    },
+    {
       "command-name": "restart",
       "trigger": "KeyY",
       "event": "Released"

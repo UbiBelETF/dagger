@@ -7,6 +7,7 @@
 
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_fields.h"
 
 #include <algorithm>    
 
@@ -29,6 +30,7 @@ void plight::PhysicsSystem::Run()
             auto it2 = collision.colidedWith.begin();
             while (it2 != collision.colidedWith.end())
             {
+
                 bool skip = false;
                 if (Engine::Registry().has<PhysicsObject>(*it2)) {
                     auto& other_physics = view.get<PhysicsObject>(*it2);
@@ -37,6 +39,12 @@ void plight::PhysicsSystem::Run()
                         if (std::find(physics.my_groups.begin(), physics.my_groups.end(), group) != physics.my_groups.end()) {
                             has = true;
                             break;
+                        }
+                    }
+                    if (Engine::Registry().has<DefenseField>(*it)) {
+                        auto& def_field = Engine::Registry().get<DefenseField>(*it);
+                        if (*it2 == def_field.defenseFieldE) {
+                            has = false;
                         }
                     }
                     if (has) {
@@ -62,12 +70,12 @@ void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myC
    Vector2 sides = myCol_.GetCollisionSides(pos_, otherCol_, posOther_);
 
     if (sides.x != 0) {
-        if (sides.x == 1) pos_.x = posOther_.x - myCol_.size.x - 1;
-        else pos_.x = posOther_.x + otherCol_.size.x + 1;
+        if (sides.x == 1) pos_.x = posOther_.x + otherCol_.pivot.x * otherCol_.size.x - (1+ myCol_.pivot.x) * myCol_.size.x;
+        else pos_.x = posOther_.x + otherCol_.pivot.x * otherCol_.size.x + otherCol_.size.x - myCol_.pivot.x * myCol_.size.x;
     }
     if (sides.y != 0) {
-        if (sides.y == 1) pos_.y = posOther_.y - myCol_.size.y - 1;
-        else pos_.y = posOther_.y + otherCol_.size.y + 1;
+        if (sides.y == 1) pos_.y = posOther_.y + otherCol_.pivot.y * otherCol_.size.y - (1 + myCol_.pivot.y) * myCol_.size.y;
+        else pos_.y = posOther_.y + otherCol_.pivot.y * otherCol_.size.y + otherCol_.size.y - myCol_.pivot.y * myCol_.size.y;
     }
 
     other_=myCol_.colidedWith.erase(other_);

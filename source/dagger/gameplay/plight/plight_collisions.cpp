@@ -8,6 +8,7 @@
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/plight_physics.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_fields.h"
 
 using namespace dagger;
 using namespace plight;
@@ -38,27 +39,33 @@ void PlightCollisionsSystem::Run()
     {
         auto& collision = view.get<PlightCollision>(*it);
         auto& transform = view.get<Transform>(*it);
-        
+		auto& chr = view.get<PlightCharacterController>(*it);
+
         for (auto entity : view2) {
-            if (entity == *it) {
+           
+            if (entity == *it || entity == chr.weaponSprite) {
                 continue;
-            }
+			}
+	
             auto& col = view2.get<PlightCollision>(entity);
             auto& tr = view2.get<Transform>(entity);
             //Don't check collisions for distant objects (They aren't colided for sure)
-            if (abs(transform.position.x - tr.position.x) > 32 && abs(transform.position.y - tr.position.y) > 32) {
+            if (abs(transform.position.x - tr.position.x) > 150 && abs(transform.position.y - tr.position.y) > 150) {
                 continue;
             }
 
-            // processing one collision per frame for each colider
-            if (collision.IsCollidedSAT(transform.position, col, tr.position))
-            {
-                collision.colided = true;
-                collision.colidedWith.push_back(entity);
+           
+                // processing one collision per frame for each colider
+                if (collision.IsCollidedSAT(transform.position, col, tr.position))
+                {
+                    collision.colided = true;
+                    collision.colidedWith.push_back(entity);
 
-                col.colided = true;
-                col.colidedWith.push_back(*it);
-            }
+                    col.colided = true;
+                    col.colidedWith.push_back(*it);
+                }
+
+           
         }
         collision.last_pos = transform;
         it++;

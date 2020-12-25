@@ -14,6 +14,8 @@
 #include "gameplay/plight/plight_particles.h"
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/plight_controller.h"
+#include "gameplay/plight/plight_melee.h"
+#include "gameplay/plight/plight_fields.h"
 
 
 
@@ -49,41 +51,108 @@ void PlightCombatSystem::Run()
 				auto it = col.colidedWith.begin();
 				while (it != col.colidedWith.end()) {
 					if (Engine::Registry().valid(*it)) {
-						if (Engine::Registry().has<PlightCharacterController>(*it)) {
+						auto& otherCol = Engine::Registry().get<PlightCollision>(*it);
+						auto& otherTransform = Engine::Registry().get<Transform>(*it);
+						if (Engine::Registry().has<Weapon>(*it)) {
 							if (cstats.currentTimer >= cstats.updateTimer) {
-								auto& ch = Engine::Registry().get<CombatStats>(*it);
-								auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
-
-							if (pchar.dead) {
-								it++;
-								continue;
+								
+								auto& weapon = Engine::Registry().get<Weapon>(*it);
+							if (weapon.attacking) {
+								auto& pspawner = Engine::Registry().get<PlightParticleSpawner>(entity);
+								pspawner.active = true;
+								cstats.currentHealth -= weapon.weaponDamage;
 							}
-								ch.currentHealth -= 0.1f;
+								
 
-								if (ch.currentHealth <= 0.f) {
-									ch.currentHealth = 0.f;
+								if (cstats.currentHealth <= 0.f) {
+									cstats.currentHealth = 0.f;
 								}
-
-								auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);
-								ch.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (ch.currentHealth / ch.maxHealth))) / 2;
-								sprite.size.x = BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
+								
+								auto& sprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+								cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
+								sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
 							}
 						}
 						if (Engine::Registry().has<Projectile>(*it)) {
 							auto& projectile = Engine::Registry().get<Projectile>(*it);				
 							auto& pspawner = Engine::Registry().get<PlightParticleSpawner>(entity);
 							pspawner.active = true;
-							projectile.destroy = true;
 
-						    cstats.currentHealth -= projectile.projectileDamage;	
-
-							if (cstats.currentHealth <= 0.f) {
-								cstats.currentHealth = 0.f;
+							if (projectile.isBomb) {
+								if (!projectile.displayingParticles) {
+									if (!projectile.activated) {
+										auto& bomb_particles = Engine::Registry().get<PlightParticleSpawner>(*it);
+										bomb_particles.active = true;
+										otherCol.size.x = projectile.bombRadius;
+										otherCol.size.y = projectile.bombRadius;
+										projectile.activated = true;
+									}									
+								}
+								else {
+									if (!cstats.healing) {
+										Float32 dmg = projectile.projectileDamage;
+										Float32 dist = getDistance(t.position.x, t.position.y, otherTransform.position.x, otherTransform.position.y);
+										if (dist > 0) {
+											dmg = projectile.projectileDamage * 1 / (dist / 15);
+											if (dmg > projectile.projectileDamage) {
+												dmg = projectile.projectileDamage;
+											}
+										}
+										cstats.currentHealth -= dmg;
+									}
+									
+								}
+							}
+							else if(!projectile.destroy){
+								cstats.currentHealth -= projectile.projectileDamage;
+								projectile.destroy = true;
 							}
 
-							auto& sprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
-							cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
-							sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
+
+								if (cstats.currentHealth <= 0.f) {
+									cstats.currentHealth = 0.f;
+								}
+
+								auto& sprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+								cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
+								sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);				
+						}
+						if (Engine::Registry().has<DefenseField>(entity)){			
+							auto& defenseField = Engine::Registry().get<DefenseField>(entity);
+							if (defenseField.defenseFieldE == *it) {
+								if (cstats.healing) {
+									if (!defenseField.initialDone) {
+										cstats.currentHealth += defenseField.initialHealthReturn;
+										if (cstats.currentHealth > cstats.maxHealth) {
+											cstats.currentHealth = cstats.maxHealth;
+										}
+										cstats.currentStamina -= defenseField.initialStaminaCost;
+										if (cstats.currentStamina > cstats.maxStamina) {
+											cstats.currentStamina = cstats.maxStamina;
+										}
+										defenseField.initialDone = true;
+									}
+									if (cstats.currentStamina < STAMINA_FOR_HEALING_FRAME) {
+										it++;
+										continue;
+									}
+									cstats.currentStamina -= STAMINA_FOR_HEALING_FRAME;
+									if (cstats.currentStamina < 0.f) {
+										cstats.currentStamina = 0.f;
+									}
+									auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+									cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+									sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+
+									cstats.currentHealth += STAMINA_FOR_HEALING_FRAME/2;
+									if (cstats.currentHealth > cstats.maxHealth) {
+										cstats.currentHealth = cstats.maxHealth;
+									}
+									auto& sprite2 = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+									cstats.healthBarOffset -= std::abs((sprite2.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2);
+									sprite2.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
+								}
+							}
 						}
 					}
 					it++;
@@ -113,16 +182,15 @@ void PlightCombatSystem::Run()
 					cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
 					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 				}
-				else {
-					cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME / 2;
+				else if(!cstats.healing || cstats.currentStamina < STAMINA_FOR_HEALING_FRAME){
+					cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME;
 					if (cstats.currentStamina > 100) {
 						cstats.currentStamina = 100;
 					}
-					if (cstats.currentStamina < 100) {
 						auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
 						cstats.staminaBarOffset += std::abs((sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2);
 						sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
-					}
+					
 				}
 				cstats.currentTimer = 0.f;
 			}
@@ -149,4 +217,40 @@ void PlightCombatSystem::Run()
 		}
 	}
 
+}
+
+void plight::PlightCombatSystem::WindDown()
+{
+	Engine::Dispatcher().sink<NextFrame>().disconnect<&PlightCombatSystem::OnEndOfFrame>(this);
+}
+
+void plight::PlightCombatSystem::SpinUp()
+{
+	Engine::Dispatcher().sink<NextFrame>().connect<&PlightCombatSystem::OnEndOfFrame>(this);
+}
+
+void plight::PlightCombatSystem::OnEndOfFrame()
+{
+	auto view = Engine::Registry().view<Projectile>();
+	for (auto entity : view) {
+		auto& projectile = Engine::Registry().get<Projectile>(entity);
+		if (projectile.isBomb) {
+			if (projectile.activated) {
+				if (!projectile.displayingParticles) {
+					projectile.displayingParticles = true;
+				}
+				else {
+					Engine::Registry().remove_if_exists<PlightCollision>(entity);
+				}
+			}
+		}
+	}
+}
+
+Float32 plight::PlightCombatSystem::getDistance(Float32 x1, Float32 y1, Float32 x2, Float32 y2)
+{
+		// Calculating distance 
+		return sqrt(pow(x2 - x1, 2) +
+			pow(y2 - y1, 2) * 1.0f);
+	
 }

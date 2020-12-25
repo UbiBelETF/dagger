@@ -29,7 +29,22 @@
     },
     {
       "command-name": "fire",
-      "trigger": "KeyL",
+      "trigger": "KeyP",
+      "event": "Released"
+    },
+    {
+      "command-name": "attack",
+      "trigger": "KeyO",
+      "event": "Released"
+    },
+    {
+      "command-name": "bomb",
+      "trigger": "KeyP",
+      "duration": 2000
+    },
+    {
+      "command-name": "defense_field",
+      "trigger": "KeyI",
       "event": "Released"
     },
     {
