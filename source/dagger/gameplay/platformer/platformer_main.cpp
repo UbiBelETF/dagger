@@ -12,6 +12,8 @@
 #include "core/graphics/textures.h"
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
+#include "core/graphics/text.h"
+
 #include "tools/diagnostics.h"
 
 #include "gameplay/platformer/platformer_controller.h"
@@ -129,6 +131,13 @@ void CreateBackdrop()
 
         AssignSprite(sprite, "souls_like_knight_character:BACKGROUND:Tree");
         sprite.position = { 0, 30, 7 };
+    }
+
+    {
+        auto ui = reg.create();
+        auto& text = reg.emplace<Text>(ui);
+        text.spacing = 0.6f;
+        text.Set("pixel-font", "hello world");
     }
 }
 
