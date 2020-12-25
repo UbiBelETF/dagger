@@ -55,6 +55,8 @@ void PlightCombatSystem::Run()
 								
 								auto& weapon = Engine::Registry().get<Weapon>(*it);
 							if (weapon.attacking) {
+								auto& pspawner = Engine::Registry().get<PlightParticleSpawner>(entity);
+								pspawner.active = true;
 								cstats.currentHealth -= weapon.weaponDamage;
 							}
 								

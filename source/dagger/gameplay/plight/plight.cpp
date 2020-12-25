@@ -234,6 +234,11 @@ void plight::ResetCharacters()
         Float32 y_weapon = character.character.weaponOffset * sin(character.crosshair.angle);
 
         auto& weapon_sprite = Engine::Registry().get<Sprite>(character.character.weaponSprite);
+        AssignSprite(weapon_sprite, character.character.weaponSpriteName);
+        character.character.attacking = false;
+        auto& weapon = Engine::Registry().get<Weapon>(character.character.weaponSprite);
+        weapon.animPlaying = false;
+        weapon.attacking = false;
         weapon_sprite.position.x = character.transform.position.x + x_weapon;
         weapon_sprite.position.y = character.transform.position.y - 3.f + y_weapon;
         weapon_sprite.position.z = character.transform.position.z - 5.f;
