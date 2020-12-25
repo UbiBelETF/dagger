@@ -313,7 +313,7 @@ Sequence<Entity> level_generator::jovica::CreateDoor(Registry& reg_, SInt32 x_, 
 
 Sequence<Entity> level_generator::jovica::CreateIdleGoblin(Registry& reg_, SInt32 x_, SInt32 y_)
 {
-    std::cout << x_ << "," << y_;
+    std::cout << x_ << "," << y_ <<std::endl;
     auto enemy = reg_.create();
     auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
     enemyState.currentState = EEnemyState::Patrolling;
