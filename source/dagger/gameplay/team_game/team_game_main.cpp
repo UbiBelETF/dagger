@@ -550,77 +550,64 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 }
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 
-/*
-
-    Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/my_first_map.map", &legend });
-  
-
-
-    
-        TilemapLegend legend;
-        legend['.'] = &level_generator::smiljana::CreateFloor;
-        legend['#'] = &level_generator::smiljana::CreateWall;
-
-
-       
-
-
-       
-*/
-      
     // PLAYER
-        auto player = reg_.create();
-        
-		auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
-        playerState.currentState = ECharacterState::Idle;
+    auto player = reg_.create();
 
-        auto& playerSprite = reg_.emplace<Sprite>(player);
-        AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-        playerSprite.scale = { 1, 1 };
+    auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+    playerState.currentState = ECharacterState::Idle;
 
- 
-        auto& playerAnimator = reg_.emplace<Animator>(player);
-        AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
+    auto& playerSprite = reg_.emplace<Sprite>(player);
+    AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+    playerSprite.scale = { 1, 1 };
 
-        auto& playerTransform = reg_.emplace<Transform>(player);
-        playerTransform.position = { 0, 0, 1 };
 
-        auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
-        playerInput.contexts.push_back("AmongThemInput");
+    auto& playerAnimator = reg_.emplace<Animator>(player);
+    AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
 
-        auto& playerCollision = reg_.emplace<SimpleCollision>(player);
-        playerCollision.size = playerSprite.size;
+    auto& playerTransform = reg_.emplace<Transform>(player);
+    playerTransform.position = { 0, 0, 1 };
 
-        reg_.emplace<CharacterController>(player);
+    auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
+    playerInput.contexts.push_back("AmongThemInput");
 
-        auto& movable = reg_.emplace<MovableBody>(player);
-        movable.size = playerSprite.size;
-        auto& detection = reg_.emplace<Detection>(player);
-        detection.SetSize({ 2,2 });
-      
+    auto& playerCollision = reg_.emplace<SimpleCollision>(player);
+    playerCollision.size = playerSprite.size;
 
-	  //DOOR
+    reg_.emplace<CharacterController>(player);
 
-        auto door = reg_.create();
+    auto& movable = reg_.emplace<MovableBody>(player);
+    movable.size = playerSprite.size;
 
-        auto& doorSprite = reg_.emplace<Sprite>(door);
-        AssignSprite(doorSprite, "spritesheets:among_them_spritesheet:door_open_anim:1");
-        doorSprite.scale = { 1, 1 };
+    auto& detection = reg_.emplace<Detection>(player);
+    detection.SetSize({ 2,2 });
 
-        auto& doorAnimator = reg_.emplace<Animator>(door);
-        
-        auto& doorTransform = reg_.emplace<Transform>(door);
-        doorTransform.position = { 40, 20, 1 };
 
-        auto& doorCollision = reg_.emplace<SimpleCollision>(door);
-        doorCollision.size = doorSprite.size;
-        
-        SInt32 x = ((SInt32)doorTransform.position.x + 8) / 16;
-        SInt32 y = ((SInt32)doorTransform.position.y - 8) / 16;
+    //DOOR
+
+    auto door = reg_.create();
+
+    auto& doorSprite = reg_.emplace<Sprite>(door);
+    AssignSprite(doorSprite, "spritesheets:among_them_spritesheet:door_open_anim:1");
+    doorSprite.scale = { 1, 1 };
+
+    auto& doorAnimator = reg_.emplace<Animator>(door);
+
+    auto& doorTransform = reg_.emplace<Transform>(door);
+    doorTransform.position = { 40, 20, 1 };
+
+    auto& doorCollision = reg_.emplace<SimpleCollision>(door);
+    doorCollision.size = doorSprite.size;
+
+    SInt32 x = ((SInt32)doorTransform.position.x + 8) / 16;
+    SInt32 y = ((SInt32)doorTransform.position.y - 8) / 16;
 
         auto& collider = reg_.emplace<StaticBody>(door);
-        collider.size = doorSprite.size;
+        collider.size = {30.0f,30.0f};
         Engine::GetDefaultResource<StaticBodyMap>()->put(x,y, door);
+
+        auto& doorDetection = reg_.emplace<Detection>(door);
+        doorDetection.who = player;
+        doorDetection.SetSize({ 2,2 });
 
         reg_.emplace<Door>(door);
 
@@ -634,10 +621,12 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
        keySprite.scale = { 1, 1 };
 
        auto& keyTransform = reg_.emplace<Transform>(key);
-       keyTransform.position = { 45, -40, 1 };
+       keyTransform.position = { -45, -40, 1 };
 
        auto& keyCollision = reg_.emplace<SimpleCollision>(key);
        keyCollision.size = keySprite.size;
+
+      
 
        reg_.emplace<Key>(key);
        
@@ -682,7 +671,7 @@ void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
     AnimatorPlay(enemy2Animator, "among_them_animations:bat");
 
     auto& enemy2Transform = reg_.emplace<Transform>(enemy2);
-    enemy2Transform.position = { 0, 90, 1 };
+    enemy2Transform.position = { -90, 90, 1 };
 
     auto& enemy2Input = reg_.emplace<InputEnemiesFile>(enemy2);
     enemy2Input.pathname = "pathidlebat.txt";

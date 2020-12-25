@@ -8,8 +8,7 @@
 #include <glm/gtc/epsilon.hpp>
 
 //useful strings
-String idle = "among_them_animations:knight_idle";
-String running = "among_them_animations:knight_run";
+
 
 // ----------------------------------------------------------
 // shortcuts
@@ -44,6 +43,7 @@ DEFAULT_ENTER(CharacterFSM, Idle);
 
 void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 {  
+	auto& chController = Engine::Registry().get<CharacterController>(state_.entity);
 	auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
 	
 	if (EPSILON_NOT_ZERO(input.Get("horizontalRun")) || EPSILON_NOT_ZERO(input.Get("verticalRun")))
@@ -51,7 +51,7 @@ void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
 		GoTo(ECharacterState::Running, state_);
 	}
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-	AnimatorPlay(animator, idle);
+	AnimatorPlay(animator,chController.idle);
 }
 
 DEFAULT_EXIT(CharacterFSM, Idle);
@@ -66,7 +66,7 @@ void CharacterFSM::Running::Run(CharacterFSM::StateComponent& state_)
 	auto& body = Engine::Registry().get<MovableBody>(state_.entity);
 
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-	AnimatorPlay(animator, running);
+	AnimatorPlay(animator, ctrl.running);
 
 	float runX = input.Get("horizontalRun");
 	float runY = input.Get("verticalRun");
