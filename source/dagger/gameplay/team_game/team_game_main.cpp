@@ -170,6 +170,7 @@ struct Player
 
         //collectable
         chr.currentLvl.legend['h'] = CreateObjectFunction("Heart", 20, true, -1, 100.0f, "", false, 0);//heart
+        chr.currentLvl.legend['s'] = CreateObjectFunction("SilverHeart", 20, true, -1, 100.0f, "", false, 0);//silver heart
 
         //Room Transition
         chr.currentLvl.legend['8'] = CreateObjectFunction("spritesheets:lab:floor_1",30,true,1,100.0f,"",false,0);//Hall
@@ -190,7 +191,7 @@ struct Player
         auto& hl = Engine::Registry().emplace<Text>(entity);
         hl.alignment={ TextAlignment::RIGHT };
         hl.spacing = 0.5f;
-        hl.Set("pixel-font", "150/150",{10,-95,0},{10,10});
+        hl.Set("pixel-font", "100/100",{10,-95,0},{10,10});
 
         return chr;
     }

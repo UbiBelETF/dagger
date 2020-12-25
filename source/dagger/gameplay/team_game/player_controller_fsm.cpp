@@ -106,9 +106,16 @@ void PlayerControllerSystem::Run()
                 if (Engine::Registry().has<Heart>(col.colidedWith))
                 {
                     Engine::Registry().remove_all(col.colidedWith);
-                    player.health += 30;
+                    player.health += 20;
                     if (player.health > player.maxHealth)
                         player.health = player.maxHealth;
+                    col.colided = false;
+                }
+
+                else if (Engine::Registry().has<SilverHeart>(col.colidedWith))
+                {
+                    Engine::Registry().remove_all(col.colidedWith);
+                    player.maxHealth += 50;
                     col.colided = false;
                 }
 

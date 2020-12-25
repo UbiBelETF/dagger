@@ -19,8 +19,8 @@ namespace lab
 		int meleeCooldown = 300;
 		int maxMeleeCooldown = 300;
 		Float32 meleeDamage = 0.5f;
-		int health = 100;
-		int bossHealth = 250;
+		int health = 150;
+		int bossHealth = 300;
 		Float32 deathTimer = 125;
 		int bossCooldown = 60;
 		int bossMaxCooldown = 60;

@@ -30,8 +30,8 @@ namespace lab
 		int speed{ 1 };
 		int maxCooldown = 35;
 		int cooldown = 35;
-		int health = 150;
-		int maxHealth = 150;
+		int health = 100;
+		int maxHealth = 100;
 		int deathCooldown=200;
 		int hitCooldown=30;
 	};
