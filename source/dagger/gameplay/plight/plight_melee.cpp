@@ -18,6 +18,7 @@
 #include "gameplay/plight/plight_particles.h"
 #include "gameplay/plight/plight_physics.h"
 #include "gameplay/plight/plight_game_logic.h"
+#include "core/graphics/animations.h"
 
 #include <algorithm>
 #include <execution>
@@ -43,22 +44,44 @@ void MeleeSystem::Run()
 				continue;
 			}
 
-			Float32 attack = input.Get("attack");
-			if (EPSILON_NOT_ZERO(attack)) {
-				if (chr.attacking) {
-					//Pusti se animacija
+			
+			auto& weapon = Engine::Registry().get<Weapon>(chr.weaponSprite);
+			auto& weapon_sprite = Engine::Registry().get<Sprite>(chr.weaponSprite);
+			if (weapon.animPlaying) {
+				if (weapon.currentTimer >= weapon.animTimer) {
+					weapon.currentTimer = 0.f;
+					weapon.animPlaying = false;
+					weapon.attacking = false;
+					AssignSprite(weapon_sprite, chr.meleeWeaponSpriteName);
 				}
 				else {
-					auto weapon_sprt = Engine::Registry().get<Sprite>(chr.weaponSprite);
+					weapon.currentTimer += Engine::DeltaTime();
+					continue;
+				}
+			}
+			
+			Float32 attack = input.Get("attack");
+			if (EPSILON_NOT_ZERO(attack) ) {
+				if (chr.attacking) {
+					if (!weapon.attacking) {
+						auto& anim = Engine::Registry().get_or_emplace<Animator>(chr.weaponSprite);
+						AnimatorPlay(anim, chr.weaponAnimationName);
+						weapon.animPlaying = true;
+						weapon.attacking = true;
+					}
+				}
+				else {
+					weapon.attacking = true;
+					chr.attacking = true;
+					auto& weapon_sprt = Engine::Registry().get<Sprite>(chr.weaponSprite);
 					AssignSprite(weapon_sprt, chr.meleeWeaponSpriteName);
-
+					auto& anim = Engine::Registry().get_or_emplace<Animator>(chr.weaponSprite);
+					AnimatorPlay(anim, chr.weaponAnimationName);
+					weapon.animPlaying = true;
 				}
 
 			}
-			
 		}
-
-
 	}
 }
 
@@ -68,12 +91,26 @@ void MeleeSystem::SpinUp()
 
 }
 
+void MeleeSystem::OnEndOfFrame() {
+	auto& view = Engine::Registry().view<Weapon>();
+	for (auto entity : view) {
+		auto& weapon = view.get<Weapon>(entity);
+		auto entity_chr = weapon.holder;
+		auto& sprite = Engine::Registry().get<Sprite>(entity);
+		auto& chr = Engine::Registry().get<PlightCharacterController>(entity_chr);
+		if (!weapon.attacking) {
+			if (!chr.attacking) {
+				AssignSprite(sprite, chr.weaponSpriteName);
+			}
+			else {
+				AssignSprite(sprite, chr.meleeWeaponSpriteName);
+			}
+			Engine::Registry().remove_if_exists<Animator>(entity);
+			
+		}
+	}
+}
 void MeleeSystem::WindDown()
 {
 	Engine::Dispatcher().sink<NextFrame>().disconnect<&MeleeSystem::OnEndOfFrame>(this);
-}
-
-
-void MeleeSystem::OnEndOfFrame() {
-
 }

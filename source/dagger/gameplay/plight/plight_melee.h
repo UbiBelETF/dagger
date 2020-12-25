@@ -2,32 +2,44 @@
 
 #include "core/system.h"
 #include "core/core.h"
-
 using namespace dagger;
 
-struct Weapon {
-	Float32 weaponDamage = 0.01f;
-
-};
+namespace plight {
 
 
 
-class MeleeSystem
-	: public System
-{
-	inline String SystemName() { return "Melee System"; }
+	struct Weapon {
+		Float32 currentTimer = 0.f;
+		Float32 animTimer = 1.f;
+		Float32 weaponDamage = 1.f;
 
-	void SpinUp() override;
-	void Run() override;
-	void WindDown() override;
+		bool attacking = false;
+
+		bool animPlaying{ false };
+		Entity holder;
+
+	};
 
 
 
-public:
-	
+	class MeleeSystem
+		: public System
+	{
+		inline String SystemName() { return "Melee System"; }
 
-private:
-	void OnEndOfFrame();
+		void SpinUp() override;
+		void Run() override;
+		void WindDown() override;
 
-};
+
+
+	public:
+
+
+	private:
+		void OnEndOfFrame();
+
+	};
+
+}
 

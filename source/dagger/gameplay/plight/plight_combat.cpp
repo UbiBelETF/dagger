@@ -52,22 +52,20 @@ void PlightCombatSystem::Run()
 					if (Engine::Registry().valid(*it)) {
 						if (Engine::Registry().has<Weapon>(*it)) {
 							if (cstats.currentTimer >= cstats.updateTimer) {
-								auto& ch = Engine::Registry().get<CombatStats>(*it);
-								auto& pchar = Engine::Registry().get<PlightCharacterController>(*it);
-
-							if (pchar.dead) {
-								it++;
-								continue;
+								
+								auto& weapon = Engine::Registry().get<Weapon>(*it);
+							if (weapon.attacking) {
+								cstats.currentHealth -= weapon.weaponDamage;
 							}
-								ch.currentHealth -= 0.1f;
+								
 
-								if (ch.currentHealth <= 0.f) {
-									ch.currentHealth = 0.f;
+								if (cstats.currentHealth <= 0.f) {
+									cstats.currentHealth = 0.f;
 								}
-
-								auto& sprite = Engine::Registry().get<Sprite>(ch.currentHealthBar);
-								ch.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (ch.currentHealth / ch.maxHealth))) / 2;
-								sprite.size.x = BAR_START_SIZE * (ch.currentHealth / ch.maxHealth);
+								
+								auto& sprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+								cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
+								sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
 							}
 						}
 						if (Engine::Registry().has<Projectile>(*it)) {

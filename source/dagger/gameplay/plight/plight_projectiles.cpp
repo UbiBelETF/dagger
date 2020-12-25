@@ -14,6 +14,8 @@
 #include "gameplay/plight/plight_aiming.h"
 #include "gameplay/plight/plight_particles.h"
 #include "gameplay/plight/plight_physics.h"
+#include "gameplay/plight/plight_melee.h"
+#include "core/graphics/animations.h"
 
 #include <algorithm>
 #include <execution>
@@ -84,6 +86,21 @@ void ProjectileSystem::Run()
 			if (projectileSys.active) {
 				Float32 fire = input.Get("fire");
 				if (EPSILON_NOT_ZERO(fire)) {
+					//auto& anim = Engine::Registry().get<Animator>(character.weaponSprite);
+					auto& weapon = Engine::Registry().get<Weapon>(character.weaponSprite);
+					if (character.attacking) {
+						if (!weapon.attacking) {
+							auto& weapon_sprt = Engine::Registry().get<Sprite>(character.weaponSprite);
+							AssignSprite(weapon_sprt, character.weaponSpriteName);
+						}
+						character.attacking = false;
+						
+					}
+					
+					
+					
+
+
 					if (cstats.currentStamina >= PROJECTILE_COST) {
 						cstats.currentStamina -= PROJECTILE_COST;
 
@@ -163,5 +180,22 @@ void ProjectileSystem::OnEndOfFrame()
             Engine::Registry().remove_all(entity);
         }
     }
+
+	auto& chrView = Engine::Registry().view<PlightCharacterController>();
+	for (auto entity : chrView) {
+		auto& controler = chrView.get<PlightCharacterController>(entity);
+		auto& weapon = Engine::Registry().get<Weapon>(controler.weaponSprite);
+		if (!controler.attacking) {
+			if (weapon.attacking) {
+				auto& anim = Engine::Registry().get<Animator>(controler.weaponSprite);
+				AnimatorStop(anim);
+				Engine::Registry().remove_if_exists<Animator>(controler.weaponSprite);
+				auto& sprite = Engine::Registry().get<Sprite>(controler.weaponSprite);
+				AssignSprite(sprite, controler.weaponSpriteName);
+				weapon.attacking = false;
+			}
+		}
+
+	}
 }
 

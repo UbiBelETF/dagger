@@ -38,11 +38,14 @@ void PlightCollisionsSystem::Run()
     {
         auto& collision = view.get<PlightCollision>(*it);
         auto& transform = view.get<Transform>(*it);
-        
+		auto& chr = view.get<PlightCharacterController>(*it);
+
         for (auto entity : view2) {
-            if (entity == *it) {
+			
+            if (entity == *it || entity == chr.weaponSprite) {
                 continue;
-            }
+			}
+	
             auto& col = view2.get<PlightCollision>(entity);
             auto& tr = view2.get<Transform>(entity);
             //Don't check collisions for distant objects (They aren't colided for sure)

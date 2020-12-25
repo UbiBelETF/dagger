@@ -130,8 +130,12 @@ struct PlightCharacter
         chr.character.weaponSprite = reg.create();
         auto& weapon_sprite = reg.emplace<Sprite>(chr.character.weaponSprite);
 		auto& col = reg.get_or_emplace<PlightCollision>(chr.character.weaponSprite);
+		col.size = { 10 , 10 };
 		auto& wep = reg.get_or_emplace<Weapon>(chr.character.weaponSprite);
+		wep.holder = chr.entity;
         auto& animator = reg.emplace<Animator>(chr.character.weaponSprite);
+		auto& transform = reg.emplace<Transform>(chr.character.weaponSprite);
+		transform.position = {position_ , 82.f};
         AssignSprite(weapon_sprite, "EmptyWhitePixel");
         weapon_sprite.scale = chr.sprite.scale;
         weapon_sprite.position.x = chr.sprite.position.x + chr.character.weaponOffset * weapon_sprite.scale.x;
@@ -267,6 +271,7 @@ void plight::SetupWorld(Engine& engine_)
     mainChar.character.playerNumber = "Player 1";
     mainChar.character.meleeWeaponSpriteName = "Plight:weapons:SWORD:Sword";
     mainChar.character.weaponAnimationName = "Plight:weapons:SWORD";
+	mainChar.character.weaponSpriteName = "Plight:weapons:Bow_13";
     auto& weapon_sprite1 = Engine::Registry().get<Sprite>(mainChar.character.weaponSprite);
     AssignSprite(weapon_sprite1, "Plight:weapons:Bow_13");
     auto& projectile_spawner1 = Engine::Registry().get<ProjectileSpawner>(mainChar.entity);
@@ -335,6 +340,7 @@ void plight::SetupWorld(Engine& engine_)
     sndChar.character.playerNumber = "Player 2";
     sndChar.character.meleeWeaponSpriteName = "Plight:weapons:AXE:Axe";
     sndChar.character.weaponAnimationName = "Plight:weapons:AXE";
+	sndChar.character.weaponSpriteName = "Plight:weapons:Crossbow_4";
     auto& weapon_sprite2 = Engine::Registry().get<Sprite>(sndChar.character.weaponSprite);
     AssignSprite(weapon_sprite2, "Plight:weapons:Crossbow_4");
     auto& projectile_spawner2 = Engine::Registry().get<ProjectileSpawner>(sndChar.entity);
