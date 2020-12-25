@@ -48,13 +48,20 @@ void MeleeSystem::Run()
 			auto& weapon = Engine::Registry().get<Weapon>(chr.weaponSprite);
 			auto& weapon_sprite = Engine::Registry().get<Sprite>(chr.weaponSprite);
 			if (weapon.animPlaying) {
-				if (weapon.currentTimer >= weapon.animTimer) {
+				com.currentStamina -= STAMINA_FOR_ATTACKING * Engine::DeltaTime();
+				auto& sprite = Engine::Registry().get<Sprite>(com.currentStaminaBar);
+				com.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (com.currentStamina / com.maxStamina))) / 2;
+				sprite.size.x = BAR_START_SIZE * (com.currentStamina / com.maxStamina);
+				if (com.currentStamina < 0.f) {
+					com.currentStamina = 0.f;
+				}
+				if (weapon.currentTimer >= weapon.animTimer || com.currentStamina == 0.f) {
 					weapon.currentTimer = 0.f;
 					weapon.animPlaying = false;
 					weapon.attacking = false;
 					AssignSprite(weapon_sprite, chr.meleeWeaponSpriteName);
 				}
-				else {
+				else {		
 					weapon.currentTimer += Engine::DeltaTime();
 					continue;
 				}
