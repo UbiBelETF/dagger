@@ -31,7 +31,7 @@ void CameraFollowSystem::DistributeCameraWeight()
         {
             auto&& [player, transform, focus] = Engine::Registry().get<PlayerCharacter, Transform, CameraFollowFocus>(*it1);
 
-            player.distanceToChest = CalculateDistanceToTreasure(treasureTransform, transform);
+            player.distanceToChest = CalculateDistance(treasureTransform, transform);
             focus.weight = 1;
 
             it1++;
@@ -64,6 +64,8 @@ void CameraFollowSystem::Run()
 {
     DistributeCameraWeight();
 
+    AdjustCameraZoom();
+
     auto* camera = Engine::GetDefaultResource<Camera>();
     auto camPosition = (Vector2)camera->position;
 
@@ -87,9 +89,62 @@ void CameraFollowSystem::Run()
     //camera->position.y += 100.f;
 }
 
-Float32 CameraFollowSystem::CalculateDistanceToTreasure(Transform& treasure_, Transform& player_)
+void CameraFollowSystem::AdjustCameraZoom()
 {
-    return std::sqrt(std::pow((treasure_.position.x - player_.position.x), 2) + std::pow((treasure_.position.y - player_.position.y), 2));
+    auto view = Engine::Registry().view<PlayerCharacter, Transform>();
+    auto iterator = view.begin();
+
+    if (iterator != view.end()) {
+
+        Float32 maxDistance = 0.f;
+
+        while (iterator != view.end())
+        {
+            auto& transform = Engine::Registry().get<Transform>(*iterator);
+
+            auto iterator2 = iterator;
+            iterator2++;
+
+            while (iterator2 != view.end())
+            {
+
+                auto& tr = Engine::Registry().get<Transform>(*iterator2);
+
+                Float32 distance = CalculateDistance(transform, tr);
+
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                    Logger::trace("Max distance is {}", maxDistance);
+                }
+                iterator2++;
+            }
+            iterator++;
+        }
+
+        auto* camera = Engine::GetDefaultResource<Camera>();
+
+        if (maxDistance >= 650)
+        {
+            camera->zoom = 0.75;
+        }
+        else if (maxDistance <= 500)
+        {
+            camera->zoom = 1;
+        }
+        else
+        {
+            //the 1 is the max zoom and the division transforms the interval of
+            //the two camera zoom locking distances(in this case (500, 650))
+            //to an interval of max zoom - min zoom(in this case 0.25)
+            camera->zoom = 1 - (maxDistance - 500) / (4 * 150);
+        }
+    }
+}
+
+Float32 CameraFollowSystem::CalculateDistance(Transform& transformOne_, Transform& transformTwo_)
+{
+    return std::sqrt(std::pow((transformOne_.position.x - transformTwo_.position.x), 2) + std::pow((transformOne_.position.y - transformTwo_.position.y), 2));
 }
 
 

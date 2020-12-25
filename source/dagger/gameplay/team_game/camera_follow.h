@@ -24,6 +24,8 @@ namespace team_game
 
         void DistributeCameraWeight();
 
-        Float32 CalculateDistanceToTreasure(Transform& treasure_, Transform& player_);
+        void AdjustCameraZoom();
+
+        Float32 CalculateDistance(Transform& transformOne_, Transform& transfromTwo_);
     };
 }
