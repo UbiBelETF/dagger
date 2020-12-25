@@ -6,7 +6,7 @@ namespace team_game {
     class CombatSystem : public System
     {
     public:
-        inline String SystemName() { return "Collisions System"; }
+        inline String SystemName() { return "Combat Collisions System"; }
         void Run() override;
 
     };

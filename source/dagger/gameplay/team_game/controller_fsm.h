@@ -26,7 +26,6 @@ namespace team_game {
 		DEFINE_STATE(ControllerFSM, ECharacterStates, Dead);
 		DEFINE_STATE(ControllerFSM, ECharacterStates, Interact);
 
-
 		ControllerFSM()
 		{
 			CONNECT_STATE(ECharacterStates, Idle);
