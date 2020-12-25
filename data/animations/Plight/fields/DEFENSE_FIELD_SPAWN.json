@@ -1,10 +1,10 @@
 {
   "animation-name": "Plight:fields:DEFENSE_FIELD_SPAWN",
-  "animation-length-ms": 1000,
+  "animation-length-ms": 500,
   "animation-frames": [
-    { "texture-name": "Plight:fields:defensefield_spawn_1" },
-    { "texture-name": "Plight:fields:defensefield_spawn_2" },
-    { "texture-name": "Plight:fields:defensefield_spawn_3" },
-    { "texture-name": "Plight:fields:defensefield_spawn_4" }
+    { "texture-name": "Plight:fields:SPAWN:defensefield_spawn_1" },
+    { "texture-name": "Plight:fields:SPAWN:defensefield_spawn_2" },
+    { "texture-name": "Plight:fields:SPAWN:defensefield_spawn_3" },
+    { "texture-name": "Plight:fields:SPAWN:defensefield_spawn_4" }
   ]
 }

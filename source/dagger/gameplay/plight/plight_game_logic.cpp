@@ -13,6 +13,7 @@
 #include "gameplay/plight/plight_aiming.h"
 #include "gameplay/plight/plight_collisions.h"
 #include "gameplay/plight/plight_projectiles.h"
+#include "gameplay/plight/plight_fields.h"
 
 using namespace dagger;
 using namespace plight;
@@ -184,6 +185,11 @@ void PlightGameLogicSystem::OnEndOfFrame()
 
         plight::ResetCharacters();
 
+		auto view = Engine::Registry().view<DefenseField>();
+		for (auto entity : view) {
+			auto& defenseField = Engine::Registry().get<DefenseField>(entity);
+			Engine::Registry().remove_all(defenseField.defenseFieldE);
+		}
        auto view1 = Engine::Registry().view<PlightGameInfo>();
        for (auto entity : view1) {
            auto& gameInfo = view1.get<PlightGameInfo>(entity);

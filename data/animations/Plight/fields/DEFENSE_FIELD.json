@@ -1,0 +1,7 @@
+{
+  "animation-name": "Plight:fields:DEFENSE_FIELD",
+  "animation-length-ms": 1000,
+  "animation-frames": [
+    { "texture-name": "Plight:fields:defensefield" }
+  ]
+}

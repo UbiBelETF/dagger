@@ -255,7 +255,10 @@ void plight::ResetCharacters()
         weapon_sprite.position.y = character.transform.position.y - 3.f + y_weapon;
         weapon_sprite.position.z = character.transform.position.z - 5.f;
         weapon_sprite.rotation = (character.crosshair.angle * 180.) / M_PI + 45;
-        
+
+        auto& defenseField = Engine::Registry().get_or_emplace<DefenseField>(character.entity);
+        defenseField.fieldsLeft = 2;
+        defenseField.fieldActive = false;
         
     }
 }

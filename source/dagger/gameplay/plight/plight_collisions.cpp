@@ -8,6 +8,7 @@
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/plight_physics.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_fields.h"
 
 using namespace dagger;
 using namespace plight;
@@ -41,7 +42,7 @@ void PlightCollisionsSystem::Run()
 		auto& chr = view.get<PlightCharacterController>(*it);
 
         for (auto entity : view2) {
-			
+           
             if (entity == *it || entity == chr.weaponSprite) {
                 continue;
 			}

@@ -14,12 +14,10 @@ namespace plight {
 		Float32 initialHealthReturn = 20.f;
 
 		bool initialDone = false;
-		bool shutDown = false;
 		bool destroy = false;
 
 		bool fieldActive = false;
-		Float32 fieldDurationTime{ 5.f };
-		Float32 shutDownDurationTime{ 2.f };
+		Float32 fieldDurationTime{ 10.f };
 		Float32 currendDurationTime{ 0.f };
 
 		Entity defenseFieldE;

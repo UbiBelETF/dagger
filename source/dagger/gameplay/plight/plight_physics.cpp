@@ -7,6 +7,7 @@
 
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_aiming.h"
+#include "gameplay/plight/plight_fields.h"
 
 #include <algorithm>    
 
@@ -29,6 +30,7 @@ void plight::PhysicsSystem::Run()
             auto it2 = collision.colidedWith.begin();
             while (it2 != collision.colidedWith.end())
             {
+
                 bool skip = false;
                 if (Engine::Registry().has<PhysicsObject>(*it2)) {
                     auto& other_physics = view.get<PhysicsObject>(*it2);
@@ -37,6 +39,12 @@ void plight::PhysicsSystem::Run()
                         if (std::find(physics.my_groups.begin(), physics.my_groups.end(), group) != physics.my_groups.end()) {
                             has = true;
                             break;
+                        }
+                    }
+                    if (Engine::Registry().has<DefenseField>(*it)) {
+                        auto& def_field = Engine::Registry().get<DefenseField>(*it);
+                        if (*it2 == def_field.defenseFieldE) {
+                            has = false;
                         }
                     }
                     if (has) {
