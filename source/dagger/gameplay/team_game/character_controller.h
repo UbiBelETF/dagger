@@ -24,11 +24,18 @@ struct CharacterController
 	ECharacterShape shape{ ECharacterShape::Hero };
 	Bool animationTrigger{ false };
 	Bool canMove{ true };
+	Bool hasKey{ false };
+	String idle { "among_them_animations:knight_idle" };
+	String running{ "among_them_animations:knight_run" };
 
 	void SetShape(ECharacterShape shape_)
 	{
 		animationTrigger = true;
 		shape = shape_;
+	}
+	ECharacterShape GetShape()
+	{
+		return shape;
 	}
 };
 

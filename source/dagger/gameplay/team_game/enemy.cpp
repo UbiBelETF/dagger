@@ -151,7 +151,7 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 		ctrl.lastState = EEnemyState::Chasing;
 		GoTo(currState, state_);
 	}
-
+	if(hero.canMove==false) {ctrl.stopenemies = true;}
 	if (ctrl.shape != hero.shape)
 	{
 		Vector2 direction = { heroTransform.position.x - t.position.x, heroTransform.position.y - t.position.y };
@@ -178,7 +178,7 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 				text.Set("pixel-font", "You lose");
 				auto ui2 = Engine::Registry().create();
 				auto& text2 = Engine::Registry().emplace<Text>(ui2);
-				text2.spacing = 0.6f;
+				text2.spacing = 0.4f;
 				text2.position = { 0,-50,0 };
 				text2.Set("pixel-font", "Press R to restart");
 				hero.canMove = false;
