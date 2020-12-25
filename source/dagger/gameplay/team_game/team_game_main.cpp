@@ -20,6 +20,8 @@
 
 #include "gameplay/team_game/collision.h"
 #include"gameplay/team_game/ai_system.h"
+#include "gameplay/team_game/camera_follow.h"
+
 using namespace dagger;
 using namespace team_game;
 
@@ -31,14 +33,19 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TeamGameControllerSystem>();
     engine_.AddSystem<TeamGameSlimeControllerSystem>();
     engine_.AddSystem<AiSystem>();
+
+    engine_.AddSystem<TeamCameraFollowSystem>();
+    
+
 }
 void SetCameraTeam()
 {
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
-    camera->size = { 400, 400 };
-    camera->zoom = 0.5;
-    camera->position = { 100,100, 0 };
+
+    camera->size = { 800, 600 };
+    camera->zoom = 3;
+    camera->position = { 0, 0, 0 };
     camera->Update();
 }
 struct MainCharacter
@@ -88,9 +95,13 @@ struct MainCharacter
         chr.character.speed = 100;
 
         //Collision setup:        
-        chr.col.size = { 18, 18 };
+
+        chr.col.size = { 16, 16 };
+
         chr.tm.position = { position_ , 0.0f };
         reg.emplace<CollisionType::Character>(entity);
+
+        reg.emplace<TeamCameraFollowFocus>(entity);
 
         return chr;
     }
@@ -113,25 +124,13 @@ void TeamGame::WorldSetup(Engine &engine_)
     auto& text = reg.emplace<Text>(ui);
     text.spacing = 0.6f;
     text.Set("pixel-font", "hello world");
-
+    
     team_game::SetupWorld(engine_);
 }
 
 void team_game::SetupWorld(Engine &engine_)
 {
    
-
-  
-
-   
-
-
-    auto* camera = Engine::GetDefaultResource<Camera>();
-    camera->mode = ECameraMode::FixedResolution;
-    camera->size = { 800, 600 };
-    camera->zoom = 0.5;
-    camera->position = { 0, 0, 0 };
-    camera->Update();
 }
 
 
