@@ -83,51 +83,40 @@ void tank_warfare::SetupWorld(Engine &engine_)
 
 void tank_warfare::SetupTestWorld(Engine& engine_)
 {
-    auto& reg = Engine::Registry();
-	  Tilemap::legend['#'] = &CreateDirt;
-	  Tilemap::legend['.'] = &CreateGrass;
-	  Tilemap::legend['-'] = &CreateBuilding;
-	  Tilemap::legend['$'] = &CreateBankBuilding;
-	  Tilemap::legend['B'] = &CreateBiggestBuilding;
-	  Tilemap::legend['S'] = &CreateShopBuilding;
-	  Tilemap::legend['@'] = &CreateSmallestBuilding;
-	  Tilemap::legend['m'] = &CreateMediumBuilding;
-	  Tilemap::legend['t'] = &CreateTree;
-	  Tilemap::legend['T'] = &CreateGroupTrees;
-	  Tilemap::legend['w'] = &CreateHorizontalWall;
-	  Tilemap::legend['W'] = &CreateVerticallWall;
-	  Tilemap::legend['s'] = &CreateStorage;
-	  Tilemap::legend['f'] = &CreateSideFence;
-	  Tilemap::legend['F'] = &CreateFrontFence;
-	  Tilemap::legend['c'] = &CreateCarBack;
-	  Tilemap::legend['X'] = &FullCollisionTrees;
-	  Tilemap::legend['E'] = &EmptyCollision;
-	  Tilemap::legend['~'] = nullptr;
-
-	  for (auto& entry : Files::recursive_directory_iterator("maps"))
-	  {
-        if (entry.path().extension() == ".png") 
-        {
-			      auto entityMap = reg.create();
-			      auto& sprite = reg.emplace<Sprite>(entityMap);
-			      sprite.position = { 0, 0, 5 };
-			      AssignSprite(sprite, "jovanovici:maps:map");
-		    }
-
-		    if (entry.path().extension() == ".map") 
-        {
-			      Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ entry.path().string(), &Tilemap::legend });
-		    }
-	  }
-
     SetupCamera(engine_, 2);
     CollectibleSystem::ResetNumCoinsPowers();
+
+    auto& reg = Engine::Registry();
+	Tilemap::legend['-'] = &CreateBuilding;
+	Tilemap::legend['$'] = &CreateBankBuilding;
+	Tilemap::legend['B'] = &CreateBiggestBuilding;
+	Tilemap::legend['@'] = &CreateSmallestBuilding;
+	Tilemap::legend['m'] = &CreateMediumBuilding;
+	Tilemap::legend['T'] = &CreateGroupTrees;
+	Tilemap::legend['s'] = &CreateStorage;
+	Tilemap::legend['E'] = &EmptyCollision;
+	Tilemap::legend['~'] = nullptr;
+
+    auto entityMap = reg.create();
+    auto& sprite = reg.emplace<Sprite>(entityMap);
+    AssignSprite(sprite, "jovanovici:maps:map");
+    auto& transform = reg.emplace<Transform>(entityMap);
+    transform.position = { 0, 0, 5 };
+
+	for (auto& entry : Files::recursive_directory_iterator("maps"))
+	{
+
+	    if (entry.path().extension() == ".map") 
+        {
+	        Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ entry.path().string(), &Tilemap::legend });
+	    }
+	}
     
     //tank1
-    CreateTankCharacter(1, { 35, 0, 3 }, "tank1");
+    CreateTankCharacter(1, { -150, 0, 3 }, "tank1");
 
     //tank2
-    CreateTankCharacter(2, { -35, 0, 3 }, "tank2");
+    CreateTankCharacter(2, { 150, 0, 3 }, "tank2");
 
 }
 

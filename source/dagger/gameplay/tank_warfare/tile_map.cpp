@@ -13,45 +13,29 @@ using namespace dagger;
 tank_warfare::TilemapLegend
 tank_warfare::Tilemap::legend;
 
-Entity tank_warfare::CreateGrass(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	AssignSprite(sprite, fmt::format("jovanovici:tile_map:tile_grass{}", 1 + (rand() % 3)));
-	sprite.position = { x_ * 48, y_ * 48, 2 };
-	return entity;
-}
-
-Entity tank_warfare::CreateDirt(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	AssignSprite(sprite, fmt::format("jovanovici:tile_map:tile_dirt{}", (rand() % 2) + 7));
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	return entity;
-}
 Entity tank_warfare::CreateBuilding(Registry& reg_, SInt32 x_, SInt32 y_) {
 	auto entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", 2));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
 	col.size = sprite.size;
+	auto& tra = reg_.emplace<Transform>(entity);
+	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
 }
+
 Entity tank_warfare::CreateBankBuilding(Registry& reg_, SInt32 x_, SInt32 y_) {
 	auto entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", 8));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
 	col.size = sprite.size;
+	auto& tra = reg_.emplace<Transform>(entity);
+	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
 }
 
@@ -59,38 +43,27 @@ Entity tank_warfare::CreateBiggestBuilding(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 	auto entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 4) + 5));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
 	col.size = sprite.size;
-	return entity;
-}
-Entity tank_warfare::CreateShopBuilding(Registry& reg_, SInt32 x_, SInt32 y_) {
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 3) + 30));
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1.5;
-	col.size = sprite.size;
 	return entity;
 }
+
 Entity tank_warfare::CreateSmallestBuilding(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 	auto entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 15) + 15));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
 	col.size = sprite.size;
+	auto& tra = reg_.emplace<Transform>(entity);
+	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
 }
 
@@ -98,13 +71,13 @@ Entity tank_warfare::CreateMediumBuilding(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 	auto entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 6) + 9));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.7;
 	col.size = sprite.size;
+	auto& tra = reg_.emplace<Transform>(entity);
+	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
 }
 
@@ -112,53 +85,12 @@ Entity tank_warfare::CreateGroupTrees(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 	auto entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:tree:tree{}", (rand() % 2) + 1));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.3;
-	return entity;
-}
-
-Entity tank_warfare::CreateTree(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, fmt::format("jovanovici:tree:tree{}", (rand() % 2) + 3));
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1.5;
-	return entity;
-}
-
-Entity tank_warfare::CreateHorizontalWall(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, "jovanovici:block:wall2");
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1.5;
-	col.size = sprite.size;
-	return entity;
-}
-
-Entity tank_warfare::CreateVerticallWall(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, "jovanovici:block:wall1");
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1.5;
-	col.size = sprite.size;
 	return entity;
 }
 
@@ -166,79 +98,23 @@ Entity tank_warfare::CreateStorage(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 	auto entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 2) + 5));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.3;
 	col.size = sprite.size;
-	return entity;
-}
-
-Entity tank_warfare::CreateSideFence(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, "jovanovici:fence:fence_side");
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1;
-	col.size = sprite.size;
-	return entity;
-}
-
-Entity tank_warfare::CreateFrontFence(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, "jovanovici:fence:fence_front");
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1;
-	col.size = sprite.size;
-	return entity;
-}
-
-Entity tank_warfare::CreateCarBack(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, "jovanovici:car:car_back");
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1.5;
-	col.size = sprite.size;
-	return entity;
-}
-
-Entity tank_warfare::FullCollisionTrees(Registry& reg_, SInt32 x_, SInt32 y_)
-{
-	auto entity = reg_.create();
-	auto& sprite = reg_.emplace<Sprite>(entity);
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
-	auto& col = reg_.emplace<SimpleCollision>(entity);
-	AssignSprite(sprite, fmt::format("jovanovici:tree:tree{}", (rand() % 2) + 1));
-	sprite.position = { x_ * 48, y_ * 48, 1.5 };
-	sprite.size *= 1.3;
-	col.size = sprite.size;
 	return entity;
 }
 
 Entity tank_warfare::EmptyCollision(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 	auto entity = reg_.create();
-	auto& tra = reg_.emplace<Transform>(entity);
-	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	auto& col = reg_.emplace<SimpleCollision>(entity);
 	col.size = { 18, 64 };
+	auto& tra = reg_.emplace<Transform>(entity);
+	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
 }
 
