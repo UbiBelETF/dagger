@@ -36,7 +36,7 @@ void ancient_defenders::EnemyBehaviorSystem::Run()
             if (Engine::Registry().get<Health>(entity_).currentHealth <= 0.0f) return; // Don't do anything if the character is in the dying phase
 
 			if (enemy_.currentAction == EAction::Idling) {
-				AnimatorPlay(animation_, "ancient_defenders:golem:IDLE");
+				AnimatorPlay(animation_, "ancient_defenders:" + enemy_.type + ":IDLE");
 			}
 			else if (enemy_.currentAction == EAction::Moving) {
 				auto nextPosition = enemy_.postition - 1;
@@ -65,7 +65,7 @@ void ancient_defenders::EnemyBehaviorSystem::Run()
                 if (enemy_.direction.x != 0) {
                     sprite_.scale.x = enemy_.direction.x * abs(sprite_.scale.x);
                 }
-				AnimatorPlay(animation_, "ancient_defenders:golem:WALK_SIDE");
+				AnimatorPlay(animation_, "ancient_defenders:" + enemy_.type + ":WALK_SIDE");
 
 				transform_.position.x += enemy_.direction.x * enemy_.speed * Engine::DeltaTime();
 				transform_.position.y += enemy_.direction.y * enemy_.speed * Engine::DeltaTime();
@@ -90,7 +90,7 @@ void ancient_defenders::EnemyBehaviorSystem::Run()
 
 			}
 			else if (enemy_.currentAction == EAction::Attacking) {
-				AnimatorPlay(animation_, "ancient_defenders:golem:ATTACK_FRONT");
+				AnimatorPlay(animation_, "ancient_defenders:" + enemy_.type + ":ATTACK_FRONT");
 				Engine::Registry().get<Health>(range_.targets[0]).currentHealth -= enemy_.meleeDmg* Engine::DeltaTime();
 				enemy_.currentAction = EAction::Moving; // Go back to moving after attacking
 			}
@@ -102,7 +102,7 @@ void ancient_defenders::EnemyBehaviorSystem::OnEndOfFrame()
 {
 }
 
-Entity ancient_defenders::Golem::Create()
+Entity ancient_defenders::Golem::Create(String type_)
 {
 	auto& reg = Engine::Registry();
 	auto entity = reg.create();
@@ -131,22 +131,45 @@ Entity ancient_defenders::Golem::Create()
     // 22 = 38 - 16( half of the width/height of the path - half of the character widht/height ); edge of the character sprite is alligned with the edge of the path
     // Only exception to this is when offset.y is positive at which point character can go up much higher while still appearing to walk along the path
     golem.offset = { (randomDirection(rng) ? roll22(rng) : 0.0f - roll22(rng)),(randomDirection(rng) ? roll38(rng) : 0.0f - roll22(rng)) };
+	golem.type = type_;
 
     start.x += golem.offset.x;
     start.y += golem.offset.y;
  
     // Z axis is calculated this way to make bottom most character appear closest to the screen
     coordinates.position = { start.x, start.y, std::abs(golem.offset.y + 22.0f) };
+	health.hpBar = reg.create();
 
-    health.hpBar = reg.create();
-	health.currentHealth = health.maxHealth = 100.0f;
+	if (type_ == "LITTLE") {
+		health.currentHealth = health.maxHealth = 100.0f;
 
-    health.deathTimer = Health::standardDeathTimer;
-    health.deathAnimation = "ancient_defenders:golem:DEATH";
+		health.deathTimer = Health::standardDeathTimer;
+		health.deathAnimation = "ancient_defenders:LITTLE:DEATH";
 
-	golem.meleeDmg = 5.0f;
+		golem.meleeDmg = 5.0f;
 
-	golem.speed = 100.0f;
+		golem.speed = 50.0f;
+	}
+	if (type_ == "BIG") {
+		health.currentHealth = health.maxHealth = 300.0f;
+		
+		health.deathTimer = Health::standardDeathTimer;
+		health.deathAnimation = "ancient_defenders:BIG:DEATH";
+
+		golem.meleeDmg = 10.0f;
+
+		golem.speed = 15.0f;
+	}
+	if (type_ == "MIDDLE") {
+		health.currentHealth = health.maxHealth = 200.0f;
+
+		health.deathTimer = Health::standardDeathTimer;
+		health.deathAnimation = "ancient_defenders:MIDDLE:DEATH";
+
+		golem.meleeDmg = 7.5f;
+		golem.speed = 30.0f;
+	}
+    
 	golem.direction = { -1,0 };
 
 	hitbox.size = sprite.size;

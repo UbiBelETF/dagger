@@ -1,0 +1,9 @@
+{
+	"animation-name": "ancient_defenders:BIG:IDLE",
+	"animation-length-ms": 3000,
+	"animation-frames": 
+	[
+		{ "texture-name": "spritesheets:golem-big-sheet:golem_stand_side:1"},
+		{ "texture-name": "spritesheets:golem-big-sheet:golem_stand_side:2"}
+	]
+}
