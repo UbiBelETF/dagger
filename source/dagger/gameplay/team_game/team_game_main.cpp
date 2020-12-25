@@ -422,6 +422,17 @@ void team_game::SetupWorld_Demo(Engine& engine_)
             sprite.position = { 0, 265, 0 };
             sprite.UseAsUI();
         }
+        {
+            auto end = reg.create();
+            auto& sprite = reg.get_or_emplace<Sprite>(end);
+            auto& b = reg.get_or_emplace<BarOrCredits>(end);
+            b.bar = false;
+            AssignSprite(sprite, "team_game:Healthbar:barnone");
+            sprite.color = { 1, 1, 1, 1.0f };
+            sprite.size = { 800, 600 };
+            sprite.position = { 0, 0, 0 };
+            sprite.UseAsUI();
+        }
     }
 }
 void TeamGame::WorldSetup(Engine& engine_)

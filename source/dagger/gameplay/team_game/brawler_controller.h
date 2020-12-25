@@ -27,7 +27,7 @@ namespace team_game
 
 		Bool player = false;
 
-
+		Bool jump = false;
 		Bool inRoom = false;
 		Bool isEnemy = false;
 

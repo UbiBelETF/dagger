@@ -48,13 +48,25 @@ void DeathsCounterSystem::Run()
             for (auto entity2 : viewCharacter)
             {
                 auto& c = viewCharacterc.get<BrawlerCharacter>(entity2);
-                if (!c.player)
-                    AssignSprite(t, fmt::format("team_game:Healthbar:bar{}",c.healthHearts));
-                    
+                if (!c.player) {
+                    if (c.inRoom) {
+                        AssignSprite(t, fmt::format("team_game:Healthbar:bar{}", c.healthHearts));
+                    }
+                    else AssignSprite(t, "team_game:Healthbar:barnone");
+                }
             }
         }
         else {
-           
+            auto& t = views.get<Sprite>(entity);
+            for (auto entity2 : viewCharacter)
+            {
+                auto& c = viewCharacterc.get<BrawlerCharacter>(entity2);
+                if (!c.player) {
+                    if (c.healthHearts==0) {
+                        AssignSprite(t, "team_game:End");
+                    }
+                }
+            }
         }
     }
 }
