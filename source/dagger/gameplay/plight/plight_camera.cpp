@@ -8,6 +8,9 @@
 using namespace dagger;
 using namespace plight;
 
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+
 void CameraCenterSystem::Run()
 {
     auto* camera = Engine::GetDefaultResource<Camera>();
@@ -15,9 +18,12 @@ void CameraCenterSystem::Run()
 
     auto camEnt = Engine::Registry().view<CameraParams>().front();
     auto camParams = Engine::Registry().get<CameraParams>(camEnt);
-    Float32 camZoom = camParams.camZoom;
+    Float32 newZoom = camera->zoom;
     Vector2 camXY = camParams.camXY;
-    camXY /= 2;
+    float distanceFact = 1.3;
+
+    float maxZoom = 1.85;
+    float minZoom = 1;
 
     Vector2 center{};
     UInt32 count{ 0 };
@@ -31,17 +37,19 @@ void CameraCenterSystem::Run()
         });
 
     distance = abs(distance);
+    camXY = camParams.camXY / distanceFact;
 
-    if ((distance.x > (camXY.x / camera->zoom) || distance.x < -(camXY.x / camera->zoom))
-        || (distance.y > (camXY.y / camera->zoom) || distance.y < -(camXY.y / camera->zoom)))
+    if ((distance.x > abs(camXY.x / camera->zoom)) || (distance.y > abs(camXY.y / camera->zoom)))
     {
-        camera->zoom -= 0.001f;
+        newZoom = min(abs(camXY.x / distance.x), abs(camXY.y / distance.y));
     }
-    if ((distance.x < ((camXY.x / camera->zoom)) && (distance.x > camXY.x / camZoom))
-        || (distance.y < ((camXY.y / camera->zoom)) && (distance.y > camXY.y / camZoom)))
+
+    if ((distance.x < abs(camXY.x / camera->zoom)) && (distance.y < abs(camXY.y / camera->zoom)))
     {
-        camera->zoom += 0.001f;
+        newZoom = min(abs(camXY.x / distance.x), abs(camXY.y / distance.y));
     }
+    
+    if (newZoom > minZoom && newZoom < maxZoom) camera->zoom = newZoom;
 
     Engine::Registry().view<CameraCenter, Sprite>().each([&](const CameraCenter& focus_, const Sprite& sprite_)
         {
@@ -54,7 +62,25 @@ void CameraCenterSystem::Run()
 
     if (count > 0)
     {
+        camXY = camParams.camXY;
         center /= count;
-        camera->position = Vector3{ glm::mix((Vector2)camera->position, center, 0.5f), 0.0f };
+        Vector3 newPos = Vector3{ glm::mix((Vector2)camera->position, center, 0.5f), 0.0f };
+
+        int startX = newPos.x + (camXY.x - camXY.x / camera->zoom) / 2;
+        int endX = startX + camXY.x / camera->zoom;
+        int startY = newPos.y + (camXY.y - camXY.y / camera->zoom) / 2;
+        int endY = startY + camXY.y / camera->zoom;
+
+        if (startX < 0 || endX > camXY.x || startY < 0 || endY > camXY.y) {
+            if (startX < 0) newPos.x = -(camXY.x - camXY.x / camera->zoom) / 2;
+            else if (endX > camXY.x)  newPos.x = (1 - 1 / camera->zoom)* camXY.x / 2;
+
+            if (startY < 0) newPos.y = -(camXY.y - camXY.y / camera->zoom) / 2;
+            else if (endY > camXY.y)  newPos.y = (1 - 1 / camera->zoom) * camXY.y / 2;
+
+            if (abs(camera->position.x - newPos.x) > 1 || abs(camera->position.y - newPos.y) > 1 )
+                camera->position = newPos;
+        } else 
+            camera->position = newPos;
     }
 }

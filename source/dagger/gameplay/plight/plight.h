@@ -23,6 +23,7 @@ namespace plight
         };
 
         void GameplaySystemsSetup(Engine& engine_) override;
+        void SetupCamera(Engine& engine_);
         void WorldSetup(Engine& engine_) override;
     };
 }

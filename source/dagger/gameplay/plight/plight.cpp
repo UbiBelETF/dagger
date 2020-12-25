@@ -165,7 +165,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<plight::CameraCenterSystem>();
 }
 
-void Plight::WorldSetup(Engine &engine_)
+void Plight::SetupCamera(Engine& engine_)
 {
     ShaderSystem::Use("standard");
 
@@ -175,6 +175,17 @@ void Plight::WorldSetup(Engine &engine_)
     camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
+
+    auto& reg = engine_.Registry();
+    auto entity = reg.create();
+    auto& camParams = reg.emplace<CameraParams>(entity);
+    camParams.camZoom = camera->zoom;
+    camParams.camXY = camera->size;
+}
+
+void Plight::WorldSetup(Engine &engine_)
+{
+    Plight::SetupCamera(engine_);
 
     srand(time(NULL));
 	plight::SetupMainManu(engine_);
