@@ -70,12 +70,12 @@ void plight::PhysicsSystem::ResolveCollision(Vector3& pos_, PlightCollision& myC
    Vector2 sides = myCol_.GetCollisionSides(pos_, otherCol_, posOther_);
 
     if (sides.x != 0) {
-        if (sides.x == 1) pos_.x = posOther_.x - myCol_.size.x - 1;
-        else pos_.x = posOther_.x + otherCol_.size.x + 1;
+        if (sides.x == 1) pos_.x = posOther_.x + otherCol_.pivot.x * otherCol_.size.x - (1+ myCol_.pivot.x) * myCol_.size.x;
+        else pos_.x = posOther_.x + otherCol_.pivot.x * otherCol_.size.x + otherCol_.size.x - myCol_.pivot.x * myCol_.size.x;
     }
     if (sides.y != 0) {
-        if (sides.y == 1) pos_.y = posOther_.y - myCol_.size.y - 1;
-        else pos_.y = posOther_.y + otherCol_.size.y + 1;
+        if (sides.y == 1) pos_.y = posOther_.y + otherCol_.pivot.y * otherCol_.size.y - (1 + myCol_.pivot.y) * myCol_.size.y;
+        else pos_.y = posOther_.y + otherCol_.pivot.y * otherCol_.size.y + otherCol_.size.y - myCol_.pivot.y * myCol_.size.y;
     }
 
     other_=myCol_.colidedWith.erase(other_);
