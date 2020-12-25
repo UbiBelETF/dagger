@@ -31,6 +31,7 @@
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_particles.h"
 #include "gameplay/plight/plight_fields.h"
+#include "gameplay/plight/plight_camera.h"
 
 
 
@@ -69,6 +70,7 @@ struct PlightCharacter
         physics.collision_groups.push_back(1);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
+        auto& camera = reg.get_or_emplace<plight::CameraCenter>(entity_);
 
         return PlightCharacter{ entity_, sprite, anim, input, character, col, transform, physics, cstats, crosshair};
 
@@ -183,9 +185,10 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
 	engine_.AddSystem<MeleeSystem>();
     engine_.AddSystem<FieldsSystem>();
 
+    engine_.AddSystem<plight::CameraCenterSystem>();
 }
 
-void Plight::WorldSetup(Engine &engine_)
+void Plight::SetupCamera(Engine& engine_)
 {
     ShaderSystem::Use("standard");
 
@@ -195,6 +198,17 @@ void Plight::WorldSetup(Engine &engine_)
     camera->zoom = 1;
     camera->position = { 0, 0, 0 };
     camera->Update();
+
+    auto& reg = engine_.Registry();
+    auto entity = reg.create();
+    auto& camParams = reg.emplace<CameraParams>(entity);
+    camParams.camZoom = camera->zoom;
+    camParams.camXY = camera->size;
+}
+
+void Plight::WorldSetup(Engine &engine_)
+{
+    Plight::SetupCamera(engine_);
 
     srand(time(NULL));
 	plight::SetupMainManu(engine_);
