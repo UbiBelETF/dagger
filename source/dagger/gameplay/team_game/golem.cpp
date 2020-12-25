@@ -137,7 +137,7 @@ Entity ancient_defenders::Golem::Create(String type_)
     start.y += golem.offset.y;
  
     // Z axis is calculated this way to make bottom most character appear closest to the screen
-    coordinates.position = { start.x, start.y, std::abs(golem.offset.y + 22.0f) };
+    coordinates.position = { start.x, start.y, std::abs(golem.offset.y + 22.0f) + 10.0f};
 	health.hpBar = reg.create();
 
 	if (type_ == "LITTLE") {
@@ -177,6 +177,8 @@ Entity ancient_defenders::Golem::Create(String type_)
 
 	range.unitType = ETarget::Golem;
 	range.targetType = ETarget::Mage;
+
+    Logger::info("Created " + golem.type + " golem");
 
 	return entity;
 }

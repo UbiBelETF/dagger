@@ -12,10 +12,10 @@ namespace ancient_defenders {
         Entity countdownTimer;
 
         Float32 health = maxHealth;
-        static constexpr Float32 maxHealth = 100.0f;
+        static constexpr Float32 maxHealth = 3000.0f;
 
         Float32 spawnTimer = 0.0f;
-        Float32 timeLeft = 10.0f;
+        Float32 timeLeft = 120.0f;
     };
 
     class GameManagerSystem

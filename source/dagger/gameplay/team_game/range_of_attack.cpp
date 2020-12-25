@@ -4,8 +4,6 @@
 
 #include "gameplay/common/simple_collisions.h"
 
-#include <list>
-
 void ancient_defenders::RangedTargetingSystem::Run() {
 
     Engine::Registry().view<SimpleCollision, RangeOfAttack>().each(

@@ -2,6 +2,7 @@
 
 #include "core/core.h"
 #include "core/system.h"
+#include "core/engine.h"
 
 #include "mage.h"
 
@@ -22,27 +23,21 @@ namespace ancient_defenders {
         Entity buildTimeTextEntity;
     };
     
-    enum class SelectMode 
-    {
-        Spot = 1,
-        Tower = 2,
-    };
-
     struct TowerPlacementInfo 
     {
-        static UInt32 selectedSpot;
-        static String selectedTower;
+        UInt32 selectedSpot;
+        String selectedTower;
 
-        static Sequence<Vector2> spotCoordinates;
-        static StaticArray<Bool, SPOT_COUNT> availableSpot;
-        static StaticArray<UInt32, SPOT_COUNT> chantingMages;
-        static StaticArray<String, SPOT_COUNT> spotTowerNames;
-        static StaticArray<String, TOWER_COUNT> towerNames;
+        Sequence<Vector2> spotCoordinates;
+        StaticArray<Bool, SPOT_COUNT> availableSpot;
+        StaticArray<UInt32, SPOT_COUNT> chantingMages;
+        StaticArray<String, SPOT_COUNT> spotTowerNames;
+        StaticArray<String, TOWER_COUNT> towerNames;
     };
 
     struct TowerStats 
     {
-        UInt32 address = TowerPlacementInfo::selectedSpot;
+        UInt32 address = Engine::GetDefaultResource<TowerPlacementInfo>()->selectedSpot;
 
         Bool constructed = false;
         Float32 constructionProgress = 0.0f;
