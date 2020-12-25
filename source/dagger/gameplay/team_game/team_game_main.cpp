@@ -61,7 +61,7 @@ void TeamGame::WorldSetup(Engine& engine_)
 
     team_game::SetupWorld(engine_);
 }
-void SetupWorldJovica(Engine& engine_, Registry& reg_)
+void SetupWorld_(Engine& engine_, Registry& reg_)
 {
     // TILEMAP
     TilemapLegend legend;
@@ -778,7 +778,7 @@ void team_game::SetupWorld(Engine &engine_)
 	auto& map = reg.emplace<StaticBodyMap>(mapEnt);
 	Engine::PutDefaultResource<StaticBodyMap>(&map);
 
-    SetupWorldJovica(engine_, reg);
+    SetupWorld_(engine_, reg);
 
 }
 
