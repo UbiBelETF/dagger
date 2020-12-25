@@ -38,6 +38,11 @@
       "event": "Released"
     },
     {
+      "command-name": "bomb",
+      "trigger": "KeyF",
+      "duration": 2000
+    },
+    {
       "command-name": "restart",
       "trigger": "KeyY",
       "event": "Released"

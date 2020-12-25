@@ -24,11 +24,12 @@
 using namespace dagger;
 using namespace plight;
 
-void ProjectileSystem::SetupProjectileSystem(Entity entity_, const ProjectileSpawnerSettings& settings_)
+void ProjectileSystem::SetupProjectileSystem(Entity entity_, const ProjectileSpawnerSettings& settings_, const ProjectileSpawnerSettings& bombSettings_)
 {
     auto& reg = Engine::Registry();
     auto& projectileSys = reg.emplace<ProjectileSpawner>(entity_);
     projectileSys.settings = settings_;
+	projectileSys.bombSettings = bombSettings_;
 }
 
 void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& settings_,Vector3 pos_,Float32 angle_)
@@ -45,21 +46,32 @@ void ProjectileSystem::CreateProjectile(const ProjectileSpawnerSettings& setting
     transform.position = pos_;
 
 
-    reg.emplace<PlightCollision>(entity);
+    auto& col = reg.emplace<PlightCollision>(entity);
+	col.size.x = 5;
+	col.size.y = 5;
 	reg.emplace<PlightCollisionInitiator>(entity);
 
     auto& projectile = reg.emplace<Projectile>(entity);
 
     projectile.projectileDamage = settings_.projectileDamage;
     projectile.projectileSpeed = settings_.projectileSpeed;
+	projectile.isBomb = settings_.bombSpawner;
     projectile.angle = angle_;
 
-	//Particle spawner for colliding with walls
-	PlightParticleSpawnerSettings particle_settings;
-	particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.25f, -0.25f }, { 0.25f, 0.15f },
-		{ 1.f,1.f,1.f,1 }, { 1.f,1.f,1.f,1 }, "dust", 0.02f, 0.4f, 0.4f);
-	PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
-
+	if (settings_.bombSpawner == false) {
+		//Particle spawner for projectiles
+		PlightParticleSpawnerSettings particle_settings;
+		particle_settings.Setup(0.05f, { 6.f, 6.f }, { -0.25f, -0.25f }, { 0.25f, 0.15f },
+			{ 1.f,1.f,1.f,1 }, { 1.f,1.f,1.f,1 }, "dust", 0.02f, 0.4f, 0.4f);
+		PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
+	}
+	else {
+		//Particle spawner for bombs
+		PlightParticleSpawnerSettings particle_settings;
+		particle_settings.Setup(0.1f, { 10.f, 10.f }, { -0.0f, -0.0f }, { 0.0f, 0.0f },
+			{ 1.f,1.f,1.f,1 }, { 1.f,1.f,1.f,1 }, "explosion", 0.15f, 0.4f, 0.3f);
+		PlightParticleSystem::SetupParticleSystem(entity, particle_settings);
+	}
 }
 
 void ProjectileSystem::Run()
@@ -85,8 +97,8 @@ void ProjectileSystem::Run()
 
 			if (projectileSys.active) {
 				Float32 fire = input.Get("fire");
-				if (EPSILON_NOT_ZERO(fire)) {
-					//auto& anim = Engine::Registry().get<Animator>(character.weaponSprite);
+				Float32 bomb = input.Get("bomb");
+				if (EPSILON_NOT_ZERO(bomb) || EPSILON_NOT_ZERO(fire)) {
 					auto& weapon = Engine::Registry().get<Weapon>(character.weaponSprite);
 					if (character.attacking) {
 						if (!weapon.attacking) {
@@ -94,13 +106,25 @@ void ProjectileSystem::Run()
 							AssignSprite(weapon_sprt, character.weaponSpriteName);
 						}
 						character.attacking = false;
-						
+
 					}
-					
-					
-					
+				}
+				if (EPSILON_NOT_ZERO(bomb) && cstats.currentStamina >= BOMB_COST) {
+					cstats.currentStamina -= BOMB_COST;
 
+					auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+					cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 
+					Float32 x = crosshair.playerDistance * cos(crosshair.angle);
+					Float32 y = crosshair.playerDistance * sin(crosshair.angle);
+
+					Vector3 pos = { x + t.position.x,y + t.position.y,t.position.z };
+					CreateProjectile(projectileSys.bombSettings, pos, crosshair.angle);
+
+				}
+				else if (EPSILON_NOT_ZERO(fire)) {
+				
 					if (cstats.currentStamina >= PROJECTILE_COST) {
 						cstats.currentStamina -= PROJECTILE_COST;
 
@@ -123,7 +147,16 @@ void ProjectileSystem::Run()
 		{
 			projectile_.timeOfLiving -= Engine::DeltaTime();
 			if (projectile_.timeOfLiving <= 0) {
-				projectile_.destroy = true;
+				if (projectile_.isBomb) {
+					pspawner_.active = true;
+					projectile_.activated = true;
+					col_.size.x = projectile_.bombRadius;
+					col_.size.y = projectile_.bombRadius;
+				}
+				else {
+					projectile_.destroy = true;
+				}
+				
 			}
 			if (col_.colided) {
 				auto it = col_.colidedWith.begin();
@@ -132,7 +165,15 @@ void ProjectileSystem::Run()
 						auto& physics_object = Engine::Registry().get<PhysicsObject>(*it);
 						if (physics_object.is_static) {
 							pspawner_.active = true;
-							projectile_.displayingParticles = true;
+							if (projectile_.isBomb) {
+								col_.size.x = projectile_.bombRadius;
+								col_.size.y = projectile_.bombRadius;
+								projectile_.activated = true;
+							}	
+							else {
+								projectile_.displayingParticles = true;
+							}
+
 						}
 					}
 					it++;
@@ -169,7 +210,7 @@ void ProjectileSystem::OnEndOfFrame()
     {
         auto& p = projectiles.get<Projectile>(entity);
 		if (p.displayingParticles) {
-			Engine::Registry().remove_if_exists<Sprite>(entity);
+			Engine::Registry().remove_if_exists<Sprite>(entity);	
 			auto& particle_spawner = Engine::Registry().get<PlightParticleSpawner>(entity);
 			if (!particle_spawner.active) {
 				p.destroy = true;
