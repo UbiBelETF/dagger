@@ -72,106 +72,481 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     legend['-'] = &level_generator::jovica::CreateBottomWall;
     legend['/'] = &level_generator::jovica::CreateLeftWall;
     legend['\\'] = &level_generator::jovica::CreateRightWall;
-    legend['T'] = &level_generator::jovica::CreateTopLeftWall;
+    legend['E'] = &level_generator::jovica::CreateTopLeftWall;
     legend['Y'] = &level_generator::jovica::CreateTopRightWall;
     legend['L'] = &level_generator::jovica::CreateBottomLeftWall;
     legend['J'] = &level_generator::jovica::CreateBottomRightWall;
     legend['q'] = &level_generator::jovica::CreateBottomLeftConcWall;
     legend['p'] = &level_generator::jovica::CreateBottomRightConcWall;
     legend['d'] = &level_generator::jovica::CreateTopLeftConcWall;
-    legend['b'] = &level_generator::jovica::CreateTopRightConcWall;
+    legend['!'] = &level_generator::jovica::CreateTopRightConcWall;
     legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
     legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
-    legend['t'] = &level_generator::jovica::CreateTopLeftConcWallS;
+    legend['e'] = &level_generator::jovica::CreateTopLeftConcWallS;
     legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
-	
+    legend['@'] = &level_generator::jovica::CreatePlayer;
+    legend['d'] = &level_generator::jovica::CreateDoor;
+    legend['g'] = &level_generator::jovica::CreateIdleGoblin; 
+    legend['k'] = &level_generator::jovica::CreateKey;
+    legend['T'] = &level_generator::jovica::CreateBigTable;
+    legend['b'] = &level_generator::jovica::CreateBookShelfOnTopWall;
+    legend['P'] = &level_generator::jovica::CreatePrisonerOnTopWall;
+    legend['c'] = &level_generator::jovica::CreateChest;
+    legend['i'] = &level_generator::jovica::CreateGreenBanner;
+    legend['r'] = &level_generator::jovica::CreateRedBanner;
+    legend['f'] = &level_generator::jovica::CreateTorch;
+    legend['o'] = &level_generator::jovica::CreateBarrel;
+    legend['s'] = &level_generator::jovica::CreateSmallTable;
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
-	
-    // PLAYER
-    auto player = reg_.create();
-    auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
-    playerState.currentState = ECharacterState::Idle;
-    auto& playerSprite = reg_.emplace<Sprite>(player);
-    AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
-    playerSprite.scale = { 1, 1 };
-    auto& playerAnimator = reg_.emplace<Animator>(player);
-    AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
-    auto& playerTransform = reg_.emplace<Transform>(player);
-    playerTransform.position = { 50, -50, 1 };
-    auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
-    playerInput.contexts.push_back("AmongThemInput");
-    auto& controller = reg_.emplace<CharacterController>(player);
-    reg_.emplace<MovableBody>(player);
 
-    auto& playerCollision = reg_.emplace<SimpleCollision>(player);
-    playerCollision.size = playerSprite.size;
-
-    auto& detection = reg_.emplace<Detection>(player);
-    detection.SetSize({ 2,2 });
-
-    // POOF
-    auto poofEntity = reg_.create();
-
-    reg_.emplace<Transform>(poofEntity);
-    auto& poofSprite = reg_.emplace<Sprite>(poofEntity);
-    AssignSprite(poofSprite, "spritesheets:among_them_spritesheet:poof_anim:5");
-    poofSprite.scale = { 0.5, 0.5 };
-    auto& poofFollow = reg_.emplace<Follow>(poofEntity);
-    poofFollow.target = player;
-    poofFollow.offset.z = -1;
-    auto& poofAnimator = reg_.emplace<Animator>(poofEntity);
-    poofAnimator.isLooping = false;
-    auto& exec = reg_.emplace<AnimationExecutor>(poofEntity);
-    exec.source = &controller.animationTrigger;
-    exec.animationName = "among_them_animations:poof";
-    exec.startingSpriteName = "spritesheets:among_them_spritesheet:poof_anim:1";
-
-    // ENEMY 
-    auto enemy = reg_.create();
-
-    auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
+    //slime1
+    auto slime1 = reg_.create();
+    auto& enemyState = ATTACH_TO_FSM(EnemyFSM, slime1);
     enemyState.currentState = EEnemyState::Patrolling;
 
-    auto& enemySprite = reg_.emplace<Sprite>(enemy);
-    AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    auto& enemySprite = reg_.emplace<Sprite>(slime1);
+    AssignSprite(enemySprite, "spritesheets:among_them_spritesheet:slime_idle_anim:1");
     enemySprite.scale = { 1, 1 };
 
-    auto& enemyAnimator = reg_.emplace<Animator>(enemy);
-    AnimatorPlay(enemyAnimator, "among_them_animations:goblin_idle");
+    auto& enemyAnimator = reg_.emplace<Animator>(slime1);
+    AnimatorPlay(enemyAnimator, "among_them_animations:slime_idle");
 
-    auto& enemyTransform = reg_.emplace<Transform>(enemy);
-    enemyTransform.position = { 0, 25, 1 };
+    auto& enemyTransform = reg_.emplace<Transform>(slime1);
+    enemyTransform.position = { 18 * 16, (-19) * 16, 1 };
 
-    auto& enemyInput = reg_.emplace<InputEnemiesFile>(enemy);
-    enemyInput.pathname = "path.txt";
-    enemyInput.currentshape = "goblin";
+    auto& enemyInput = reg_.emplace<InputEnemiesFile>(slime1);
+    enemyInput.pathname = "slime1.txt";
+    enemyInput.currentshape = "slime";
 
-    auto& en = reg_.emplace<EnemyDescription>(enemy);
-    en.shape = ECharacterShape::Goblin;
+    auto& en = reg_.emplace<EnemyDescription>(slime1);
+    en.shape = ECharacterShape::Slime;
 
-    auto& enemyCollision = reg_.emplace<SimpleCollision>(enemy);
+    en.enemyIdle = false;
+
+    auto& enemyCollision = reg_.emplace<SimpleCollision>(slime1);
     enemyCollision.size = enemySprite.size;
 
-    reg_.emplace<MovableBody>(enemy);
+    auto& det = reg_.emplace<Detection>(slime1);
+    det.SetSize(en.detectionArea);
 
-    auto& enDetection1 = reg_.emplace<Detection>(enemy);
-    enDetection1.SetSize(en.detectionArea);
+    reg_.emplace<MovableBody>(slime1);
 
-    // VISION CONE
-    auto visionCone = reg_.create();
+    //slime2
+    auto slime2 = reg_.create();
+    auto& enemyState2 = ATTACH_TO_FSM(EnemyFSM, slime2);
+    enemyState2.currentState = EEnemyState::Patrolling;
 
-    reg_.emplace<Transform>(visionCone);
+    auto& enemySprite2 = reg_.emplace<Sprite>(slime2);
+    AssignSprite(enemySprite2, "spritesheets:among_them_spritesheet:slime_idle_anim:1");
+    enemySprite2.scale = { 1, 1 };
 
-    auto& vcSprite = reg_.emplace<Sprite>(visionCone);
-    AssignSprite(vcSprite, "AmongThem:circle");
-    vcSprite.size = enDetection1.size;
+    auto& enemyAnimator2 = reg_.emplace<Animator>(slime2);
+    AnimatorPlay(enemyAnimator2, "among_them_animations:slime_idle");
 
-    auto& vcFollow = reg_.emplace<Follow>(visionCone);
-    vcFollow.target = enemy;
-    vcFollow.offset.z = 25;
+    auto& enemyTransform2 = reg_.emplace<Transform>(slime2);
+    enemyTransform2.position = { 18 * 16, (-21) * 16, 1 };
 
-    auto& vcCone = reg_.emplace<VisionCone>(visionCone);
-    vcCone.shape = ECharacterShape::Goblin;
+    auto& enemyInput2 = reg_.emplace<InputEnemiesFile>(slime2);
+    enemyInput2.pathname = "slime2.txt";
+    enemyInput2.currentshape = "slime";
+
+    auto& en2 = reg_.emplace<EnemyDescription>(slime2);
+    en2.shape = ECharacterShape::Slime;
+
+    en2.enemyIdle = false;
+
+    auto& enemyCollision2 = reg_.emplace<SimpleCollision>(slime2);
+    enemyCollision2.size = enemySprite.size;
+
+    auto& det2 = reg_.emplace<Detection>(slime2);
+    det2.SetSize(en2.detectionArea);
+
+    reg_.emplace<MovableBody>(slime2);
+
+    //bat1
+    auto bat1 = reg_.create();
+    auto& enemyState3 = ATTACH_TO_FSM(EnemyFSM, bat1);
+    enemyState3.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite3 = reg_.emplace<Sprite>(bat1);
+    AssignSprite(enemySprite3, "spritesheets:among_them_spritesheet:bat_anim:1");
+    enemySprite3.scale = { 1, 1 };
+
+    auto& enemyAnimator3 = reg_.emplace<Animator>(bat1);
+    AnimatorPlay(enemyAnimator3, "among_them_animations:bat");
+
+    auto& enemyTransform3 = reg_.emplace<Transform>(bat1);
+    enemyTransform3.position = { 18 * 16, (-20) * 16, 1 };
+
+    auto& enemyInput3 = reg_.emplace<InputEnemiesFile>(bat1);
+    enemyInput3.pathname = "bat1.txt";
+    enemyInput3.currentshape = "bat";
+
+    auto& en3 = reg_.emplace<EnemyDescription>(bat1);
+    en3.shape = ECharacterShape::Bat;
+
+    en3.enemyIdle = false;
+
+    auto& enemyCollision3 = reg_.emplace<SimpleCollision>(bat1);
+    enemyCollision3.size = enemySprite3.size;
+
+    auto& det3 = reg_.emplace<Detection>(bat1);
+    det3.SetSize(en3.detectionArea);
+
+    reg_.emplace<MovableBody>(bat1);
+
+    //goblin2
+    auto goblin2 = reg_.create();
+    auto& enemyState4 = ATTACH_TO_FSM(EnemyFSM, goblin2);
+    enemyState4.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite4 = reg_.emplace<Sprite>(goblin2);
+    AssignSprite(enemySprite4, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite4.scale = { 1, 1 };
+
+    auto& enemyAnimator4 = reg_.emplace<Animator>(goblin2);
+    AnimatorPlay(enemyAnimator4, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform4 = reg_.emplace<Transform>(goblin2);
+    enemyTransform4.position = { 22 * 16, (-8) * 16, 1 };
+
+    auto& enemyInput4 = reg_.emplace<InputEnemiesFile>(goblin2);
+    enemyInput4.pathname = "goblin2.txt";
+    enemyInput4.currentshape = "goblin";
+
+    auto& en4 = reg_.emplace<EnemyDescription>(goblin2);
+    en4.shape = ECharacterShape::Goblin;
+
+    en4.enemyIdle = true;
+
+    auto& enemyCollision4 = reg_.emplace<SimpleCollision>(goblin2);
+    enemyCollision4.size = enemySprite4.size;
+
+    auto& det4 = reg_.emplace<Detection>(goblin2);
+    det4.SetSize(en4.detectionArea);
+
+    reg_.emplace<MovableBody>(goblin2);
+
+    //bat2
+    auto bat2 = reg_.create();
+    auto& enemyState5 = ATTACH_TO_FSM(EnemyFSM, bat2);
+    enemyState5.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite5 = reg_.emplace<Sprite>(bat2);
+    AssignSprite(enemySprite5, "spritesheets:among_them_spritesheet:bat_anim:1");
+    enemySprite5.scale = { 1, 1 };
+
+    auto& enemyAnimator5 = reg_.emplace<Animator>(bat2);
+    AnimatorPlay(enemyAnimator5, "among_them_animations:bat");
+
+    auto& enemyTransform5 = reg_.emplace<Transform>(bat2);
+    enemyTransform5.position = { 2 * 16, (-4) * 16, 1 };
+
+    auto& enemyInput5 = reg_.emplace<InputEnemiesFile>(bat2);
+    enemyInput5.pathname = "bat2.txt";
+    enemyInput5.currentshape = "bat";
+
+    auto& en5 = reg_.emplace<EnemyDescription>(bat2);
+    en5.shape = ECharacterShape::Bat;
+
+    en5.enemyIdle = false;
+
+    auto& enemyCollision5 = reg_.emplace<SimpleCollision>(bat2);
+    enemyCollision5.size = enemySprite5.size;
+
+    auto& det5 = reg_.emplace<Detection>(bat2);
+    det5.SetSize(en5.detectionArea);
+
+    reg_.emplace<MovableBody>(bat2);
+
+    //bat3
+    auto bat3 = reg_.create();
+    auto& enemyState6 = ATTACH_TO_FSM(EnemyFSM, bat3);
+    enemyState6.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite6 = reg_.emplace<Sprite>(bat3);
+    AssignSprite(enemySprite6, "spritesheets:among_them_spritesheet:bat_anim:1");
+    enemySprite6.scale = { 1, 1 };
+
+    auto& enemyAnimator6 = reg_.emplace<Animator>(bat3);
+    AnimatorPlay(enemyAnimator6, "among_them_animations:bat");
+
+    auto& enemyTransform6 = reg_.emplace<Transform>(bat3);
+    enemyTransform6.position = { 3 * 16, (-11) * 16, 1 };
+
+    auto& enemyInput6 = reg_.emplace<InputEnemiesFile>(bat3);
+    enemyInput6.pathname = "bat3.txt";
+    enemyInput6.currentshape = "bat";
+
+    auto& en6 = reg_.emplace<EnemyDescription>(bat3);
+    en6.shape = ECharacterShape::Bat;
+
+    en6.enemyIdle = false;
+
+    auto& enemyCollision6 = reg_.emplace<SimpleCollision>(bat3);
+    enemyCollision6.size = enemySprite6.size;
+
+    auto& det6 = reg_.emplace<Detection>(bat3);
+    det6.SetSize(en6.detectionArea);
+
+    reg_.emplace<MovableBody>(bat3);
+
+    //slime3
+    auto slime3 = reg_.create();
+    auto& enemyState7 = ATTACH_TO_FSM(EnemyFSM, slime3);
+    enemyState7.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite7 = reg_.emplace<Sprite>(slime3);
+    AssignSprite(enemySprite7, "spritesheets:among_them_spritesheet:slime_idle_anim:1");
+    enemySprite7.scale = { 1, 1 };
+
+    auto& enemyAnimator7 = reg_.emplace<Animator>(slime3);
+    AnimatorPlay(enemyAnimator7, "among_them_animations:slime_idle");
+
+    auto& enemyTransform7 = reg_.emplace<Transform>(slime3);
+    enemyTransform7.position = { 18 * 16, (-5) * 16, 1 };
+
+    auto& enemyInput7 = reg_.emplace<InputEnemiesFile>(slime3);
+    enemyInput7.pathname = "slime3.txt";
+    enemyInput7.currentshape = "slime";
+
+    auto& en7 = reg_.emplace<EnemyDescription>(slime3);
+    en7.shape = ECharacterShape::Slime;
+
+    en7.enemyIdle = false;
+
+    auto& enemyCollision7 = reg_.emplace<SimpleCollision>(slime3);
+    enemyCollision7.size = enemySprite7.size;
+
+    auto& det7 = reg_.emplace<Detection>(slime3);
+    det7.SetSize(en7.detectionArea);
+
+    reg_.emplace<MovableBody>(slime3);
+
+    //slime4
+    auto slime4 = reg_.create();
+    auto& enemyState8 = ATTACH_TO_FSM(EnemyFSM, slime4);
+    enemyState8.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite8 = reg_.emplace<Sprite>(slime4);
+    AssignSprite(enemySprite8, "spritesheets:among_them_spritesheet:slime_idle_anim:1");
+    enemySprite8.scale = { 1, 1 };
+
+    auto& enemyAnimator8 = reg_.emplace<Animator>(slime4);
+    AnimatorPlay(enemyAnimator8, "among_them_animations:slime_idle");
+
+    auto& enemyTransform8 = reg_.emplace<Transform>(slime4);
+    enemyTransform8.position = { 16 * 16, (-5) * 16, 1 };
+
+    auto& enemyInput8 = reg_.emplace<InputEnemiesFile>(slime4);
+    enemyInput8.pathname = "slime4.txt";
+    enemyInput8.currentshape = "slime";
+
+    auto& en8 = reg_.emplace<EnemyDescription>(slime4);
+    en8.shape = ECharacterShape::Slime;
+
+    en8.enemyIdle = true;
+
+    auto& enemyCollision8 = reg_.emplace<SimpleCollision>(slime4);
+    enemyCollision8.size = enemySprite8.size;
+
+    auto& det8 = reg_.emplace<Detection>(slime4);
+    det8.SetSize(en8.detectionArea);
+
+    reg_.emplace<MovableBody>(slime4);
+    
+
+    //bat4
+    auto bat4 = reg_.create();
+    auto& enemyState9 = ATTACH_TO_FSM(EnemyFSM, bat4);
+    enemyState9.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite9 = reg_.emplace<Sprite>(bat4);
+    AssignSprite(enemySprite9, "spritesheets:among_them_spritesheet:bat_anim:1");
+    enemySprite9.scale = { 1, 1 };
+
+    auto& enemyAnimator9 = reg_.emplace<Animator>(bat4);
+    AnimatorPlay(enemyAnimator9, "among_them_animations:bat");
+
+    auto& enemyTransform9 = reg_.emplace<Transform>(bat4);
+    enemyTransform9.position = { 31 * 16, (-1) * 16, 1 };
+
+    auto& enemyInput9 = reg_.emplace<InputEnemiesFile>(bat4);
+    enemyInput9.pathname = "bat4.txt";
+    enemyInput9.currentshape = "bat";
+
+    auto& en9 = reg_.emplace<EnemyDescription>(bat4);
+    en9.shape = ECharacterShape::Bat;
+
+    en9.enemyIdle = false;
+
+    auto& enemyCollision9 = reg_.emplace<SimpleCollision>(bat4);
+    enemyCollision9.size = enemySprite9.size;
+
+    auto& det9 = reg_.emplace<Detection>(bat4);
+    det9.SetSize(en9.detectionArea);
+
+    reg_.emplace<MovableBody>(bat4);
+
+    //goblin4
+    auto goblin4 = reg_.create();
+    auto& enemyState10 = ATTACH_TO_FSM(EnemyFSM, goblin4);
+    enemyState8.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite10 = reg_.emplace<Sprite>(goblin4);
+    AssignSprite(enemySprite10, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite10.scale = { 1, 1 };
+
+    auto& enemyAnimator10 = reg_.emplace<Animator>(goblin4);
+    AnimatorPlay(enemyAnimator10, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform10 = reg_.emplace<Transform>(goblin4);
+    enemyTransform10.position = { 25 * 16, (-5) * 16, 1 };
+
+    auto& enemyInput10 = reg_.emplace<InputEnemiesFile>(goblin4);
+    enemyInput10.pathname = "goblin4.txt";
+    enemyInput10.currentshape = "goblin";
+
+    auto& en10 = reg_.emplace<EnemyDescription>(goblin4);
+    en10.shape = ECharacterShape::Goblin;
+
+    en10.enemyIdle = true;
+
+    auto& enemyCollision10 = reg_.emplace<SimpleCollision>(goblin4);
+    enemyCollision10.size = enemySprite10.size;
+
+    auto& det10 = reg_.emplace<Detection>(goblin4);
+    det10.SetSize(en10.detectionArea);
+
+    reg_.emplace<MovableBody>(goblin4);
+
+    //goblin3
+    auto goblin3 = reg_.create();
+    auto& enemyState11 = ATTACH_TO_FSM(EnemyFSM, goblin3);
+    enemyState11.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite11 = reg_.emplace<Sprite>(goblin3);
+    AssignSprite(enemySprite11, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite11.scale = { 1, 1 };
+
+    auto& enemyAnimator11 = reg_.emplace<Animator>(goblin3);
+    AnimatorPlay(enemyAnimator11, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform11 = reg_.emplace<Transform>(goblin3);
+    enemyTransform11.position = { 6 * 16, (-13) * 16, 1 };
+
+    auto& enemyInput11 = reg_.emplace<InputEnemiesFile>(goblin3);
+    enemyInput11.pathname = "goblin3.txt";
+    enemyInput11.currentshape = "goblin";
+
+    auto& en11 = reg_.emplace<EnemyDescription>(goblin3);
+    en11.shape = ECharacterShape::Goblin;
+
+    en11.enemyIdle = true;
+
+    auto& enemyCollision11 = reg_.emplace<SimpleCollision>(goblin3);
+    enemyCollision11.size = enemySprite11.size;
+
+    auto& det11 = reg_.emplace<Detection>(goblin3);
+    det11.SetSize(en11.detectionArea);
+
+    reg_.emplace<MovableBody>(goblin3);
+
+    //slime5
+    auto slime5 = reg_.create();
+    auto& enemyState12 = ATTACH_TO_FSM(EnemyFSM, slime5);
+    enemyState12.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite12 = reg_.emplace<Sprite>(slime5);
+    AssignSprite(enemySprite12, "spritesheets:among_them_spritesheet:slime_idle_anim:1");
+    enemySprite12.scale = { 1, 1 };
+
+    auto& enemyAnimator12 = reg_.emplace<Animator>(slime5);
+    AnimatorPlay(enemyAnimator12, "among_them_animations:slime_idle");
+
+    auto& enemyTransform12 = reg_.emplace<Transform>(slime5);
+    enemyTransform12.position = { 6 * 16, (-4) * 16, 1 };
+
+    auto& enemyInput12 = reg_.emplace<InputEnemiesFile>(slime5);
+    enemyInput12.pathname = "slime5.txt";
+    enemyInput12.currentshape = "slime";
+
+    auto& en12 = reg_.emplace<EnemyDescription>(slime5);
+    en12.shape = ECharacterShape::Slime;
+
+    en12.enemyIdle = false;
+
+    auto& enemyCollision12 = reg_.emplace<SimpleCollision>(slime5);
+    enemyCollision12.size = enemySprite8.size;
+
+    auto& det12 = reg_.emplace<Detection>(slime5);
+    det12.SetSize(en12.detectionArea);
+
+    reg_.emplace<MovableBody>(slime5);
+
+    //goblin5
+    auto goblin5 = reg_.create();
+    auto& enemyState13 = ATTACH_TO_FSM(EnemyFSM, goblin5);
+    enemyState13.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite13 = reg_.emplace<Sprite>(goblin5);
+    AssignSprite(enemySprite13, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite13.scale = { 1, 1 };
+
+    auto& enemyAnimator13 = reg_.emplace<Animator>(goblin5);
+    AnimatorPlay(enemyAnimator13, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform13 = reg_.emplace<Transform>(goblin5);
+    enemyTransform13.position = { 5 * 16, (-2) * 16, 1 };
+
+    auto& enemyInput13 = reg_.emplace<InputEnemiesFile>(goblin5);
+    enemyInput13.pathname = "goblin5.txt";
+    enemyInput13.currentshape = "goblin";
+
+    auto& en13 = reg_.emplace<EnemyDescription>(goblin5);
+    en13.shape = ECharacterShape::Goblin;
+
+    en13.enemyIdle = true;
+
+    auto& enemyCollision13 = reg_.emplace<SimpleCollision>(goblin5);
+    enemyCollision13.size = enemySprite13.size;
+
+    auto& det13 = reg_.emplace<Detection>(goblin5);
+    det13.SetSize(en13.detectionArea);
+
+    reg_.emplace<MovableBody>(goblin5);
+
+    //goblin6
+    auto goblin6 = reg_.create();
+    auto& enemyState14 = ATTACH_TO_FSM(EnemyFSM, goblin6);
+    enemyState14.currentState = EEnemyState::Patrolling;
+
+    auto& enemySprite14 = reg_.emplace<Sprite>(goblin6);
+    AssignSprite(enemySprite14, "spritesheets:among_them_spritesheet:goblin_idle_anim:1");
+    enemySprite14.scale = { 1, 1 };
+
+    auto& enemyAnimator14 = reg_.emplace<Animator>(goblin6);
+    AnimatorPlay(enemyAnimator14, "among_them_animations:goblin_idle");
+
+    auto& enemyTransform14 = reg_.emplace<Transform>(goblin6);
+    enemyTransform14.position = { 9 * 16, (-2) * 16, 1 };
+
+    auto& enemyInput14 = reg_.emplace<InputEnemiesFile>(goblin6);
+    enemyInput14.pathname = "goblin6.txt";
+    enemyInput14.currentshape = "goblin";
+
+    auto& en14 = reg_.emplace<EnemyDescription>(goblin6);
+    en14.shape = ECharacterShape::Goblin;
+
+    en14.enemyIdle = true;
+
+    auto& enemyCollision14 = reg_.emplace<SimpleCollision>(goblin6);
+    enemyCollision14.size = enemySprite14.size;
+
+    auto& det14 = reg_.emplace<Detection>(goblin6);
+    det14.SetSize(en14.detectionArea);
+
+    reg_.emplace<MovableBody>(goblin6);
 }
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 

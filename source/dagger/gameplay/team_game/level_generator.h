@@ -35,5 +35,18 @@ namespace level_generator
         Sequence<Entity> CreateBottomRightConcWallS(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateTopLeftConcWallS(Registry& reg_, SInt32 x_, SInt32 y_);
         Sequence<Entity> CreateTopRightConcWallS(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreatePlayer(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateDoor(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateIdleGoblin(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateKey(Registry& reg_, SInt32 x_, SInt32 y_); 
+        Sequence<Entity> CreateBigTable(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateBookShelfOnTopWall(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreatePrisonerOnTopWall(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateChest(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateGreenBanner(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateRedBanner(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateTorch(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateBarrel(Registry& reg_, SInt32 x_, SInt32 y_);
+        Sequence<Entity> CreateSmallTable(Registry& reg_, SInt32 x_, SInt32 y_);
 	}
 }

@@ -63,7 +63,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 		GoTo(EEnemyState::Chasing, state_);
 	}
 
-	
+
 	FileInputStream inFile{ path.pathname };
 
 	Vector2 point;
@@ -86,7 +86,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	else if (transform.position.x > destinationX) {
 		ctrl.direction.x = -1;
 		sprite.scale.x = -1;
-		
+
 	}
 	else ctrl.direction.x = 0;
 	if (transform.position.y < destinationY) {
@@ -98,27 +98,6 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	else { ctrl.direction.y = 0; }
 
 	AnimatorPlay(animator, run);
-	/*transform.position.x += ctrl.direction.x * ctrl.speed * Engine::DeltaTime();
-	transform.position.y += ctrl.direction.y * ctrl.speed * Engine::DeltaTime();
-
-	if ((transform.position.x < destinationX && ctrl.direction.x == -1) ||
-		(transform.position.x > destinationX && ctrl.direction.x == 1)) {
-		transform.position.x = destinationX;
-	}
-
-	else if ((transform.position.y > destinationY && ctrl.direction.y == 1) ||
-		(transform.position.y < destinationY && ctrl.direction.y == -1))
-	{
-		transform.position.y = destinationY;
-	}
-
-	if (transform.position.x == destinationX && transform.position.y == destinationY) {
-		ctrl.postition++;
-		if ((ctrl.postition + 1) >= ctrl.numberOfPoints) {
-			return;
-		}
-		
-	}*/
 	if (glm::abs(destinationX - transform.position.x) < 0.1f && glm::abs(destinationY - transform.position.y) < 0.1f)
 	{
 		ctrl.postition = (ctrl.postition + 1) % ctrl.numberOfPoints;
@@ -154,6 +133,7 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 
 	if (ctrl.shape != hero.shape)
 	{
+		AnimatorPlay(animator, run);
 		Vector2 direction = { heroTransform.position.x - t.position.x, heroTransform.position.y - t.position.y };
 
 		if (direction.x > 0.0f)
