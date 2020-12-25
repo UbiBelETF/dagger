@@ -17,6 +17,7 @@ namespace tank_warfare
 		bool toBeDestroyed{ false };
 		Vector2 speed{ 0, 0 };
 		int id{ 0 };
+		bool explode{ false };
 	};
 
 	class RocketSystem

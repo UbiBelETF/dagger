@@ -165,7 +165,7 @@ void tank_warfare::AddCollectible(bool isPower_)
 	auto& transform = reg.emplace<Transform>(entity);
 	int i = rand() % 15 - 6;
 	int j = rand() % 15 - 7;
-	transform.position = { 48 * i, 48 * j, 1 };
+	transform.position = { 48 * i, 48 * j, 2 };
 	
 	auto& col = reg.emplace<SimpleCollision>(entity);
 }

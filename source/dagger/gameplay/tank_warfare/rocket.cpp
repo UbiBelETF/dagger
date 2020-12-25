@@ -31,11 +31,12 @@ void RocketSystem::Run()
 			if (Engine::Registry().has<TankCharacter>(col.colidedWith))
 			{
 				auto& tank = Engine::Registry().get<TankCharacter>(col.colidedWith);
+				auto& tra = Engine::Registry().get<Transform>(col.colidedWith);
 				if (rocket.id == tank.id)
 				{
 					t.position.x += rocket.speed.x * Engine::DeltaTime();
 					t.position.y += rocket.speed.y * Engine::DeltaTime();
-					t.position.z = 4;
+					t.position.z = tra.position.z + 1;
 				}
 				else
 				{
@@ -52,6 +53,7 @@ void RocketSystem::Run()
 					}
 					tank.health -= rocket.damage;
 					rocket.damage = 0;
+					rocket.explode = true;
 					AnimatorPlay(anim, "explosion:small");
 					if (anim.currentFrame == AnimatorNumberOfFrames(anim))
 					{
@@ -67,6 +69,15 @@ void RocketSystem::Run()
 			}
 			else
 			{
+				auto& c = Engine::Registry().get<SimpleCollision>(col.colidedWith);
+				auto& tr = Engine::Registry().get<Transform>(col.colidedWith);
+				Vector2 collisionSides = c.GetCollisionSides(tr.position, c, t.position);
+
+				if (collisionSides.y < 0)
+				{
+					t.position.z = tr.position.z - 1;
+				}
+
 				AnimatorPlay(anim, "explosion:small");
 				if (anim.currentFrame == AnimatorNumberOfFrames(anim))
 				{
@@ -77,9 +88,20 @@ void RocketSystem::Run()
 		}
 		else
 		{
-			t.position.x += rocket.speed.x * Engine::DeltaTime();
-			t.position.y += rocket.speed.y * Engine::DeltaTime();
-			t.position.z = 2;
+			if (rocket.explode)
+			{
+				AnimatorPlay(anim, "explosion:small");
+				if (anim.currentFrame == AnimatorNumberOfFrames(anim))
+				{
+					rocket.toBeDestroyed = true;
+				}
+			}
+			else
+			{
+				t.position.x += rocket.speed.x * Engine::DeltaTime();
+				t.position.y += rocket.speed.y * Engine::DeltaTime();
+				t.position.z = 2;
+			}
 		}
 	}
 }
