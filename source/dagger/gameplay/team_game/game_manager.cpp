@@ -72,28 +72,28 @@ void GameManagerSystem::Run()
                 auto& player = Engine::Registry().get<PlayerCharacter>(entity);
                 auto& transform = Engine::Registry().get<Transform>(entity);
 
-                if (camera->position.x - transform.position.x < -500)
+                if (camera->position.x - transform.position.x < -533)
                 {
                     isGameOver = true;
-                    winnerId = 1;
+                    winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
-                else if (camera->position.x - transform.position.x > 500)
+                else if (camera->position.x - transform.position.x > 533)
                 {
                     isGameOver = true;
-                    winnerId = 1;
+                    winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
-                else if (camera->position.y - transform.position.y < -350)
+                else if (camera->position.y - transform.position.y < -400)
                 {
                     isGameOver = true;
-                    winnerId = 1;
+                    winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
-                else if (camera->position.y - transform.position.y > 350)
+                else if (camera->position.y - transform.position.y > 400)
                 {
                     isGameOver = true;
-                    winnerId = 1;
+                    winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
             }
@@ -107,6 +107,8 @@ void GameManagerSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
     {
         if (kEvent_.key == nextLevelKey && (kEvent_.action == EDaggerInputState::Pressed || kEvent_.action == EDaggerInputState::Held))
         {
+            auto* camera = Engine::GetDefaultResource<Camera>();
+            camera->position = { 0, 0, 0 };
             restarted = true;    
         }
     }
