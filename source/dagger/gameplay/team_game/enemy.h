@@ -14,13 +14,13 @@ namespace lab
 		Float32 speed = 10.f;
 		Float32 speedX = 10.f;
 		Float32 speedY = 10.f;
-		int cooldown = 150;
+		int cooldown = 100;
 		int maxCooldown = 150;
 		int meleeCooldown = 300;
 		int maxMeleeCooldown = 300;
 		Float32 meleeDamage = 0.5f;
-		int health = 100;
-		int bossHealth = 250;
+		int health = 150;
+		int bossHealth = 300;
 		Float32 deathTimer = 125;
 		int bossCooldown = 60;
 		int bossMaxCooldown = 60;
@@ -43,6 +43,8 @@ namespace lab
 			return "Enemy System";
 		}
 		void Run() override;
+
+		static int bossesAlive;
 	};
 
 	Vector2 speedForFollow(Vector2 position_, Vector2 target_, Float32 speed_);

@@ -83,12 +83,13 @@ void PlayerControllerSystem::Run()
                 Engine::Registry().remove<Sprite>(entity);
                 Engine::Registry().remove<Transform>(entity);
                 tex.alignment={ TextAlignment::CENTER };
-                tex.Set("pixel-font", "GAME OVER",{30,30});    
+                tex.Set("pixel-font", " GAME OVER",{30,30});  
+                col.colided=false;  
             }                                     
         }else
         {
             tex.alignment={ TextAlignment::RIGHT };
-            tex.Set("pixel-font", std::to_string(player.health) + "/100", { 10,-95,0 }, { 10,10 });
+            tex.Set("pixel-font", std::to_string(player.health) + "/" + std::to_string(player.maxHealth), { 10,-95,0 }, { 10,10 });
         }
         
 
@@ -105,9 +106,16 @@ void PlayerControllerSystem::Run()
                 if (Engine::Registry().has<Heart>(col.colidedWith))
                 {
                     Engine::Registry().remove_all(col.colidedWith);
-                    player.health += 40;
-                    if (player.health > 100)
-                        player.health = 100;
+                    player.health += 20;
+                    if (player.health > player.maxHealth)
+                        player.health = player.maxHealth;
+                    col.colided = false;
+                }
+
+                else if (Engine::Registry().has<SilverHeart>(col.colidedWith))
+                {
+                    Engine::Registry().remove_all(col.colidedWith);
+                    player.maxHealth += 50;
                     col.colided = false;
                 }
 

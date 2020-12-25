@@ -9,6 +9,11 @@ namespace lab
 {
 	struct Heart
 	{
-		int heal = 40;
+		int heal = 20;
+	};
+
+	struct SilverHeart
+	{
+		int extraHealth = 50;
 	};
 }

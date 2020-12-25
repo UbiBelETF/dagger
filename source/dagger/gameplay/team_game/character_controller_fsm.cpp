@@ -1,4 +1,5 @@
 #include "gameplay/team_game/character_controller_fsm.h"
+#include "gameplay/team_game/enemy.h"
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
@@ -44,6 +45,7 @@ void CharacterFSM::Idle::Run(CharacterFSM::StateComponent& state_)
     if(EPSILON_NOT_ZERO(input.Get("restart")) )
     {
         Engine::Registry().clear();
+        lab::EnemySystem::bossesAlive = 3;
         lab::SetupWorld(Engine::Instance());
     }
 

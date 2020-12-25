@@ -8,19 +8,31 @@
 #include "core/engine.h"
 #include "core/game/transforms.h"
 #include "core/graphics/sprite.h"
+#include "core/graphics/text.h"
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/team_game/player_controller_fsm.h"
 
+int lab::EnemySystem::bossesAlive = 3;
 
 void lab::EnemySystem::Run()
 {
 	Vector2 playerPosition;
-	auto view3 = Engine::Registry().view<Sprite, Animator, InputReceiver, Transform, PlayerCharacter, SimpleCollision>();
+	auto view3 = Engine::Registry().view<Sprite, Animator, InputReceiver, Transform, PlayerCharacter, SimpleCollision, Text>();
 	for (auto entity : view3)
 	{
 		auto playerTransform = view3.get<Transform>(entity);
 		playerPosition = playerTransform.position;
 		playerPosition.y *= -1;
+
+		if (bossesAlive <= 0)
+		{
+			auto textEntity = Engine::Registry().create();
+			auto& txt = Engine::Registry().emplace<Text>(textEntity);
+			txt.position = { 50, 0, 0 };
+			txt.spacing = 0.8f;
+			txt.alignment = { TextAlignment::CENTER };
+			txt.Set("pixel-font", " VICTORY!", { 30,30 });
+		}
 	}
 
 	auto viewCollisions = Engine::Registry().view<Transform, SimpleCollision>();
@@ -41,7 +53,11 @@ void lab::EnemySystem::Run()
 			AnimatorPlay(animator, "skeleton:death");
 			skeleton.deathTimer--;
 			if (skeleton.deathTimer <= 0)
+			{
+				if (skeleton.type == boss1 || skeleton.type == boss2)
+					bossesAlive--;
 				reg.remove_all(entity);
+			}
 		}
 		else
 		{

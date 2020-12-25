@@ -29,6 +29,11 @@ TileProcessor CreateObjectFunction(String name_,UInt32 depth_,Bool includeCollis
                 sprite.scale *= 0.4f;
                 auto& heart = reg_.emplace<Heart>(entity);
             }
+            else if (name_ == "SilverHeart")
+            {
+                sprite.scale *= 0.4f;
+                auto& silverHeart = reg_.emplace<SilverHeart>(entity);
+            }
         }
         if(includeCollision_)
         {
