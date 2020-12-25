@@ -16,6 +16,8 @@ namespace ancient_defenders
     void LoadPath();
     void LoadTowerSpots();
 
+    void SetupEndScreen(Engine& engine_, Bool goodEnd = true);
+
     class TeamGame : public Game
     {
         inline String GetIniFile() override
