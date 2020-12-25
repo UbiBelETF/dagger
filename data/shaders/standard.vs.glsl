@@ -12,6 +12,7 @@ layout (location = 6) in vec2 ai_QuadPivot;
 layout (location = 7) in vec4 ai_QuadColor;
 layout (location = 8) in vec2 ai_Scale;
 layout (location = 9) in float ai_Rotation;
+layout (location = 10) in float ai_IsUI;
 
 uniform mat4 u_Projection;
 uniform mat4 u_Viewport;
@@ -42,6 +43,10 @@ void main()
 		cosRotation * recenteredVertexPosition.x - sinRotation * recenteredVertexPosition.y, 
 		sinRotation * recenteredVertexPosition.x + cosRotation * recenteredVertexPosition.y);
 
-	gl_Position = u_Projection * u_Viewport * u_Camera * 
-		vec4(rotatedVertexPosition + ai_QuadPosition.xy, -ai_QuadPosition.z, 1.0f);
+	vec4 position = vec4(rotatedVertexPosition + ai_QuadPosition.xy, -ai_QuadPosition.z, 1.0f);
+
+	if(ai_IsUI < 0.5f)
+		gl_Position = u_Projection * u_Viewport * u_Camera * position;
+	else
+		gl_Position = u_Projection * u_Viewport * position;
 }

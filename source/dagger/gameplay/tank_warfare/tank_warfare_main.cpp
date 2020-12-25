@@ -114,10 +114,11 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     
     //tank1
     CreateTankCharacter(1, { -150, 0, 3 }, "tank1");
+    CreateUIBars({-250, 250, 0}, 1);
 
     //tank2
     CreateTankCharacter(2, { 150, 0, 3 }, "tank2");
-
+    CreateUIBars({250, 250, 0}, 2);
 }
 
 void tank_warfare::SetupStartScreen(Engine& engine_)

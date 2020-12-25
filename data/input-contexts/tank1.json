@@ -1,19 +1,19 @@
 {
-	"context-name": "tank1",
+	"context-name": "tank2",
 	"commands": [
 		{ "command-name": "driveLeftRight", 
 		  "actions": [
-			{ "trigger": "KeyA", "value": -1 },
-			{ "trigger": "KeyD", "value": 1 }		
+			{ "trigger": "KeyLeft", "value": -1 },
+			{ "trigger": "KeyRight", "value": 1 }		
 		] }, 
 		{ "command-name": "driveUpDown", 
 		  "actions": [
-			{ "trigger": "KeyW", "value": 1 },
-			{ "trigger": "KeyS", "value": -1 }		
+			{ "trigger": "KeyUp", "value": 1 },
+			{ "trigger": "KeyDown", "value": -1 }		
 		] }, 
 		{ "command-name": "fire", 
 		  "actions": [
-			{ "trigger": "KeySpace", "value": 1 }
+			{ "trigger": "KeyRightControl", "value": 1 }
 		] }
 	]
 }

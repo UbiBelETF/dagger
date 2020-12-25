@@ -43,6 +43,12 @@ void TankStatsSystem::Run()
             tank.lives--;
         }
 
+        if (tank.lives > 0)
+        {
+            if (tank.id == 1 && m_LifeNumPlayerOne < tank.lives) m_LifePlayerOne = true;
+            if (tank.id == 2 && m_LifeNumPlayerTwo < tank.lives) m_LifePlayerTwo = true;
+        }
+
         for (auto entityHS : viewHS)
         {
             auto& ts = viewHS.get<TankStats>(entityHS);
@@ -51,65 +57,58 @@ void TankStatsSystem::Run()
 
             if (tank.id == ts.id && ts.type == EStatType::Health)
             {
-                t.position = transform.position;
-                t.position.y += (sprite.size.y / 2 + 5);
                 if (tank.toBeDestroyed) ts.toBeDestroyed = true;
 
                 if (s.size.x > (tank.health / tank.maxHealth * ts.barWidth) || tank.zeroHealth)
                 {
-                    s.size.x -= 0.1;
-                    s.color.a = 1;
-                    ts.barTime = ts.maxBarTime;
+                    s.size.x -= 0.8;
+                    if (ts.startingPosition.x < 0) t.position.x -= 0.4;
+                    if (ts.startingPosition.x > 0) t.position.x += 0.4;
                     if (s.size.x <= 0.0)
                     {
                         tank.zeroHealth = false;
+                        t.position = ts.startingPosition;
                     }
                 }
                 else if (s.size.x < (tank.health / tank.maxHealth * ts.barWidth))
                 {
                     s.size.x = tank.health / tank.maxHealth * ts.barWidth;
-                    s.color.a = 1;
-                    ts.barTime = ts.maxBarTime;
-                }
-                else
-                {
-                    ts.barTime -= Engine::DeltaTime();
-                    if (ts.barTime < -1) ts.barTime = 0;
-                    if (ts.barTime <= 0)
-                    {
-                        s.color.a = 0;
-                    }
                 }
             }
 
             if (tank.id == ts.id && ts.type == EStatType::Shield)
             {
-                t.position = transform.position;
-                t.position.y += (sprite.size.y / 2 + 8);
                 if (tank.toBeDestroyed) ts.toBeDestroyed = true;
 
                 if (s.size.x > (tank.shield / tank.maxShield * ts.barWidth))
                 {
                     s.color.a = 1;
-                    ts.barTime = ts.maxBarTime;
-                    s.size.x -= 0.1;
+                    s.size.x -= 0.8;
+                    if (ts.startingPosition.x < 0) t.position.x -= 0.4;
+                    if (ts.startingPosition.x > 0) t.position.x += 0.4;
                 }
                 else if (s.size.x < (tank.shield / tank.maxShield * ts.barWidth))
                 {
                     s.size.x = tank.shield / tank.maxShield * ts.barWidth;
                     s.color.a = 1;
-                    ts.barTime = ts.maxBarTime;
                 }
-                else
+                else if (tank.shield == 0)
                 {
-                    ts.barTime -= Engine::DeltaTime();
-                    if (ts.barTime < -1) ts.barTime = 0;
-                    if (ts.barTime <= 0)
-                    {
-                        s.color.a = 0;
-                    }
+                    t.position = ts.startingPosition;
+                    s.color.a = 0;
                 }
             }
+
+            if (tank.id == ts.id && ts.type == EStatType::Life)
+            {
+                if (tank.lives < ts.life)
+                {
+                    ts.toBeDestroyed = true;
+                    if (tank.id == 1) m_LifeNumPlayerOne--;
+                    if (tank.id == 2) m_LifeNumPlayerTwo--;
+                }
+            }
+
         }
 
         if (tank.powerDuration > 0)
@@ -129,6 +128,21 @@ void TankStatsSystem::Run()
         }
 
     }
+
+    if (m_LifePlayerOne)
+    {
+        m_LifeNumPlayerOne++;
+        AddHeart({ -250, 250, 0 }, 1, m_LifeNumPlayerOne);
+        m_LifePlayerOne = false;
+    }
+
+    if (m_LifePlayerTwo)
+    {
+        m_LifeNumPlayerTwo++;
+        AddHeart({ 250, 250, 0 }, 2, m_LifeNumPlayerTwo);
+        m_LifePlayerTwo = false;
+    }
+
 }
 
 void tank_warfare::CreateTankCharacter(int playerNo_, Vector3 pos_, String input_)
@@ -148,18 +162,24 @@ void tank_warfare::CreateTankCharacter(int playerNo_, Vector3 pos_, String input
     collision.size = sprite.size;
     input.contexts.push_back(input_);
     AssignSprite(sprite, "jovanovici:tank:tank3_side");
+}
+
+void tank_warfare::CreateUIBars(Vector3 pos_, int id_)
+{
+    auto& reg = Engine::Registry();
 
     auto entityH = reg.create();
     auto& spriteH = reg.emplace<Sprite>(entityH);
     auto& transformH = reg.emplace<Transform>(entityH);
     auto& statsH = reg.emplace<TankStats>(entityH);
     AssignSprite(spriteH, "EmptyWhitePixel");
-    spriteH.size = { 0, 2 };
+    spriteH.size = { 200, 20 };
     spriteH.color = { 1, 0, 0, 1 };
+    spriteH.UseAsUI();
     transformH.position = pos_;
-    transformH.position.y += (sprite.size.y / 2 + 5);
-    statsH.id = tank.id;
-    statsH.barWidth = sprite.size.x;
+    statsH.startingPosition = pos_;
+    statsH.id = id_;
+    statsH.barWidth = 200;
     statsH.type = EStatType::Health;
 
     auto entityS = reg.create();
@@ -167,13 +187,36 @@ void tank_warfare::CreateTankCharacter(int playerNo_, Vector3 pos_, String input
     auto& transformS = reg.emplace<Transform>(entityS);
     auto& statsS = reg.emplace<TankStats>(entityS);
     AssignSprite(spriteS, "EmptyWhitePixel");
-    spriteS.size = { 0, 2 };
+    spriteS.size = { 0, 20 };
     spriteS.color = { 0, 0, 1, 1 };
+    spriteS.UseAsUI();
     transformS.position = pos_;
-    transformS.position.y += (sprite.size.y / 2 + 8);
-    statsS.id = tank.id;
-    statsS.barWidth = sprite.size.x;
+    statsS.startingPosition = pos_;
+    statsS.startingPosition.y -= 25;
+    transformS.position.y -= 25;
+    statsS.id = id_;
+    statsS.barWidth = 200;
     statsS.type = EStatType::Shield;
+}
+
+void tank_warfare::AddHeart(Vector3 pos_, int id_, int lives_)
+{
+    auto& reg = Engine::Registry();
+
+    auto entityL = reg.create();
+    auto& spriteL = reg.emplace<Sprite>(entityL);
+    auto& statsL = reg.emplace<TankStats>(entityL);
+    AssignSprite(spriteL, "jovanovici:powerup:heart");
+    spriteL.UseAsUI();
+    spriteL.size *= 1.5;
+    auto& transformL = reg.emplace<Transform>(entityL);
+    transformL.position = pos_;
+    transformL.position.y -= 50;
+    if (id_ == 1) transformL.position.x -= 89 - ((lives_ - 1) * 31);
+    if (id_ == 2) transformL.position.x += 89 - ((lives_ - 1) * 31);
+    statsL.life = lives_;
+    statsL.id = id_;
+    statsL.type = EStatType::Life;
 }
 
 void TankStatsSystem::SpinUp()

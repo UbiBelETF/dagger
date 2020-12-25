@@ -8,7 +8,10 @@ using namespace dagger;
 
 namespace tank_warfare
 {
+
 	void CreateTankCharacter(int playerNo_, Vector3 pos_, String input_);
+	void CreateUIBars(Vector3 pos_, int id_);
+	void AddHeart(Vector3 pos_, int id_, int lives_);
 
 	enum struct ETankOrientation
 	{
@@ -54,6 +57,8 @@ namespace tank_warfare
 		Float32 maxBarTime{ 0.8 };
 		EStatType type{ EStatType::Health };
 		bool toBeDestroyed{ false };
+		Vector3 startingPosition{ 0, 0, 0 };
+		int life{ 1 };
 	};
 
 	class TankStatsSystem
@@ -66,6 +71,10 @@ namespace tank_warfare
 		}
 
 		Float32 m_Print{ 0 };
+		bool m_LifePlayerOne{ false };
+		bool m_LifePlayerTwo{ false };
+		int m_LifeNumPlayerOne{ 0 };
+		int m_LifeNumPlayerTwo{ 0 };
 
 		void SpinUp() override;
 		void Run() override;

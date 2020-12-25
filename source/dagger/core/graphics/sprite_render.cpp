@@ -38,7 +38,7 @@ void SpriteRenderSystem::SpinUp()
     glBindBuffer(GL_ARRAY_BUFFER, m_InstanceQuadInfoVBO);
 	glBufferData(GL_ARRAY_BUFFER, s_BufferSize, nullptr, GL_STREAM_DRAW);
 
-    const StaticArray<Pair<UInt32, UInt32>, 8> sizesAndStrides = {
+    const StaticArray<Pair<UInt32, UInt32>, 9> sizesAndStrides = {
         pair(2, 0),     // #2: sub size
         pair(2, 2),     // #3: sub origin
         pair(2, 4),     // #4: sub origin
@@ -47,6 +47,7 @@ void SpriteRenderSystem::SpinUp()
         pair(4, 11),    // #7: quad tint color
         pair(2, 15),    // #8: scale
         pair(1, 17),    // #9: rotation
+        pair(1, 18),    // #10: is UI?
     };
 
     for (UInt32 i = 0; i < sizesAndStrides.size(); i++)

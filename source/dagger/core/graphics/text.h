@@ -24,5 +24,5 @@ struct Text
 		Set(font_, message_, { 0, 0, 0 }, size_);
 	}
 
-	void Set(String font_, String message_, Vector3 pos_, Float32 size_ = 1);
+	void Set(String font_, String message_, Vector3 pos_ = { 0, 0, 0}, Float32 size_ = 1, Bool ui_ = true);
 };
