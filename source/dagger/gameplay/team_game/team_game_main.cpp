@@ -134,7 +134,7 @@ void team_game::SetupWorld(Engine& engine_)
         AssignSprite(sprite, "TeamGame:Other:Chest");
 
         auto& transform = reg1.get_or_emplace<Transform>(entity);
-        transform.position = { 468, 270, 1 };
+        transform.position = { 3320, 1130, 1 };
 
         auto& collider = reg1.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;

@@ -1,2 +1,9 @@
-Other DiamondRed 4.0 48.0 48.0 -430.0 50.0 SPEED 2.0 5.5
-Other DiamondGreen 4.0 48.0 48.0 200.0 50.0 JUMP 1.5 5.0
+Other DiamondRed 4.0 48.0 48.0 -450.0 50.0 SPEED 2.0 5.5
+Other DiamondRed 4.0 48.0 48.0 775.0 1200.0 SPEED 3.0 5.5
+
+
+
+
+
+
+Other DiamondGreen 4.0 48.0 48.0 2700.0 0.0 JUMP 1.6 5.0
