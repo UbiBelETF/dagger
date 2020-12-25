@@ -58,9 +58,9 @@ void TankStatsSystem::Run()
 
                 if (s.size.x > (tank.health / tank.maxHealth * ts.barWidth) || tank.zeroHealth)
                 {
-                    s.size.x -= 0.5;
-                    if (ts.startingPosition.x < 0) t.position.x -= 0.25;
-                    if (ts.startingPosition.x > 0) t.position.x += 0.25;
+                    s.size.x -= 0.8;
+                    if (ts.startingPosition.x < 0) t.position.x -= 0.4;
+                    if (ts.startingPosition.x > 0) t.position.x += 0.4;
                     if (s.size.x <= 0.0)
                     {
                         tank.zeroHealth = false;
@@ -80,9 +80,9 @@ void TankStatsSystem::Run()
                 if (s.size.x > (tank.shield / tank.maxShield * ts.barWidth))
                 {
                     s.color.a = 1;
-                    s.size.x -= 0.5;
-                    if (ts.startingPosition.x < 0) t.position.x -= 0.25;
-                    if (ts.startingPosition.x > 0) t.position.x += 0.25;
+                    s.size.x -= 0.8;
+                    if (ts.startingPosition.x < 0) t.position.x -= 0.4;
+                    if (ts.startingPosition.x > 0) t.position.x += 0.4;
                 }
                 else if (s.size.x < (tank.shield / tank.maxShield * ts.barWidth))
                 {
@@ -205,11 +205,12 @@ void tank_warfare::AddHeart(Vector3 pos_, int id_, int lives_)
     auto& statsL = reg.emplace<TankStats>(entityL);
     AssignSprite(spriteL, "jovanovici:powerup:heart");
     spriteL.UseAsUI();
+    spriteL.size *= 1.5;
     auto& transformL = reg.emplace<Transform>(entityL);
     transformL.position = pos_;
     transformL.position.y -= 50;
-    if (id_ == 1) transformL.position.x -= 93 - ((lives_ - 1) * 23);
-    if (id_ == 2) transformL.position.x += 93 - ((lives_ - 1) * 23);
+    if (id_ == 1) transformL.position.x -= 89 - ((lives_ - 1) * 31);
+    if (id_ == 2) transformL.position.x += 89 - ((lives_ - 1) * 31);
     statsL.life = lives_;
     statsL.id = id_;
     statsL.type = EStatType::Life;
