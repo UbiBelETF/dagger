@@ -19,6 +19,8 @@ void CollisionSystem::SpinUp()
 void CollisionSystem::Run()
 {
     auto* board = Engine::GetDefaultResource<Map<SInt32, Sequence<Entity>>>();
+    if (board->size() == 0 && cachedStatics.size() > 0)
+        cachedStatics.clear();
 
     const auto dynamics = Engine::Registry().view<Collider, Transform, PlayerCharacter>();
 
@@ -41,12 +43,12 @@ void CollisionSystem::Run()
 
     while (it != dynamics.end())
     {
-        Sequence<Entity> statics;
+        Sequence<Entity> okStatics, statics;
 
         auto& [dynamicCollider, dynamicTransform] = dynamics.get<Collider, Transform>(*it);
         const auto dynamicIndex = Neighborhood(dynamicTransform.position.x);
 
-        if (!cachedStatics.contains(dynamicIndex))
+        if (cachedStatics.find(dynamicIndex) != cachedStatics.end())
         {
             for (SInt32 i = -1; i < 2; i++) // -1, 0, 1
             {
@@ -62,6 +64,18 @@ void CollisionSystem::Run()
         else
         {
             statics = cachedStatics[dynamicIndex];
+        }
+
+        for (auto id : statics)
+        {
+            if (Engine::Registry().valid(id) && Engine::Registry().has<Collider, Transform>(id))
+                okStatics.push_back(id);
+        }
+
+        if (okStatics.size() != statics.size())
+        {
+            statics = okStatics;
+            cachedStatics[dynamicIndex] = statics;
         }
 
         for (auto id : statics)
