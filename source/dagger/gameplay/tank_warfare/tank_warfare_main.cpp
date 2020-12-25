@@ -112,9 +112,11 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     col3.size.y -= 35;
     
     //tank1
-    CreateTankCharacter({ 35, 0, 3 }, "tank1");
+    CreateTankCharacter({ 35, 0, 3 }, "tank1", 1);
+    CreateUIBars({-250, 250, 0}, 1);
 
     //tank2
-    CreateTankCharacter({ -35, 0, 3 }, "tank2");
+    CreateTankCharacter({ -35, 0, 3 }, "tank2", 2);
+    CreateUIBars({250, 250, 0}, 2);
 
 }
