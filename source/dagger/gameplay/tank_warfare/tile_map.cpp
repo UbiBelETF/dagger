@@ -20,7 +20,9 @@ Entity tank_warfare::CreateBuilding(Registry& reg_, SInt32 x_, SInt32 y_) {
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", 2));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
-	col.size = sprite.size;
+	col.size.x = sprite.size.x;
+	col.size.y = sprite.size.y / 2;
+	col.pivot = { -0.5f,-0.8f };
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
@@ -33,7 +35,9 @@ Entity tank_warfare::CreateBankBuilding(Registry& reg_, SInt32 x_, SInt32 y_) {
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", 8));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
-	col.size = sprite.size;
+	col.size.x = sprite.size.x;
+	col.size.y = sprite.size.y / 2;
+	col.pivot = { -0.5f,-0.8f };
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
@@ -47,7 +51,9 @@ Entity tank_warfare::CreateBiggestBuilding(Registry& reg_, SInt32 x_, SInt32 y_)
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 4) + 5));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
-	col.size = sprite.size;
+	col.size.x = sprite.size.x;
+	col.size.y = sprite.size.y / 2;
+	col.pivot = { -0.5f,-0.8f };
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
@@ -61,7 +67,9 @@ Entity tank_warfare::CreateSmallestBuilding(Registry& reg_, SInt32 x_, SInt32 y_
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 15) + 15));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.5;
-	col.size = sprite.size;
+	col.size.x = sprite.size.x;
+	col.size.y = sprite.size.y / 2;
+	col.pivot = { -0.5f,-0.8f };
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
@@ -75,7 +83,9 @@ Entity tank_warfare::CreateMediumBuilding(Registry& reg_, SInt32 x_, SInt32 y_)
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 6) + 9));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.7;
-	col.size = sprite.size;
+	col.size.x = sprite.size.x;
+	col.size.y = sprite.size.y / 2;
+	col.pivot = { -0.5f,-0.8f };
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
@@ -102,7 +112,9 @@ Entity tank_warfare::CreateStorage(Registry& reg_, SInt32 x_, SInt32 y_)
 	AssignSprite(sprite, fmt::format("jovanovici:building:building{}", (rand() % 2) + 5));
 	sprite.position = { x_ * 48, y_ * 48, 1.5 };
 	sprite.size *= 1.3;
-	col.size = sprite.size;
+	col.size.x = sprite.size.x;
+	col.size.y = sprite.size.y / 2;
+	col.pivot = { -0.5f,-0.8f };
 	auto& tra = reg_.emplace<Transform>(entity);
 	tra.position = { x_ * 48, y_ * 48, 1.5 };
 	return entity;
