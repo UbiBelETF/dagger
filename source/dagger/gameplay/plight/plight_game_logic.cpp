@@ -232,11 +232,7 @@ void PlightGameLogicSystem::OnEndOfFrame()
        for (auto entity : view2) {
            Engine::Registry().remove_all(entity);
        }
-	   
-	   
-
-      
-      
+	     
     }
 	auto viewLS1 = Engine::Registry().view<PlightIntro, Sprite>();
 	auto it = viewLS1.begin();

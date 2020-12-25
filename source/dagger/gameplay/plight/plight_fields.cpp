@@ -68,7 +68,7 @@ void FieldsSystem::Run()
 				if (cstats.currentStamina > defenseField.initialStaminaCost) {
 					defenseField.fieldActive = true;
 					auto& defSprite = Engine::Registry().emplace<Sprite>(defenseField.defenseFieldE);
-					AssignSprite(defSprite, "Plight:fields:SPAWN:defensefield_spawn_1");
+					AssignSprite(defSprite, "Plight:fields:defensefield");
 					defSprite.scale = { 0.4f,0.4f };
 					auto& defTransform = Engine::Registry().emplace<Transform>(defenseField.defenseFieldE);
 					auto& defPhysics = Engine::Registry().emplace<PhysicsObject>(defenseField.defenseFieldE);

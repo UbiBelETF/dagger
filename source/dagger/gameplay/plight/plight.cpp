@@ -240,6 +240,7 @@ void plight::ResetCharacters()
         character.character.dashing = false;
         character.character.running = false;
         character.character.resting = false;
+        character.cstats.healing = false;
         character.character.dead = false;
 
         Float32 x_weapon = character.character.weaponOffset * cos(character.crosshair.angle);
