@@ -100,7 +100,7 @@ void ControllerFSM::InAir::Run(ControllerFSM::StateComponent& state_)
         physics_.velocity.y += char_.speed.y;
         char_.jump = true;
         //char_.doubleJump = false;
-        //JUMP ONLY WHEN RELEASED KEY(Not holding)
+        //TODO: JUMP ONLY WHEN RELEASED KEY(Not holding)
     }
     if (EPSILON_NOT_ZERO(input_.Get("jump")) && physics_.velocity.y <GetGravity()*Engine::DeltaTime()&& !char_.doubleJump)
     {
@@ -188,32 +188,30 @@ void ControllerFSM::Dead::Enter(ControllerFSM::StateComponent& state_)
 }
 void ControllerFSM::Dead::Run(ControllerFSM::StateComponent& state_)
 {
-    /*Engine::Registry().clear();
-    team_game::SetupWorld_Demo(Engine::Instance());*/
-
     auto& char_ = Engine::Registry().get<BrawlerCharacter>(state_.entity);
     auto& sprite_ = Engine::Registry().get<Sprite>(state_.entity);
     auto& transform_ = Engine::Registry().get<Transform>(state_.entity);
     transform_.position = { 2550,26,0 };
+    auto view = Engine::Registry().view<BrawlerCharacter,Transform>();
+    for (auto entity : view)
+    {
+        auto& char_ = Engine::Registry().get<BrawlerCharacter>(state_.entity);
+        auto& transform_ = Engine::Registry().get<Transform>(state_.entity);
+        if (char_.isEnemy)
+        {
+            char_.healthHearts = 9;
+            transform_.position = { 2475,1125 ,0};
+        }
+        else 
+        {
+            char_.healthHearts = 3;
+            transform_.position = { 0,100 ,0};
+        }
+        
+
+    }
     char_.healthHearts = 3;
     GoTo(ECharacterStates::Idle, state_);
-    /*if (!char_.dead)
-    {
-        if (EPSILON_ZERO(char_.gotHit))
-        {
-            char_.gotHit = 0.7f;
-        }
-        else
-        {
-            char_.gotHit -= Engine::DeltaTime();
-            if (char_.gotHit <= 0)
-            {
-                auto& animator_ = Engine::Registry().get<Animator>(state_.entity);
-                AnimatorStop(animator_);
-            }
-
-        }
-    }*/
 }
 DEFAULT_EXIT(ControllerFSM, Dead);
 
@@ -228,14 +226,14 @@ void ControllerFSM::Interact::Run(ControllerFSM::StateComponent& state_)
         if (t_.position.x > 2530 && t_.position.x<2575 && t_.position.y>-27 && t_.position.y < 26)
         {
             t_.position = { 2160, 1175, 0.0f };
-            auto view = Engine::Registry().view<BrawlerCharacter>();
+           /* auto view = Engine::Registry().view<BrawlerCharacter>();
             for (auto entity : view)
             {
                 //THIS IS IN CASE WE WANT THE CAMERA TO FOLLOW THE BOSS AND OUR CHARACTER
                 //if(entity!=state_.entity)  Engine::Registry().emplace<team_game::CameraFollow>(entity);
                 auto& brawler = Engine::Registry().get<BrawlerCharacter>(entity);
                 brawler.inRoom = true;
-            }
+            }*/
         }
         else if (EPSILON_NOT_ZERO(input_.Get("jump"))) GoTo(ECharacterStates::InAir, state_);
         else if (EPSILON_NOT_ZERO(input_.Get("run"))) GoTo(ECharacterStates::Running, state_);

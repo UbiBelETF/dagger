@@ -22,8 +22,7 @@ void team_game::BossAISystem::Run()
     for (auto entity1 : view)
     {
         auto& bossCharacter = Engine::Registry().get<BrawlerCharacter>(entity1);
-        if (bossCharacter.inRoom)
-        {
+        
             for (auto entity2 : viewCollisions)
             {
                 if (entity2 != entity1)
@@ -32,7 +31,6 @@ void team_game::BossAISystem::Run()
                     auto& bossTransform = Engine::Registry().get<Transform>(entity1);
                     auto& bossAI = Engine::Registry().get<BossAI>(entity1);
                     auto& sprite = Engine::Registry().get<Sprite>(entity1);
-                    Logger::info( std::abs(bossTransform.position.y - enemyTransform.position.y));
                     if (enemyTransform.position.x < bossTransform.position.x - bossCharacter.attackSize/2 && std::abs(bossTransform.position.y - enemyTransform.position.y) <50)
                     {
                         bossAI.run = -1;
@@ -55,7 +53,7 @@ void team_game::BossAISystem::Run()
                     }
                 }
             }
-        }
+        
 
     }
 
