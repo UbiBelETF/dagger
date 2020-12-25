@@ -30,7 +30,7 @@ namespace CollisionType {
 class CollisionSystem : public System
 {
     void ResolveCharWall(Collision& colChar_, Collision& colWall_, Transform& trChar_, Transform& trWall_);
-
+    void ResolveCharChar(Collision& colChar_, Collision& colChar2_, Transform& trChar_, Transform& trChar2_);
 public:
     inline String SystemName() { return "Collision System"; }
 

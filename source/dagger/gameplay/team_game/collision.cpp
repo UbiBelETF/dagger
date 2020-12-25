@@ -51,6 +51,10 @@ void CollisionSystem::Run()
                 {
                     ResolveCharWall(col2, col1, tr2, tr1);
                 }
+                else if (viewChars.contains(*it1) && viewChars.contains(*it2)) {
+                    ResolveCharChar(col2, col1, tr2, tr1);
+                    ResolveCharChar(col1, col2, tr1, tr2);
+                }
                 else // Generic collision
                 {
                     col1.colided = true;
@@ -77,6 +81,16 @@ void CollisionSystem::ResolveCharWall(Collision& colChar_, Collision& colWall_, 
         trChar_.position.x -= colSides.x / 10;
         trChar_.position.y -= colSides.y / 10;
     } 
+}
+void CollisionSystem::ResolveCharChar(Collision& colChar_, Collision& colChar2_, Transform& trChar_, Transform& trChar2_)
+{
+    //Logger::info("CharWall collision");
+    while (colChar_.IsCollided(trChar_.position, colChar2_, trChar2_.position))
+    {
+        Vector2 colSides = colChar_.GetCollisionSides(trChar_.position, colChar2_, trChar2_.position);
+        trChar_.position.x -= colSides.x / 5;
+        trChar_.position.y -= colSides.y / 5;
+    }
 }
 
 bool Collision::IsCollided(const Vector3& pos_, const Collision& other_, const Vector3& posOther_)
