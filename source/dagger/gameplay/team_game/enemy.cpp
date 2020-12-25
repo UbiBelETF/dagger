@@ -103,7 +103,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	else {
 		AnimatorPlay(animator, run);
 	}
-	if (glm::abs(destinationX - transform.position.x) < 0.1f && glm::abs(destinationY - transform.position.y) < 0.1f)
+	if (glm::abs(destinationX - transform.position.x) < 1.0f && glm::abs(destinationY - transform.position.y) < 1.0f)
 	{
 		ctrl.postition = (ctrl.postition + 1) % ctrl.numberOfPoints;
 	}

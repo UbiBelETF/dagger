@@ -78,7 +78,7 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
     legend['J'] = &level_generator::jovica::CreateBottomRightWall;
     legend['q'] = &level_generator::jovica::CreateBottomLeftConcWall;
     legend['p'] = &level_generator::jovica::CreateBottomRightConcWall;
-    legend['d'] = &level_generator::jovica::CreateTopLeftConcWall;
+    legend['h'] = &level_generator::jovica::CreateTopLeftConcWall;
     legend['!'] = &level_generator::jovica::CreateTopRightConcWall;
     legend['l'] = &level_generator::jovica::CreateBottomLeftConcWallS;
     legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
@@ -97,6 +97,7 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
     legend['f'] = &level_generator::jovica::CreateTorch;
     legend['o'] = &level_generator::jovica::CreateBarrel;
     legend['s'] = &level_generator::jovica::CreateSmallTable;
+    legend['|'] = &level_generator::jovica::TopLeftSide;
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
     //slime1
@@ -595,7 +596,7 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
     auto& en11 = reg_.emplace<EnemyDescription>(goblin3);
     en11.shape = ECharacterShape::Goblin;
 
-    en11.enemyIdle = true;
+    en11.enemyIdle = false;
 
     auto& enemyCollision11 = reg_.emplace<SimpleCollision>(goblin3);
     enemyCollision11.size = enemySprite11.size;
