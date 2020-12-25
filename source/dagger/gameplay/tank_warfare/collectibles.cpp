@@ -25,6 +25,7 @@ void CollectibleSystem::Run()
 	{
 		auto& col = view.get<SimpleCollision>(entity);
 		auto& collectible = view.get<Collectible>(entity);
+		auto& t = view.get<Transform>(entity);
 
 		if (col.colided)
 		{
@@ -58,6 +59,33 @@ void CollectibleSystem::Run()
 					s_NumPowers--;
 				}
 				collectible.toBeDestroyed = true;
+			}
+
+			if (Engine::Registry().has<Transform>(col.colidedWith))
+			{
+				auto& tra = Engine::Registry().get<Transform>(col.colidedWith);
+				Vector2 collisionSides = col.GetCollisionSides(t.position, col, tra.position);
+
+				do
+				{
+					Float32 dt = Engine::DeltaTime();
+					if (collisionSides.x > 0)
+					{
+						t.position.x -= 100 * dt;
+					}
+					if (collisionSides.x < 0)
+					{
+						t.position.x += 100 * dt;
+					}
+					if (collisionSides.y > 0)
+					{
+						t.position.y -= 100 * dt;
+					}
+					if (collisionSides.y < 0)
+					{
+						t.position.y += 100 * dt;
+					}
+				} while (col.IsCollided(t.position, col, tra.position));
 			}
 			col.colided = false;
 		}
@@ -136,8 +164,8 @@ void tank_warfare::AddCollectible(bool isPower_)
 
 	auto& transform = reg.emplace<Transform>(entity);
 	int i = rand() % 15 - 6;
-	int j = rand() % 17 - 7;
-	transform.position = { 48 * i, 48 * j, 2 };
+	int j = rand() % 15 - 7;
+	transform.position = { 48 * i, 48 * j, 1 };
 	
 	auto& col = reg.emplace<SimpleCollision>(entity);
 }

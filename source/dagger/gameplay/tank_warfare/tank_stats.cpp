@@ -168,6 +168,22 @@ void tank_warfare::CreateUIBars(Vector3 pos_, int id_)
 {
     auto& reg = Engine::Registry();
 
+  /*  auto entHBB = reg.create();
+    auto& sprHBB = reg.emplace<Sprite>(entHBB);
+    auto& traHBB = reg.emplace<Transform>(entHBB);
+    AssignSprite(sprHBB, "jovanovici:health_bar2");
+    sprHBB.UseAsUI();
+    traHBB.position = pos_;
+    traHBB.position.z += 2;
+
+    auto entH = reg.create();
+    auto& sprH = reg.emplace<Sprite>(entH);
+    auto& traH = reg.emplace<Transform>(entH);
+    AssignSprite(sprH, "jovanovici:health_bar1");
+    sprH.UseAsUI();
+    traH.position = pos_;
+    traH.position.x -= 100;
+    */
     auto entityH = reg.create();
     auto& spriteH = reg.emplace<Sprite>(entityH);
     auto& transformH = reg.emplace<Transform>(entityH);
@@ -177,6 +193,7 @@ void tank_warfare::CreateUIBars(Vector3 pos_, int id_)
     spriteH.color = { 1, 0, 0, 1 };
     spriteH.UseAsUI();
     transformH.position = pos_;
+    //transformH.position.z += 1;
     statsH.startingPosition = pos_;
     statsH.id = id_;
     statsH.barWidth = 200;
