@@ -1,6 +1,6 @@
 {
   "animation-name": "Plight:fields:DEFENSE_FIELD_SPAWN",
-  "animation-length-ms": 500,
+  "animation-length-ms": 700,
   "animation-frames": [
     { "texture-name": "Plight:fields:SPAWN:defensefield_spawn_1" },
     { "texture-name": "Plight:fields:SPAWN:defensefield_spawn_2" },

@@ -71,19 +71,21 @@ void FieldsSystem::Run()
 					auto& defSprite = Engine::Registry().get_or_emplace<Sprite>(defenseField.defenseFieldE);
 					AssignSprite(defSprite, "Plight:fields:SPAWN:defensefield_spawn_1");
 					defSprite.scale = { 0.4f,0.4f };
-					auto& defTransform = Engine::Registry().get_or_emplace<Transform>(defenseField.defenseFieldE);
-					auto& defPhysics = Engine::Registry().emplace<PhysicsObject>(defenseField.defenseFieldE);
-					auto& defCollision = Engine::Registry().emplace<PlightCollision>(defenseField.defenseFieldE);
-					auto& anim = Engine::Registry().emplace<Animator>(defenseField.defenseFieldE);
-
-					
-					defSprite.position = t.position;
-					defTransform.position = t.position;
 					defSprite.position.z = 70.f;
+					defSprite.position = t.position;
+
+					auto& defTransform = Engine::Registry().get_or_emplace<Transform>(defenseField.defenseFieldE);
+					defTransform.position = t.position;
 					defTransform.position.z = 70.f;
+
+					auto& defPhysics = Engine::Registry().emplace<PhysicsObject>(defenseField.defenseFieldE);
 					defPhysics.my_groups.push_back(1);
 					defPhysics.collision_groups.push_back(1);
+
+					auto& defCollision = Engine::Registry().emplace<PlightCollision>(defenseField.defenseFieldE);
 					defCollision.size = { defenseField.fieldSize,defenseField.fieldSize };
+
+					auto& anim = Engine::Registry().emplace<Animator>(defenseField.defenseFieldE);
 					AnimatorPlay(anim, "Plight:fields:DEFENSE_FIELD_SPAWN");
 					cstats.healing = true;
 				}
