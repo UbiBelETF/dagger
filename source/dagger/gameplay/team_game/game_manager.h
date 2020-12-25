@@ -59,4 +59,6 @@ namespace team_game
             currentLevel = newLevel_;
         }
     };
+
+    void SaveOnBoard(Entity entity_, Float32 position_);
 };

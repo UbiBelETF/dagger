@@ -72,7 +72,7 @@ void GameManagerSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
     }
 }
 
-void SaveOnBoard(Entity entity_, Float32 position_)
+void team_game::SaveOnBoard(Entity entity_, Float32 position_)
 {
     static auto* board = Engine::GetDefaultResource<Map<SInt32, Sequence<Entity>>>();
     auto neighborhood = Neighborhood(position_);
