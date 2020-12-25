@@ -63,7 +63,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 		GoTo(EEnemyState::Chasing, state_);
 	}
 
-	
+
 	FileInputStream inFile{ path.pathname };
 
 	Vector2 point;
@@ -86,7 +86,7 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	else if (transform.position.x > destinationX) {
 		ctrl.direction.x = -1;
 		sprite.scale.x = -1;
-		
+
 	}
 	else ctrl.direction.x = 0;
 	if (transform.position.y < destinationY) {
@@ -97,7 +97,12 @@ void EnemyFSM::Patrolling::Run(EnemyFSM::StateComponent& state_)
 	}
 	else { ctrl.direction.y = 0; }
 
-	AnimatorPlay(animator, run);
+	if (ctrl.enemyIdle) {
+		AnimatorPlay(animator, idle_);
+	}
+	else {
+		AnimatorPlay(animator, run);
+	}
 	transform.position.x += ctrl.direction.x * ctrl.speed * Engine::DeltaTime();
 	transform.position.y += ctrl.direction.y * ctrl.speed * Engine::DeltaTime();
 
@@ -150,6 +155,7 @@ void EnemyFSM::Chasing::Run(EnemyFSM::StateComponent& state_)
 
 	if (ctrl.shape != hero.shape)
 	{
+		AnimatorPlay(animator, run);
 		Vector2 direction = { heroTransform.position.x - t.position.x, heroTransform.position.y - t.position.y };
 
 		if (direction.x > 0.0f)
