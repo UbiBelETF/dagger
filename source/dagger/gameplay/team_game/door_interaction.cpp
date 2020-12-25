@@ -51,7 +51,7 @@ void DoorSystem::Run()
 				       
 					    auto& hero = Engine::Registry().get<CharacterController>(detect.who);
 
-					   // if (GetPickedUpp() == true)
+					    if (GetPickedUpp() == true)
 						{
 						statbody.enabled = false;
 						auto ui = Engine::Registry().create();
