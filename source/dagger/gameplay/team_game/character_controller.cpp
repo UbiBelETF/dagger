@@ -29,10 +29,10 @@ void CharacterControllerSystem::Run()
 				if (chController.canMove)
 				{
 					auto& input = Engine::Registry().get<InputReceiver>(state_.entity);
-					if (input.Get("goblinTransform") == 1) { idle = "among_them_animations:goblin_idle"; running = "among_them_animations:goblin_run"; chController.SetShape(ECharacterShape::Goblin); }
-					if (input.Get("slimeTransform") == 1) { idle = "among_them_animations:slime_idle"; running = "among_them_animations:slime_run"; chController.SetShape(ECharacterShape::Slime); }
-					if (input.Get("batTransform") == 1) { idle = "among_them_animations:bat"; running = "among_them_animations:bat"; chController.SetShape(ECharacterShape::Bat); }
-					if (input.Get("knightTransform") == 1) { idle = "among_them_animations:knight_idle"; running = "among_them_animations:knight_run"; chController.SetShape(ECharacterShape::Hero); }
+					if (input.Get("goblinTransform") == 1) { chController.idle = "among_them_animations:goblin_idle"; chController.running = "among_them_animations:goblin_run"; chController.SetShape(ECharacterShape::Goblin); }
+					if (input.Get("slimeTransform") == 1) { chController.idle = "among_them_animations:slime_idle"; chController.running = "among_them_animations:slime_run"; chController.SetShape(ECharacterShape::Slime); }
+					if (input.Get("batTransform") == 1) { chController.idle = "among_them_animations:bat"; chController.running = "among_them_animations:bat"; chController.SetShape(ECharacterShape::Bat); }
+					if (input.Get("knightTransform") == 1) { chController.idle = "among_them_animations:knight_idle"; chController.running = "among_them_animations:knight_run"; chController.SetShape(ECharacterShape::Hero); }
 					m_CharStateMachine.Run(state_);
 				}
 			});

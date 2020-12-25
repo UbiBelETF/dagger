@@ -131,6 +131,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(slime1);
 
+    auto visionCone = reg_.create();
+
+    reg_.emplace<Transform>(visionCone);
+
+    auto& vcSprite = reg_.emplace<Sprite>(visionCone);
+    AssignSprite(vcSprite, "AmongThem:circle");
+    vcSprite.size = det.size;
+
+    auto& vcFollow = reg_.emplace<Follow>(visionCone);
+    vcFollow.target = slime1;
+    vcFollow.offset.z = 25;
+
+    auto& vcCone = reg_.emplace<VisionCone>(visionCone);
+    vcCone.shape = ECharacterShape::Slime;
+
     //slime2
     auto slime2 = reg_.create();
     auto& enemyState2 = ATTACH_TO_FSM(EnemyFSM, slime2);
@@ -162,6 +177,22 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     det2.SetSize(en2.detectionArea);
 
     reg_.emplace<MovableBody>(slime2);
+
+    auto visionCone2 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone2);
+
+    auto& vcSprite2 = reg_.emplace<Sprite>(visionCone2);
+    AssignSprite(vcSprite2, "AmongThem:circle");
+    vcSprite2.size = det2.size;
+
+    auto& vcFollow2 = reg_.emplace<Follow>(visionCone2);
+    vcFollow2.target = slime2;
+    vcFollow2.offset.z = 25;
+
+    auto& vcCone2 = reg_.emplace<VisionCone>(visionCone2);
+    vcCone2.shape = ECharacterShape::Slime;
+
 
     //bat1
     auto bat1 = reg_.create();
@@ -195,6 +226,22 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(bat1);
 
+    auto visionCone3 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone3);
+
+    auto& vcSprite3 = reg_.emplace<Sprite>(visionCone3);
+    AssignSprite(vcSprite3, "AmongThem:circle");
+    vcSprite3.size = det3.size;
+
+    auto& vcFollow3 = reg_.emplace<Follow>(visionCone3);
+    vcFollow3.target = bat1;
+    vcFollow3.offset.z = 25;
+
+    auto& vcCone3 = reg_.emplace<VisionCone>(visionCone3);
+    vcCone3.shape = ECharacterShape::Bat;
+
+
     //goblin2
     auto goblin2 = reg_.create();
     auto& enemyState4 = ATTACH_TO_FSM(EnemyFSM, goblin2);
@@ -226,6 +273,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     det4.SetSize(en4.detectionArea);
 
     reg_.emplace<MovableBody>(goblin2);
+
+    auto visionCone4 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone4);
+
+    auto& vcSprite4 = reg_.emplace<Sprite>(visionCone4);
+    AssignSprite(vcSprite4, "AmongThem:circle");
+    vcSprite4.size = det4.size;
+
+    auto& vcFollow4 = reg_.emplace<Follow>(visionCone4);
+    vcFollow4.target = goblin2;
+    vcFollow4.offset.z = 25;
+
+    auto& vcCone4 = reg_.emplace<VisionCone>(visionCone4);
+    vcCone4.shape = ECharacterShape::Goblin;
 
     //bat2
     auto bat2 = reg_.create();
@@ -259,6 +321,22 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(bat2);
 
+    auto visionCone5 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone5);
+
+    auto& vcSprite5 = reg_.emplace<Sprite>(visionCone5);
+    AssignSprite(vcSprite5, "AmongThem:circle");
+    vcSprite5.size = det5.size;
+
+    auto& vcFollow5 = reg_.emplace<Follow>(visionCone5);
+    vcFollow5.target = bat2;
+    vcFollow5.offset.z = 25;
+
+    auto& vcCone5 = reg_.emplace<VisionCone>(visionCone5);
+    vcCone5.shape = ECharacterShape::Bat;
+
+
     //bat3
     auto bat3 = reg_.create();
     auto& enemyState6 = ATTACH_TO_FSM(EnemyFSM, bat3);
@@ -290,6 +368,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     det6.SetSize(en6.detectionArea);
 
     reg_.emplace<MovableBody>(bat3);
+
+    auto visionCone6 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone6);
+
+    auto& vcSprite6 = reg_.emplace<Sprite>(visionCone6);
+    AssignSprite(vcSprite6, "AmongThem:circle");
+    vcSprite6.size = det6.size;
+
+    auto& vcFollow6 = reg_.emplace<Follow>(visionCone6);
+    vcFollow6.target = bat3;
+    vcFollow6.offset.z = 25;
+
+    auto& vcCone6 = reg_.emplace<VisionCone>(visionCone6);
+    vcCone6.shape = ECharacterShape::Bat;
 
     //slime3
     auto slime3 = reg_.create();
@@ -323,6 +416,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(slime3);
 
+    auto visionCone7 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone7);
+
+    auto& vcSprite7 = reg_.emplace<Sprite>(visionCone7);
+    AssignSprite(vcSprite7, "AmongThem:circle");
+    vcSprite7.size = det7.size;
+
+    auto& vcFollow7 = reg_.emplace<Follow>(visionCone7);
+    vcFollow7.target = slime3;
+    vcFollow7.offset.z = 25;
+
+    auto& vcCone7 = reg_.emplace<VisionCone>(visionCone7);
+    vcCone7.shape = ECharacterShape::Slime;
+
     //slime4
     auto slime4 = reg_.create();
     auto& enemyState8 = ATTACH_TO_FSM(EnemyFSM, slime4);
@@ -354,6 +462,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     det8.SetSize(en8.detectionArea);
 
     reg_.emplace<MovableBody>(slime4);
+
+    auto visionCone8 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone8);
+
+    auto& vcSprite8 = reg_.emplace<Sprite>(visionCone8);
+    AssignSprite(vcSprite8, "AmongThem:circle");
+    vcSprite8.size = det8.size;
+
+    auto& vcFollow8 = reg_.emplace<Follow>(visionCone8);
+    vcFollow8.target = slime4;
+    vcFollow8.offset.z = 25;
+
+    auto& vcCone8 = reg_.emplace<VisionCone>(visionCone8);
+    vcCone8.shape = ECharacterShape::Slime;
     
 
     //bat4
@@ -388,6 +511,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(bat4);
 
+    auto visionCone9 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone9);
+
+    auto& vcSprite9 = reg_.emplace<Sprite>(visionCone9);
+    AssignSprite(vcSprite9, "AmongThem:circle");
+    vcSprite9.size = det9.size;
+
+    auto& vcFollow9 = reg_.emplace<Follow>(visionCone9);
+    vcFollow9.target = bat4;
+    vcFollow9.offset.z = 25;
+
+    auto& vcCone9 = reg_.emplace<VisionCone>(visionCone9);
+    vcCone9.shape = ECharacterShape::Bat;
+
     //goblin4
     auto goblin4 = reg_.create();
     auto& enemyState10 = ATTACH_TO_FSM(EnemyFSM, goblin4);
@@ -419,6 +557,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     det10.SetSize(en10.detectionArea);
 
     reg_.emplace<MovableBody>(goblin4);
+
+    auto visionCone10 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone10);
+
+    auto& vcSprite10 = reg_.emplace<Sprite>(visionCone10);
+    AssignSprite(vcSprite10, "AmongThem:circle");
+    vcSprite10.size = det10.size;
+
+    auto& vcFollow10 = reg_.emplace<Follow>(visionCone10);
+    vcFollow10.target = goblin4;
+    vcFollow10.offset.z = 25;
+
+    auto& vcCone10 = reg_.emplace<VisionCone>(visionCone10);
+    vcCone10.shape = ECharacterShape::Goblin;
 
     //goblin3
     auto goblin3 = reg_.create();
@@ -452,6 +605,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(goblin3);
 
+    auto visionCone11 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone11);
+
+    auto& vcSprite11 = reg_.emplace<Sprite>(visionCone11);
+    AssignSprite(vcSprite11, "AmongThem:circle");
+    vcSprite11.size = det11.size;
+
+    auto& vcFollow11 = reg_.emplace<Follow>(visionCone11);
+    vcFollow11.target = goblin3;
+    vcFollow11.offset.z = 25;
+
+    auto& vcCone11 = reg_.emplace<VisionCone>(visionCone11);
+    vcCone11.shape = ECharacterShape::Goblin;
+
     //slime5
     auto slime5 = reg_.create();
     auto& enemyState12 = ATTACH_TO_FSM(EnemyFSM, slime5);
@@ -483,6 +651,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     det12.SetSize(en12.detectionArea);
 
     reg_.emplace<MovableBody>(slime5);
+
+    auto visionCone12 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone12);
+
+    auto& vcSprite12 = reg_.emplace<Sprite>(visionCone12);
+    AssignSprite(vcSprite12, "AmongThem:circle");
+    vcSprite12.size = det12.size;
+
+    auto& vcFollow12 = reg_.emplace<Follow>(visionCone12);
+    vcFollow12.target = slime5;
+    vcFollow12.offset.z = 25;
+
+    auto& vcCone12 = reg_.emplace<VisionCone>(visionCone12);
+    vcCone12.shape = ECharacterShape::Slime;
 
     //goblin5
     auto goblin5 = reg_.create();
@@ -516,6 +699,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
 
     reg_.emplace<MovableBody>(goblin5);
 
+    auto visionCone13 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone13);
+
+    auto& vcSprite13 = reg_.emplace<Sprite>(visionCone13);
+    AssignSprite(vcSprite13, "AmongThem:circle");
+    vcSprite13.size = det13.size;
+
+    auto& vcFollow13 = reg_.emplace<Follow>(visionCone13);
+    vcFollow13.target = goblin5;
+    vcFollow13.offset.z = 25;
+
+    auto& vcCone13 = reg_.emplace<VisionCone>(visionCone13);
+    vcCone13.shape = ECharacterShape::Goblin;
+
     //goblin6
     auto goblin6 = reg_.create();
     auto& enemyState14 = ATTACH_TO_FSM(EnemyFSM, goblin6);
@@ -547,6 +745,21 @@ void SetupWorldJovica(Engine& engine_, Registry& reg_)
     det14.SetSize(en14.detectionArea);
 
     reg_.emplace<MovableBody>(goblin6);
+
+    auto visionCone14 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone14);
+
+    auto& vcSprite14 = reg_.emplace<Sprite>(visionCone14);
+    AssignSprite(vcSprite14, "AmongThem:circle");
+    vcSprite14.size = det14.size;
+
+    auto& vcFollow14 = reg_.emplace<Follow>(visionCone14);
+    vcFollow14.target = goblin6;
+    vcFollow14.offset.z = 25;
+
+    auto& vcCone14 = reg_.emplace<VisionCone>(visionCone14);
+    vcCone14.shape = ECharacterShape::Goblin;
 }
 void SetupWorldSmiljana(Engine& engine_, Registry& reg_) {
 

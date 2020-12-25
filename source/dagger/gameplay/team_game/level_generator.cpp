@@ -19,6 +19,7 @@
 #include "gameplay\team_game\enemy.h"
 #include <iostream>
 #include <gameplay\team_game\key.h>
+#include <gameplay\team_game\vision_cone.h>
 
 using namespace dagger;
 using namespace team_game;
@@ -313,7 +314,6 @@ Sequence<Entity> level_generator::jovica::CreateDoor(Registry& reg_, SInt32 x_, 
 
 Sequence<Entity> level_generator::jovica::CreateIdleGoblin(Registry& reg_, SInt32 x_, SInt32 y_)
 {
-    std::cout << x_ << "," << y_ <<std::endl;
     auto enemy = reg_.create();
     auto& enemyState = ATTACH_TO_FSM(EnemyFSM, enemy);
     enemyState.currentState = EEnemyState::Patrolling;
@@ -344,6 +344,21 @@ Sequence<Entity> level_generator::jovica::CreateIdleGoblin(Registry& reg_, SInt3
     det.SetSize(en.detectionArea);
 
     reg_.emplace<MovableBody>(enemy);
+
+    auto visionCone14 = reg_.create();
+
+    reg_.emplace<Transform>(visionCone14);
+
+    auto& vcSprite14 = reg_.emplace<Sprite>(visionCone14);
+    AssignSprite(vcSprite14, "AmongThem:circle");
+    vcSprite14.size = det.size;
+
+    auto& vcFollow14 = reg_.emplace<Follow>(visionCone14);
+    vcFollow14.target = enemy;
+    vcFollow14.offset.z = 25;
+
+    auto& vcCone14 = reg_.emplace<VisionCone>(visionCone14);
+    vcCone14.shape = ECharacterShape::Goblin;
 
     UInt32 type = 1 + rand() % 10;
     Entity entity = CreateTile(reg_, x_, y_, 30, fmt::format("spritesheets:among_them_tilemap:floor_{}", type));
