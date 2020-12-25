@@ -148,6 +148,12 @@ void ancient_defenders::MageBehaviorSystem::OnEndOfFrame()
 
 Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool offset_, UInt32 spot_)
 {
+    if (Engine::GetDefaultResource<PlayerInfo>()->health < Health::standardHP) { // So that spawning a mage wouldn't end the game by causing player to go below 0 HP
+        return Engine::Registry().create(); // Return just an empty entity since the function requiers return value 
+    }
+
+    auto towerInfo = Engine::GetDefaultResource<TowerPlacementInfo>();
+
     auto& reg = Engine::Registry();
     auto entity = reg.create();
     
@@ -166,7 +172,7 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
     mage.chantingSpot = spot_; // Used for Chanting state
     if (spot_ != TOWER_NONE)
     {
-        TowerPlacementInfo::chantingMages[spot_]++;
+        towerInfo->chantingMages[spot_]++;
     }
 
     mage.currentAction = action_;
@@ -194,7 +200,7 @@ Entity ancient_defenders::Mage::Create(Vector2 position_,EAction action_, Bool o
         start.y += mage.offset.y;
     }
     // Z axis is calculated this way to make bottom most character appear closest to the screen
-    coordinates.position = { start.x, start.y, std::abs(mage.offset.y + 22.0f) };
+    coordinates.position = { start.x, start.y, std::abs(mage.offset.y + 22.0f) + 10.0f };
 
     hitbox.size = sprite.size;
     range.range = hitbox.size.x;

@@ -10,7 +10,6 @@
 
 #include "gameplay/common/simple_collisions.h"
 
-#include <random>
 
 using namespace ancient_defenders;
 

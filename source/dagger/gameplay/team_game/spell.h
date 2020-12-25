@@ -1,15 +1,7 @@
 #pragma once
 
-#include "range_of_attack.h"
-#include "mage.h"
-
 #include "core/core.h"
 #include "core/system.h"
-#include "core/game/transforms.h"
-#include "core/graphics/animation.h"
-#include "core/graphics/sprite.h"
-
-#include "gameplay/common/simple_collisions.h"
 
 using namespace dagger;
 

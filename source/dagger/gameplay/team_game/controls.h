@@ -7,11 +7,6 @@ using namespace dagger;
 
 namespace ancient_defenders {
 
-    struct ControlData {
-        Float32 timeout;
-        static constexpr Float32 maxTimeout = 0.2f;
-    };
-
     class PlayerControlsSystem
         : public System
     {
@@ -21,6 +16,6 @@ namespace ancient_defenders {
         void Run() override;
     
     private:
-        ControlData m_controlData;
+        static Bool s_onStart;
     };
 }

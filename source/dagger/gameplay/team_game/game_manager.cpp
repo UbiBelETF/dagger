@@ -2,9 +2,10 @@
 #include "mage.h"
 #include "golem.h"
 #include "team_game_main.h"
+#include "controls.h"
 
-#include "core/graphics/text.h"
 #include "core/engine.h"
+#include "core/graphics/text.h"
 
 #include <random>
 
@@ -32,6 +33,7 @@ void ancient_defenders::GameManagerSystem::Run()
     }
     
     Engine::Registry().get<Text>(player->countdownTimer).Set("pixel-font", fmt::format("Raid: {}s left!", (UInt32)player->timeLeft), { 10, 260, 98 });
+    Engine::Registry().get<Sprite>(player->countdownTimer).scale = { 0.5,0.5 };
 
     auto percentage = player->health / player->maxHealth;
     if (percentage < 0.0f) percentage = 0.0f;
@@ -43,7 +45,6 @@ void ancient_defenders::GameManagerSystem::Run()
         return;
     }
     if ((player->spawnTimer -= Engine::DeltaTime()) > 0) return;
-    else player->spawnTimer = 2.0f;
 
 
     std::random_device dev;
@@ -55,20 +56,22 @@ void ancient_defenders::GameManagerSystem::Run()
 
     if (spawnCode < 4) { // 40% chance to spawn a little golem
         for (auto i = spawnCode + 1; i > 0; i--) { // Create a random number of golems (based on the spawnCode)
-            Golem::Create();
+            Golem::Create("LITTLE");
         }
+        player->spawnTimer = (spawnCode + 1)*1.0f;
     }
     else if (spawnCode < 6) { // 20% chance to spawn a middle golem
-      //  for (auto i = (spawnCode - 4) + 1; i > 0; i--) { // Create a random number of golems (based on the spawnCode)
-            // Create middle golem
-      //  }
+        for (auto i = (spawnCode - 4) + 1; i > 0; i--) { // Create a random number of golems (based on the spawnCode)
+            Golem::Create("MIDDLE");
+        }
+        player->spawnTimer = (spawnCode - 3)*2.0f;
     }
     else if (spawnCode < 7) { // 10% chance to spawn a big golem
-        // Crate big golem
+        Golem::Create("BIG");
+        player->spawnTimer = 3.0f;
     }
-    else { // 30% chance to spawn a boar
-        // Create boar
-    }
+    // 30% chance to skip spawn
+     
 }
 
 void ancient_defenders::GameManagerSystem::OnEndOfFrame()
@@ -113,6 +116,8 @@ void ancient_defenders::GameManagerSystem::OnEndOfFrame()
 
     if (m_defeat || m_victory) {
         Engine::ToggleSystemsPause(true);
+
+        Engine::GetDefaultResource<PlayerControlsSystem>()->Unpause(); // So that player can restart the game
 
         auto viewA = reg.view<Animator>();
         

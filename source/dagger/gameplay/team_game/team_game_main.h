@@ -5,8 +5,6 @@
 #include "core/game.h"
 #include "core/engine.h"
 
-#include <list>
-
 using namespace dagger;
 
 namespace ancient_defenders
@@ -16,6 +14,7 @@ namespace ancient_defenders
     void LoadPath();
     void LoadTowerSpots();
 
+    void SetupStartScreen(Engine& engine_);
     void SetupEndScreen(Engine& engine_, Bool goodEnd = true);
 
     class TeamGame : public Game

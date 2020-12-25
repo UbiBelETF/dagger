@@ -1,8 +1,13 @@
 {
 	"animation-name": "ancient_defenders:BIG:ATTACK_FRONT",
-	"animation-length-ms": 1250,
+	"animation-length-ms": 2000,
 	"animation-frames": 
 	[
+		{ "texture-name": "spritesheets:golem-big-sheet:golem_walk_side:1" },
+		{ "texture-name": "spritesheets:golem-big-sheet:golem_walk_side:2" },
+		{ "texture-name": "spritesheets:golem-big-sheet:golem_walk_side:3" },
+		{ "texture-name": "spritesheets:golem-big-sheet:golem_walk_side:4" },
+		{ "texture-name": "spritesheets:golem-big-sheet:golem_walk_side:5" },
 		{ "texture-name": "spritesheets:golem-big-sheet:golem_swing_front:1" },
 		{ "texture-name": "spritesheets:golem-big-sheet:golem_swing_front:2" },
 		{ "texture-name": "spritesheets:golem-big-sheet:golem_swing_front:3" },

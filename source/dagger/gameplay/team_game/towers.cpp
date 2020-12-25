@@ -7,14 +7,6 @@
 
 using namespace ancient_defenders;
 
-UInt32 ancient_defenders::TowerPlacementInfo::selectedSpot = TOWER_NONE;
-String ancient_defenders::TowerPlacementInfo::selectedTower = "BLOOD";
-
-Sequence<Vector2> ancient_defenders::TowerPlacementInfo::spotCoordinates = {};
-StaticArray<Bool, SPOT_COUNT> ancient_defenders::TowerPlacementInfo::availableSpot = { true, true, true, true, true, true, true, true };
-StaticArray<UInt32, SPOT_COUNT> ancient_defenders::TowerPlacementInfo::chantingMages = { 0, 0, 0, 0, 0, 0, 0, 0 };
-StaticArray<String, SPOT_COUNT> ancient_defenders::TowerPlacementInfo::spotTowerNames = { "", "", "", "", "", "", "", "" };
-StaticArray<String, TOWER_COUNT> ancient_defenders::TowerPlacementInfo::towerNames = {"BLOOD", "FIRE", "ICE", "POISON", "STORM", "SUN"};
 
 Float32 ancient_defenders::TowerStats::constructionGoal = 10.0f;
 Float32 ancient_defenders::TowerStats::maxCooldown = 2.0f;
@@ -37,16 +29,18 @@ void ancient_defenders::TowerBehaviorSystem::Run()
     Engine::Registry().view<TowerStats, RangeOfAttack, Animator>().each(
         [](Entity entity_, TowerStats & tower_, RangeOfAttack & range_, Animator & animator_)
     {
+        auto towerInfo = Engine::GetDefaultResource<TowerPlacementInfo>();
+
         if (tower_.constructionProgress < TowerStats::constructionGoal) return;
         else if (!tower_.constructed) {
             tower_.constructed = true;
-            TowerPlacementInfo::chantingMages[tower_.address] = 0;
-            TowerPlacementInfo::availableSpot[tower_.address] = false;
+            towerInfo->chantingMages[tower_.address] = 0;
+            towerInfo->availableSpot[tower_.address] = false;
 
 
             auto & sprite = Engine::Registry().emplace<Sprite>(entity_);
             AssignSprite(sprite, "ancient_defenders:" + tower_.type);
-            sprite.position = { TowerPlacementInfo::spotCoordinates[tower_.address].x,TowerPlacementInfo::spotCoordinates[tower_.address].y, 1.0f };
+            sprite.position = { towerInfo->spotCoordinates[tower_.address].x,towerInfo->spotCoordinates[tower_.address].y, 10.0f };
             sprite.pivot = { 0,0.25f };
             sprite.scale = { 2,2 };
         }
@@ -73,6 +67,8 @@ void ancient_defenders::TowerBehaviorSystem::OnEndOfFrame()
 
 Entity ancient_defenders::Tower::Create(String type_)
 {
+    auto towerInfo = Engine::GetDefaultResource<TowerPlacementInfo>();
+
     auto& reg = Engine::Registry();
     auto entity = reg.create();
 
@@ -84,8 +80,8 @@ Entity ancient_defenders::Tower::Create(String type_)
 
     tower.type = type_;
 
-    coordinates.position = { TowerPlacementInfo::spotCoordinates[tower.address].x,
-            TowerPlacementInfo::spotCoordinates[tower.address].y, 1.0f };
+    coordinates.position = { towerInfo->spotCoordinates[tower.address].x,
+            towerInfo->spotCoordinates[tower.address].y, 10.0f };
 
     hitbox.size = { 250, 0 };
     hitbox.shape = EHitbox::Circular;

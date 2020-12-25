@@ -2,6 +2,7 @@
 #include "mage.h"
 #include "golem.h"
 #include "towers.h"
+#include "team_game_main.h"
 
 #include "core/graphics/text.h"
 #include "core/input/inputs.h"
@@ -9,10 +10,32 @@
 
 #include <unordered_map>
 
+Bool ancient_defenders::PlayerControlsSystem::s_onStart = true;
+
 using namespace ancient_defenders;
 
 void ancient_defenders::PlayerControlsSystem::Run()
 {
+    if (PlayerControlsSystem::s_onStart == true) {
+        Engine::Registry().view<InputReceiver>().each(
+            [](InputReceiver& input_)
+        {
+            if (EPSILON_NOT_ZERO(input_.Get("restart")))
+            {
+                Engine::Registry().clear();
+
+
+                ancient_defenders::SetupWorld(Engine::Instance());
+                ancient_defenders::SetupControls(Engine::Instance());
+                ancient_defenders::LoadPath();
+                ancient_defenders::LoadTowerSpots();
+                
+                PlayerControlsSystem::s_onStart = false;
+            }
+        });
+        return;
+    }
+
     static std::unordered_map<String, SInt32> towerMenuChoiceOffsets{ 
         { "BLOOD", -120 },
         { "FIRE", -73 },
@@ -21,10 +44,6 @@ void ancient_defenders::PlayerControlsSystem::Run()
         { "STORM", 71 },
         { "SUN", 120 },
     };
-
-    if ((m_controlData.timeout -= Engine::DeltaTime()) > 0.0f) return;
-    // Controls are getting a very small timeout every time something spawns, because due to the input value not reseting in time
-    // every comand executed multiple times, spawining multiple objects, which wasn't the intended behavior
 
     auto mouse = dagger::Input::CursorPositionInWorld();
 
@@ -41,41 +60,44 @@ void ancient_defenders::PlayerControlsSystem::Run()
 
     bool found = false;
 
-    for (UInt32 i = 0; i < TowerPlacementInfo::spotCoordinates.size(); i++)
-    {
-        auto towerCoords = TowerPlacementInfo::spotCoordinates[i];
+    auto towerInfo = Engine::GetDefaultResource<TowerPlacementInfo>();
 
-        if (!TowerPlacementInfo::availableSpot[i] && glm::distance(circle.position, { towerCoords, 0.0f }) < 1.0f)
+    for (UInt32 i = 0; i < towerInfo->spotCoordinates.size(); i++)
+    {
+        auto towerCoords = towerInfo->spotCoordinates[i];
+
+        if (!towerInfo->availableSpot[i] && glm::distance(circle.position, { towerCoords, 0.0f }) < 1.0f)
         {
             circle.position = { 10000, 10000, 10000 };
-            TowerPlacementInfo::selectedSpot = TOWER_NONE;
+            towerInfo->selectedSpot = TOWER_NONE;
         }
 
-        if (TowerPlacementInfo::availableSpot[i])
+        if (towerInfo->availableSpot[i])
         {
             if (glm::distance(mouse, towerCoords) < 30)
             {
-                TowerPlacementInfo::selectedSpot = i;
+                towerInfo->selectedSpot = i;
                 circle.position = { towerCoords, 0.0f };
 
                 if (dagger::Input::IsInputDown(EDaggerMouse::MouseButton1))
                 {
-                    Tower::Create(TowerPlacementInfo::selectedTower);
-                    if (TowerPlacementInfo::spotTowerNames[TowerPlacementInfo::selectedSpot] == "")
-                    {
-                        TowerPlacementInfo::spotTowerNames[TowerPlacementInfo::selectedSpot] = TowerPlacementInfo::selectedTower;
+                    if (towerInfo->chantingMages[i] == 0) {
+                        Tower::Create(towerInfo->selectedTower);
                     }
 
-                    Mage::Create(TowerPlacementInfo::spotCoordinates[TowerPlacementInfo::selectedSpot], EAction::Chanting, true, TowerPlacementInfo::selectedSpot);
+                    if (towerInfo->spotTowerNames[towerInfo->selectedSpot] == "")
+                    {
+                        towerInfo->spotTowerNames[towerInfo->selectedSpot] = towerInfo->selectedTower;
+                    }
+
+                    Mage::Create(towerInfo->spotCoordinates[towerInfo->selectedSpot], EAction::Chanting, true, towerInfo->selectedSpot);
 
                     Logger::info("Placed a tower");
-
-                    m_controlData.timeout = ControlData::maxTimeout;
 
                     dagger::Input::ConsumeInput(EDaggerMouse::MouseButton1);
                 }
 
-                if (!TowerPlacementInfo::chantingMages[i])
+                if (!towerInfo->chantingMages[i])
                 {
                     menu.position = { mouse - Vector2{0, 50}, 2.0f };
                     build.position = { 10000, 10000, 10000 };
@@ -84,10 +106,10 @@ void ancient_defenders::PlayerControlsSystem::Run()
                     if (menu.position.x < -250) menu.position.x = -250;
                     if (menu.position.x > 250) menu.position.x = 250;
 
-                    if (TowerPlacementInfo::selectedTower == "")
-                        TowerPlacementInfo::selectedTower = "BLOOD";
+                    if (towerInfo->selectedTower == "")
+                        towerInfo->selectedTower = "BLOOD";
 
-                    choice.position = menu.position + Vector3{ towerMenuChoiceOffsets[TowerPlacementInfo::selectedTower], -20, -1 };
+                    choice.position = menu.position + Vector3{ towerMenuChoiceOffsets[towerInfo->selectedTower], -20, -1 };
                 }
                 else
                 {
@@ -97,12 +119,12 @@ void ancient_defenders::PlayerControlsSystem::Run()
                     if (build.position.x < -250) build.position.x = -250;
                     if (build.position.x > 250) build.position.x = 250;
 
-                    auto towerName = TowerPlacementInfo::spotTowerNames[TowerPlacementInfo::selectedSpot];
+                    auto towerName = towerInfo->spotTowerNames[towerInfo->selectedSpot];
                     if (towerName != "")
                     {
                         AssignSprite(buildIconSprite, fmt::format("ancient_defenders:{}", towerName));
                         buildIconTransform.position = build.position + Vector3{ -23, 5, -1 };
-                        auto mageCount = TowerPlacementInfo::chantingMages[TowerPlacementInfo::selectedSpot];
+                        auto mageCount = towerInfo->chantingMages[towerInfo->selectedSpot];
                         buildTimeText.Set("pixel-font", fmt::format("{}", mageCount), build.position + Vector3{ 43, 0, -2 });
                     }
                     else
@@ -123,18 +145,16 @@ void ancient_defenders::PlayerControlsSystem::Run()
         menu.position = choice.position = build.position = buildIconTransform.position = circle.position = { 10000, 10000, 10000 };
         buildTimeText.Set("pixel-font", "", { 10000, 10000, 10000 });
 
-        TowerPlacementInfo::selectedSpot = TOWER_NONE;
+        towerInfo->selectedSpot = TOWER_NONE;
     }
 
     Engine::Registry().view<InputReceiver>().each(
-        [this](InputReceiver& input_) 
+        [towerInfo](InputReceiver& input_) 
     {        
         if (EPSILON_NOT_ZERO(input_.Get("move")))
         {
             Mage::Create(WalkingPath::path[0], EAction::Moving);
             Logger::info("Made mage");
-
-            m_controlData.timeout = ControlData::maxTimeout;
         }
 
         if (EPSILON_NOT_ZERO(input_.Get("enemy")))
@@ -142,8 +162,6 @@ void ancient_defenders::PlayerControlsSystem::Run()
 			Golem::Create("LITTLE");
             Golem::Create("MIDDLE");
 			Golem::Create("BIG");
-
-            m_controlData.timeout = ControlData::maxTimeout;
         }
 
         if (EPSILON_NOT_ZERO(input_.Get("num")))
@@ -151,9 +169,23 @@ void ancient_defenders::PlayerControlsSystem::Run()
             auto num = (UInt32) input_.Get("num");
             if (num <= 6)
             {
-                TowerPlacementInfo::selectedTower = TowerPlacementInfo::towerNames[num - 1];
-                Logger::info("Switched to tower: "+ TowerPlacementInfo::selectedTower);
+                towerInfo->selectedTower = towerInfo->towerNames[num - 1];
+                Logger::info("Switched to tower: "+ towerInfo->selectedTower);
             }
         }
+
+        if (EPSILON_NOT_ZERO(input_.Get("restart")))
+        {
+            Engine::Registry().clear();
+
+
+            ancient_defenders::SetupWorld(Engine::Instance());
+            ancient_defenders::SetupControls(Engine::Instance());
+            ancient_defenders::LoadPath();
+            ancient_defenders::LoadTowerSpots();
+        
+            Engine::ToggleSystemsPause(false); // If the game is restarted after the ending
+        }
+
     });
 }
