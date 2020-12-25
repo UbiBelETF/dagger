@@ -28,22 +28,23 @@ void team_game::AiSystem::Run()
 				auto& slimeAi = viewSlimes.get<SlimeAi>(slime);
 				auto& slimeTransform = viewSlimes.get<Transform>(slime);
 				auto& slimeSprite = viewSlimes.get<Sprite>(slime);
-				Vector2 distance = Vector2(slimeTransform.position.x - heroTransform.position.x, slimeTransform.position.y - heroTransform.position.y);
+				Vector2 distanceVec = Vector2(slimeTransform.position.x - heroTransform.position.x, slimeTransform.position.y - heroTransform.position.y);
 				if (slimeAi.previous.size() > depth)slimeAi.previous.pop_front();
 				slimeAi.previous.push_back(slimeAi.current);
 				SlimeAiCommand newCommand;
 				newCommand.attack = false;
-				if (glm::length(distance) <= slimeSprite.size.x*slimeSprite.scale.x * 2) {
-					if (glm::length(distance) <= slimeSprite.size.x * slimeSprite.scale.x * 1.1) {
+				float distance= glm::length(distanceVec);
+				if (distance <= slimeSprite.size.x * 1.5) {
+					if (distance<=slimeSprite.size.x*0.55) {
 						newCommand.attack = true;
 					}
 					
-					if (abs(distance.x) > abs(distance.y)) {
-						if (distance.x > 0)newCommand.move = LEFT;
+					if (abs(distanceVec.x) > abs(distanceVec.y)) {
+						if (distanceVec.x > 0)newCommand.move = LEFT;
 						else newCommand.move = RIGHT;
 					}
 					else {
-						if (distance.y > 0)newCommand.move = UP;
+						if (distanceVec.y > 0)newCommand.move = UP;
 						else newCommand.move = DOWN;
 
 					}

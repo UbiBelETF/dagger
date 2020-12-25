@@ -79,7 +79,7 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	auto& transform = reg_.emplace<Transform>(entity);
 
 	auto& col = reg_.emplace<Collision>(entity);
-	reg_.emplace<CollisionType::Character>(entity);
+	reg_.emplace<CollisionType::Slime>(entity);
 	reg_.emplace<SlimeAi>(entity);
 	reg_.emplace<TeamGameSlime>(entity);
 	auto& health = reg_.emplace<Health>(entity);
@@ -114,7 +114,6 @@ Entity CreateHero(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	reg_.emplace<Transform>(health.hpBar);
 	AssignSprite(hpBarSprite, "TeamGame:playerHp");
 	sprite.size=Vector2(1, 1) * size;
-	sprite.subOrigin = Vector2(-10, -0.5) * size;
 	sprite.scale = Vector2(scale, scale);
 	auto const gameCharacter = view.get<TeamGameCharacter>(*it);
 	auto entity = entt::to_entity<Entity,TeamGameCharacter>(reg_, gameCharacter);

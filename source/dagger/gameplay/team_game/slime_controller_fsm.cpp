@@ -23,14 +23,8 @@ void SlimeControllerFSM::Idle::Enter(SlimeControllerFSM::StateComponent& state_)
 void SlimeControllerFSM::Idle::Run(SlimeControllerFSM::StateComponent& state_)
 {
 	auto& slimeAi = Engine::Registry().get<SlimeAi>(state_.entity);
-
-	if(slimeAi.current.attack==true)
-		GoTo(ESlimeStates::Attacking, state_);
-		
-	
-
-	else if(slimeAi.current.move!=STAY)
-		GoTo(ESlimeStates::Running, state_);
+	if (slimeAi.current.move != STAY|| slimeAi.current.attack == true)
+		GoTo(ESlimeStates::Running, state_);	
 }
 
 DEFAULT_EXIT(SlimeControllerFSM, Idle);

@@ -25,6 +25,7 @@ struct Collision
 namespace CollisionType {
     struct Wall {};
     struct Character {};
+    struct Slime {};
 }
 
 class CollisionSystem : public System
