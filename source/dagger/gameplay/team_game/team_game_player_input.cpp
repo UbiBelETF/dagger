@@ -29,9 +29,9 @@ void TeamGamePlayerInputSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
 
 void TeamGamePlayerInputSystem::Run()
 {
-    if (triggeredTransition)
+    /*if (triggeredTransition)
     {
         GameManagerSystem::IsObjectiveCompleted() = true;
         triggeredTransition = false;
-    }
+    }*/
 }

@@ -12,6 +12,8 @@
 #include "core/graphics/textures.h"
 #include "core/graphics/animations.h"
 #include "core/graphics/gui.h"
+#include "core/graphics/text.h"
+
 #include "tools/diagnostics.h"
 
 #include "gameplay/platformer/platformer_controller.h"
@@ -24,10 +26,10 @@ using namespace platformer;
 
 void Platformer::GameplaySystemsSetup(Engine& engine_)
 {
-	engine_.AddSystem<PlatformerControllerSystem>();
+    engine_.AddSystem<PlatformerCollisionSystem>();
+    engine_.AddSystem<PlatformerControllerSystem>();
     engine_.AddSystem<ParallaxSystem>();
     engine_.AddSystem<CameraFollowSystem>();
-    engine_.AddSystem<PlatformerCollisionSystem>();
 }
 
 void SetCamera()
@@ -156,6 +158,12 @@ void CreateBackdrop()
         transform.position = { 0.0f, -32.0f, 1 };
 
         auto& character = reg.get_or_emplace<PlatformerCharacter>(entity);
+    }
+    {
+        auto ui = reg.create();
+        auto& text = reg.emplace<Text>(ui);
+        text.spacing = 0.6f;
+        text.Set("pixel-font", "hello world");
     }
 }
 
