@@ -12,7 +12,9 @@
 #include "core/graphics/animations.h"
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
+#include "gameplay/team_game/slime_controller.h"
 #include "collision.h"
+#include "health_system.h"
  int scale = 1;
  int x_step = 16 *scale;
  int y_step = 16 * scale;
@@ -75,10 +77,22 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);
+
 	auto& col = reg_.emplace<Collision>(entity);
-	reg_.emplace<CollisionType::Character>(entity);
+	reg_.emplace<CollisionType::Slime>(entity);
+	reg_.emplace<SlimeAi>(entity);
+	reg_.emplace<TeamGameSlime>(entity);
+	auto& health = reg_.emplace<Health>(entity);
+	health.maxHp = 50;
+	health.hp = 50;
+	health.hpBar = reg_.create();
+	health.show = true;
+	auto& hpBarSprite =reg_.emplace <Sprite>(health.hpBar);
+	reg_.emplace<Transform>(health.hpBar);
+	AssignSprite(hpBarSprite, "TeamGame:enemyHp");
+	ATTACH_TO_FSM(SlimeControllerFSM, entity);
 	sprite.size = Vector2(1, 1) * size;
-	col.size = sprite.size;
+	col.size = Vector2(16,16);
 	sprite.scale = { scale,scale };
 	transform.position = { x_ * x_step, y_ * y_step, 30 };
 	AssignSprite(sprite, "spritesheets:chara_slime:slime_idle_anim:1");
@@ -91,8 +105,15 @@ Entity CreateHero(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	auto it = view.begin();
 	auto& transform = view.get<Transform>(*it);
 	auto& sprite = view.get<Sprite>(*it);
+	auto& health = reg_.emplace<Health>(*it);
+	health.maxHp = 50;
+	health.hp = 50;
+	health.hpBar = reg_.create();
+	health.show = true;
+	auto& hpBarSprite = reg_.emplace <Sprite>(health.hpBar);
+	reg_.emplace<Transform>(health.hpBar);
+	AssignSprite(hpBarSprite, "TeamGame:playerHp");
 	sprite.size=Vector2(1, 1) * size;
-	sprite.subOrigin = Vector2(-10, -0.5) * size;
 	sprite.scale = Vector2(scale, scale);
 	auto const gameCharacter = view.get<TeamGameCharacter>(*it);
 	auto entity = entt::to_entity<Entity,TeamGameCharacter>(reg_, gameCharacter);
@@ -144,6 +165,13 @@ Entity CreatePot(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	auto& transform = reg_.emplace<Transform>(entity);
 	auto& col = reg_.emplace<Collision>(entity);
 	reg_.emplace<CollisionType::Wall>(entity);
+	auto& create = reg_.emplace<TeamGamePot>(entity);
+	auto& health = reg_.emplace<Health>(entity);
+	health.maxHp = create.startHp;
+	health.hp = create.startHp;
+	health.hpBar = reg_.create();
+	reg_.emplace <Text>(health.hpBar);
+    
 	sprite.size = Vector2(1, 1) * size;
 	col.size = sprite.size;
 	sprite.scale = { scale,scale };
@@ -157,6 +185,13 @@ Entity CreateCrate(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	auto& transform = reg_.emplace<Transform>(entity);
 	auto& col = reg_.emplace<Collision>(entity);
 	reg_.emplace<CollisionType::Wall>(entity);
+	auto& pot = reg_.emplace<TeamGameCrate>(entity);
+	auto& health = reg_.emplace<Health>(entity);
+	health.maxHp = pot.startHp;
+	health.hp = pot.startHp;
+	health.hpBar = reg_.create();
+	reg_.emplace <Text>(health.hpBar);
+	
 	sprite.size = Vector2(1, 1) * size;
 	col.size = sprite.size;
 	sprite.scale = { scale,scale };

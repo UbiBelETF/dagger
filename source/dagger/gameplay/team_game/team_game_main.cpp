@@ -1,6 +1,6 @@
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/hero_controller.h"
-
+#include "gameplay/team_game/slime_controller.h"
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
@@ -17,8 +17,9 @@
 #include "core/graphics/text.h"
 #include "tilemap_system.h"
 #include "tilemap_legends.h"
-
+#include "health_system.h"
 #include "gameplay/team_game/collision.h"
+#include"gameplay/team_game/ai_system.h"
 #include "gameplay/team_game/camera_follow.h"
 
 using namespace dagger;
@@ -30,13 +31,18 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<TilemapSystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<TeamGameControllerSystem>();
+    engine_.AddSystem<TeamGameSlimeControllerSystem>();
+    engine_.AddSystem<AiSystem>();
+    engine_.AddSystem<HealthSystem>();
     engine_.AddSystem<TeamCameraFollowSystem>();
     
+
 }
 void SetCameraTeam()
 {
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
+
     camera->size = { 800, 600 };
     camera->zoom = 3;
     camera->position = { 0, 0, 0 };
@@ -89,7 +95,9 @@ struct MainCharacter
         chr.character.speed = 100;
 
         //Collision setup:        
+
         chr.col.size = { 16, 16 };
+
         chr.tm.position = { position_ , 0.0f };
         reg.emplace<CollisionType::Character>(entity);
 
@@ -114,9 +122,11 @@ void TeamGame::WorldSetup(Engine &engine_)
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/creatures_level_1.map", &tilemap_legends.legends.at("creatures") });
     auto ui = reg.create();
     auto& text = reg.emplace<Text>(ui);
+    auto& transform = reg.emplace<Transform>(ui);
+    transform.position = Vector3(100, 100, 100);
     text.spacing = 0.6f;
-    text.Set("pixel-font", "hello world");
-
+    text.Set("pixel-font", "hello 2 world");
+    
     team_game::SetupWorld(engine_);
 }
 

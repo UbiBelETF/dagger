@@ -14,6 +14,12 @@ public:
     Tilemap_legends();
     Map<String, TilemapLegend>legends;
 };
+struct TeamGamePot {
+    int startHp = 0;
+};
+struct TeamGameCrate {
+    int startHp = 100;
+};
 Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_,char type);
 Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type);
 Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_,char type);
