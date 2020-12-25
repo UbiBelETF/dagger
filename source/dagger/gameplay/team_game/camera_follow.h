@@ -2,6 +2,7 @@
 
 #include "core/core.h"
 #include "core/system.h"
+#include "core/game/transforms.h"
 
 using namespace dagger;
 
@@ -20,5 +21,11 @@ namespace team_game
         };
 
         void Run() override;
+
+        void DistributeCameraWeight();
+
+        void AdjustCameraZoom();
+
+        Float32 CalculateDistance(Transform& transformOne_, Transform& transfromTwo_);
     };
 }

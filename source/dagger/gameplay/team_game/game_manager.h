@@ -4,11 +4,17 @@
 #include "core/system.h"
 #include "core/game.h"
 #include "core/engine.h"
+#include "core/game/transforms.h"
 
 using namespace dagger;
 
 namespace team_game
 {
+    struct TreasureChest
+    {
+        Bool hadCollisionWithPlayer = false;
+    };
+
     class GameManagerSystem : public System
     {
     private:

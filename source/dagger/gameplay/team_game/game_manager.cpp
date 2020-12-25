@@ -7,10 +7,12 @@
 
 #include <gameplay/team_game/team_game_main.h>
 #include "gameplay/team_game/team_game_collisions.h"
+
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/collectables.h"
 #include "gameplay/team_game/treasure.h"
 #include "gameplay/team_game/traps_collision.h"
+#include "gameplay/team_game/camera_follow.h"
 
 using namespace dagger;
 using namespace team_game;
@@ -244,6 +246,8 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
         addCollision = addCollision_;
     }
 }
+
+
 
 void GameManagerSystem::OnEndOfFrame()
 {

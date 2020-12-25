@@ -106,7 +106,8 @@ void team_game::SetupWorld(Engine& engine_)
         auto& transform = reg2.get_or_emplace<Transform>(entity);
         transform.position = GameManagerSystem::GetPlayerPositionsPerLevel()[GameManagerSystem::GetCurrentLevel()];
 
-        reg2.get_or_emplace<CameraFollowFocus>(entity);
+        auto& cameraFocus = reg2.get_or_emplace<CameraFollowFocus>(entity);
+        cameraFocus.weight = 2;
 
         auto& collider = reg2.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;
@@ -130,6 +131,7 @@ void team_game::SetupWorld(Engine& engine_)
     {
         auto entity = reg1.create();
         auto& sprite = reg1.get_or_emplace<Sprite>(entity);
+
         sprite.scale = { 2.0, 2.0 };
         AssignSprite(sprite, "TeamGame:Other:Chest");
 
