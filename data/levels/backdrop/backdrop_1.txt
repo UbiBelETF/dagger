@@ -1,4 +1,17 @@
 BACKGROUND OverlayedWall 5.0 140.0 140.0 -650.0 -300.0 30 9
-BACKGROUND MapEdge 6.0 150.0 50.0 -950.0 -550.0 40 40
+BACKGROUND MapEdge 6.0 150.0 50.0 -950.0 -1000.0 40 40
 
+Other Barrel 4.0 48.0 48.0 0.0 50.0 2 1
+Other Barrel 4.0 48.0 48.0 1350.0 250.0 2 1
+Other Barrel 4.0 48.0 48.0 1475.0 250.0 1 1
 
+Other Candle 4.0 16.0 32.0 66.0 98.0 1 1
+
+Other Chain_1 4.0 18.0 200.0 366.0 298.0 1 1
+Other Chain_1 4.0 18.0 200.0 2100 275.0 1 1
+
+Other Skull 4.0 20.0 20.0 -225.0 -70.0 1 1
+Other Skull 4.0 20.0 20.0 -185.0 -200.0 2 1
+Other Skull 4.0 20.0 20.0 1845.0 130.0 1 1
+
+Other Window 4.0 50.0 50.0 710.0 420.0 2 1

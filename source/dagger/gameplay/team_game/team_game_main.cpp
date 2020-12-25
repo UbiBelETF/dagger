@@ -23,16 +23,22 @@
 #include "gameplay/team_game/game_manager.h"
 #include "gameplay/team_game/character_controller.h"
 #include "gameplay/team_game/team_game_player_input.h"
+#include "gameplay/team_game/traps_collision.h"
+#include "gameplay/team_game/collectables.h"
+#include "gameplay/team_game/treasure.h"
 
 using namespace dagger;
 
-void team_game::TeamGame::GameplaySystemsSetup(Engine &engine_)
+void team_game::TeamGame::GameplaySystemsSetup(Engine& engine_)
 {
     engine_.AddSystem<CharacterControllerSystem>();
-    engine_.AddSystem<GameManagerSystem>();
     engine_.AddSystem<GravitySystem>();
     engine_.AddSystem<CollisionSystem>();
     engine_.AddSystem<CameraFollowSystem>();
+    engine_.AddSystem<TrapsCollisionSystem>();
+    engine_.AddSystem<CollectablePickupSystem>();
+    engine_.AddSystem<TreasureSystem>();
+    engine_.AddSystem<GameManagerSystem>();
 }
 
 void team_game::TeamGame::WorldSetup(Engine &engine_)
@@ -42,7 +48,7 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
     auto* camera = Engine::GetDefaultResource<Camera>();
     camera->mode = ECameraMode::FixedResolution;
     camera->size = { 800, 600 };
-    camera->zoom = 1;
+    camera->zoom = 0.9;
     camera->position = { 0, 0, 0 };
     camera->Update();
 
@@ -55,11 +61,12 @@ void team_game::TeamGame::WorldSetup(Engine &engine_)
     {
         GameManagerSystem::GetPlayerPositionsPerLevel().push_back(playerPos);
     }
+
+    GameManagerSystem::SetCurrentLevel(1);
 }
 
 void team_game::SetupWorld(Engine& engine_)
 {
-
     auto& reg1 = engine_.Registry();
     {
         auto entity = reg1.create();
@@ -124,15 +131,19 @@ void team_game::SetupWorld(Engine& engine_)
     {
         auto entity = reg1.create();
         auto& sprite = reg1.get_or_emplace<Sprite>(entity);
+
+        sprite.scale = { 2.0, 2.0 };
         AssignSprite(sprite, "TeamGame:Other:Chest");
 
         auto& transform = reg1.get_or_emplace<Transform>(entity);
-        transform.position = { 5000, 5000, 1 };
+        transform.position = { 468, 270, 1 };
 
         auto& collider = reg1.get_or_emplace<Collider>(entity);
         collider.size = sprite.size;
-        collider.entityType = CollisionID::TERRAIN;
+        collider.entityType = CollisionID::COLLECTABLE;
         collider.hasGravity = false;
+        auto& staticCollider = reg1.get_or_emplace<StaticCollider>(entity);
+        SaveOnBoard(entity, transform.position.x);
 
         auto& treasure = reg1.get_or_emplace<TreasureChest>(entity);
     }

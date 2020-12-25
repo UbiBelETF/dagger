@@ -1,6 +1,7 @@
 #pragma once
 #include "core/system.h"
 #include "core/core.h"
+
 #include <array>
 
 using namespace dagger;
@@ -9,7 +10,7 @@ namespace team_game
 {
     enum class CollisionSide { NONE, RIGHT, LEFT, TOP, BOTTOM };
 
-    enum class CollisionID { PLAYER, TERRAIN, ENEMY };
+    enum class CollisionID { PLAYER, TERRAIN, ENEMY, COLLECTABLE, TRAP };
 
     enum class MovementState { IMMOBILE, UNSTOPPABLE, MOVEABLE };
 
@@ -19,6 +20,11 @@ namespace team_game
 
         CollisionSide collisionSide = CollisionSide::NONE, collisionSideOther = CollisionSide::NONE;
     };
+
+    struct StaticCollider
+    {
+        UInt8 a;
+    }; 
 
     struct Collider
     {
@@ -48,12 +54,17 @@ namespace team_game
 
     class CollisionSystem : public System
     {
+        Map<SInt32, Sequence<Entity>> cachedStatics{};
+
     public:
 
         inline String SystemName() { return "Platformer Collisions System"; }
 
+        void SpinUp() override;
         void Run() override;
 
         void LimitPlayerMovement(Collider& collision_);
     };
+
+    SInt32 Neighborhood(Float32 x_coord);
 }

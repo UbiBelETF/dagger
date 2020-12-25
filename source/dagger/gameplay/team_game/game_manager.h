@@ -20,11 +20,19 @@ namespace team_game
     private:
         inline static Sequence<Vector3> playerPositionsPerLevel{};
 
+        inline static UInt8 winnerId{ 0 };
+        inline static Bool isGameOver{ false };
+
         inline static UInt8 currentLevel{ 0 };
-        inline static Bool completedObjective{ true };
+        inline static Bool gameStarted{ true };
+
+        inline static Bool messageDisplayed{ false };
 
         void OnEndOfFrame();
     public:
+        Bool restarted{ false };
+        EDaggerKeyboard nextLevelKey{ EDaggerKeyboard::KeyY };
+
         inline String SystemName() { return " Game Manager System "; }
 
         void SpinUp() override;
@@ -32,11 +40,15 @@ namespace team_game
 
         void Run() override;
 
+        void OnKeyboardEvent(KeyboardEvent kEvent_);
+
         void LoadNextLevel();
-        void LoadTextures(String filePath_, Bool addCollision_);
+
+        void LoadTextures(String filePath_, Bool addCollision_, Bool isTrap_ = false);
         void LoadBackDrop();
         void LoadPlatforms();
         void LoadTraps();
+        void LoadCollectables();
 
         inline static Sequence<Vector3>& GetPlayerPositionsPerLevel()
         {
@@ -48,9 +60,11 @@ namespace team_game
             return currentLevel;
         }
 
-        inline static Bool& IsObjectiveCompleted()
+        inline static void SetCurrentLevel(UInt8 newLevel_)
         {
-            return completedObjective;
+            currentLevel = newLevel_;
         }
     };
+
+    void SaveOnBoard(Entity entity_, Float32 position_);
 };
