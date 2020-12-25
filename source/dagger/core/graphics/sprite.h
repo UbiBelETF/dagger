@@ -44,7 +44,7 @@ namespace dagger
 		SpriteCutoutData frame;
 	};
 
-	void AssignSprite(Sprite& spriteTarget_, String textureName_);
+	void AssignSprite(Sprite& spriteTarget_, String textureName_, UInt32 size_ = 1);
 	void AssignSprite(Sprite& spriteTarget_, ViewPtr<Texture> texture_);
 	void AssignSprite(Sprite& spriteTarget_, ViewPtr<SpriteFrame> texture_);
 

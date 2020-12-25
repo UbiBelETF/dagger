@@ -1,0 +1,10 @@
+{
+	"context-name": "menu",
+	"commands": [ 
+		{ "command-name": "start", 
+		  "actions": [
+			{ "trigger": "KeySpace", "value": 1 },
+			{ "trigger": "MouseButton1", "value": 1 }
+		] }
+	]
+}

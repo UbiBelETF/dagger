@@ -7,6 +7,7 @@
 
 #include "gameplay/common/simple_collisions.h"
 #include "gameplay/tank_warfare/camera_center.h"
+#include "gameplay/tank_warfare/game_menu.h"
 
 using namespace tank_warfare;
 
@@ -31,6 +32,8 @@ void TankStatsSystem::Run()
                 if (anim.currentFrame == AnimatorNumberOfFrames(anim))
                 {
                     tank.toBeDestroyed = true;
+                    if (tank.id == 1) GameMenuSystem::EndOfGame("two");
+                    else if (tank.id == 2) GameMenuSystem::EndOfGame("one");
                 }
             }
             else
@@ -128,7 +131,7 @@ void TankStatsSystem::Run()
     }
 }
 
-void tank_warfare::CreateTankCharacter(Vector3 pos_, String input_)
+void tank_warfare::CreateTankCharacter(int playerNo_, Vector3 pos_, String input_)
 {
     auto& reg = Engine::Registry();
     auto entity = reg.create();
@@ -139,6 +142,7 @@ void tank_warfare::CreateTankCharacter(Vector3 pos_, String input_)
     auto& input = reg.emplace<InputReceiver>(entity);
     auto& tank = reg.emplace<TankCharacter>(entity);
     auto& cam = reg.emplace<CameraCenter>(entity);
+    tank.id = playerNo_;
     sprite.scale = { -1, 1 };
     transform.position = pos_;
     collision.size = sprite.size;
