@@ -398,6 +398,22 @@ void team_game::SetupWorld_Demo(Engine& engine_)
             sprite.scale = { 3, 3 };
             sprite.position = { -385, 225, 0 };
             sprite.UseAsUI();
+            auto uii = reg.create();
+            auto& text = reg.emplace<Text>(uii);
+            auto& ct = reg.emplace<CounterType>(uii);
+            ct.type = true;
+            text.spacing = 0.6f;
+            text.Set("pixel-font", fmt::format("x {}", mainChar.character.deaths), { -300, 222,0 });
+        }
+        {
+            auto bar = reg.create();
+            auto& sprite = reg.get_or_emplace<Sprite>(bar);
+            auto& b = reg.get_or_emplace<BarOrCredits>(bar);
+            AssignSprite(sprite, "team_game:Healthbar:barnone");
+            sprite.color = { 1, 1, 1, 1.0f };
+            sprite.scale = { 1, 1 };
+            sprite.position = { 0, 265, 0 };
+            sprite.UseAsUI();
         }
     }
 }

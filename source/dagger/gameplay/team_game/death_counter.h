@@ -10,9 +10,12 @@ namespace team_game
 {
 	struct CounterType
 	{
-
 		Bool type = false;
 	};
+    struct BarOrCredits
+    {
+        Bool bar = true;
+    };
     class DeathsCounterSystem
         : public System
     {
