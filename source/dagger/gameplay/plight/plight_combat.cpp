@@ -15,6 +15,7 @@
 #include "gameplay/plight/plight_projectiles.h"
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_melee.h"
+#include "gameplay/plight/plight_fields.h"
 
 
 
@@ -88,15 +89,18 @@ void PlightCombatSystem::Run()
 									}									
 								}
 								else {
-									Float32 dmg = projectile.projectileDamage;
-									Float32 dist = getDistance(t.position.x, t.position.y, otherTransform.position.x, otherTransform.position.y);
-									if (dist > 0) {
-										dmg = projectile.projectileDamage * 1 / (dist / 15);
-										if (dmg > projectile.projectileDamage) {
-											dmg = projectile.projectileDamage;
+									if (!cstats.healing) {
+										Float32 dmg = projectile.projectileDamage;
+										Float32 dist = getDistance(t.position.x, t.position.y, otherTransform.position.x, otherTransform.position.y);
+										if (dist > 0) {
+											dmg = projectile.projectileDamage * 1 / (dist / 15);
+											if (dmg > projectile.projectileDamage) {
+												dmg = projectile.projectileDamage;
+											}
 										}
+										cstats.currentHealth -= dmg;
 									}
-									cstats.currentHealth -= dmg;
+									
 								}
 							}
 							else if(!projectile.destroy){
@@ -112,6 +116,43 @@ void PlightCombatSystem::Run()
 								auto& sprite = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
 								cstats.healthBarOffset += (sprite.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2;
 								sprite.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);				
+						}
+						if (Engine::Registry().has<DefenseField>(entity)){			
+							auto& defenseField = Engine::Registry().get<DefenseField>(entity);
+							if (defenseField.defenseFieldE == *it) {
+								if (cstats.healing) {
+									if (!defenseField.initialDone) {
+										cstats.currentHealth += defenseField.initialHealthReturn;
+										if (cstats.currentHealth > cstats.maxHealth) {
+											cstats.currentHealth = cstats.maxHealth;
+										}
+										cstats.currentStamina -= defenseField.initialStaminaCost;
+										if (cstats.currentStamina > cstats.maxStamina) {
+											cstats.currentStamina = cstats.maxStamina;
+										}
+										defenseField.initialDone = true;
+									}
+									if (cstats.currentStamina < STAMINA_FOR_HEALING_FRAME) {
+										it++;
+										continue;
+									}
+									cstats.currentStamina -= STAMINA_FOR_HEALING_FRAME;
+									if (cstats.currentStamina < 0.f) {
+										cstats.currentStamina = 0.f;
+									}
+									auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
+									cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
+									sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
+
+									cstats.currentHealth += STAMINA_FOR_HEALING_FRAME/2;
+									if (cstats.currentHealth > cstats.maxHealth) {
+										cstats.currentHealth = cstats.maxHealth;
+									}
+									auto& sprite2 = Engine::Registry().get<Sprite>(cstats.currentHealthBar);
+									cstats.healthBarOffset -= std::abs((sprite2.size.x - (BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth))) / 2);
+									sprite2.size.x = BAR_START_SIZE * (cstats.currentHealth / cstats.maxHealth);
+								}
+							}
 						}
 					}
 					it++;
@@ -141,16 +182,15 @@ void PlightCombatSystem::Run()
 					cstats.staminaBarOffset -= (sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2;
 					sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
 				}
-				else {
-					cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME / 2;
+				else if(!cstats.healing || cstats.currentStamina < STAMINA_FOR_HEALING_FRAME){
+					cstats.currentStamina += STAMINA_FOR_REGENERATING_FRAME;
 					if (cstats.currentStamina > 100) {
 						cstats.currentStamina = 100;
 					}
-					if (cstats.currentStamina < 100) {
 						auto& sprite = Engine::Registry().get<Sprite>(cstats.currentStaminaBar);
 						cstats.staminaBarOffset += std::abs((sprite.size.x - (BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina))) / 2);
 						sprite.size.x = BAR_START_SIZE * (cstats.currentStamina / cstats.maxStamina);
-					}
+					
 				}
 				cstats.currentTimer = 0.f;
 			}

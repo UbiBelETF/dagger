@@ -30,6 +30,7 @@
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_particles.h"
+#include "gameplay/plight/plight_fields.h"
 
 
 
@@ -158,6 +159,10 @@ struct PlightCharacter
             { 0.9f,0.9f,0.9f,1 }, { 0.9f,0.9f,0.9f,1 }, "smoke", 0.05f, .5f, 0.5f);
         PlightParticleSystem::SetupParticleSystem(chr.character.dashingParticleSpawner, particle_settings2);
 
+        auto& defenseField = reg.emplace<DefenseField>(chr.entity);
+        defenseField.defenseFieldE = reg.create();
+        defenseField.holder = chr.entity;
+
         return chr;
     }
 };
@@ -176,6 +181,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightSpikesSystem>();
     engine_.AddSystem<PlightParticleSystem>();
 	engine_.AddSystem<MeleeSystem>();
+    engine_.AddSystem<FieldsSystem>();
 
 }
 
@@ -234,6 +240,7 @@ void plight::ResetCharacters()
         character.character.dashing = false;
         character.character.running = false;
         character.character.resting = false;
+        character.cstats.healing = false;
         character.character.dead = false;
 
         Float32 x_weapon = character.character.weaponOffset * cos(character.crosshair.angle);
@@ -249,7 +256,10 @@ void plight::ResetCharacters()
         weapon_sprite.position.y = character.transform.position.y - 3.f + y_weapon;
         weapon_sprite.position.z = character.transform.position.z - 5.f;
         weapon_sprite.rotation = (character.crosshair.angle * 180.) / M_PI + 45;
-        
+
+        auto& defenseField = Engine::Registry().get_or_emplace<DefenseField>(character.entity);
+        defenseField.fieldsLeft = 2;
+        defenseField.fieldActive = false;
         
     }
 }
