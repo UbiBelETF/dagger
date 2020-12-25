@@ -84,8 +84,6 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
     legend['j'] = &level_generator::jovica::CreateBottomRightConcWallS;
     legend['e'] = &level_generator::jovica::CreateTopLeftConcWallS;
     legend['y'] = &level_generator::jovica::CreateTopRightConcWallS;
-    legend['@'] = &level_generator::jovica::CreatePlayer;
-    legend['d'] = &level_generator::jovica::CreateDoor;
     legend['g'] = &level_generator::jovica::CreateIdleGoblin; 
     legend['k'] = &level_generator::jovica::CreateKey;
     legend['T'] = &level_generator::jovica::CreateBigTable;
@@ -100,7 +98,72 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
     legend['|'] = &level_generator::jovica::TopLeftSide;
     Engine::Dispatcher().trigger <TilemapLoadRequest>(TilemapLoadRequest{ "tilemaps/tilemap_test_jovica.map", &legend });
 
-    //slime1
+    //PLAYER
+    auto player = reg_.create();
+    auto& playerState = ATTACH_TO_FSM(CharacterFSM, player);
+    playerState.currentState = ECharacterState::Idle;
+    auto& playerSprite = reg_.emplace<Sprite>(player);
+    AssignSprite(playerSprite, "spritesheets:among_them_spritesheet:knight_idle_anim:1");
+    playerSprite.scale = { 1, 1 };
+    auto& playerAnimator = reg_.emplace<Animator>(player);
+    AnimatorPlay(playerAnimator, "among_them_animations:knight_idle");
+    auto& playerTransform = reg_.emplace<Transform>(player);
+    playerTransform.position = { 30*16, -13*16, 1 };
+    auto& playerInput = reg_.get_or_emplace<InputReceiver>(player);
+    playerInput.contexts.push_back("AmongThemInput");
+    auto& controller = reg_.emplace<CharacterController>(player);
+    reg_.emplace<MovableBody>(player);
+
+    auto& heroDet = reg_.emplace<Detection>(player);
+    heroDet.SetSize({ 2, 2 });
+
+    auto& playerCollision = reg_.emplace<SimpleCollision>(player);
+    playerCollision.size = playerSprite.size;
+    // POOF
+    auto poofEntity = reg_.create();
+
+    reg_.emplace<Transform>(poofEntity);
+    auto& poofSprite = reg_.emplace<Sprite>(poofEntity);
+    AssignSprite(poofSprite, "spritesheets:among_them_spritesheet:poof_anim:5");
+    poofSprite.scale = { 0.5, 0.5 };
+    auto& poofFollow = reg_.emplace<Follow>(poofEntity);
+    poofFollow.target = player;
+    poofFollow.offset.z = -1;
+    auto& poofAnimator = reg_.emplace<Animator>(poofEntity);
+    poofAnimator.isLooping = false;
+    auto& exec = reg_.emplace<AnimationExecutor>(poofEntity);
+    exec.source = &controller.animationTrigger;
+    exec.animationName = "among_them_animations:poof";
+    exec.startingSpriteName = "spritesheets:among_them_spritesheet:poof_anim:1";
+
+    //DOOR
+    auto door = reg_.create();
+
+    auto& doorSprite = reg_.emplace<Sprite>(door);
+    AssignSprite(doorSprite, "spritesheets:among_them_spritesheet:door_open_anim:1");
+    doorSprite.scale = { 1, 1 };
+
+    auto& doorAnimator = reg_.emplace<Animator>(door);
+
+    auto& doorTransform = reg_.emplace<Transform>(door);
+    doorTransform.position = { 7*16+8,0*16+8,1};
+
+    auto& doorCollision = reg_.emplace<SimpleCollision>(door);
+    doorCollision.size = doorSprite.size;
+
+     SInt32 x = ((SInt32)doorTransform.position.x + 8) / 16;
+    SInt32 y = ((SInt32)doorTransform.position.y - 8) / 16;
+
+    auto& collider = reg_.emplace<StaticBody>(door);
+    collider.size = { 30.0f,30.0f };
+    Engine::GetDefaultResource<StaticBodyMap>()->put(x,y, door);
+
+    auto& doorDetection = reg_.emplace<Detection>(door);
+    doorDetection.who = player;
+    doorDetection.SetSize({ 2,2 });
+    reg_.emplace<Door>(door);
+    
+   //slime1
     auto slime1 = reg_.create();
     auto& enemyState = ATTACH_TO_FSM(EnemyFSM, slime1);
     enemyState.currentState = EEnemyState::Patrolling;
@@ -761,6 +824,8 @@ void SetupWorld_(Engine& engine_, Registry& reg_)
 
     auto& vcCone14 = reg_.emplace<VisionCone>(visionCone14);
     vcCone14.shape = ECharacterShape::Goblin;
+    
+    
 }
 
 void team_game::SetupWorld(Engine &engine_)
