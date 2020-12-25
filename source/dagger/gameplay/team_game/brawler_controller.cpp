@@ -13,6 +13,7 @@
 #include "gameplay/team_game/team_game_main.h"
 #include "gameplay/team_game/boss_ai.h"
 #include "core/game/transforms.h"
+#include "gameplay/team_game/game_manager.h"
 using namespace team_game;
 
 
@@ -25,19 +26,8 @@ void BrawlerControllerSystem::Run()
                 auto& input_ = Engine::Registry().get<InputReceiver>(state_.entity);
                 if (input_.Get("reset"))
                 {
-                    auto& transform = Engine::Registry().get<Transform>(state_.entity);
-                    auto& brawler = Engine::Registry().get<BrawlerCharacter>(state_.entity);
-                    transform.position={ 0,100 ,0};
-                    brawler.healthHearts = 3;
-                    auto view = Engine::Registry().view<BossAI, BrawlerCharacter, Transform>();
-                    for (auto entity : view)
-                    {
-                            auto& transform2 = Engine::Registry().get<Transform>(entity);
-                            auto& brawler = Engine::Registry().get<BrawlerCharacter>(entity);
-                            transform2.position = { 2475,1125,0 };
-                            brawler.healthHearts = 9;
-                    }
-                                              
+                    GameManagerSystem::completedObjective = true;
+                    
                 }
                 m_ControllerFSM.Run(state_);
             });

@@ -11,14 +11,14 @@ namespace team_game
 {
     class GameManagerSystem : public System
     {
-    private:
+    public:
         inline static Sequence<Vector3> playerPositionsPerLevel{};
 
         inline static UInt8 currentLevel{ 0 };
         inline static Bool completedObjective{ true };
 
         void OnEndOfFrame();
-    public:
+   
         inline String SystemName() { return " Game Manager System "; }
 
         void SpinUp() override;

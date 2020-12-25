@@ -29,7 +29,7 @@ void GameManagerSystem::Run()
 
 void GameManagerSystem::LoadNextLevel()
 {
-    currentLevel++;
+    if(currentLevel==0)currentLevel++;
     LoadBackDrop();
     LoadPlatforms();
     completedObjective = false;
