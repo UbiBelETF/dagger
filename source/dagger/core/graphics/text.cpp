@@ -6,8 +6,7 @@
 
 using namespace dagger;
 
-void Text::Set(String font_, String message_, Vector3 pos_, Bool ui_)
-void Text::Set(String font_, String message_, Vector3 pos_, Float32 size_)
+void Text::Set(String font_, String message_, Vector3 pos_, Float32 size_, Bool ui_)
 {
 	font = font_;
 	position=pos_;
