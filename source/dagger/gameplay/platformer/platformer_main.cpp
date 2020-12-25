@@ -26,10 +26,10 @@ using namespace platformer;
 
 void Platformer::GameplaySystemsSetup(Engine& engine_)
 {
-	engine_.AddSystem<PlatformerControllerSystem>();
+    engine_.AddSystem<PlatformerCollisionSystem>();
+    engine_.AddSystem<PlatformerControllerSystem>();
     engine_.AddSystem<ParallaxSystem>();
     engine_.AddSystem<CameraFollowSystem>();
-    engine_.AddSystem<PlatformerCollisionSystem>();
 }
 
 void SetCamera()

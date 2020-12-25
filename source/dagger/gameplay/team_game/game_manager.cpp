@@ -12,12 +12,13 @@
 #include "gameplay/team_game/treasure.h"
 #include "gameplay/team_game/traps_collision.h"
 
-
 using namespace dagger;
 using namespace team_game;
 
 void GameManagerSystem::SpinUp()
 {
+    Engine::PutDefaultResource<Map<SInt32, Sequence<Entity>>>(new Map<SInt32, Sequence<Entity>>{});
+
     Engine::Dispatcher().sink<NextFrame>().connect<&GameManagerSystem::OnEndOfFrame>(this);
     Engine::Dispatcher().sink<KeyboardEvent>().connect<&GameManagerSystem::OnKeyboardEvent>(this);
 }
@@ -71,9 +72,20 @@ void GameManagerSystem::OnKeyboardEvent(KeyboardEvent kEvent_)
     }
 }
 
+void team_game::SaveOnBoard(Entity entity_, Float32 position_)
+{
+    static auto* board = Engine::GetDefaultResource<Map<SInt32, Sequence<Entity>>>();
+    auto neighborhood = Neighborhood(position_);
+    (*board)[neighborhood].push_back(entity_);
+
+    Logger::critical("Adding {} to neighborhood {}", entity_, neighborhood);
+}
 
 void GameManagerSystem::LoadNextLevel()
 {
+    auto* board = Engine::GetDefaultResource<Map<SInt32, Sequence<Entity>>>();
+    board->clear();
+
     LoadBackDrop();
     LoadPlatforms();
     LoadTraps();
@@ -135,6 +147,7 @@ void GameManagerSystem::LoadCollectables()
         collider.entityType = CollisionID::COLLECTABLE;
         collider.state = MovementState::IMMOBILE;
         collider.size = spriteBlock.size * spriteBlock.scale;
+        auto& staticCollider = reg.get_or_emplace<StaticCollider>(block);
 
         auto& collectable = reg.get_or_emplace<Collectable>(block);
         collectable.improvement = improvement;
@@ -153,12 +166,15 @@ void GameManagerSystem::LoadCollectables()
         {
             collectable.type = CollectableType::JUMP;
         }
+
+        SaveOnBoard(block, transform.position.x);
     }
 }
 
 void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool isTrap_)
 {
-    
+    auto* board = Engine::GetDefaultResource<Map<SInt32, Sequence<Entity>>>();
+
     FilePath path{ filePath_ };
     std::ifstream fin(Files::absolute(path).string().c_str());
 
@@ -205,6 +221,7 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
             auto bigBlock = reg.create();
             auto& collider = reg.get_or_emplace<Collider>(bigBlock);
             auto& transform = reg.get_or_emplace<Transform>(bigBlock);
+            auto& staticCollider = reg.get_or_emplace<StaticCollider>(bigBlock);
 
             if (isTrap_)
             {
@@ -221,6 +238,7 @@ void GameManagerSystem::LoadTextures(String filePath_, Bool addCollision_, Bool 
             collider.size.y = spriteSize.y * verticalBlocks;
 
             transform.position = { pos.x + collider.size.x / 2, pos.y + collider.size.y / 2, zPos };
+            SaveOnBoard(bigBlock, transform.position.x);
         }
 
         addCollision = addCollision_;

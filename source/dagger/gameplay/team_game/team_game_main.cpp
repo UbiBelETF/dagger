@@ -140,6 +140,8 @@ void team_game::SetupWorld(Engine& engine_)
         collider.size = sprite.size;
         collider.entityType = CollisionID::COLLECTABLE;
         collider.hasGravity = false;
+        auto& staticCollider = reg1.get_or_emplace<StaticCollider>(entity);
+        SaveOnBoard(entity, transform.position.x);
 
         auto& treasure = reg1.get_or_emplace<TreasureChest>(entity);
     }

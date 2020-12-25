@@ -2,18 +2,33 @@
 
 #include "core/engine.h"
 #include "core/game/transforms.h"
+#include "character_controller.h"
 
 using namespace dagger;
 using namespace team_game;
 
+SInt32 team_game::Neighborhood(Float32 x_)
+{
+    auto bucket = (SInt32)(x_ / 250.0f);
+    return bucket;
+}
+
+void CollisionSystem::SpinUp()
+{}
+
 void CollisionSystem::Run()
 {
-    auto view = Engine::Registry().view<Collider, Transform>();
-    auto iterator = view.begin();
+    auto* board = Engine::GetDefaultResource<Map<SInt32, Sequence<Entity>>>();
+    if (board->size() == 0 && cachedStatics.size() > 0)
+        cachedStatics.clear();
 
-    while (iterator != view.end())//this for loop clears all previous collision data
+    const auto dynamics = Engine::Registry().view<Collider, Transform, PlayerCharacter>();
+
+    auto iterator = dynamics.begin();
+
+    while (iterator != dynamics.end())
     {
-        auto& collision = view.get<Collider>(*iterator);
+        auto& collision = dynamics.get<Collider>(*iterator);
 
         collision.listOfEntities.clear();
         collision.listOfCollisionSides.clear();
@@ -24,39 +39,66 @@ void CollisionSystem::Run()
         iterator++;
     }
 
-    auto it = view.begin();
+    auto it = dynamics.begin();
 
-    while (it != view.end())
+    while (it != dynamics.end())
     {
-        auto& collision = view.get<Collider>(*it);
-        auto& transform = view.get<Transform>(*it);
+        Sequence<Entity> okStatics, statics;
 
-        Vector2 p{};
+        auto& [dynamicCollider, dynamicTransform] = dynamics.get<Collider, Transform>(*it);
+        const auto dynamicIndex = Neighborhood(dynamicTransform.position.x);
 
-        auto it2 = it;
-        it2++;
-        while (it2 != view.end())
+        if (cachedStatics.find(dynamicIndex) != cachedStatics.end())
         {
-            auto& col = view.get<Collider>(*it2);
-            auto& tr = view.get<Transform>(*it2);
+            for (SInt32 i = -1; i < 2; i++) // -1, 0, 1
+            {
+                auto index = dynamicIndex + i;
+                if (board->contains(index))
+                {
+                    for (auto stat : (*board)[index]) statics.push_back(stat);
+                }
+            }
 
-            if (collision.collidesWith[(int)col.entityType])
+            cachedStatics[dynamicIndex] = statics;
+        }
+        else
+        {
+            statics = cachedStatics[dynamicIndex];
+        }
+
+        for (auto id : statics)
+        {
+            if (Engine::Registry().valid(id) && Engine::Registry().has<Collider, Transform>(id))
+                okStatics.push_back(id);
+        }
+
+        if (okStatics.size() != statics.size())
+        {
+            statics = okStatics;
+            cachedStatics[dynamicIndex] = statics;
+        }
+
+        for (auto id : statics)
+        { 
+            auto& [staticCollider, staticTransform] = Engine::Registry().get<Collider, Transform>(id);
+
+            if (dynamicCollider.collidesWith[(int)staticCollider.entityType])
             {
                 // Perform the collision check
-                CollisionInfo collisionInfo = collision.GetCollisionInfo(transform.position, col, tr.position);
+                const CollisionInfo& collisionInfo = dynamicCollider.GetCollisionInfo(dynamicTransform.position, staticCollider, staticTransform.position);
 
                 if (collisionInfo.hasCollided)
                 {
-                    collision.listOfEntities.push_back(*it2);
-                    collision.listOfCollisionSides.push_back(collisionInfo.collisionSide);
+                    dynamicCollider.listOfEntities.push_back(id);
+                    dynamicCollider.listOfCollisionSides.push_back(collisionInfo.collisionSide);
 
-                    col.listOfEntities.push_back(*it);
-                    col.listOfCollisionSides.push_back(collisionInfo.collisionSideOther);
+                    staticCollider.listOfEntities.push_back(*it);
+                    staticCollider.listOfCollisionSides.push_back(collisionInfo.collisionSideOther);
                 }
             }
-            it2++;
         }
-        LimitPlayerMovement(collision);//goes through all the collisions and limits the movement of the player depending on said collisions
+
+        LimitPlayerMovement(dynamicCollider);
         it++;
     }
 
