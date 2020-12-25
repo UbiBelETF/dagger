@@ -29,6 +29,7 @@
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_particles.h"
+#include "gameplay/plight/plight_camera.h"
 
 
 
@@ -66,6 +67,7 @@ struct PlightCharacter
         physics.collision_groups.push_back(1);
         auto& cstats = reg.get_or_emplace<CombatStats>(entity_);
         auto& crosshair = reg.get_or_emplace<PlightCrosshair>(entity_);
+        auto& camera = reg.get_or_emplace<plight::CameraCenter>(entity_);
 
         return PlightCharacter{ entity_, sprite, anim, input, character, col, transform, physics, cstats, crosshair};
 
@@ -160,7 +162,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightGameLogicSystem>();
     engine_.AddSystem<PlightSpikesSystem>();
     engine_.AddSystem<PlightParticleSystem>();
-
+    engine_.AddSystem<plight::CameraCenterSystem>();
 }
 
 void Plight::WorldSetup(Engine &engine_)
