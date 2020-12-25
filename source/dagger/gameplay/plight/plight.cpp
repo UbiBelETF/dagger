@@ -18,6 +18,7 @@
 #include <time.h>
 #include <math.h>
 
+#include "gameplay/plight/plight_melee.h"
 #include "gameplay/plight/plight_tilemaps_initialization.h"
 #include "gameplay/plight/plight_controller.h"
 #include "gameplay/plight/plight_combat.h"
@@ -29,6 +30,7 @@
 #include "gameplay/plight/plight_game_logic.h"
 #include "gameplay/plight/plight_spikes.h"
 #include "gameplay/plight/plight_particles.h"
+
 
 
 
@@ -133,6 +135,13 @@ struct PlightCharacter
 
         chr.character.weaponSprite = reg.create();
         auto& weapon_sprite = reg.emplace<Sprite>(chr.character.weaponSprite);
+		auto& col = reg.get_or_emplace<PlightCollision>(chr.character.weaponSprite);
+		col.size = { 10 , 10 };
+		auto& wep = reg.get_or_emplace<Weapon>(chr.character.weaponSprite);
+		wep.holder = chr.entity;
+        auto& animator = reg.emplace<Animator>(chr.character.weaponSprite);
+		auto& transform = reg.emplace<Transform>(chr.character.weaponSprite);
+		transform.position = {position_ , 82.f};
         AssignSprite(weapon_sprite, "EmptyWhitePixel");
         weapon_sprite.scale = chr.sprite.scale;
         weapon_sprite.position.x = chr.sprite.position.x + chr.character.weaponOffset * weapon_sprite.scale.x;
@@ -166,6 +175,7 @@ void Plight::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<PlightGameLogicSystem>();
     engine_.AddSystem<PlightSpikesSystem>();
     engine_.AddSystem<PlightParticleSystem>();
+	engine_.AddSystem<MeleeSystem>();
 
 }
 
@@ -230,6 +240,11 @@ void plight::ResetCharacters()
         Float32 y_weapon = character.character.weaponOffset * sin(character.crosshair.angle);
 
         auto& weapon_sprite = Engine::Registry().get<Sprite>(character.character.weaponSprite);
+        AssignSprite(weapon_sprite, character.character.weaponSpriteName);
+        character.character.attacking = false;
+        auto& weapon = Engine::Registry().get<Weapon>(character.character.weaponSprite);
+        weapon.animPlaying = false;
+        weapon.attacking = false;
         weapon_sprite.position.x = character.transform.position.x + x_weapon;
         weapon_sprite.position.y = character.transform.position.y - 3.f + y_weapon;
         weapon_sprite.position.z = character.transform.position.z - 5.f;
@@ -265,6 +280,9 @@ void plight::SetupWorld(Engine& engine_)
     auto mainChar = PlightCharacter::Create("asdw_circular", { 1, 1, 1 }, { -356, 32 });
     mainChar.crosshair.startAngle = 0.f;
     mainChar.character.playerNumber = "Player 1";
+    mainChar.character.meleeWeaponSpriteName = "Plight:weapons:SWORD:Sword";
+    mainChar.character.weaponAnimationName = "Plight:weapons:SWORD";
+	mainChar.character.weaponSpriteName = "Plight:weapons:Bow_13";
     auto& weapon_sprite1 = Engine::Registry().get<Sprite>(mainChar.character.weaponSprite);
     AssignSprite(weapon_sprite1, "Plight:weapons:Bow_13");
     auto& projectile_spawner1 = Engine::Registry().get<ProjectileSpawner>(mainChar.entity);
@@ -331,6 +349,9 @@ void plight::SetupWorld(Engine& engine_)
     auto& crosshairSprite = Engine::Registry().get<Sprite>(sndChar.crosshair.crosshairSprite);
     crosshairSprite.position.x -= sndChar.crosshair.playerDistance * 2;
     sndChar.character.playerNumber = "Player 2";
+    sndChar.character.meleeWeaponSpriteName = "Plight:weapons:AXE:Axe";
+    sndChar.character.weaponAnimationName = "Plight:weapons:AXE";
+	sndChar.character.weaponSpriteName = "Plight:weapons:Crossbow_4";
     auto& weapon_sprite2 = Engine::Registry().get<Sprite>(sndChar.character.weaponSprite);
     AssignSprite(weapon_sprite2, "Plight:weapons:Crossbow_4");
     auto& projectile_spawner2 = Engine::Registry().get<ProjectileSpawner>(sndChar.entity);

@@ -2,6 +2,7 @@
 
 #include "plight_aiming.h"
 #include "plight_game_logic.h"
+#include "core/game/transforms.h"
 
 #include "core/graphics/sprite.h"
 #include "core/input/inputs.h"
@@ -57,10 +58,17 @@ void plight::PlightAimingSystem::Run()
             Float32 x_weapon = character_.weaponOffset * cos(crosshair_.angle);
             Float32 y_weapon = character_.weaponOffset * sin(crosshair_.angle);
 
-            auto& weapon_sprite = Engine::Registry().get<Sprite>(character_.weaponSprite);
-            weapon_sprite.position.x = sprite_.position.x + x_weapon;
-            weapon_sprite.position.y = sprite_.position.y - 3.f + y_weapon;
-            weapon_sprite.rotation = (crosshair_.angle * 180.) / M_PI + 45;
+            auto& weapon_transform = Engine::Registry().get<Transform>(character_.weaponSprite);
+			auto& weapon_sprite = Engine::Registry().get<Sprite>(character_.weaponSprite);
+            weapon_transform.position.x = sprite_.position.x + x_weapon;
+            weapon_transform.position.y = sprite_.position.y - 3.f + y_weapon;
+            if(character_.attacking){
+				weapon_sprite.rotation = (crosshair_.angle * 180.) / M_PI - 45;
+			}
+			else {
+				weapon_sprite.rotation = (crosshair_.angle * 180.) / M_PI + 45;
+			}
+			
 
 		    });
 	}

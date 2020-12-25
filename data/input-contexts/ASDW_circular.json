@@ -32,6 +32,11 @@
       "trigger": "KeyF",
       "event": "Released"
     },
+	{
+      "command-name": "attack",
+      "trigger": "KeyR",
+      "event": "Released"
+    },
     {
       "command-name": "bomb",
       "trigger": "KeyF",
