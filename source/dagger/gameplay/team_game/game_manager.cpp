@@ -61,7 +61,7 @@ void GameManagerSystem::Run()
                 return;
             }
         }
-        /*
+        
         if (!restarted)
         {
             auto& playerView = Engine::Registry().view<PlayerCharacter, Transform>();
@@ -72,32 +72,32 @@ void GameManagerSystem::Run()
                 auto& player = Engine::Registry().get<PlayerCharacter>(entity);
                 auto& transform = Engine::Registry().get<Transform>(entity);
 
-                if (camera->position.x - transform.position.x < -533)
+                if (camera->position.x - transform.position.x < -666)
                 {
                     isGameOver = true;
                     winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
-                else if (camera->position.x - transform.position.x > 533)
+                else if (camera->position.x - transform.position.x > 666)
                 {
                     isGameOver = true;
                     winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
-                else if (camera->position.y - transform.position.y < -400)
+                else if (camera->position.y - transform.position.y < -500)
                 {
                     isGameOver = true;
                     winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
-                else if (camera->position.y - transform.position.y > 400)
+                else if (camera->position.y - transform.position.y > 500)
                 {
                     isGameOver = true;
                     winnerId = (player.id == 0) ? 1 : 0;
                     return;
                 }
             }
-        }*/
+        }
     }
 }
 
