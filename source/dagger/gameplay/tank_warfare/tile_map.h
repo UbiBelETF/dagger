@@ -19,6 +19,7 @@ namespace tank_warfare
 	Entity CreateMediumBuilding(Registry& reg_, SInt32 x_, SInt32 y_);
 	Entity CreateStorage(Registry& reg_, SInt32 x_, SInt32 y_);
 
+	void MapLoading();
 
 	struct Tilemap
 	{

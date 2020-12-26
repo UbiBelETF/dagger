@@ -120,6 +120,35 @@ Entity tank_warfare::CreateStorage(Registry& reg_, SInt32 x_, SInt32 y_)
 	return entity;
 }
 
+void tank_warfare::MapLoading()
+{
+	auto& reg = Engine::Registry();
+	Tilemap::legend['-'] = &CreateBuilding;
+	Tilemap::legend['$'] = &CreateBankBuilding;
+	Tilemap::legend['B'] = &CreateBiggestBuilding;
+	Tilemap::legend['@'] = &CreateSmallestBuilding;
+	Tilemap::legend['m'] = &CreateMediumBuilding;
+	Tilemap::legend['T'] = &CreateGroupTrees;
+	Tilemap::legend['s'] = &CreateStorage;
+	Tilemap::legend['E'] = &EmptyCollision;
+	Tilemap::legend['~'] = nullptr;
+
+	auto entityMap = reg.create();
+	auto& sprite = reg.emplace<Sprite>(entityMap);
+	AssignSprite(sprite, "jovanovici:maps:map");
+	auto& transform = reg.emplace<Transform>(entityMap);
+	transform.position = { 0, 0, 5 };
+
+	for (auto& entry : Files::recursive_directory_iterator("maps"))
+	{
+
+		if (entry.path().extension() == ".map")
+		{
+			Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ entry.path().string(), &Tilemap::legend });
+		}
+	}
+}
+
 Entity tank_warfare::EmptyCollision(Registry& reg_, SInt32 x_, SInt32 y_)
 {
 	auto entity = reg_.create();

@@ -86,31 +86,7 @@ void tank_warfare::SetupTestWorld(Engine& engine_)
     SetupCamera(engine_, 2);
     CollectibleSystem::ResetNumCoinsPowers();
 
-    auto& reg = Engine::Registry();
-	Tilemap::legend['-'] = &CreateBuilding;
-	Tilemap::legend['$'] = &CreateBankBuilding;
-	Tilemap::legend['B'] = &CreateBiggestBuilding;
-	Tilemap::legend['@'] = &CreateSmallestBuilding;
-	Tilemap::legend['m'] = &CreateMediumBuilding;
-	Tilemap::legend['T'] = &CreateGroupTrees;
-	Tilemap::legend['s'] = &CreateStorage;
-	Tilemap::legend['E'] = &EmptyCollision;
-	Tilemap::legend['~'] = nullptr;
-
-    auto entityMap = reg.create();
-    auto& sprite = reg.emplace<Sprite>(entityMap);
-    AssignSprite(sprite, "jovanovici:maps:map");
-    auto& transform = reg.emplace<Transform>(entityMap);
-    transform.position = { 0, 0, 5 };
-
-	for (auto& entry : Files::recursive_directory_iterator("maps"))
-	{
-
-	    if (entry.path().extension() == ".map") 
-        {
-	        Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ entry.path().string(), &Tilemap::legend });
-	    }
-	}
+	MapLoading();
     
     //tank1
     CreateTankCharacter(1, { -350, -260, 3 }, "tank1");
