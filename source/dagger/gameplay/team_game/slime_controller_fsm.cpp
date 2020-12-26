@@ -7,6 +7,7 @@
 
 #include "gameplay/team_game/slime_controller_fsm.h"
 #include "gameplay/team_game/slime_controller.h"
+#include "attack_system.h"
 using namespace dagger;
 using namespace team_game;
 // Idle
@@ -23,6 +24,7 @@ void SlimeControllerFSM::Idle::Enter(SlimeControllerFSM::StateComponent& state_)
 void SlimeControllerFSM::Idle::Run(SlimeControllerFSM::StateComponent& state_)
 {
 	auto& slimeAi = Engine::Registry().get<SlimeAi>(state_.entity);
+	if(!slimeAi.alive)GoTo(ESlimeStates::Dead, state_);
 	if (slimeAi.current.move != STAY|| slimeAi.current.attack == true)
 		GoTo(ESlimeStates::Running, state_);	
 }
@@ -34,9 +36,9 @@ void SlimeControllerFSM::Running::Enter(SlimeControllerFSM::StateComponent& stat
 
 void SlimeControllerFSM::Running::Run(SlimeControllerFSM::StateComponent& state_)
 {
-	auto&& [transform, sprite,slimeAi,slime] = Engine::Registry().get<Transform, Sprite, SlimeAi, TeamGameSlime>(state_.entity);
+	auto&& [transform, sprite,slimeAi,slime,attackSlime] = Engine::Registry().get<Transform, Sprite, SlimeAi, TeamGameSlime,Attack>(state_.entity);
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-
+	if (!slimeAi.alive)GoTo(ESlimeStates::Dead, state_);
 	Float32 run_left_right = 0;
 	Float32 run_up_down = 0;
 	switch (slimeAi.current.move) {
@@ -90,15 +92,21 @@ void SlimeControllerFSM::Running::Run(SlimeControllerFSM::StateComponent& state_
 		}
 
 	}
-
-	if (run_up_down > 0)
+	float bigSlimeBonus = 1.0f;
+	if (slime.type == "boss")bigSlimeBonus = 2.0f;
+	if (run_up_down > 0) {
 		AnimatorPlay(animator, "chara_slime:slime_move_up");
-
-	else if (run_up_down < 0)
+		attackSlime.offsetVec = Vector3(0, 10*bigSlimeBonus, 0);
+	}
+	else if (run_up_down < 0) {
 		AnimatorPlay(animator, "chara_slime:slime_move_down");
-
-	else if (run_left_right != 0)
+		attackSlime.offsetVec = Vector3(0, -10 * bigSlimeBonus, 0);
+	}
+	else if (run_left_right != 0) {
 		AnimatorPlay(animator, "chara_slime:slime_move_side");
+		attackSlime.offsetVec = Vector3(10*run_left_right * bigSlimeBonus, 0, 0);
+
+	}
 
 	if (slimeAi.current.attack == true)
 	{
@@ -115,7 +123,8 @@ void SlimeControllerFSM::Attacking::Enter(SlimeControllerFSM::StateComponent& st
 	SlimeControllerFSM::stopAttackOnNextRepeat = false;
 
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-
+	auto& slimeAi = Engine::Registry().get<SlimeAi>(state_.entity);
+	auto&& attackSlime = Engine::Registry().get<Attack>(state_.entity);
 	if (SlimeControllerFSM::facingPosition == side)
 		AnimatorPlay(animator, "chara_slime:slime_attack_side");
 
@@ -124,17 +133,37 @@ void SlimeControllerFSM::Attacking::Enter(SlimeControllerFSM::StateComponent& st
 
 	if (SlimeControllerFSM::facingPosition == down)
 		AnimatorPlay(animator, "chara_slime:slime_attack_down");
+	if(slimeAi.alive)
+	attackSlime.finished = true;
 }
 
 void SlimeControllerFSM::Attacking::Run(SlimeControllerFSM::StateComponent& state_)
 {
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-
+	auto& slimeAi = Engine::Registry().get<SlimeAi>(state_.entity);
+	auto& attackSlime = Engine::Registry().get<Attack>(state_.entity);
 	if (animator.currentFrame > 0)
 		stopAttackOnNextRepeat = true;
 
-	else if (SlimeControllerFSM::stopAttackOnNextRepeat && animator.currentFrame == 0)
+	 if ((SlimeControllerFSM::stopAttackOnNextRepeat && animator.currentFrame == 0) || (!slimeAi.alive)) {
+		attackSlime.finished = false;
 		GoTo(ESlimeStates::Idle, state_);
+	}
 }
 
 DEFAULT_EXIT(SlimeControllerFSM, Attacking);
+void SlimeControllerFSM::Dead::Enter(SlimeControllerFSM::StateComponent& state_) {
+	auto& attackSlime = Engine::Registry().get<Attack>(state_.entity);
+	attackSlime.finished = false;
+	auto&& sprite = Engine::Registry().get< Sprite>(state_.entity);
+	AssignSprite(sprite, "spritesheets:tiles_dungeon:empty");
+}
+void SlimeControllerFSM::Dead::Run(SlimeControllerFSM::StateComponent& state_) {
+
+	auto&& sprite = Engine::Registry().get< Sprite>(state_.entity);
+	AssignSprite(sprite, "spritesheets:tiles_dungeon:empty");
+}
+void SlimeControllerFSM::Dead::Exit(SlimeControllerFSM::StateComponent& state_) {
+	auto&& sprite = Engine::Registry().get< Sprite>(state_.entity);
+	AssignSprite(sprite, "spritesheets:tiles_dungeon:empty");
+}

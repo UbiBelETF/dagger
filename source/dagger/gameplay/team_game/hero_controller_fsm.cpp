@@ -114,7 +114,7 @@ void HeroControllerFSM::Attacking::Enter(HeroControllerFSM::StateComponent& stat
 	HeroControllerFSM::stopAttackOnNextRepeat = false;
 
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-
+	auto&& attackPlayer = Engine::Registry().get<Attack>(state_.entity);
 	if(HeroControllerFSM::facingPosition == side)
 		AnimatorPlay(animator, "chara_hero:hero_attack_side");
 
@@ -123,17 +123,21 @@ void HeroControllerFSM::Attacking::Enter(HeroControllerFSM::StateComponent& stat
 
 	if (HeroControllerFSM::facingPosition == down)
 		AnimatorPlay(animator, "chara_hero:hero_attack_down");
+	attackPlayer.finished = true;
 }
 
 void HeroControllerFSM::Attacking::Run(HeroControllerFSM::StateComponent& state_)
 {
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
-
+	auto&&  attackPlayer = Engine::Registry().get<Attack>(state_.entity);
 	if (animator.currentFrame > 0)
 		HeroControllerFSM::stopAttackOnNextRepeat = true;
 
-	else if (HeroControllerFSM::stopAttackOnNextRepeat && animator.currentFrame == 0)
+	else if (HeroControllerFSM::stopAttackOnNextRepeat && animator.currentFrame == 0) {
+		attackPlayer.finished = false;
 		GoTo(EHeroStates::Idle, state_);
+		
+	}
 }
 
 DEFAULT_EXIT(HeroControllerFSM, Attacking);

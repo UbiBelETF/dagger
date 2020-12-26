@@ -9,8 +9,8 @@ using namespace dagger;
 namespace team_game {
     struct Attack {
         UInt32 damage;
-        std::vector<Health>damaged;
-        bool finished = true;
+        std::vector<Entity>damaged;
+        bool finished = false;
         Entity  attackEnt;
         Vector3 offsetVec;
     };

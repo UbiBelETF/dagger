@@ -20,6 +20,7 @@ namespace team_game
 		bool attack=false;
 	};
 	struct SlimeAi {
+		bool alive = true;
 		SlimeAiCommand current;
 		std::deque<SlimeAiCommand>previous;
 	};

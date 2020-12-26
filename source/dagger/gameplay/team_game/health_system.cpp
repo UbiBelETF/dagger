@@ -20,10 +20,6 @@ namespace team_game {
 		auto& heroHealth = viewHero.get<Health>(*hero);
 		if (heroHealth.hp < 0) {
 			heroHealth.hp = 0;
-			heroHealth.show = false;
-			Engine::Registry().remove(heroHealth.hpBar);
-			Engine::Registry().remove<Collision>(*hero);
-			Engine::Registry().remove<Health>(*hero);
 		}
 		if (heroHealth.show) {
 			auto& hpBarSprite = Engine::Registry().get<Sprite>(heroHealth.hpBar);
@@ -36,20 +32,22 @@ namespace team_game {
 		}
 		for (auto slime : viewSlimes) {
 			auto& slimeTransform = viewSlimes.get<Transform>(slime);
+			auto& slimeSprite = viewSlimes.get<Transform>(slime);
 			auto& slimeHealth = viewSlimes.get<Health>(slime);
 			if (slimeHealth.hp < 0) {
 				slimeHealth.hp = 0;
-				slimeHealth.show = false;
-				Engine::Registry().remove(slimeHealth.hpBar);
-				Engine::Registry().remove<Collision>(slime);
-				Engine::Registry().remove<Health>(slime);
-				Engine::Registry().remove<SlimeAi>(slime);
-			}
-			else if (slimeHealth.show) {
+				auto& slimeSprite = Engine::Registry().get<Sprite>(slime);
+				auto& slimeAi = Engine::Registry().get<SlimeAi>(slime);
+				slimeAi.alive = false;
+				AssignSprite(slimeSprite, "spritesheets:tiles_dungeon:empty");
+				auto& slimeCol = Engine::Registry().get<Collision>(slime);
+				slimeCol.size = Vector2{ 0,0 };
 			
+			}
+			if (slimeHealth.show) {
 				auto& hpBarSprite = Engine::Registry().get<Sprite>(slimeHealth.hpBar);
 				auto& hpBarTransform = Engine::Registry().get<Transform>(slimeHealth.hpBar);
-				float hp = heroHealth.hp * 1.0f / heroHealth.maxHp;
+				float hp = slimeHealth.hp * 1.0f / slimeHealth.maxHp;
 				hpBarSprite.scale = Vector2(hp, 1);
 				hpBarTransform.position = slimeTransform.position+Vector3(0,-10,0);
 			}
@@ -60,9 +58,12 @@ namespace team_game {
 			if (potHealth.hp <= 0) {
 				potHealth.hp = 0;
 				auto& potSprite = Engine::Registry().get<Sprite>(pot);
+				auto& potCol = Engine::Registry().get<Collision>(pot);
+				potCol.size = Vector2{ 0,0 };
 				AssignSprite(potSprite, "spritesheets:tiles_dungeon:pot_damaged");
-				Engine::Registry().remove<Collision>(pot);
-				Engine::Registry().remove<Health>(pot);
+
+				//Engine::Registry().remove<Collision>(pot);
+				//Engine::Registry().remove<Health>(pot);
 			}
 
 		}
@@ -72,9 +73,11 @@ namespace team_game {
 			if (crateHealth.hp <= 0) {
 				crateHealth.hp = 0;
 				auto& crateSprite = Engine::Registry().get<Sprite>(crate);
+				auto& crateCol = Engine::Registry().get<Collision>(crate);
+				crateCol.size = Vector2{ 0,0 };
 				AssignSprite(crateSprite, "spritesheets:tiles_dungeon:crate_damaged");
-				Engine::Registry().remove<Collision>(crate);
-				Engine::Registry().remove<Health>(crate);
+				//Engine::Registry().remove<Collision>(crate);
+				//Engine::Registry().remove<Health>(crate);
 			}
 
 		}

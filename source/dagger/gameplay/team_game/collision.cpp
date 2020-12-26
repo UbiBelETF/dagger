@@ -19,8 +19,8 @@ void CollisionSystem::Run()
     auto viewWalls = Engine::Registry().view<CollisionType::Wall>();
     auto viewChars = Engine::Registry().view<CollisionType::Character>();
     auto viewSlimes = Engine::Registry().view<CollisionType::Slime>();
-    auto viewAttack = Engine::Registry().view<Attack>();
-    auto viewHealth = Engine::Registry().view<Health>();
+    auto viewAttack = Engine::Registry().view<CollisionType::Attack>();
+    auto viewHealth = Engine::Registry().view<Collision,Health>();
     // Reset generic collision flags
     auto it = viewAll.begin();
     while (it != viewAll.end())
@@ -41,9 +41,13 @@ void CollisionSystem::Run()
         it2++;
         while (it2 != viewAll.end())
         {
+            
             auto& col2 = viewAll.get<Collision>(*it2);
             auto& tr2  = viewAll.get<Transform>(*it2);
-
+            if (col2.size.x == 0 || col1.size.x == 0) {
+                it2++;
+                continue;
+            }
             // processing one collision per frame for each colider
             if (col1.IsCollided(tr1.position, col2, tr2.position))
             {
@@ -61,12 +65,21 @@ void CollisionSystem::Run()
                 else // Generic collision
                 {
                    if (viewAttack.contains(*it1) && viewHealth.contains(*it2)) {
-                       auto& attack = viewAttack.get<Attack>(*it1);
-                       auto& health = viewHealth.get<Health>(*it2);
-                       attack.damaged.push_back(health);
+                       auto& attackEnt = viewAttack.get<CollisionType::Attack>(*it1);
+                       Entity p;
+                       
+                       if ((int)(*it2) != (int)attackEnt.orig) {
+                           auto& attack = Engine::Registry().get<Attack>(attackEnt.orig);
+
+                           attack.damaged.push_back(*it2);
+                       }
                     }
                     else if (viewAttack.contains(*it2) && viewHealth.contains(*it1) ){
-                        
+                       auto& attackEnt = viewAttack.get<CollisionType::Attack>(*it2);
+                       if ((int)(*it1) != (int)attackEnt.orig) {
+                           auto& attack = Engine::Registry().get<Attack>(attackEnt.orig);
+                           attack.damaged.push_back(*it1);
+                       }
                     }
                     col1.colided = true;
                     col1.colidedWith = *it2;

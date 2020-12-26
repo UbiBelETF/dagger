@@ -11,10 +11,14 @@ void team_game::AttackSystem::Run()
 		transformAttack.position = transform.position + attack.offsetVec;
 		if (attack.finished) {
 			if (attack.damaged.size() > 0) {
+				std::sort(attack.damaged.begin(), attack.damaged.end());
+				attack.damaged.erase(std::unique(attack.damaged.begin(), attack.damaged.end()), attack.damaged.end());
 				for (auto& damaged : attack.damaged) {
-					damaged.hp -= attack.damage;
+					auto& health = Engine::Registry().get<Health>(damaged);
+					health.hp -= attack.damage;
 				}
 				attack.damaged.clear();
+				attack.finished = false;
 			}
 		}
 	}
