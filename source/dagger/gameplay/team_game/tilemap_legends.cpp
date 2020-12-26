@@ -96,7 +96,6 @@ Entity CreateSlimeBoss(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto& attackColSet = reg_.emplace_or_replace<CollisionType::Attack>(attackEnt);
 	attackColSet.orig = entity;
 	auto& attackTransform = reg_.emplace_or_replace<Transform>(attackEnt);
-	auto& attackSprite = reg_.emplace_or_replace<Sprite>(attackEnt);
 	attackCol.size = Vector2(8, 8);
 	attack.attackEnt = attackEnt;
 	attack.offsetVec = Vector3(0, 40, 0);
@@ -131,7 +130,6 @@ Entity CreateSlime(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto& attackColSet = reg_.emplace_or_replace<CollisionType::Attack>(attackEnt);
 	attackColSet.orig = entity;
 	auto& attackTransform = reg_.emplace_or_replace<Transform>(attackEnt);
-	auto& attackSprite = reg_.emplace_or_replace<Sprite>(attackEnt);
 	attackCol.size = Vector2(5, 5);
 	attack.attackEnt = attackEnt;
 	attack.offsetVec = Vector3(0, 22, 0);
@@ -167,7 +165,6 @@ Entity CreateHero(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto& attackColSet = reg_.emplace_or_replace<CollisionType::Attack>(attackEnt);
 	attackColSet.orig = *it;
 	auto& attackTransform = reg_.emplace_or_replace<Transform>(attackEnt);
-	auto& attackSprite = reg_.emplace_or_replace<Sprite>(attackEnt);
 	attackCol.size = Vector2(6, 6);
 	attack.attackEnt = attackEnt;
 	attack.offsetVec = Vector3(0, 22, 0);
