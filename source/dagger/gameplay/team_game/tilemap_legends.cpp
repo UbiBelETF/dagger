@@ -82,7 +82,8 @@ Entity CreateSlimeBoss(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto& col = reg_.emplace<Collision>(entity);
 	reg_.emplace<CollisionType::Slime>(entity);
 	reg_.emplace<SlimeAi>(entity);
-	reg_.emplace<TeamGameSlime>(entity);
+	auto& gameSlime=reg_.emplace<TeamGameSlime>(entity);
+	gameSlime.type = "boss";
 	auto& health = reg_.emplace<Health>(entity);
 	health.maxHp = 150;
 	health.hp = 150;

@@ -12,6 +12,7 @@ namespace team_game
 	struct TeamGameSlime
 	{
 		int speed{ 20 };
+		String type = "normal";
 	};
 	enum Movement{STAY,LEFT,RIGHT,UP,DOWN};
 	struct SlimeAiCommand {
