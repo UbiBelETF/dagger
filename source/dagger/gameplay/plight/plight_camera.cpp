@@ -23,7 +23,7 @@ void CameraCenterSystem::Run()
     Vector2 camXY = camParams.camXY;
     float distanceFact = 1.6;
 
-    float maxZoom = 1.85;
+    float maxZoom = 1.50;
     float minZoom = 1;
 
     Vector2 center{};
