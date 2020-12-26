@@ -21,8 +21,8 @@ Controls:
 	Shooting:
 		mouse - aiming
 		left click - shooting
-		
-	space - restart
+	General:
+		space - restart
 
 # Dagger
 
