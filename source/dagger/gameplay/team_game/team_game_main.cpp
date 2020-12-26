@@ -87,7 +87,7 @@ struct Player
         auto chr = Player::Get(entity);
 
         chr.sprite.scale = { 1, 1 };
-        chr.sprite.position = { position_, 10 };
+        chr.sprite.position = { position_, 5 };
         chr.sprite.color = { color_, 1.0f };
 
         AssignSprite(chr.sprite, "main_character:idle:idle1");
