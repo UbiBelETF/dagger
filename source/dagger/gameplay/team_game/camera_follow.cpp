@@ -32,7 +32,7 @@ void CameraFollowSystem::DistributeCameraWeight()
             auto&& [player, transform, focus] = Engine::Registry().get<PlayerCharacter, Transform, CameraFollowFocus>(*it1);
 
             player.distanceToChest = CalculateDistance(treasureTransform, transform);
-            focus.weight = 1;
+            focus.weight = 2;
 
             it1++;
         }
@@ -56,7 +56,7 @@ void CameraFollowSystem::DistributeCameraWeight()
                 it1++;
             }
 
-            Engine::Registry().get<CameraFollowFocus>(entity).weight = 2;
+            Engine::Registry().get<CameraFollowFocus>(entity).weight = 3;
         }
         iterator++;
     }
@@ -88,7 +88,6 @@ void CameraFollowSystem::Run()
         center /= count;
         camera->position = Vector3{ glm::mix((Vector2)camera->position, center, 0.02f), 0.0f };
     }
-    //camera->position.y += 100.f;
 }
 
 void CameraFollowSystem::AdjustCameraZoom()
@@ -125,20 +124,20 @@ void CameraFollowSystem::AdjustCameraZoom()
 
         auto* camera = Engine::GetDefaultResource<Camera>();
 
-        if (maxDistance >= 650)
+        if (maxDistance >= 1000)
         {
-            camera->zoom = 0.75;
+            camera->zoom = 0.6;
         }
-        else if (maxDistance <= 500)
+        else if (maxDistance <= 300)
         {
-            camera->zoom = 1;
+            camera->zoom = 0.9;
         }
         else
         {
             //the 1 is the max zoom and the division transforms the interval of
             //the two camera zoom locking distances(in this case (500, 650))
             //to an interval of max zoom - min zoom(in this case 0.25)
-            camera->zoom = 1 - (maxDistance - 500) / (4 * 150);
+            camera->zoom = 0.9 - (maxDistance - 300) / (2333);
         }
     }
 }
