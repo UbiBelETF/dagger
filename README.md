@@ -5,32 +5,32 @@
 
 Game:
 
-# Dagger
-
-A fully-featured, modern game engine made for educational purposes.
+# Among them
+It's a stealth based game. you can run,you can hide, you can shapeshift and you can die.
 
 ## Features
 
-- Dagger is data-driven and event-based.
-- Dagger is extremely modular.
-- Dagger is clear and clearly educational.
+- Shapeshifting ability
+- Enemy AI(Enemies patroll and chase you)
+- Demo level
+- End mechanic(Finding the key and opening the door)
+- Level restarting,win and lose scenarios
 
-## Installation
+## Controls
 
-You can clone and fully set up this project by simply running:
+W,A,S,D for player movement
+I for shifting into goblin
+O for shifting into slime
+P for shifting into bat
+L for shifting into hero
 
-```git
-  git clone --recursive https://github.com/UBIBelETF/dagger.git
-```
+## How to win
 
-Afterwards, run the solution file `dagger.sln` in Visual Studio 2019 to start playing around. 
+You need to find the key first,only if you obtain it you can open the door but you also need to be in the hero form as well.
 
 ## Resources
 
-Any kind of data used by engine that is not source code is considered a resource. Root directory for resources is `data\`
-and so all references to resoruces begin there. For example, if you want to get a texture (from `data\textures`) you would
-use `textures\mytexture.png` instead `data\textures\mytexture.png`.
+All of our resources can be found in the dagger/data.We have some spritesheets,animations,a tilemap and a lot of files that are used for enemy patrolling routes 
 
 ## Rights and Reservations
-
-Dagger is made as a part of Ubisoft Belgrade's game development course. All rights reserved.
+This game is made as a part of Ubisoft Belgrade's game development course. All rights reserved.
