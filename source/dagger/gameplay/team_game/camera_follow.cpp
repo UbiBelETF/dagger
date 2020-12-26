@@ -32,7 +32,7 @@ void CameraFollowSystem::DistributeCameraWeight()
             auto&& [player, transform, focus] = Engine::Registry().get<PlayerCharacter, Transform, CameraFollowFocus>(*it1);
 
             player.distanceToChest = CalculateDistance(treasureTransform, transform);
-            focus.weight = 1;
+            focus.weight = 2;
 
             it1++;
         }
@@ -56,7 +56,7 @@ void CameraFollowSystem::DistributeCameraWeight()
                 it1++;
             }
 
-            Engine::Registry().get<CameraFollowFocus>(entity).weight = 2;
+            Engine::Registry().get<CameraFollowFocus>(entity).weight = 3;
         }
         iterator++;
     }
@@ -88,7 +88,7 @@ void CameraFollowSystem::Run()
         center /= count;
         camera->position = Vector3{ glm::mix((Vector2)camera->position, center, 0.02f), 0.0f };
     }
-    //camera->position.y += 100.f;
+    camera->position.y += 2.f;
 }
 
 void CameraFollowSystem::AdjustCameraZoom()
