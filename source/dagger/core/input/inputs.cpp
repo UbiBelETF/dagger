@@ -14,7 +14,11 @@ using namespace dagger;
 
 void InputSystem::OnKeyboardEvent(KeyboardEvent input_)
 {
-    if ((SInt32)input_.key < 0) return;
+    if ((SInt32)input_.key < 0) 
+    {
+	    return;
+    }
+	
 	auto key = (UInt64)input_.key;
 
 
@@ -337,7 +341,10 @@ UInt32 dagger::Input::GetInputDuration(EDaggerKeyboard key_)
 {
 	const auto* state = Engine::GetDefaultResource<InputState>();
 	UInt32 value = (UInt32)key_;
-	if (!state->moments.contains(value)) return 0;
+	if (!state->moments.contains(value)) 
+	{ 
+		return 0;
+	}
 
 	return DurationToMilliseconds(Engine::CurrentTime() - state->moments.at(value));
 }
