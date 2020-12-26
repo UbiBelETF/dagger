@@ -15,17 +15,18 @@ public:
     Map<String, TilemapLegend>legends;
 };
 struct TeamGamePot {
-    int startHp = 0;
+    int startHp = 20;
 };
 struct TeamGameCrate {
     int startHp = 100;
 };
-Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_,char type);
-Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type);
-Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_,char type);
-Entity CreateHero(Registry& reg_, UInt32 x_, UInt32 y_,char type);
-Entity CreateDoorHorizontal(Registry& reg_, UInt32 x_, UInt32 y_,char type);
-Entity CreateDoorVertical(Registry& reg_, UInt32 x_, UInt32 y_,char type);
-Entity CreateChest(Registry& reg_, UInt32 x_, UInt32 y_, char type);
-Entity CreatePot(Registry& reg_, UInt32 x_, UInt32 y_, char type);
-Entity CreateCrate(Registry& reg_, UInt32 x_, UInt32 y_, char type);
+Entity CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_,char type);
+Entity CreateWall(Registry& reg_, SInt32 x_, SInt32 y_, char type);
+Entity CreateSlime(Registry& reg_, SInt32 x_, SInt32 y_,char type);
+Entity CreateHero(Registry& reg_, SInt32 x_, SInt32 y_,char type);
+Entity CreateDoorHorizontal(Registry& reg_, SInt32 x_, SInt32 y_,char type);
+Entity CreateDoorVertical(Registry& reg_, SInt32 x_, SInt32 y_,char type);
+Entity CreateChest(Registry& reg_, SInt32 x_, SInt32 y_, char type);
+Entity CreatePot(Registry& reg_, SInt32 x_, SInt32 y_, char type);
+Entity CreateCrate(Registry& reg_, SInt32 x_, SInt32 y_, char type);
+Entity CreateSlimeBoss(Registry& reg_, SInt32 x_, SInt32 y_, char type);

@@ -33,6 +33,7 @@ Tilemap_legends::Tilemap_legends() {
 	floors['4'] = &CreateWall;
 	creatures['S'] = &CreateSlime;
 	creatures['H'] = &CreateHero;
+	creatures['B'] = &CreateSlimeBoss;
 	objects['c'] = &CreateChest;
 	objects['p'] = &CreatePot;
 	objects['t'] = &CreateCrate;
@@ -49,7 +50,7 @@ Tilemap_legends::Tilemap_legends() {
 	legends["objects"] = objects;
 }
 
-Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateFloor(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	sprite.scale = { scale,scale };
@@ -58,7 +59,7 @@ Entity CreateFloor(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:floor_1");
 	return entity;
 }
-Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateWall(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Map<Char, String>walls;
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
@@ -73,7 +74,7 @@ Entity CreateWall(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:"+wall_type.at(type));
 	return entity;
 }
-Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateSlimeBoss(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);
@@ -83,15 +84,44 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	reg_.emplace<SlimeAi>(entity);
 	reg_.emplace<TeamGameSlime>(entity);
 	auto& health = reg_.emplace<Health>(entity);
-	health.maxHp = 50;
-	health.hp = 50;
+	health.maxHp = 150;
+	health.hp = 150;
+	health.hpBar = reg_.create();
+	health.show = true;
+	auto& hpBarSprite = reg_.emplace <Sprite>(health.hpBar);
+	reg_.emplace<Transform>(health.hpBar);
+	hpBarSprite.size = hpBarSprite.size*2.0f;
+	hpBarSprite.pivot = Vector2{ 0,-5};
+	AssignSprite(hpBarSprite, "TeamGame:enemyHp");
+	ATTACH_TO_FSM(SlimeControllerFSM, entity);
+	sprite.size = Vector2(1, 1) * size;
+	col.size = Vector2(16, 16)*2.0f;
+	sprite.scale = { scale*2,scale*2 };
+	transform.position = { x_ * x_step, y_ * y_step, 30 };
+	AssignSprite(sprite, "spritesheets:chara_slime:slime_idle_anim:1");
+	auto& anim = reg_.emplace<Animator>(entity);
+	AnimatorPlay(anim, "chara_slime:slime_idle");
+	return entity;
+}
+Entity CreateSlime(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
+	Entity entity = reg_.create();
+	auto& sprite = reg_.emplace<Sprite>(entity);
+	auto& transform = reg_.emplace<Transform>(entity);
+
+	auto& col = reg_.emplace<Collision>(entity);
+	reg_.emplace<CollisionType::Slime>(entity);
+	reg_.emplace<SlimeAi>(entity);
+	reg_.emplace<TeamGameSlime>(entity);
+	auto& health = reg_.emplace<Health>(entity);
+	health.maxHp = 30;
+	health.hp = 30;
 	health.hpBar = reg_.create();
 	health.show = true;
 	auto& hpBarSprite =reg_.emplace <Sprite>(health.hpBar);
 	reg_.emplace<Transform>(health.hpBar);
 	AssignSprite(hpBarSprite, "TeamGame:enemyHp");
 	ATTACH_TO_FSM(SlimeControllerFSM, entity);
-	sprite.size = Vector2(1, 1) * size;
+	sprite.size = Vector2(1, 1) *( size);
 	col.size = Vector2(16,16);
 	sprite.scale = { scale,scale };
 	transform.position = { x_ * x_step, y_ * y_step, 30 };
@@ -100,14 +130,14 @@ Entity CreateSlime(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AnimatorPlay(anim, "chara_slime:slime_idle");
 	return entity;
 }
-Entity CreateHero(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateHero(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto view = Engine::Registry().view<TeamGameCharacter,Transform,Sprite>();
 	auto it = view.begin();
 	auto& transform = view.get<Transform>(*it);
 	auto& sprite = view.get<Sprite>(*it);
-	auto& health = reg_.emplace<Health>(*it);
-	health.maxHp = 50;
-	health.hp = 50;
+	auto& health = reg_.emplace_or_replace<Health>(*it);
+	health.maxHp = 120;
+	health.hp = 120;
 	health.hpBar = reg_.create();
 	health.show = true;
 	auto& hpBarSprite = reg_.emplace <Sprite>(health.hpBar);
@@ -120,7 +150,7 @@ Entity CreateHero(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	transform.position = { x_ * x_step,y_ * y_step,0 };
 	return *it;
 }
-Entity CreateDoorHorizontal(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateDoorHorizontal(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);
@@ -133,7 +163,7 @@ Entity CreateDoorHorizontal(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:door_horizontal");
 	return entity;
 }
-Entity CreateDoorVertical(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateDoorVertical(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);
@@ -146,7 +176,7 @@ Entity CreateDoorVertical(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:door_vertical");
 	return entity;
 }
-Entity CreateChest(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateChest(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);
@@ -159,7 +189,7 @@ Entity CreateChest(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:chest");
 	return entity;
 }
-Entity CreatePot(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreatePot(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);
@@ -179,7 +209,7 @@ Entity CreatePot(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
 	AssignSprite(sprite, "spritesheets:tiles_dungeon:pot");
 	return entity;
 }
-Entity CreateCrate(Registry& reg_, UInt32 x_, UInt32 y_, char type) {
+Entity CreateCrate(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	Entity entity = reg_.create();
 	auto& sprite = reg_.emplace<Sprite>(entity);
 	auto& transform = reg_.emplace<Transform>(entity);

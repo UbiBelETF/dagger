@@ -13,7 +13,7 @@ namespace team_game {
         float counter;
         int depth;
     public:
-        AiSystem() { delay = 0.5f; counter = 0.0f; depth = 3; };
+        AiSystem() { delay = 1.0f; counter = 0.0f; depth = 3; };
         void SpinUp() override;
         void Run() override;
         void WindDown() override;
