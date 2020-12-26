@@ -88,7 +88,6 @@ void CameraFollowSystem::Run()
         center /= count;
         camera->position = Vector3{ glm::mix((Vector2)camera->position, center, 0.02f), 0.0f };
     }
-    camera->position.y += 2.f;
 }
 
 void CameraFollowSystem::AdjustCameraZoom()
@@ -125,9 +124,9 @@ void CameraFollowSystem::AdjustCameraZoom()
 
         auto* camera = Engine::GetDefaultResource<Camera>();
 
-        if (maxDistance >= 1100)
+        if (maxDistance >= 1000)
         {
-            camera->zoom = 0.3;
+            camera->zoom = 0.6;
         }
         else if (maxDistance <= 300)
         {
@@ -138,7 +137,7 @@ void CameraFollowSystem::AdjustCameraZoom()
             //the 1 is the max zoom and the division transforms the interval of
             //the two camera zoom locking distances(in this case (500, 650))
             //to an interval of max zoom - min zoom(in this case 0.25)
-            camera->zoom = 0.9 - (maxDistance - 300) / (1333);
+            camera->zoom = 0.9 - (maxDistance - 300) / (2333);
         }
     }
 }
