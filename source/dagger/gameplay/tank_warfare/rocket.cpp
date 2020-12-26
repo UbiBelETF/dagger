@@ -130,7 +130,7 @@ void RocketSystem::OnEndOfFrame()
 	}
 }
 
-void tank_warfare::CreateRocket(Vector2 position_, Vector2 speed_, int id_, ETankOrientation to_)
+void tank_warfare::CreateRocket(Vector2 position_, Vector2 speed_, int id_, ETankOrientation to_, bool isUpgraded_)
 {
 	auto& reg = Engine::Registry();
 	auto entity = reg.create();
@@ -150,10 +150,22 @@ void tank_warfare::CreateRocket(Vector2 position_, Vector2 speed_, int id_, ETan
 	auto& transform = reg.emplace<Transform>(entity);
 	transform.position.x = position_.x;
 	transform.position.y = position_.y;
+	if (isUpgraded_ == false)
+	{
+		transform.position.y += 3;
+	}
 	transform.position.z = 4;
 
 	auto& col = reg.emplace<SimpleCollision>(entity);
-	col.size = { 15, 10 };
+	if (isUpgraded_ == false)
+	{
+		col.size = { 11, 7 };
+		sprite.size /= 1.5;
+	}
+	else
+	{
+		col.size = { 15, 10 };
+	}
 
 	auto& rocket = reg.emplace<Rocket>(entity);
 	rocket.speed = speed_;

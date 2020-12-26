@@ -47,6 +47,12 @@ namespace tank_warfare
 		Float32 maxShield{ 100 };
 
 		bool zeroHealth{ false };
+
+		Float32 blinkTime{ 0.2f };
+		Float32 blinkOnLeft{ 0.2f };
+		Float32 blinkOffLeft{ 0.2f };
+		int blinkTimes{ 4 };
+		bool upgraded{ false };
 	};
 
 	struct TankStats

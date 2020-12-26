@@ -18,7 +18,7 @@ using namespace tank_warfare;
 void TankControllerSystem::OnInitialize(Registry& registry_, Entity entity_)
 {
 	InputReceiver& reciever = registry_.get<InputReceiver>(entity_);
-	for (auto command : { "driveLeftRight", "driveUpDown", "fire" })
+	for (auto command : { "driveLeftRight", "driveUpDown", "fire", "upgrade" })
 	{
 		reciever.values[command] = 0;
 	}
@@ -37,8 +37,43 @@ void TankControllerSystem::Run()
 			Float32 driveLR = input_.values.at("driveLeftRight");
 			Float32 driveUD = input_.values.at("driveUpDown");
 			Float32 fire = input_.values.at("fire");
+			Float32 upgrade = input_.values.at("upgrade");
 			Vector2 rocketPos = { transform_.position.x, transform_.position.y + 4 };
 			Vector2 rocketSpeed = { 0, 0 };
+
+			if (EPSILON_NOT_ZERO(upgrade) && tank_.coins >= 10)
+			{
+				if (tank_.upgraded == false)
+				{
+					tank_.upgraded = true;
+					tank_.maxHealth += 50;
+					tank_.health = tank_.maxHealth;
+					tank_.maxShield += 50;
+					tank_.speed += 25;
+					tank_.fireRate++;
+					tank_.maxFireRate *= tank_.fireRate;
+				}
+			}
+
+			if (tank_.upgraded && tank_.blinkTimes != 0)
+			{
+				if (tank_.blinkOnLeft >= 0)
+				{
+					tank_.blinkOnLeft -= Engine::DeltaTime();
+					sprite_.color = { 1, 1, 1, 0.5 };
+				}
+				else if (tank_.blinkOffLeft >= 0)
+				{
+					tank_.blinkOffLeft -= Engine::DeltaTime();
+					sprite_.color = { 1, 1, 1, 1 };
+				}
+				else
+				{
+					tank_.blinkOnLeft = tank_.blinkTime;
+					tank_.blinkOffLeft = tank_.blinkTime;
+					tank_.blinkTimes--;
+				}
+			}
 
 			if (driveLR == 0 && driveUD == 0)
 			{
@@ -46,19 +81,40 @@ void TankControllerSystem::Run()
 				{
 				case ETankOrientation::TankLeft: case ETankOrientation::TankRight:
 				{
-					AnimatorPlay(animator_, "tank:idleLeftRight");
+					if (tank_.upgraded)
+					{
+						AnimatorPlay(animator_, "tank:idleLeftRight");
+					}
+					else
+					{
+						AssignSprite(sprite_, "jovanovici:tank:tank5_side");
+					}
 					rocketSpeed = { 200 * -sprite_.scale.x, 0 };
 					break;
 				}
 				case ETankOrientation::TankUp:
 				{
-					AssignSprite(sprite_, "jovanovici:tank:tank3_back"); 
+					if (tank_.upgraded)
+					{
+						AssignSprite(sprite_, "jovanovici:tank:tank3_back");
+					}
+					else
+					{
+						AssignSprite(sprite_, "jovanovici:tank:tank5_back");
+					}
 					rocketSpeed = { 0, 200 };  
 					break;
 				}
 				case ETankOrientation::TankDown:
 				{
-					AssignSprite(sprite_, "jovanovici:tank:tank3_front"); 
+					if (tank_.upgraded)
+					{
+						AssignSprite(sprite_, "jovanovici:tank:tank3_front");
+					}
+					else
+					{
+						AssignSprite(sprite_, "jovanovici:tank:tank5_front");
+					}
 					rocketSpeed = { 0, -200 }; 
 					break;
 				}
@@ -73,13 +129,20 @@ void TankControllerSystem::Run()
 				}
 				else if (fire != 0)
 				{
-					CreateRocket(rocketPos, rocketSpeed, tank_.id, tank_.lastOrientation);
+					CreateRocket(rocketPos, rocketSpeed, tank_.id, tank_.lastOrientation, tank_.upgraded);
 					tank_.reloadTime = 1.f / tank_.fireRate;
 				}
 			}
 			if (driveLR != 0)
 			{
-				AnimatorPlay(animator_, "tank:driveLeftRight");
+				if (tank_.upgraded)
+				{
+					AnimatorPlay(animator_, "tank:driveLeftRight");
+				}
+				else
+				{
+					AssignSprite(sprite_, "jovanovici:tank:tank5_side");
+				}
 				if (driveLR == -1)
 				{
 					tank_.lastOrientation = ETankOrientation::TankLeft;
@@ -97,13 +160,27 @@ void TankControllerSystem::Run()
 			{
 				if (driveUD == 1)
 				{
-					AnimatorPlay(animator_, "tank:driveUp");
+					if (tank_.upgraded)
+					{
+						AnimatorPlay(animator_, "tank:driveUp");
+					}
+					else
+					{
+						AssignSprite(sprite_, "jovanovici:tank:tank5_back");
+					}
 					tank_.lastOrientation = ETankOrientation::TankUp;
 					col_.size = sprite_.size;
 				}
 				else
 				{
-					AnimatorPlay(animator_, "tank:driveDown");
+					if (tank_.upgraded)
+					{
+						AnimatorPlay(animator_, "tank:driveDown");
+					}
+					else
+					{
+						AssignSprite(sprite_, "jovanovici:tank:tank5_front");
+					}
 					tank_.lastOrientation = ETankOrientation::TankDown;
 					col_.size = sprite_.size;
 				}

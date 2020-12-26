@@ -9,7 +9,7 @@ using namespace dagger;
 
 namespace tank_warfare
 {
-	void CreateRocket(Vector2 position_, Vector2 speed_, int id_, ETankOrientation to_);
+	void CreateRocket(Vector2 position_, Vector2 speed_, int id_, ETankOrientation to_, bool isUpgraded_);
 
 	struct Rocket
 	{
