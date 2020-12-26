@@ -30,7 +30,7 @@ namespace tank_warfare
     public:
         static int s_NumCoins;
         static int s_NumPowers;
-        int m_ReachedMax = 0;
+        static int s_ReachedMax;
         const int m_MaxCoins = 15;
         const int m_MaxPowers = 3;
         const int m_PowerDuration = 4;

@@ -16,6 +16,7 @@ using namespace tank_warfare;
 
 int CollectibleSystem::s_NumCoins = 15;
 int CollectibleSystem::s_NumPowers = 3;
+int CollectibleSystem::s_ReachedMax = 0;
 
 void CollectibleSystem::Run()
 {
@@ -97,11 +98,11 @@ void CollectibleSystem::Run()
 		s_NumPowers++;
 	}
 
-	while (s_NumCoins < m_MaxCoins && m_ReachedMax != m_MaxCoins)
+	while (s_NumCoins < m_MaxCoins && s_ReachedMax != m_MaxCoins)
 	{
 		AddCollectible(false);
 		s_NumCoins++;
-		m_ReachedMax++;
+		s_ReachedMax++;
 	}
 
 }
@@ -134,6 +135,7 @@ void CollectibleSystem::ResetNumCoinsPowers()
 {
 	s_NumCoins = 0;
 	s_NumPowers = 0;
+	s_ReachedMax = 0;
 }
 
 void tank_warfare::AddCollectible(bool isPower_)
