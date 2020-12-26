@@ -4,11 +4,12 @@
 #include "core/game/transforms.h"
 
 #include "team_game_main.h"
-
+#include "attack_system.h"
+#include "health_system.h"
 #include <cmath>
 
 using namespace dagger;
-
+using namespace team_game;
 
 
 void CollisionSystem::Run()
@@ -18,6 +19,8 @@ void CollisionSystem::Run()
     auto viewWalls = Engine::Registry().view<CollisionType::Wall>();
     auto viewChars = Engine::Registry().view<CollisionType::Character>();
     auto viewSlimes = Engine::Registry().view<CollisionType::Slime>();
+    auto viewAttack = Engine::Registry().view<Attack>();
+    auto viewHealth = Engine::Registry().view<Health>();
     // Reset generic collision flags
     auto it = viewAll.begin();
     while (it != viewAll.end())
@@ -57,6 +60,14 @@ void CollisionSystem::Run()
                 }
                 else // Generic collision
                 {
+                   if (viewAttack.contains(*it1) && viewHealth.contains(*it2)) {
+                       auto& attack = viewAttack.get<Attack>(*it1);
+                       auto& health = viewHealth.get<Health>(*it2);
+                       attack.damaged.push_back(health);
+                    }
+                    else if (viewAttack.contains(*it2) && viewHealth.contains(*it1) ){
+                        
+                    }
                     col1.colided = true;
                     col1.colidedWith = *it2;
 

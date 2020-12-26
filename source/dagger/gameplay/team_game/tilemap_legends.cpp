@@ -15,6 +15,7 @@
 #include "gameplay/team_game/slime_controller.h"
 #include "collision.h"
 #include "health_system.h"
+#include "attack_system.h"
  int scale = 1;
  int x_step = 16 *scale;
  int y_step = 16 * scale;
@@ -137,6 +138,16 @@ Entity CreateHero(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto& transform = view.get<Transform>(*it);
 	auto& sprite = view.get<Sprite>(*it);
 	auto& health = reg_.emplace_or_replace<Health>(*it);
+	Entity attackEnt = reg_.create();
+	auto& attack= reg_.emplace_or_replace<Attack>(*it);
+	auto& attackCol = reg_.emplace_or_replace<Collision>(attackEnt);
+	auto& attackTransform = reg_.emplace_or_replace<Transform>(attackEnt);
+	auto& attackSprite = reg_.emplace_or_replace<Sprite>(attackEnt);
+	AssignSprite(attackSprite, "spritesheets:chara_slime:slime_idle_anim:1");
+	attackCol.size = Vector2(5, 5);
+	attack.attackEnt = attackEnt;
+	attack.offsetVec = Vector3(0, 22, 0);
+	attack.damage = 22;
 	health.maxHp = 120;
 	health.hp = 120;
 	health.hpBar = reg_.create();

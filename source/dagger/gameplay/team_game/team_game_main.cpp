@@ -59,7 +59,7 @@ struct MainCharacter
     Collision& col;
     Transform& tm;
     Health& hp;
-
+    Attack& att;
     static MainCharacter Get(Entity entity)
     {
         auto& reg = Engine::Registry();
@@ -70,7 +70,8 @@ struct MainCharacter
         auto& col = reg.get_or_emplace<Collision>(entity);
         auto& tm = reg.get_or_emplace<Transform>(entity);
         auto& hp = reg.get_or_emplace<Health>(entity);
-        return MainCharacter{ entity, sprite, anim, input, character, col, tm,hp };
+        auto& att = reg.get_or_emplace<Attack>(entity);
+        return MainCharacter{ entity, sprite, anim, input, character, col, tm,hp,att };
     }
 
     static MainCharacter Create(
@@ -84,7 +85,7 @@ struct MainCharacter
         
 
         ATTACH_TO_FSM(HeroControllerFSM, entity);
-
+        
         chr.sprite.scale = { 3, 3 };
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };

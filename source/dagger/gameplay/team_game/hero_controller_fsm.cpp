@@ -7,11 +7,11 @@
 
 #include "gameplay/team_game/hero_controller.h"
 #include "gameplay/team_game/hero_controller_fsm.h"
-
+#include "attack_system.h"
 using namespace dagger;
 
 // Idle
-
+using namespace team_game;
 bool HeroControllerFSM::stopAttackOnNextRepeat = false;
 FacingPostion HeroControllerFSM::facingPosition = side;
 
@@ -43,7 +43,7 @@ void HeroControllerFSM::Running::Enter(HeroControllerFSM::StateComponent& state_
 
 void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 {
-	auto&& [transform, sprite, input, character] = Engine::Registry().get<Transform, Sprite, InputReceiver, team_game::TeamGameCharacter>(state_.entity);
+	auto&& [transform, sprite, input, character,attackPlayer] = Engine::Registry().get<Transform, Sprite, InputReceiver, team_game::TeamGameCharacter,Attack>(state_.entity);
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 
 	Float32 run_left_right = input.Get("run-left-right");
@@ -84,15 +84,21 @@ void HeroControllerFSM::Running::Run(HeroControllerFSM::StateComponent& state_)
 		}
 		
 	}
-
-	if (run_up_down > 0)
+	
+	if (run_up_down > 0) {
 		AnimatorPlay(animator, "chara_hero:hero_move_up");
+		attackPlayer.offsetVec = Vector3(0, 10,0);
+	}
 
-	else if (run_up_down < 0)
+	else if (run_up_down < 0) {
 		AnimatorPlay(animator, "chara_hero:hero_move_down");
+		attackPlayer.offsetVec = Vector3(0, -10, 0);
+	}
 
-	else if(run_left_right != 0)
+	else if (run_left_right != 0) {
 		AnimatorPlay(animator, "chara_hero:hero_move_side");
+		attackPlayer.offsetVec = Vector3(run_left_right*10, 0, 0);
+	}
 
 	if (EPSILON_NOT_ZERO(input.Get("attack")))
 	{

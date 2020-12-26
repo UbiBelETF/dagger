@@ -7,19 +7,21 @@
 #include "core/game/transforms.h"
 using namespace dagger;
 namespace team_game {
+    struct Attack {
+        UInt32 damage;
+        std::vector<Health>damaged;
+        bool finished = true;
+        Entity  attackEnt;
+        Vector3 offsetVec;
+    };
+
+    struct AttackOffset {
+        
+    };
     class AttackSystem : public System
     {
     public:
-        struct Attack {
-            UInt32 damage;
-            std::vector<Health>damaged;
-            bool finished=true;
-            Entity  orig;
-        };
-
-        struct AttackOffset {
-            Vector3 offsetVec;
-        };
+      
         void Run() override;
         String SystemName() override {
             return "Team Game Attack System";
