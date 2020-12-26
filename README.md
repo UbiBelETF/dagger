@@ -5,7 +5,20 @@
 - Damjan Pavlović		dp98tm@gmail.com 
 
 # Game
-To be determined...
+Plight. A local mulitplayer VS game, in which you battle to the death to ascend to the afterlife.
+
+# Controlls
+Player 1                        | Player 2   
+W - forward                     | ↑ - forward
+S - back                        | ↓ - back 
+A - rotate counter-clockwise    | ← - rotate counter-clockwise
+D - rotate clockwise            | → - rotate clockwise
+Double tap W - dash             | Double tap ↑ - dash
+F - fire arrow                  | P - fire arrow
+G - melee                       | O - melee
+H - cast shield                 | I - cast shield
+Hold F - fire bomb              | Hold P - fire bomb
+-----------------------------------------------------------------
 
 # Dagger
 
