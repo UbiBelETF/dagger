@@ -6,7 +6,7 @@
 
 using namespace dagger;
 
-void Text::Set(String font_, String message_, Vector3 pos_)
+void Text::Set(String font_, String message_, Vector3 pos_, Bool ui_)
 {
 	font = font_;
 	position=pos_;
@@ -22,7 +22,7 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 		entities.clear();
 	}
 
-	UInt32 positionX = position.x;
+	SInt32 positionX = position.x;
 	auto& sheets = Engine::Res<SpriteFrame>();
 
 	Map<UInt32, SpriteFrame*> cache;
@@ -44,8 +44,9 @@ void Text::Set(String font_, String message_, Vector3 pos_)
 		auto spritesheet = cache[letter];
 		auto entity = registry.create();
 		auto& sprite = registry.emplace<Sprite>(entity);
+
+		if (ui_) sprite.UseAsUI();
 		sprite.position = { positionX - xOffsetDueToAlign, position.y, position.z };
-		
 		AssignSprite(sprite, spritesheet);
 
 		positionX += (int)(spritesheet->frame.size.x * spacing);

@@ -15,6 +15,7 @@
 #include "gameplay/team_game/slime_controller.h"
 #include "collision.h"
 #include "health_system.h"
+#include "attack_system.h"
  int scale = 1;
  int x_step = 16 *scale;
  int y_step = 16 * scale;
@@ -82,12 +83,23 @@ Entity CreateSlimeBoss(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto& col = reg_.emplace<Collision>(entity);
 	reg_.emplace<CollisionType::Slime>(entity);
 	reg_.emplace<SlimeAi>(entity);
-	reg_.emplace<TeamGameSlime>(entity);
+	auto& gameSlime=reg_.emplace<TeamGameSlime>(entity);
+	gameSlime.type = "boss";
 	auto& health = reg_.emplace<Health>(entity);
 	health.maxHp = 150;
 	health.hp = 150;
 	health.hpBar = reg_.create();
 	health.show = true;
+	Entity attackEnt = reg_.create();
+	auto& attack = reg_.emplace_or_replace<Attack>(entity);
+	auto& attackCol = reg_.emplace_or_replace<Collision>(attackEnt);
+	auto& attackColSet = reg_.emplace_or_replace<CollisionType::Attack>(attackEnt);
+	attackColSet.orig = entity;
+	auto& attackTransform = reg_.emplace_or_replace<Transform>(attackEnt);
+	attackCol.size = Vector2(8, 8);
+	attack.attackEnt = attackEnt;
+	attack.offsetVec = Vector3(0, 40, 0);
+	attack.damage = 20;
 	auto& hpBarSprite = reg_.emplace <Sprite>(health.hpBar);
 	reg_.emplace<Transform>(health.hpBar);
 	hpBarSprite.size = hpBarSprite.size*2.0f;
@@ -112,6 +124,16 @@ Entity CreateSlime(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	reg_.emplace<CollisionType::Slime>(entity);
 	reg_.emplace<SlimeAi>(entity);
 	reg_.emplace<TeamGameSlime>(entity);
+	Entity attackEnt = reg_.create();
+	auto& attack = reg_.emplace_or_replace<Attack>(entity);
+	auto& attackCol = reg_.emplace_or_replace<Collision>(attackEnt);
+	auto& attackColSet = reg_.emplace_or_replace<CollisionType::Attack>(attackEnt);
+	attackColSet.orig = entity;
+	auto& attackTransform = reg_.emplace_or_replace<Transform>(attackEnt);
+	attackCol.size = Vector2(5, 5);
+	attack.attackEnt = attackEnt;
+	attack.offsetVec = Vector3(0, 22, 0);
+	attack.damage = 10;
 	auto& health = reg_.emplace<Health>(entity);
 	health.maxHp = 30;
 	health.hp = 30;
@@ -121,6 +143,7 @@ Entity CreateSlime(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	reg_.emplace<Transform>(health.hpBar);
 	AssignSprite(hpBarSprite, "TeamGame:enemyHp");
 	ATTACH_TO_FSM(SlimeControllerFSM, entity);
+	
 	sprite.size = Vector2(1, 1) *( size);
 	col.size = Vector2(16,16);
 	sprite.scale = { scale,scale };
@@ -136,6 +159,16 @@ Entity CreateHero(Registry& reg_, SInt32 x_, SInt32 y_, char type) {
 	auto& transform = view.get<Transform>(*it);
 	auto& sprite = view.get<Sprite>(*it);
 	auto& health = reg_.emplace_or_replace<Health>(*it);
+	Entity attackEnt = reg_.create();
+	auto& attack= reg_.emplace_or_replace<Attack>(*it);
+	auto& attackCol = reg_.emplace_or_replace<Collision>(attackEnt);
+	auto& attackColSet = reg_.emplace_or_replace<CollisionType::Attack>(attackEnt);
+	attackColSet.orig = *it;
+	auto& attackTransform = reg_.emplace_or_replace<Transform>(attackEnt);
+	attackCol.size = Vector2(6, 6);
+	attack.attackEnt = attackEnt;
+	attack.offsetVec = Vector3(0, 22, 0);
+	attack.damage = 22;
 	health.maxHp = 120;
 	health.hp = 120;
 	health.hpBar = reg_.create();

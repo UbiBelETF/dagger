@@ -6,7 +6,8 @@ enum struct ESlimeStates
 {
 	Idle,
 	Running,
-	Attacking
+	Attacking,
+	Dead
 };
 
 
@@ -16,7 +17,7 @@ struct SlimeControllerFSM : public FSM<ESlimeStates>
 	DEFINE_STATE(SlimeControllerFSM, ESlimeStates, Idle);
 	DEFINE_STATE(SlimeControllerFSM, ESlimeStates, Running);
 	DEFINE_STATE(SlimeControllerFSM, ESlimeStates, Attacking);
-
+	DEFINE_STATE(SlimeControllerFSM, ESlimeStates, Dead);
 	static bool stopAttackOnNextRepeat;
 	static FacingPostion facingPosition;
 
@@ -25,6 +26,7 @@ struct SlimeControllerFSM : public FSM<ESlimeStates>
 		CONNECT_STATE(ESlimeStates, Idle);
 		CONNECT_STATE(ESlimeStates, Running);
 		CONNECT_STATE(ESlimeStates, Attacking);
+		CONNECT_STATE(ESlimeStates, Dead);
 	}
 };
 

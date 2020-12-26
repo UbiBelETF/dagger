@@ -12,6 +12,7 @@ namespace team_game
 	struct TeamGameSlime
 	{
 		int speed{ 20 };
+		String type = "normal";
 	};
 	enum Movement{STAY,LEFT,RIGHT,UP,DOWN};
 	struct SlimeAiCommand {
@@ -19,6 +20,7 @@ namespace team_game
 		bool attack=false;
 	};
 	struct SlimeAi {
+		bool alive = true;
 		SlimeAiCommand current;
 		std::deque<SlimeAiCommand>previous;
 	};

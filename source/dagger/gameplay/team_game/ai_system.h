@@ -3,7 +3,6 @@
 #include "core/system.h"
 #include "core/game.h"
 #include "core/engine.h"
-#include <functional>
 using namespace dagger;
 namespace team_game {
     class AiSystem : public System

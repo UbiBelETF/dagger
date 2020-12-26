@@ -22,6 +22,7 @@
 #include"gameplay/team_game/ai_system.h"
 #include "gameplay/team_game/camera_follow.h"
 #include "level_generator.h"
+#include "attack_system.h"
 using namespace dagger;
 using namespace team_game;
 
@@ -35,7 +36,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<AiSystem>();
     engine_.AddSystem<HealthSystem>();
     engine_.AddSystem<TeamCameraFollowSystem>();
-    
+    engine_.AddSystem<AttackSystem>();
 
 }
 void SetCameraTeam()
@@ -58,7 +59,7 @@ struct MainCharacter
     Collision& col;
     Transform& tm;
     Health& hp;
-
+    Attack& att;
     static MainCharacter Get(Entity entity)
     {
         auto& reg = Engine::Registry();
@@ -69,7 +70,8 @@ struct MainCharacter
         auto& col = reg.get_or_emplace<Collision>(entity);
         auto& tm = reg.get_or_emplace<Transform>(entity);
         auto& hp = reg.get_or_emplace<Health>(entity);
-        return MainCharacter{ entity, sprite, anim, input, character, col, tm,hp };
+        auto& att = reg.get_or_emplace<Attack>(entity);
+        return MainCharacter{ entity, sprite, anim, input, character, col, tm,hp,att };
     }
 
     static MainCharacter Create(
@@ -83,7 +85,7 @@ struct MainCharacter
         
 
         ATTACH_TO_FSM(HeroControllerFSM, entity);
-
+        
         chr.sprite.scale = { 3, 3 };
         chr.sprite.position = { position_, 0.0f };
         chr.sprite.color = { color_, 1.0f };
@@ -123,12 +125,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/objects_level_1.map",&tilemap_legends.legends.at("objects"),0,0 });
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/creatures_level_1.map", &tilemap_legends.legends.at("creatures"),0,0 });*/
     levelGen.GenerateLevel(4, 2);
-    auto ui = reg.create();
-    auto& text = reg.emplace<Text>(ui);
-    auto& transform = reg.emplace<Transform>(ui);
-    transform.position = Vector3(100, 100, 100);
-    text.spacing = 0.6f;
-    text.Set("pixel-font", "hello 2 world");
+
     
     team_game::SetupWorld(engine_);
 }

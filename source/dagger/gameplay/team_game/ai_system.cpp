@@ -28,11 +28,16 @@ void team_game::AiSystem::Run()
 				auto& slimeAi = viewSlimes.get<SlimeAi>(slime);
 				auto& slimeTransform = viewSlimes.get<Transform>(slime);
 				auto& slimeSprite = viewSlimes.get<Sprite>(slime);
+				if (!slimeAi.alive)continue;
 				Vector2 distanceVec = Vector2(slimeTransform.position.x - heroTransform.position.x, slimeTransform.position.y - heroTransform.position.y);
 				if (slimeAi.previous.size() > depth)slimeAi.previous.pop_front();
 				slimeAi.previous.push_back(slimeAi.current);
 				SlimeAiCommand newCommand;
 				newCommand.attack = false;
+				if (!slimeAi.alive) {
+					newCommand.move = STAY;
+					continue;
+				}
 				float distance = glm::length(distanceVec);
 				if (distance <= slimeSprite.size.x * 13) {
 					if (distance <= slimeSprite.size.x * 1.5) {
