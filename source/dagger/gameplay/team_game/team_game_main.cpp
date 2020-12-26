@@ -271,7 +271,7 @@ void team_game::SetupWorld_Demo(Engine& engine_)
         transform.position.y = -400;
         transform.position.z = 1;
     }
-    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,100 });
+    auto mainChar = Player::Create("CONTROLS", { 1, 1, 1 }, { 0,22 });
     auto boss = Boss::Create( { 1,1,1 }, { 2475, 1125 });
     auto guide = Guide::Create( { 1,1,1 }, { 50,100 });
     auto bubble = Bubble::Create({ 1,1,1 }, { 50,100 });
