@@ -59,6 +59,10 @@ void TankStatsSystem::Run()
             {
                 if (tank.toBeDestroyed) ts.toBeDestroyed = true;
 
+                if (tank.health == tank.maxHealth && tank.zeroHealth == false)
+                {
+                    t.position = ts.startingPosition;
+                }
                 if (s.size.x > (tank.health / tank.maxHealth * ts.barWidth) || tank.zeroHealth)
                 {
                     s.size.x -= 0.8;
@@ -80,6 +84,10 @@ void TankStatsSystem::Run()
             {
                 if (tank.toBeDestroyed) ts.toBeDestroyed = true;
 
+                if (tank.shield == tank.maxShield)
+                {
+                    t.position = ts.startingPosition;
+                }
                 if (s.size.x > (tank.shield / tank.maxShield * ts.barWidth))
                 {
                     s.color.a = 1;
