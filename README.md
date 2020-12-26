@@ -5,7 +5,15 @@
 - Damjan Pavlović		dp98tm@gmail.com 
 
 # Game
-To be determined...
+Plight , the ultimate arena fighting game!
+The ultimate blend between castle crashers and bloodline champions
+
+
+#Controlls
+
+You move , shoot and dash in the direction you are aiming at!
+You aim with A and D or UP and DOWN, shoot with F or P , attack with G or O, use shields with H or I and dash by double tapping the forward key!
+(Also , you can use Y to restart the game)
 
 # Dagger
 
