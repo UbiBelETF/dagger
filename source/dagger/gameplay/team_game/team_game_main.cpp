@@ -125,12 +125,7 @@ void TeamGame::WorldSetup(Engine &engine_)
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/objects_level_1.map",&tilemap_legends.legends.at("objects"),0,0 });
     Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/creatures_level_1.map", &tilemap_legends.legends.at("creatures"),0,0 });*/
     levelGen.GenerateLevel(4, 2);
-    auto ui = reg.create();
-    auto& text = reg.emplace<Text>(ui);
-    auto& transform = reg.emplace<Transform>(ui);
-    transform.position = Vector3(100, 100, 100);
-    text.spacing = 0.6f;
-    text.Set("pixel-font", "hello 2 world");
+
     
     team_game::SetupWorld(engine_);
 }

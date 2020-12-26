@@ -7,6 +7,7 @@
 #include "core/graphics/sprite.h"
 #include <string>
 #include "collision.h"
+#include "attack_system.h"
 namespace team_game {
 	
 	void HealthSystem::Run()
@@ -20,6 +21,19 @@ namespace team_game {
 		auto& heroHealth = viewHero.get<Health>(*hero);
 		if (heroHealth.hp < 0) {
 			heroHealth.hp = 0;
+			auto ui = Engine::Registry().create();
+			auto& text = Engine::Registry().emplace<Text>(ui);
+			auto& transform = Engine::Registry().emplace<Transform>(ui);
+			transform.position = Vector3(100, 100, 100);
+			text.spacing = 0.6f;
+			text.Set("pixel-font", "Defeat");
+			auto& heroAttack = Engine::Registry().get<Attack>(*hero);
+			auto attackCol = Engine::Registry().get<Collision>(heroAttack.attackEnt);
+			attackCol.size = Vector2{ 0,0 };
+			auto& heroCol = Engine::Registry().get<Collision>(*hero);
+			heroCol.size = Vector2{ 0,0 };
+			auto& heroGameChar = viewHero.get<TeamGameCharacter>(*hero);
+			heroGameChar.speed = 0;
 		}
 		if (heroHealth.show) {
 			auto& hpBarSprite = Engine::Registry().get<Sprite>(heroHealth.hpBar);
@@ -34,6 +48,7 @@ namespace team_game {
 			auto& slimeTransform = viewSlimes.get<Transform>(slime);
 			auto& slimeSprite = viewSlimes.get<Transform>(slime);
 			auto& slimeHealth = viewSlimes.get<Health>(slime);
+			auto& slimeType = viewSlimes.get< TeamGameSlime>(slime);
 			if (slimeHealth.hp < 0) {
 				slimeHealth.hp = 0;
 				auto& slimeSprite = Engine::Registry().get<Sprite>(slime);
@@ -42,6 +57,14 @@ namespace team_game {
 				AssignSprite(slimeSprite, "spritesheets:tiles_dungeon:empty");
 				auto& slimeCol = Engine::Registry().get<Collision>(slime);
 				slimeCol.size = Vector2{ 0,0 };
+				if (slimeType.type == "boss") {
+					auto ui = Engine::Registry().create();
+					auto& text = Engine::Registry().emplace<Text>(ui);
+					auto& transform = Engine::Registry().emplace<Transform>(ui);
+					transform.position = Vector3(100, 100, 100);
+					text.spacing = 0.6f;
+					text.Set("pixel-font", "Victory");
+				}
 			
 			}
 			if (slimeHealth.show) {
