@@ -8,17 +8,29 @@
 Plight. A local mulitplayer VS game, in which you battle to the death to ascend to the afterlife.
 
 # Controlls
-Player 1                        | Player 2   
-W - forward                     | ↑ - forward
-S - back                        | ↓ - back 
-A - rotate counter-clockwise    | ← - rotate counter-clockwise
-D - rotate clockwise            | → - rotate clockwise
-Double tap W - dash             | Double tap ↑ - dash
-F - fire arrow                  | P - fire arrow
-G - melee                       | O - melee
-H - cast shield                 | I - cast shield
-Hold F - fire bomb              | Hold P - fire bomb
------------------------------------------------------------------
+Player 1                        
+W - forward                     
+S - back                        
+A - rotate counter-clockwise    
+D - rotate clockwise            
+Double tap W - dash             
+F - fire arrow                  
+G - melee                       
+H - cast shield                 
+Hold F - fire bomb        
+
+--------------------------------
+
+Player 2        
+↑ - forward         
+↓ - back        
+← - rotate counter-clockwise      
+→ - rotate clockwise      
+Double tap ↑ - dash     
+P - fire arrow      
+O - melee     
+I - cast shield     
+Hold P - fire bomb    
 
 # Dagger
 
