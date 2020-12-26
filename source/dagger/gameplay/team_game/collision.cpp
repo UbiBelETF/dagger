@@ -30,18 +30,17 @@ void CollisionSystem::Run()
         it++;
     }
 
-    // Find collisions
-    auto it1 = viewAll.begin();
-    while (it1 != viewAll.end())
+    // Find collisions Slimes
+    auto it1 = viewSlimes.begin();
+    while (it1 != viewSlimes.end())
     {
         auto& col1 = viewAll.get<Collision>(*it1);
         auto& tr1  = viewAll.get<Transform>(*it1);
 
-        auto it2 = it1;
-        it2++;
-        while (it2 != viewAll.end())
-        {
-            
+        // Find collision with walls
+        auto it2 = viewWalls.begin();
+        while (it2 != viewWalls.end())
+        {            
             auto& col2 = viewAll.get<Collision>(*it2);
             auto& tr2  = viewAll.get<Transform>(*it2);
             if (col2.size.x == 0 || col1.size.x == 0) {
@@ -51,7 +50,96 @@ void CollisionSystem::Run()
             // processing one collision per frame for each colider
             if (col1.IsCollided(tr1.position, col2, tr2.position))
             {
-                if ((viewChars.contains(*it1) || viewSlimes.contains(*it1)) && viewWalls.contains(*it2))
+                ResolveCharWall(col1, col2, tr1, tr2);
+            }
+            it2++;
+        }
+
+        // Find colliion with chars
+        it2 = viewChars.begin();
+        while (it2 != viewWalls.end())
+        {
+            auto& col2 = viewAll.get<Collision>(*it2);
+            auto& tr2 = viewAll.get<Transform>(*it2);
+            if (col2.size.x == 0 || col1.size.x == 0) {
+                it2++;
+                continue;
+            }
+            // processing one collision per frame for each colider
+            if (col1.IsCollided(tr1.position, col2, tr2.position))
+            {
+                ResolveCharChar(col2, col1, tr2, tr1);
+            }
+            it2++;
+        }
+
+        //if (col1.colided) Logger::info(*it1);
+        it1++;
+    }
+
+    // Find collisions Attack
+    auto itA = viewAttack.begin();
+    while (itA != viewAttack.end())
+    {
+        auto& colA = viewAll.get<Collision>(*itA);
+        auto& trA = viewAll.get<Transform>(*itA);
+
+        // Find collision with Health
+        auto it2 = viewHealth.begin();
+        while (it2 != viewHealth.end())
+        {
+            auto& col2 = viewAll.get<Collision>(*it2);
+            auto& tr2 = viewAll.get<Transform>(*it2);
+            if (col2.size.x == 0 || colA.size.x == 0) {
+                it2++;
+                continue;
+            }
+            // processing one collision per frame for each colider
+            if (colA.IsCollided(trA.position, col2, tr2.position))
+            {
+                auto& attackEnt = viewAttack.get<CollisionType::Attack>(*itA);
+                Entity p;
+
+                if ((int)(*it2) != (int)attackEnt.orig) {
+                    auto& attack = Engine::Registry().get<Attack>(attackEnt.orig);
+
+                    attack.damaged.push_back(*it2);
+                }
+            }
+            it2++;
+        }
+
+        //if (col1.colided) Logger::info(*it1);
+        itA++;
+    }
+
+    // Find collisions player
+    auto itC = viewChars.begin();
+    
+        auto& colC = viewAll.get<Collision>(*itC);
+        auto& trC = viewAll.get<Transform>(*itC);
+
+        // Find collision with walls
+        auto it2 = viewWalls.begin();
+        while (it2 != viewWalls.end())
+        {
+            auto& col2 = viewAll.get<Collision>(*it2);
+            auto& tr2 = viewAll.get<Transform>(*it2);
+            if (col2.size.x == 0 || colC.size.x == 0) {
+                it2++;
+                continue;
+            }
+            // processing one collision per frame for each colider
+            if (colC.IsCollided(trC.position, col2, tr2.position))
+            {
+                ResolveCharWall(colC, col2, trC, tr2);
+            }
+            it2++;
+        }
+   
+}
+
+/*if ((viewChars.contains(*it1) || viewSlimes.contains(*it1)) && viewWalls.contains(*it2))
                 {
                     ResolveCharWall(col1, col2, tr1, tr2);
                 } else if (viewWalls.contains(*it1) && (viewChars.contains(*it2)||viewSlimes.contains(*it2)) )
@@ -59,42 +147,19 @@ void CollisionSystem::Run()
                     ResolveCharWall(col2, col1, tr2, tr1);
                 }
                 else if ((viewChars.contains(*it1) || viewSlimes.contains(*it1)) && (viewChars.contains(*it2) || viewSlimes.contains(*it2))) {
-                    ResolveCharChar(col2, col1, tr2, tr1);
+                    
                     ResolveCharChar(col1, col2, tr1, tr2);
                 }
                 else // Generic collision
                 {
-                   if (viewAttack.contains(*it1) && viewHealth.contains(*it2)) {
-                       auto& attackEnt = viewAttack.get<CollisionType::Attack>(*it1);
-                       Entity p;
-                       
-                       if ((int)(*it2) != (int)attackEnt.orig) {
-                           auto& attack = Engine::Registry().get<Attack>(attackEnt.orig);
-
-                           attack.damaged.push_back(*it2);
-                       }
-                    }
-                    else if (viewAttack.contains(*it2) && viewHealth.contains(*it1) ){
-                       auto& attackEnt = viewAttack.get<CollisionType::Attack>(*it2);
-                       if ((int)(*it1) != (int)attackEnt.orig) {
-                           auto& attack = Engine::Registry().get<Attack>(attackEnt.orig);
-                           attack.damaged.push_back(*it1);
-                       }
-                    }
+                   
                     col1.colided = true;
                     col1.colidedWith = *it2;
 
                     col2.colided = true;
                     col2.colidedWith = *it1;
                     //Logger::info("Generic collision");
-                }
-            }
-            it2++;
-        }
-        //if (col1.colided) Logger::info(*it1);
-        it1++;
-    }
-}
+                }*/
 
 void CollisionSystem::ResolveCharWall(Collision& colChar_, Collision& colWall_, Transform& trChar_, Transform& trWall_)
 {
