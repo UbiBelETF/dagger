@@ -25,7 +25,7 @@ void TilemapSystem::OnLoadAsset(TilemapLoadRequest request_) {
 		else {
 			
 			if (request_.legend->contains(ch)) {
-				tilemap->tiles.push_back((request_.legend->at(ch))(Engine::Registry(), x, y, ch));
+				tilemap->tiles.push_back((request_.legend->at(ch))(Engine::Registry(), x+request_.xOffset, y+ request_.yOffset, ch));
 			}
 			x++;
 		}

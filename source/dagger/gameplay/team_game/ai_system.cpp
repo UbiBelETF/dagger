@@ -23,7 +23,7 @@ void team_game::AiSystem::Run()
 			auto hero = viewHero.begin();
 			auto& heroTransform = viewHero.get<Transform>(*hero);
 			
-			for( auto slime :viewSlimes)
+			for (auto slime : viewSlimes)
 			{
 				auto& slimeAi = viewSlimes.get<SlimeAi>(slime);
 				auto& slimeTransform = viewSlimes.get<Transform>(slime);
@@ -33,46 +33,52 @@ void team_game::AiSystem::Run()
 				slimeAi.previous.push_back(slimeAi.current);
 				SlimeAiCommand newCommand;
 				newCommand.attack = false;
-				float distance= glm::length(distanceVec);
-				if (distance <= slimeSprite.size.x * 1.5) {
-					if (distance<=slimeSprite.size.x*0.55) {
-						newCommand.attack = true;
-					}
-					
-					if (abs(distanceVec.x) > abs(distanceVec.y)) {
-						if (distanceVec.x > 0)newCommand.move = LEFT;
-						else newCommand.move = RIGHT;
-					}
-					else {
-						if (distanceVec.y > 0)newCommand.move = UP;
-						else newCommand.move = DOWN;
-
-					}
-				}
-			else {
-					if (rand() % 10 < 3) {
-						
-						newCommand.move = Movement((rand() % 4) );
-						
-					}
-					else {
-						INT16 previous[5] = { 0,0,0,0,0 };
-						for (size_t i = 0; i < slimeAi.previous.size(); i++)previous[(int)slimeAi.previous.at(i).move]++;
-						INT16 moveMax = 0;
-						INT16 maxMoved = previous[0];
-						for (INT16 i = 0; i < 5; i++) {
-							if (maxMoved < previous[i]) {
-								maxMoved = previous[i];
-							    moveMax = i;
-							}
+				float distance = glm::length(distanceVec);
+				if (distance <= slimeSprite.size.x * 13) {
+					if (distance <= slimeSprite.size.x * 1.5) {
+						if (distance <= slimeSprite.size.x * 0.55) {
+							newCommand.attack = true;
 						}
-						newCommand.move = Movement(moveMax);
-						
+
+						if (abs(distanceVec.x) > abs(distanceVec.y)) {
+							if (distanceVec.x > 0)newCommand.move = LEFT;
+							else newCommand.move = RIGHT;
+						}
+						else {
+							if (distanceVec.y > 0)newCommand.move = UP;
+							else newCommand.move = DOWN;
+
+						}
 					}
+					else {
+						if (rand() % 10 < 3) {
+
+							newCommand.move = Movement((rand() % 4));
+
+						}
+						else {
+							SInt16 previous[5] = { 0,0,0,0,0 };
+							for (size_t i = 0; i < slimeAi.previous.size(); i++)previous[(int)slimeAi.previous.at(i).move]++;
+							SInt16 moveMax = 0;
+							SInt16 maxMoved = previous[0];
+							for (SInt16 i = 0; i < 5; i++) {
+								if (maxMoved < previous[i]) {
+									maxMoved = previous[i];
+									moveMax = i;
+								}
+							}
+							newCommand.move = Movement(moveMax);
+
+						}
+					}
+					slimeAi.current = newCommand;
+
 				}
-				slimeAi.current = newCommand;
-			
+				else {
+					newCommand.move = STAY;
+				}
 			}
+	
 			
 	}
 	

@@ -21,7 +21,7 @@
 #include "gameplay/team_game/collision.h"
 #include"gameplay/team_game/ai_system.h"
 #include "gameplay/team_game/camera_follow.h"
-
+#include "level_generator.h"
 using namespace dagger;
 using namespace team_game;
 
@@ -57,7 +57,7 @@ struct MainCharacter
     TeamGameCharacter& character;
     Collision& col;
     Transform& tm;
-
+    Health& hp;
 
     static MainCharacter Get(Entity entity)
     {
@@ -68,7 +68,8 @@ struct MainCharacter
         auto& character = reg.get_or_emplace<TeamGameCharacter>(entity);
         auto& col = reg.get_or_emplace<Collision>(entity);
         auto& tm = reg.get_or_emplace<Transform>(entity);
-        return MainCharacter{ entity, sprite, anim, input, character, col, tm };
+        auto& hp = reg.get_or_emplace<Health>(entity);
+        return MainCharacter{ entity, sprite, anim, input, character, col, tm,hp };
     }
 
     static MainCharacter Create(
@@ -79,6 +80,7 @@ struct MainCharacter
         auto& reg = Engine::Registry();
         auto entity = reg.create();
         auto chr = MainCharacter::Get(entity);
+        
 
         ATTACH_TO_FSM(HeroControllerFSM, entity);
 
@@ -116,10 +118,11 @@ void TeamGame::WorldSetup(Engine &engine_)
 
 
     Tilemap_legends tilemap_legends;
-    
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/floor_level_1.map", &tilemap_legends.legends.at("floors") });
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/objects_level_1.map",&tilemap_legends.legends.at("objects") });
-    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/creatures_level_1.map", &tilemap_legends.legends.at("creatures") });
+    LevelGenerator levelGen;
+   /* Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/floor_level_1.map", &tilemap_legends.legends.at("floors"),0,0 });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/objects_level_1.map",&tilemap_legends.legends.at("objects"),0,0 });
+    Engine::Dispatcher().trigger<TilemapLoadRequest>(TilemapLoadRequest{ "levels/creatures_level_1.map", &tilemap_legends.legends.at("creatures"),0,0 });*/
+    levelGen.GenerateLevel(4, 2);
     auto ui = reg.create();
     auto& text = reg.emplace<Text>(ui);
     auto& transform = reg.emplace<Transform>(ui);

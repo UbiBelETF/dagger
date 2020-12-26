@@ -15,5 +15,6 @@ struct Tilemap
 struct TilemapLoadRequest : public AssetLoadRequest<Tilemap>
 {
 	ViewPtr<TilemapLegend> legend;
+	INT32 xOffset, yOffset;
 };
 String Filename(String path_);
