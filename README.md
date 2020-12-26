@@ -1,9 +1,28 @@
 # sun tsu
 	Sofija  sofija98733@gmail.com
 	Teodor  teopiano3@gmail.com
-	Uros	urosmaricic123@gmail.com
 	
-Game:
+Game: The Toxic Remnants
+
+Dynamic bullethell game with a lot of movement.
+Based on clearing rooms full of enemies and dodging their attacks.
+
+Takes place in an abandoned lab, full of scary enemies.
+
+Players goal is to clear all the rooms and defeat final bosses.
+
+Controls:
+	Movement: 
+		w - up
+		a - left
+		s - down
+		d - right
+		left shift - speedup
+	Shooting:
+		mouse - aiming
+		left click - shooting
+		
+	space - restart
 
 # Dagger
 
