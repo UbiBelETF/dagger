@@ -1,9 +1,23 @@
 # Dagger
+A fully-featured, modern game engine made for educational purposes.
+
+## Team_game
 tired_bunch:
 Dimitrije Ivković		dimiivko@gmail.com 
-Ranko Damnjanović	rankodamnjanovic@gmail.com 
+Ranko Damnjanović	rankodamnjanovic@gmail.com
 
-A fully-featured, modern game engine made for educational purposes.
+Forgotten kingdom is 2d scroling, sideview platformer and brawler,
+set in ruins of once great kingdom, that fell in oblivion.
+You fight your way into city encountering demanding terain and boss fights.
+
+Player finds himself in ruins of an old kingdoms central city.
+He needs to find his way through unforgiving terrain where one step means
+plumeting to death. After reaching safety player is greeted by lone knight,
+and door that leeds to boss room...
+
+Character is controled by keyboard keys, A and D to move left and right,
+SPACE to jump, H to attack, J to interact and R to restart level. 
+
 
 ## Features
 
