@@ -33,7 +33,7 @@ void CameraCenterSystem::Run()
 
     auto gameInfoEnt = Engine::Registry().view<PlightGameInfo>().front();
     PlightGameInfo gameInfo = Engine::Registry().get<PlightGameInfo>(gameInfoEnt);
-    if (gameInfo.displayingMessageEndGame) {
+    if (gameInfo.displayingMessageEndGame || gameInfo.displayingMessage) {
         camera->position = { 0.0f,0.0f,0.0f };
         camera->zoom = camParams.camZoom;
         return;
