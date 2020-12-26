@@ -302,13 +302,13 @@ Entity CreateRoof(Registry& reg_, INT32 x_, INT32 y_)
     sprite.position = { x_ * 16, y_ * 16, 75 };
     float mod = (float)rand() / RAND_MAX;
     if (mod <= 0.33) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_left");
+        AssignSprite(sprite, "spritesheets:dungeon:roof_left");
     }
     else if (0.33 < mod <= 0.66) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_mid");
+        AssignSprite(sprite, "spritesheets:dungeon:roof_mid");
     }
     else {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_right");
+        AssignSprite(sprite, "spritesheets:dungeon:roof_right");
     }
     return entity;
 }
@@ -321,13 +321,19 @@ Entity CreateWallMid(Registry& reg_, INT32 x_, INT32 y_)
    
     float mod = (float)rand() / RAND_MAX;
     if (mod <= 0.33) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_left");
+        AssignSprite(sprite, "spritesheets:dungeon:wall_mid1");
     }
     else if (0.33 < mod <= 0.66) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_mid");
+        AssignSprite(sprite, "spritesheets:dungeon:wall_mid2");
+    }
+    else if (0.66 < mod <= 98.0) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_mid3");
+    }
+    else if (0.98 < mod <= 0.99) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_hole_1");
     }
     else {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_right");
+        AssignSprite(sprite, "spritesheets:dungeon:wall_hole_2");
     }
     return entity;
 }
@@ -339,14 +345,20 @@ Entity CreateWallMidFront(Registry& reg_, INT32 x_, INT32 y_)
     sprite.position = { x_ * 16, y_ * 16, 79 };
 
     float mod = (float)rand() / RAND_MAX;
-    if (mod <= 0.33) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_left");
+    if (mod <= 0.32) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_mid1");
     }
-    else if (0.33 < mod <= 0.66) {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_mid");
+    else if (0.32 < mod <= 0.64) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_mid2");
+    }
+    else if (0.64 < mod <= 0.98) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_mid3");
+    }
+    else if (0.98 < mod <= 0.99) {
+        AssignSprite(sprite, "spritesheets:dungeon:wall_hole_1");
     }
     else {
-        AssignSprite(sprite, "spritesheets:dungeon:wall_right");
+        AssignSprite(sprite, "spritesheets:dungeon:wall_hole_2");
     }
     return entity;
 }
