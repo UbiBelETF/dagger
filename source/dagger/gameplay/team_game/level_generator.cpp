@@ -2,6 +2,7 @@
 #include "tilemap_system.h"
 #include "tilemap_legends.h"
 #include <string>
+using namespace team_game;
 void LevelGenerator::GenerateLevel(SInt32 depth_, SInt32 complexity_)
 {
 	if (depth_ < 2)depth_ = 2;

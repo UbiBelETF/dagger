@@ -24,7 +24,6 @@ struct HeroControllerFSM : public FSM<EHeroStates>
 
 	static bool stopAttackOnNextRepeat;
 	static FacingPostion facingPosition;
-
 	HeroControllerFSM()
 	{
 		CONNECT_STATE(EHeroStates, Idle);

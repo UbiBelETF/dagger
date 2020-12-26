@@ -22,6 +22,7 @@
 #include"gameplay/team_game/ai_system.h"
 #include "gameplay/team_game/camera_follow.h"
 #include "level_generator.h"
+#include "attack_system.h"
 using namespace dagger;
 using namespace team_game;
 
@@ -35,7 +36,7 @@ void TeamGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<AiSystem>();
     engine_.AddSystem<HealthSystem>();
     engine_.AddSystem<TeamCameraFollowSystem>();
-    
+    engine_.AddSystem<AttackSystem>();
 
 }
 void SetCameraTeam()

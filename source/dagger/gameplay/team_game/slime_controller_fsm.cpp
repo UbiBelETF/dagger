@@ -131,7 +131,7 @@ void SlimeControllerFSM::Attacking::Run(SlimeControllerFSM::StateComponent& stat
 	auto& animator = Engine::Registry().get<Animator>(state_.entity);
 
 	if (animator.currentFrame > 0)
-		SlimeControllerFSM::stopAttackOnNextRepeat = true;
+		stopAttackOnNextRepeat = true;
 
 	else if (SlimeControllerFSM::stopAttackOnNextRepeat && animator.currentFrame == 0)
 		GoTo(ESlimeStates::Idle, state_);
