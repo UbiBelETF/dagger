@@ -3,8 +3,18 @@
 - Senad Kurtiši   (senad98kurtisi@gmail.com)
 - Feđa Vujičić    (fedjavujicic@gmail.com)
 
-Game:
+Game:  **Treasure Heist**
 
+Treasure Heist is a fast-paced, two-player side-scrolling game.
+You and your opponent are in a secret pirate base which contains valuable treasure.
+
+The goal is to reach the treasure chest before your opponent does.
+But be careful! The pirate base is filled with dangerous obstacles. 
+Fear not! You can pick up valuable collectible power-ups along the way.
+
+Controls:
+- Player 1 (Bomb guy): Arrow keys
+- Player 2 (Bald pirate): AWSD
 
 # Dagger
 
