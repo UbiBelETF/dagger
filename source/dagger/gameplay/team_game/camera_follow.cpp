@@ -125,20 +125,20 @@ void CameraFollowSystem::AdjustCameraZoom()
 
         auto* camera = Engine::GetDefaultResource<Camera>();
 
-        if (maxDistance >= 650)
+        if (maxDistance >= 800)
         {
-            camera->zoom = 0.75;
+            camera->zoom = 0.25;
         }
-        else if (maxDistance <= 500)
+        else if (maxDistance <= 300)
         {
-            camera->zoom = 1;
+            camera->zoom = 0.9;
         }
         else
         {
             //the 1 is the max zoom and the division transforms the interval of
             //the two camera zoom locking distances(in this case (500, 650))
             //to an interval of max zoom - min zoom(in this case 0.25)
-            camera->zoom = 1 - (maxDistance - 500) / (4 * 150);
+            camera->zoom = 0.9 - (maxDistance - 300) / (770);
         }
     }
 }

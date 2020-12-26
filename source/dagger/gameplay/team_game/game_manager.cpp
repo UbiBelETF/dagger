@@ -61,7 +61,7 @@ void GameManagerSystem::Run()
                 return;
             }
         }
-
+        /*
         if (!restarted)
         {
             auto& playerView = Engine::Registry().view<PlayerCharacter, Transform>();
@@ -97,7 +97,7 @@ void GameManagerSystem::Run()
                     return;
                 }
             }
-        }
+        }*/
     }
 }
 
