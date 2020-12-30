@@ -2,6 +2,7 @@
 
 #include "core/core.h"
 #include "core/engine.h"
+#include "core/audio.h"
 #include "core/input/inputs.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
@@ -143,6 +144,8 @@ void CreateBackdrop()
 
 void Platformer::WorldSetup(Engine& engine_)
 {
+    Engine::GetDefaultResource<Audio>()->PlayLoop("music");
+
     SetCamera();
     CreateBackdrop();
 

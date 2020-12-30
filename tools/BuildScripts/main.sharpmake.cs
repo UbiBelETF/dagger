@@ -68,6 +68,11 @@ public class MainProject : Project
         config.LibraryFiles.Add("glu32.lib");
         config.LibraryFiles.Add("opengl32.lib");
 
+        if (target.GetPlatform() == Platform.win32 || target.GetPlatform() == Platform.win64)
+        {
+            config.LibraryFiles.Add("winmm.lib");
+        }
+
         // For external CPP files
         string external = Path.Combine(m_RootDirectory, @"source", mc_ProjectName, @"external");
         if (!Directory.Exists(external))
