@@ -18,9 +18,9 @@ void Audio::Load(AssetLoadRequest<Sound> request_)
     FilePath path{ request_.path };
     String name = path.stem().string();
     auto& sounds = Engine::Res<Sound>();
+
     if (!sounds.contains(name))
-        Engine::Dispatcher().trigger<AssetLoadRequest<Sound>>(
-            AssetLoadRequest<Sound>{ path.replace_extension("wav").string() });
+        sounds[name] = new Sound();
 
     FilePath root{ request_.path };
     root.remove_filename();
@@ -29,14 +29,14 @@ void Audio::Load(AssetLoadRequest<Sound> request_)
     {
         String pathName = root.append(path.stem().string()).string();
         if (pathName.find("sounds") == 0)
-            pathName = pathName.substr(9, pathName.length() - 15);
+            pathName = pathName.substr(7, pathName.length() - 15);
 
         std::replace(pathName.begin(), pathName.end(), '/', ':');
         std::replace(pathName.begin(), pathName.end(), '\\', ':');
         soundName = pathName;
     }
 
-    auto* sound = sounds[soundName] = new Sound();
+    auto* sound = sounds[soundName];
     sound->name = soundName;
     sound->path = request_.path;
 }
@@ -78,7 +78,8 @@ void AudioSystem::OnLoadAsset(AssetLoadRequest<Sound> request_)
 void AudioSystem::SpinUp()
 {
     Engine::PutDefaultResource<Audio>(new Audio());
-    Engine::GetDefaultResource<Audio>()->Initialize();
+    auto* audio = Engine::GetDefaultResource<Audio>();
+    audio->Initialize();
 
     Engine::Dispatcher().sink<AssetLoadRequest<Sound>>().connect<&AudioSystem::OnLoadAsset>(this);
 
@@ -94,7 +95,7 @@ void AudioSystem::SpinUp()
 
 void AudioSystem::WindDown()
 {
-    Engine::GetDefaultResource<Audio>()->Uninitialize();
+    auto* audio = Engine::GetDefaultResource<Audio>();
     delete Engine::GetDefaultResource<Audio>();
 }
 
