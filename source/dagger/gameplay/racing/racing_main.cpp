@@ -10,6 +10,7 @@
 #include "core/game/transforms.h"
 
 #include "gameplay/common/simple_collisions.h"
+#include "gameplay/common/particles.h"
 
 #include "gameplay/racing/racing_game_logic.h"
 #include "gameplay/racing/racing_player_car.h"
@@ -24,6 +25,7 @@ void RacingGame::GameplaySystemsSetup(Engine &engine_)
     engine_.AddSystem<RacingCarSystem>();
     engine_.AddSystem<RacingCollisionsLogicSystem>();
     engine_.AddSystem<SimpleCollisionsSystem>();
+    engine_.AddSystem<common_res::ParticleSystem>();
 }
 
 void RacingGame::WorldSetup(Engine &engine_)
@@ -110,9 +112,17 @@ void racing_game::SetupWorld(Engine &engine_)
 
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
+
         racingPlayer.strike=0;
 
         racing_game::CreateStrike(TileSize,racingPlayer.strike);
+
+
+        common_res::ParticleSpawnerSettings settings;
+        settings.Setup(0.05f, {4.f, 4.f}, {-0.2f, -1.4f}, {0.2f, -0.6f}, 
+                        {0.6f,0.6f,0.6f,1}, {1,1,1,1}, "EmptyWhitePixel");
+        common_res::ParticleSystem::SetupParticleSystem(entity, settings);
+
     }
 
     // collisions for road bounds
@@ -136,6 +146,11 @@ void racing_game::SetupWorld(Engine &engine_)
 
         auto& col = reg.emplace<SimpleCollision>(entity);
         col.size = sprite.size;
+
+        common_res::ParticleSpawnerSettings settings;
+        settings.Setup(0.1f, {4.f, 4.f}, {-0.2f, 0.4f}, {0.2f, 1.2f}, 
+                        {0.6f,0.6f,0.6f,1}, {1,1,1,1}, "EmptyWhitePixel");
+        common_res::ParticleSystem::SetupParticleSystem(entity, settings);
     }
 
 }

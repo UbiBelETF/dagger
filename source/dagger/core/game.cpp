@@ -3,6 +3,7 @@
 #include "core/core.h"
 #include "core/engine.h"
 #include "core/input/inputs.h"
+#include "core/audio.h"
 #include "core/graphics/sprite.h"
 #include "core/graphics/animation.h"
 #include "core/graphics/shaders.h"
@@ -17,6 +18,7 @@
 
 void dagger::Game::CoreSystemsSetup(Engine& engine_)
 {
+    engine_.AddSystem<AudioSystem>();
     engine_.AddSystem<WindowSystem>();
     engine_.AddSystem<InputSystem>();
     engine_.AddSystem<ShaderSystem>();

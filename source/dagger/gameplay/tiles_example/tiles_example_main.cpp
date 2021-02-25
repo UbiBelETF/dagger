@@ -51,7 +51,7 @@ void TilesExampleMain::WorldSetup(Engine& engine_)
     auto ui = reg.create();
     auto& text = reg.emplace<Text>(ui);
     text.spacing = 0.6f;
-    text.Set("pixel-font", "hello world");
+    text.Set("pixel-font", "new text", { 10,-200,0 });
 
-    
+
 }
