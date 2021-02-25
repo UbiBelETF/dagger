@@ -201,7 +201,7 @@ struct Player
 
 void lab::SetupWorld(Engine &engine_)
 {
-    Engine::GetDefaultResource<Audio>()->PlayLoop("music");
+    Engine::GetDefaultResource<Audio>()->PlayLoop("game");
     auto& reg = engine_.Registry();
        Vector2 scale(1, 1);    
 
