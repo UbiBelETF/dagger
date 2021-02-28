@@ -67,7 +67,9 @@ sources = [
 'source/dagger/gameplay/team_game/enemy.cpp',
 'source/dagger/gameplay/team_game/character_controller_fsm.cpp',
 'source/dagger/gameplay/team_game/player_controller_fsm.cpp',
-
+'source/dagger/gameplay/common/particles.cpp',
+'source/dagger/core/audio_linux.cpp',
+'source/dagger/core/audio_win.cpp',
 
 
 

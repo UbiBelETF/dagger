@@ -9,6 +9,7 @@
 #include "core/graphics/shaders.h"
 #include "core/graphics/window.h"
 #include "core/game/transforms.h"
+#include "core/audio.h"
 
 #include "core/graphics/sprite_render.h"
 #include "core/graphics/textures.h"
@@ -200,6 +201,7 @@ struct Player
 
 void lab::SetupWorld(Engine &engine_)
 {
+    Engine::GetDefaultResource<Audio>()->PlayLoop("game");
     auto& reg = engine_.Registry();
        Vector2 scale(1, 1);    
 
